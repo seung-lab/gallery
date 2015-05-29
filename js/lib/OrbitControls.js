@@ -145,6 +145,10 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 		this.object.position.add( distance );
 		this.center.add( distance );
+		console.log("distance ");
+		console.log(distance);
+		console.log("center ");
+		console.log(this.center);
 
 	};
 

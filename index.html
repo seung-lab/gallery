@@ -7,11 +7,17 @@
 <body>
     <div ng-controller="SceneControl">
         <div>
-            Cell ID <input type="number" ng-model="cellID" />
-            <button ng-click="addCell()">Add</button>
-            <button ng-click="removeCell()">Remove</button>
-            <button ng-click="increaseCameraZ()">Increase Camera Z</button>
-            <button ng-click="decreaseCameraZ()">Decrease Camera Z</button>
+            <div>
+                Cell ID <input type="number" ng-model="cellID" />
+                <button ng-click="addCell()">Add</button>
+                <button ng-click="removeCell()">Remove</button>
+            </div>
+            <div>
+                Camera 
+                <input type="number" ng-model="camera.x" ng-change="moveCamera()"/>
+                <input type="number" ng-model="camera.y" ng-change="moveCamera()"/>
+                <input type="number" ng-model="camera.z" ng-change="moveCamera()"/>
+            </div>
         </div>
     </div>
 

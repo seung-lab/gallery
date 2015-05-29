@@ -19,7 +19,8 @@ angular.module('threeViewer.directives', ['threeViewer.services'])
 
               function init() {
                   // Add the camera
-                  CameraService.perspectiveCam.position.set(0, 0, 200);
+                  CameraService.perspectiveCam.position.set(-6000, 75000, 1000);
+                  window.camera = CameraService.perspectiveCam;
                   SceneService.scene.add(CameraService.perspectiveCam);
 
                   // create the renderer
@@ -43,7 +44,6 @@ angular.module('threeViewer.directives', ['threeViewer.services'])
               }
 
               function onWindowResize(event) {
-                  console.log(element[0].offsetHeight);
                   renderer.setSize(window.innerWidth -40, window.innerHeight - 60);
                   CameraService.perspectiveCam.aspect = window.innerWidth / window.innerHeight;
                   CameraService.perspectiveCam.updateProjectionMatrix();
