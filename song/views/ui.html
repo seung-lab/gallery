@@ -51,7 +51,7 @@
             <div class=b sp-tap="modal('new')" sp-kbd="'n'" ng-class="{on:modal.isOn('new')}"><i class=icon-plus></i></div>
             <h1 sp-tap="p('sets/')" sp-kbd="'s'"><b>Song</b>Pane</h1></header>
             <div id=view ng-class=navClass>
-                <article sp-slide=viewSlide id={{model}} ng-include="model + '-template'"></article>
+                <article sp-slide=viewSlide id={{model}} ng-include="'views/'+model + '-template.html'"></article>
             </div>
         </section>
     </div>

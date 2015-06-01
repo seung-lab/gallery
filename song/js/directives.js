@@ -11,9 +11,6 @@ app.directive("spSlide", ["util", "transitioner", function(util, transitioner) {
                 j.addClass("t3d");
                 a.$watch(function(a) {
                     var c;
-                    console.log(i);
-                    console.log(a);
-                    console.log(a.$eval(i));
                     var k = a.$eval(i);
                     !k.model && h && (g.remove(), f.$destroy(), g = f = h = null), k.model && (k.model != h || k.force) && (k.force = !1, c = a.$new(), c.model = k.model , d(c, function(a) {
                         if (e.after(a), g) {
@@ -73,11 +70,13 @@ app.directive("spSortable", ["touch", "$timeout", "util",
 ]);
 
 app.directive("spTap", ["touch", "keyboard",
-    function(a, b) {
+    function(touch, keyboard) {
         return function(c, d, e) {
-            a.tap(d, function() {
+            touch.tap(d, function() {
                 return c.$apply(e.spTap)
-            }), e.spKbd && b.on(c.$eval(e.spKbd), function() {
+            });
+
+            e.spKbd && keyboard.on(c.$eval(e.spKbd), function() {
                 return c.$apply(e.spTap)
             })
         }

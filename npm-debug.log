@@ -1,0 +1,207 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '-g',
+1 verbose cli   'local-web-server' ]
+2 info using npm@2.0.0
+3 info using node@v0.11.14
+4 verbose cache add [ 'local-web-server', null ]
+5 verbose cache add spec="local-web-server" args=["local-web-server",null]
+6 verbose parsed spec { raw: 'local-web-server',
+6 verbose parsed spec   scope: null,
+6 verbose parsed spec   name: 'local-web-server',
+6 verbose parsed spec   rawSpec: '',
+6 verbose parsed spec   spec: '*',
+6 verbose parsed spec   type: 'range' }
+7 verbose parsed spec { raw: 'local-web-server',
+7 verbose parsed spec   scope: null,
+7 verbose parsed spec   name: 'local-web-server',
+7 verbose parsed spec   rawSpec: '',
+7 verbose parsed spec   spec: '*',
+7 verbose parsed spec   type: 'range' }
+8 verbose addNamed [ 'local-web-server', '*' ]
+9 verbose addNamed [ null, '*' ]
+10 silly lockFile 6067613a-local-web-server local-web-server@*
+11 verbose lock local-web-server@* /usr/people/it2/.npm/6067613a-local-web-server.lock
+12 silly addNameRange { name: 'local-web-server', range: '*', hasData: false }
+13 verbose mapToRegistry name local-web-server
+14 verbose mapToRegistry uri https://registry.npmjs.org/local-web-server
+15 verbose request on initialization, where is /local-web-server
+16 verbose request after pass 1, where is /local-web-server
+17 verbose request url raw /local-web-server
+18 verbose request resolving registry [ 'https://registry.npmjs.org/', './local-web-server' ]
+19 verbose request after pass 2, where is https://registry.npmjs.org/local-web-server
+20 verbose request no auth needed
+21 info attempt registry request try #1 at 15:04:59
+22 verbose request id 790e834723fb9865
+23 http request GET https://registry.npmjs.org/local-web-server
+24 http 200 https://registry.npmjs.org/local-web-server
+25 silly registry.get cb [ 200,
+25 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+25 silly registry.get     etag: '"72UGB7W89LGOHCP0SZ6IZIX6B"',
+25 silly registry.get     'content-type': 'application/json',
+25 silly registry.get     'cache-control': 'max-age=60',
+25 silly registry.get     'content-length': '56944',
+25 silly registry.get     'accept-ranges': 'bytes',
+25 silly registry.get     date: 'Mon, 01 Jun 2015 19:04:59 GMT',
+25 silly registry.get     via: '1.1 varnish',
+25 silly registry.get     age: '0',
+25 silly registry.get     connection: 'close',
+25 silly registry.get     'x-served-by': 'cache-jfk1022-JFK',
+25 silly registry.get     'x-cache': 'MISS',
+25 silly registry.get     'x-cache-hits': '0',
+25 silly registry.get     'x-timer': 'S1433185499.162935,VS0,VE245',
+25 silly registry.get     vary: 'Accept' } ]
+26 silly addNameRange number 2 { name: 'local-web-server', range: '*', hasData: true }
+27 silly addNameRange versions [ 'local-web-server',
+27 silly addNameRange   [ '0.1.0',
+27 silly addNameRange     '0.1.1',
+27 silly addNameRange     '0.1.2',
+27 silly addNameRange     '0.1.3',
+27 silly addNameRange     '0.1.4',
+27 silly addNameRange     '0.1.5',
+27 silly addNameRange     '0.1.6',
+27 silly addNameRange     '0.1.7',
+27 silly addNameRange     '0.1.8',
+27 silly addNameRange     '0.1.9',
+27 silly addNameRange     '0.1.10',
+27 silly addNameRange     '0.2.0',
+27 silly addNameRange     '0.2.1',
+27 silly addNameRange     '0.2.2',
+27 silly addNameRange     '0.2.3',
+27 silly addNameRange     '0.3.0',
+27 silly addNameRange     '0.3.1',
+27 silly addNameRange     '0.3.2',
+27 silly addNameRange     '0.3.3',
+27 silly addNameRange     '0.3.4',
+27 silly addNameRange     '0.3.5',
+27 silly addNameRange     '0.3.6',
+27 silly addNameRange     '0.3.7',
+27 silly addNameRange     '0.4.0',
+27 silly addNameRange     '0.4.1',
+27 silly addNameRange     '0.4.2',
+27 silly addNameRange     '0.4.3',
+27 silly addNameRange     '0.4.4',
+27 silly addNameRange     '0.5.0',
+27 silly addNameRange     '0.5.1',
+27 silly addNameRange     '0.5.2',
+27 silly addNameRange     '0.5.3',
+27 silly addNameRange     '0.5.4',
+27 silly addNameRange     '0.5.5',
+27 silly addNameRange     '0.5.6',
+27 silly addNameRange     '0.5.7',
+27 silly addNameRange     '0.5.8',
+27 silly addNameRange     '0.5.9',
+27 silly addNameRange     '0.5.10',
+27 silly addNameRange     '0.5.11',
+27 silly addNameRange     '0.5.12',
+27 silly addNameRange     '0.5.13',
+27 silly addNameRange     '0.5.14',
+27 silly addNameRange     '0.5.15',
+27 silly addNameRange     '0.5.16',
+27 silly addNameRange     '0.5.17',
+27 silly addNameRange     '0.5.18',
+27 silly addNameRange     '0.5.19' ] ]
+28 verbose addNamed [ 'local-web-server', '0.5.19' ]
+29 verbose addNamed [ '0.5.19', '0.5.19' ]
+30 silly lockFile 048bd5f2-local-web-server-0-5-19 local-web-server@0.5.19
+31 verbose lock local-web-server@0.5.19 /usr/people/it2/.npm/048bd5f2-local-web-server-0-5-19.lock
+32 silly lockFile 93aac1ef-rver-local-web-server-0-5-19-tgz https://registry.npmjs.org/local-web-server/-/local-web-server-0.5.19.tgz
+33 verbose lock https://registry.npmjs.org/local-web-server/-/local-web-server-0.5.19.tgz /usr/people/it2/.npm/93aac1ef-rver-local-web-server-0-5-19-tgz.lock
+34 verbose addRemoteTarball [ 'https://registry.npmjs.org/local-web-server/-/local-web-server-0.5.19.tgz',
+34 verbose addRemoteTarball   'b4ba65aa6c24494aacaa837eeb93042595b3839f' ]
+35 info retry fetch attempt 1 at 15:04:59
+36 info attempt registry request try #1 at 15:04:59
+37 http fetch GET https://registry.npmjs.org/local-web-server/-/local-web-server-0.5.19.tgz
+38 http fetch 200 https://registry.npmjs.org/local-web-server/-/local-web-server-0.5.19.tgz
+39 silly fetchAndShaCheck shasum b4ba65aa6c24494aacaa837eeb93042595b3839f
+40 silly lockFile 93aac1ef-rver-local-web-server-0-5-19-tgz https://registry.npmjs.org/local-web-server/-/local-web-server-0.5.19.tgz
+41 silly lockFile 93aac1ef-rver-local-web-server-0-5-19-tgz https://registry.npmjs.org/local-web-server/-/local-web-server-0.5.19.tgz
+42 silly lockFile 048bd5f2-local-web-server-0-5-19 local-web-server@0.5.19
+43 silly lockFile 048bd5f2-local-web-server-0-5-19 local-web-server@0.5.19
+44 silly lockFile 6067613a-local-web-server local-web-server@*
+45 silly lockFile 6067613a-local-web-server local-web-server@*
+46 silly resolved [ { name: 'local-web-server',
+46 silly resolved     version: '0.5.19',
+46 silly resolved     description: 'Lightweight static web server, zero configuration. Perfect for front-end devs.',
+46 silly resolved     bin: { ws: './bin/ws.js' },
+46 silly resolved     license: 'MIT',
+46 silly resolved     engines: { node: '>=0.10.0' },
+46 silly resolved     scripts: { lint: 'jshint bin/ws.js; echo;' },
+46 silly resolved     repository:
+46 silly resolved      { type: 'git',
+46 silly resolved        url: 'git+https://github.com/75lb/local-web-server.git' },
+46 silly resolved     author: { name: 'Lloyd Brookes' },
+46 silly resolved     dependencies:
+46 silly resolved      { 'command-line-args': '~0.5.0',
+46 silly resolved        compression: '^1.0.2',
+46 silly resolved        'config-master': '^1',
+46 silly resolved        connect: '^3.0.0',
+46 silly resolved        'console-dope': '~0.3.0',
+46 silly resolved        'home-path': '~0.1.1',
+46 silly resolved        morgan: '^1.0.0',
+46 silly resolved        'object-tools': '^1.0.3',
+46 silly resolved        'serve-index': '^1.6.3',
+46 silly resolved        'serve-static': '^1.8',
+46 silly resolved        'stream-log-stats': '^1',
+46 silly resolved        typical: '^1.0.0' },
+46 silly resolved     'local-web-server': { mime: [Object] },
+46 silly resolved     gitHead: 'adae894af8ef5a209954958b570cdd827a1f67be',
+46 silly resolved     bugs: { url: 'https://github.com/75lb/local-web-server/issues' },
+46 silly resolved     homepage: 'https://github.com/75lb/local-web-server#readme',
+46 silly resolved     _id: 'local-web-server@0.5.19',
+46 silly resolved     _shasum: 'b4ba65aa6c24494aacaa837eeb93042595b3839f',
+46 silly resolved     _from: 'local-web-server@*',
+46 silly resolved     _npmVersion: '2.9.0',
+46 silly resolved     _nodeVersion: '0.12.2',
+46 silly resolved     _npmUser: { name: '75lb', email: '75pound@gmail.com' },
+46 silly resolved     dist:
+46 silly resolved      { shasum: 'b4ba65aa6c24494aacaa837eeb93042595b3839f',
+46 silly resolved        tarball: 'http://registry.npmjs.org/local-web-server/-/local-web-server-0.5.19.tgz' },
+46 silly resolved     maintainers: [ [Object] ],
+46 silly resolved     directories: {},
+46 silly resolved     _resolved: 'https://registry.npmjs.org/local-web-server/-/local-web-server-0.5.19.tgz' } ]
+47 info install local-web-server@0.5.19 into /usr/local/lib
+48 info installOne local-web-server@0.5.19
+49 verbose lib/node_modules/local-web-server unbuild
+50 verbose gentlyRm vacuuming /usr/local/lib/node_modules/local-web-server
+51 verbose tar unpack /usr/people/it2/.npm/local-web-server/0.5.19/package.tgz
+52 silly lockFile b045c29d-ib-node-modules-local-web-server tar:///usr/local/lib/node_modules/local-web-server
+53 verbose lock tar:///usr/local/lib/node_modules/local-web-server /usr/people/it2/.npm/b045c29d-ib-node-modules-local-web-server.lock
+54 silly lockFile ca4c198e-al-web-server-0-5-19-package-tgz tar:///usr/people/it2/.npm/local-web-server/0.5.19/package.tgz
+55 verbose lock tar:///usr/people/it2/.npm/local-web-server/0.5.19/package.tgz /usr/people/it2/.npm/ca4c198e-al-web-server-0-5-19-package-tgz.lock
+56 verbose gentlyRm vacuuming /usr/local/lib/node_modules/local-web-server
+57 silly gunzTarPerm modes [ '775', '664' ]
+58 verbose fstream_path /usr/local/lib/node_modules/local-web-server
+59 verbose fstream_type Directory
+60 verbose fstream_class DirWriter
+61 verbose stack Error: EACCES, mkdir '/usr/local/lib/node_modules/local-web-server'
+61 verbose stack     at Error (native)
+62 verbose fstream_stack /usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
+62 verbose fstream_stack /usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53
+62 verbose fstream_stack Object.oncomplete (fs.js:93:15)
+63 verbose cwd /usr/people/it2/galery
+64 error Linux 3.13.0-46-generic
+65 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "install" "-g" "local-web-server"
+66 error node v0.11.14
+67 error npm  v2.0.0
+68 error path /usr/local/lib/node_modules/local-web-server
+69 error code EACCES
+70 error errno -13
+71 error Error: EACCES, mkdir '/usr/local/lib/node_modules/local-web-server'
+71 error     at Error (native)
+71 error  { [Error: EACCES, mkdir '/usr/local/lib/node_modules/local-web-server']
+71 error   stack: 'Error: EACCES, mkdir \'/usr/local/lib/node_modules/local-web-server\'\n    at Error (native)',
+71 error   errno: -13,
+71 error   code: 'EACCES',
+71 error   path: '/usr/local/lib/node_modules/local-web-server',
+71 error   fstream_type: 'Directory',
+71 error   fstream_path: '/usr/local/lib/node_modules/local-web-server',
+71 error   fstream_class: 'DirWriter',
+71 error   fstream_stack:
+71 error    [ '/usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
+71 error      '/usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53',
+71 error      'Object.oncomplete (fs.js:93:15)' ] }
+72 error Please try running this command again as root/Administrator.
+73 verbose exit [ -13, true ]

@@ -17,7 +17,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 	this.center = new THREE.Vector3();
 
 	this.userZoom = true;
-	this.userZoomSpeed = 10.0;
+	this.userZoomSpeed = 1.0;
 
 	this.userRotate = true;
 	this.userRotateSpeed = 1.0;
@@ -145,11 +145,6 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 		this.object.position.add( distance );
 		this.center.add( distance );
-		console.log("distance ");
-		console.log(distance);
-		console.log("center ");
-		console.log(this.center);
-
 	};
 
 	this.update = function () {

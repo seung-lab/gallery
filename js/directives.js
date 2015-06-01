@@ -26,6 +26,7 @@ angular.module('threeViewer.directives', ['threeViewer.services'])
                   // create the renderer
                   renderer = new THREE.WebGLRenderer({ antialias: true });
                   renderer.setSize(window.innerWidth-40, window.innerHeight-60);
+                  renderer.setClearColor( 0xAAAAAA, 1.0 );
 
                   // set up the controls with the camera and renderer
                   controls = new THREE.OrbitControls(CameraService.perspectiveCam, renderer.domElement);

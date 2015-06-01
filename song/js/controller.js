@@ -100,120 +100,146 @@ app.controller("shareController", ["$scope", "$routeParams", "$rootScope", "md5"
     }
     ]);
 
-app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$location", "settings", "util", "keyboard", "transposer", "transitioner", "locale", "$timeout", "modal", function(a, b, c, d, e, f, g, h, i, j, k, l) {
-    function m(a, b, c) {
-        var d, e, g, i, j, k, l, m, n, o = [];
-        return a.split("[").forEach(function(a) {
-            if ("" !== a) {
-                for (d = a.split("]"), k = "", g = d[1].replace(/[\r\t\v\f\0\x0B]|^\n+|\s+$/g, "").split("\n"), i = 0, j = g.length; j > i; i += 2) {
-                    for (e = g[i + 1], e.length < g[i].length && (e += f.pad(g[i].length - e.length, " ")), n = 0, l = /\S+/g; m = l.exec(g[i]);) k += e.substring(n, m.index) + '<span class="c"><span>' + (b !== c ? h.transpose(m[0], b, c) : m[0]) + "</span></span>", n = m.index;
-                        k += g[i + 1].substr(n) + "\n"
+app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$location", "settings", "util", "keyboard", "transposer", "transitioner", "locale", "$timeout", "modal",
+    function($scope, $rootScope, $routeParams, $location, settings, util, keyboard, transposer, transitioner, locale, $timepout, modal) {
+        function m(a, b, c) {
+            var d, e, g, i, j, k, l, m, n, o = [];
+            return a.split("[").forEach(function(a) {
+                if ("" !== a) {
+                    for (d = a.split("]"), k = "", g = d[1].replace(/[\r\t\v\f\0\x0B]|^\n+|\s+$/g, "").split("\n"), i = 0, j = g.length; j > i; i += 2) {
+                        for (e = g[i + 1], e.length < g[i].length && (e += util.pad(g[i].length - e.length, " ")), n = 0, l = /\S+/g; m = l.exec(g[i]);) k += e.substring(n, m.index) + '<span class="c"><span>' + (b !== c ? transposer.transpose(m[0], b, c) : m[0]) + "</span></span>", n = m.index;
+                            k += g[i + 1].substr(n) + "\n"
+                    }
+                    o.push({
+                        type: d[0].toLowerCase(),
+                        text: k
+                    })
                 }
-                o.push({
-                    type: d[0].toLowerCase(),
-                    text: k
+            }), o
+        }
+        var n = locale._;
+        var sets = $rootScope.sets;
+        var songs = $rootScope.songs;
+        q = $rootScope.songSlide = {
+            to: "left"
+        },
+        r = $rootScope.viewSlide = {
+            to: "left"
+        };
+        $rootScope.r = $routeParams;
+
+        $rootScope.p = function(path) {
+            $location.path(path);
+        };
+        $rootScope.q = function(a, b) {
+            $location.search(a, b)
+        };
+        $rootScope._ = n;
+        $scope.s = settings.settings;
+        $scope.pad = util.pad;
+
+        $scope.nextSong = function() {
+            var a, b, e = $routeParams.setId,
+            f = $routeParams.songId;
+            e && f && (a = sets[e].songs, a.forEach(function(a, c) {
+                a._id == f && (b = c)
+            }), b < a.length - 1 ? b++ : b = 0, $location.path("/set/" + e + "/" + a[b]._id))
+        };
+        $scope.prevSong = function() {
+            var a, b, e = $routeParams.setId,
+            f = $routeParams.songId;
+            e && f && (a = sets[e].songs, a.forEach(function(a, c) {
+                a._id == f && (b = c)
+            }), b > 0 ? b-- : b = a.length - 1, $location.path("/set/" + e + "/" + a[b]._id))
+        };
+        $scope.getKeys = function() {
+            return $routeParams.songId && songs[$routeParams.songId] && transposer.getKeys("m" === songs[$routeParams.songId].key.slice(-1)) || []
+        };
+        $scope.trashSet = function() {
+            $location.path("/"), sets.remove($routeParams.setId)
+        };
+        $scope.duplicateSet = function() {
+            var a = sets[$routeParams.setId];
+            $location.path("set/" + sets.save({
+                title: a.title + " (" + n.copy + ")",
+                songs: a.songs.slice(0)
+            }) + "/")
+        };
+        $scope.rmSong = function(b) {
+            var e = $routeParams.setId,
+            f = sets[e],
+            g = f.songs;
+            $location.path("set/" + e + "/"), g.splice(b, 1), g.length ? sets.save(f) : $scope.trashSet()
+        };
+        $scope.curKey = function() {
+            var a = $routeParams.songId;
+            return a && songs.getKey(a, $routeParams.setId)
+        };
+        $scope.updateKey = function(b, d) {
+            var e, f, g = $routeParams.setId,
+            h = $routeParams.songId,
+            i = songs[h];
+            g && (e = sets[g], f = sets.getSong(g, h), b !== i.key ? f.key = b : delete f.key, !d && sets.save(e)), $scope.k != b && (q.model = m(i.body, i.key, b), $scope.k = b)
+        };
+        $scope.clean = function(a) {
+            delete this[a]
+        };
+        $scope.sortSet = function(a, b) {
+            util.move(sets, a, b)
+        };
+        $scope.sortSong = function(a, b) {
+            var d = sets[$routeParams.setId];
+            util.move(d.songs, a, b), sets.save(d)
+        };
+        $scope.isSongOwner = function() {
+            return $routeParams.songId && songs.isOwner(songs[$routeParams.songId])
+        };
+        $scope.editSong = function(a) {
+            $location.search("edit", a ? "clone" : void 0), modal("new")
+        };
+        $scope.canChangeKey = function() {
+            var a = $routeParams.setId;
+            return a ? sets.isWriter(sets[a]) : true
+        };
+        $scope.$on("$routeChangeSuccess", function($routeChangeSuccess, to, from) {
+            if ("/" === $location.path()) return void $location.path(sets.length ? "sets/" : "search/");
+            if (to) {
+                var f, g, h, j;
+                var view = to.params.view;
+                var setId = to.params.setId;
+                var songId = to.params.songId;
+                if (from && (f = from.params.view, g = from.params.setId, h = from.params.songId), view) {
+                    if (-1 == ["sets", "catalog", "search"].indexOf(view)) return void $location.path(sets.length ? "sets/" : "search/");
+                    g ? (r.to = "right", r.model = view) : view != f && (r.to = "left", r.model = view)
+                }
+                if (setId) {
+                    if (!sets[setId]) return void $location.path(sets.length ? "sets/" : "search/");
+                    setId != g && (r.force = !0, r.to = "left", r.model = "set")
+                }
+                if (songId) {
+                    if (!songs[songId]) return void $location.path(view + "/");
+                    j = m(songs[songId].body, songs[songId].key, songs.getKey(songId, setId)), $scope.k = $scope.curKey(), from ? songId !== h && (g && g === setId && sets[setId].songs.indexOf(songId) < sets[setId].songs.indexOf(h) ? (q.to = "right", q.model = j) : (q.to = "left", q.model = j)) : (q.to = "left", q.model = j)
+                } else h && transitioner.apply("song-view", function() {
+                    q.model = ""
                 })
             }
-        }), o
-    }
-    var n = j._,
-    o = b.sets,
-    p = b.songs,
-    q = b.songSlide = {
-        to: "left"
-    },
-    r = b.viewSlide = {
-        to: "left"
-    };
-    b.r = c, b.p = function(a) {
-        d.path(a)
-    }, b.q = function(a, b) {
-        d.search(a, b)
-    }, b._ = n, a.s = e.settings, a.nextSong = function() {
-        var a, b, e = c.setId,
-        f = c.songId;
-        e && f && (a = o[e].songs, a.forEach(function(a, c) {
-            a._id == f && (b = c)
-        }), b < a.length - 1 ? b++ : b = 0, d.path("/set/" + e + "/" + a[b]._id))
-    }, a.prevSong = function() {
-        var a, b, e = c.setId,
-        f = c.songId;
-        e && f && (a = o[e].songs, a.forEach(function(a, c) {
-            a._id == f && (b = c)
-        }), b > 0 ? b-- : b = a.length - 1, d.path("/set/" + e + "/" + a[b]._id))
-    }, a.getKeys = function() {
-        return c.songId && p[c.songId] && h.getKeys("m" === p[c.songId].key.slice(-1)) || []
-    }, a.pad = f.pad, a.trashSet = function() {
-        d.path("/"), o.remove(c.setId)
-    }, a.duplicateSet = function() {
-        var a = o[c.setId];
-        d.path("set/" + o.save({
-            title: a.title + " (" + n.copy + ")",
-            songs: a.songs.slice(0)
-        }) + "/")
-    }, a.rmSong = function(b) {
-        var e = c.setId,
-        f = o[e],
-        g = f.songs;
-        d.path("set/" + e + "/"), g.splice(b, 1), g.length ? o.save(f) : a.trashSet()
-    }, a.curKey = function() {
-        var a = c.songId;
-        return a && p.getKey(a, c.setId)
-    }, a.updateKey = function(b, d) {
-        var e, f, g = c.setId,
-        h = c.songId,
-        i = p[h];
-        g && (e = o[g], f = o.getSong(g, h), b !== i.key ? f.key = b : delete f.key, !d && o.save(e)), a.k != b && (q.model = m(i.body, i.key, b), a.k = b)
-    }, a.clean = function(a) {
-        delete this[a]
-    }, a.sortSet = function(a, b) {
-        f.move(o, a, b)
-    }, a.sortSong = function(a, b) {
-        var d = o[c.setId];
-        f.move(d.songs, a, b), o.save(d)
-    }, a.isSongOwner = function() {
-        return c.songId && p.isOwner(p[c.songId])
-    }, a.editSong = function(a) {
-        d.search("edit", a ? "clone" : void 0), l("new")
-    }, a.canChangeKey = function() {
-        var a = c.setId;
-        return a ? o.isWriter(o[a]) : !0
-    }, a.$on("$routeChangeSuccess", function(b, c, e) {
-        if ("/" === d.path()) return void d.path(o.length ? "sets/" : "search/");
-        if (c) {
-            var f, g, h, j, k = c.params.view,
-            l = c.params.setId,
-            n = c.params.songId;
-            if (e && (f = e.params.view, g = e.params.setId, h = e.params.songId), k) {
-                if (-1 == ["sets", "catalog", "search"].indexOf(k)) return void d.path(o.length ? "sets/" : "search/");
-                g ? (r.to = "right", r.model = k) : k != f && (r.to = "left", r.model = k)
-            }
-            if (l) {
-                if (!o[l]) return void d.path(o.length ? "sets/" : "search/");
-                l != g && (r.force = !0, r.to = "left", r.model = "set")
-            }
-            if (n) {
-                if (!p[n]) return void d.path(k + "/");
-                j = m(p[n].body, p[n].key, p.getKey(n, l)), a.k = a.curKey(), e ? n !== h && (g && g === l && o[l].songs.indexOf(n) < o[l].songs.indexOf(h) ? (q.to = "right", q.model = j) : (q.to = "left", q.model = j)) : (q.to = "left", q.model = j)
-            } else h && i.apply("song-view", function() {
-                q.model = ""
-            })
-        }
-    }), g.on(["left", "k", "up", "pageup"], function() {
-        return a.$apply(function() {
-            a.prevSong()
-        }), !1
-    }).on("c", function() {
-        return a.$apply(function() {
-            e.toggle("hideChords")
-        }), !1
-    }).on("=", function() {
-        var b = e.settings.fontSize || 0;
-        2 > b && (e.set("fontSize", b + 1), a.$apply())
-    }).on("-", function() {
-        var b = e.settings.fontSize || 0;
-        b && (e.set("fontSize", b - 1), a.$apply())
-    }), a.$emit("$routeChangeSuccess", {
-        params: c
-    })
+        });
+        keyboard.on(["left", "k", "up", "pageup"], function() {
+            return $scope.$apply(function() {
+                $scope.prevSong()
+            }), !1
+        }).on("c", function() {
+            return $scope.$apply(function() {
+                settings.toggle("hideChords")
+            }), !1
+        }).on("=", function() {
+            var b = settings.settings.fontSize || 0;
+            2 > b && (settings.set("fontSize", b + 1), $scope.$apply())
+        }).on("-", function() {
+            var b = settings.settings.fontSize || 0;
+            b && (settings.set("fontSize", b - 1), $scope.$apply())
+        });
+        $scope.$emit("$routeChangeSuccess", {
+            params: $routeParams
+        })
 }]);
