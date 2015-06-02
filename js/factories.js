@@ -99,7 +99,8 @@ function(a, b, c, d) {
 }]);
 
 app.factory("locale", function() {
-    var a = {}, b = a.langs = [{
+    var locale = {};
+    var languages = locale.langs = [{
         code: "cs",
         name: "Czech",
         "native": "Česky"
@@ -200,7 +201,7 @@ app.factory("locale", function() {
         name: "Ukrainian",
         "native": "Українська"
     }];
-    return a._ = {
+      return locale._ = {
         newSong: "New Song",
         editSong: "Edit Song",
         addToSet: "Add to Set",
@@ -232,6 +233,11 @@ app.factory("locale", function() {
         addToExistingSet: "or an existing set",
         selectSet: "Select a set",
         hideChords: "Hide chords",
+        toggleXZGrid: "Show XZ Grid",
+        toggleYZGrid: "Show YZ Grid",
+        toggleXYGrid: "Show XY Grid",
+        toggleGround: "Show Ground",
+        toggleAxes: "Show axes",
         disconnect: "Disconnect",
         disconnectAccount: "Disconnect account",
         songTitle: "Song title",
@@ -286,9 +292,9 @@ app.factory("locale", function() {
         SPInvalidData: "The data you submitted was invalid.",
         SPOperationNotPermitted: "You are trying to perform an illegal operation.",
         SPInvalidQuery: ""
-    }, b.forEach(function(a) {
-        b[a.code] = a
-    }), a
+    }, languages.forEach(function(lang) {
+        languages[lang.code] = lang
+    }), locale
 });
 
 
@@ -599,21 +605,22 @@ app.factory("parse", ["$window",
     }
 ]);
 
+//This factory is consume by the settings controller
+app.factory("settings", function() {
 
-app.factory("settings", ["util",
-    function() {
-        var a = {}, b = function(b, c) {
-            a[b] = c
-        };
-        return {
-            settings: a,
-            set: b,
-            toggle: function(c) {
-                b(c, !a[c])
-            }
+    var instance = {
+        settings: {},
+        set: function(property, value) {
+            console.log("setting property "+property);
+            this.settings[property] = value;
+        },
+        toggle: function(property) {
+            this.set(property, !this.settings[property])
         }
-    }
-]);
+    };
+
+    return instance;
+});
 
 
 

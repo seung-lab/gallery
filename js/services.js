@@ -1,13 +1,14 @@
 'use strict';
 
-angular.module('threeViewer.services', [])
 
 
+
+//THREEJS
 // For this example this is consumed by the directive and
 // the model factory.
 
 // Is this cached or is it actually returning a new scene?
-.service('SceneService', function () {
+app.service('SceneService', function () {
 
     var Coordinates = {
         drawGrid:function(params) {
@@ -210,7 +211,7 @@ angular.module('threeViewer.services', [])
 })
 
 // Returns a single instance of a camera.  Consumed by directive and controls.
-.service('CameraService', function () {
+app.service('CameraService', function () {
     // default values for camera
     var viewAngle = 45;
     var aspectRatio = window.innerWidth / window.innerHeight;
@@ -221,21 +222,11 @@ angular.module('threeViewer.services', [])
         perspectiveCam:  new THREE.PerspectiveCamera(viewAngle, aspectRatio, near, far)}
     })
 
-.service('MeshDataService', ['$http','SceneService', function ($http, SceneService) {
+app.service('MeshDataService', ['$http','SceneService', function ($http, SceneService) {
     this.getMesh = function (cellID, mip , x, y, z, color) {
-
-        var cell_id = cellID * 10  + 1;
-        var request = $http({
-            method: 'GET',
-            url: 'http://data.eyewire.org/cell/'+cell_id+'/chunk/'+mip+'/'+x+'/'+y+'/'+z+'/mesh',
-            responseType: 'arraybuffer'
-        });
-        return( request.then( handleSuccess, handleError ) );
-
         // I transform the error response, unwrapping the application dta from
         // the API response payload.
-        function handleError( response ) {
-
+        var handleError = function( response ) {
             // The API response from the server should be returned in a
             // nomralized format. However, if the request was not handled by the
             // server (or what not handles properly - ex. server error), then we
@@ -243,27 +234,21 @@ angular.module('threeViewer.services', [])
             if (
                 ! angular.isObject( response.data ) ||
                 ! response.data.message
-                ) {
-
-                return( $q.reject( "An unknown error occurred." ) );
-
-        }
+                ) {return( $q.reject( "An unknown error occurred." ) ); }
 
             // Otherwise, use expected error message.
             return( $q.reject( response.data.message ) );
 
-        }
-
+        };
 
         // I transform the successful response, unwrapping the application data
         // from the API response payload.
-        function handleSuccess( response ) {
+        var handleSuccess = function( response ) {
 
-            var vertices = new Float32Array(response.data);
-            if (vertices.length == 0){
+            if (response.data.length == 0){
                 return false;
             }
-
+            var vertices = new Float32Array(response.data);
             var material = new THREE.MeshBasicMaterial( { color: color, wireframe:false } );
             var mesh = new THREE.Segment( vertices, material );
 
@@ -275,14 +260,22 @@ angular.module('threeViewer.services', [])
             SceneService.scene.add(mesh);
             return true;
 
-        }
-    }
+        };
 
+
+        var cell_id = cellID * 10  + 1;
+        var request = $http({
+            responseType: 'arraybuffer',
+            method: 'GET',
+            url: 'http://data.eyewire.org/cell/'+cell_id+'/chunk/'+mip+'/'+x+'/'+y+'/'+z+'/mesh'
+        });
+        return( request.then(handleSuccess, handleError ));
+    }
 }])
 
 // Adds a new model to the viewer with the provided x, y offset from the UI.  This specific model
 // creates a tube that follows a collection of 3d points.
-.service('ModelFactory', ['SceneService','MeshDataService', function (SceneService, MeshDataService) {
+app.service('ModelFactory', ['SceneService','MeshDataService', function (SceneService, MeshDataService) {
     this.addCell = function (cellID) {
         var mip = 6;
         var color = '#'+Math.floor(Math.random()*16777215).toString(16);
@@ -305,15 +298,6 @@ angular.module('threeViewer.services', [])
                 index--;
             }                       
         }
-    }
-    this.showGrid = function() {
-        var geometry = new THREE.PlaneGeometry( 5000, 5000, 500, 500 );
-        var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-        var plane = new THREE.Mesh( geometry, material );
-        plane.position.x = 0;
-        plane.position.y = 0;
-        plane.position.z = 0;
-        SceneService.scene.add(plane);
     }
 }]);
 

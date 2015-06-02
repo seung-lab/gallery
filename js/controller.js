@@ -71,15 +71,21 @@ app.controller("searchController", ["$scope", "$rootScope", "locale",
       a._ = c._, a.message = "", a.search = function() {}
   }
   ]);
+
+// Used in views/settings.html
 app.controller("settingsController", ["$scope", "settings",
-  function(a, b) {
-      a.s = b.settings, a.toggle = function(a) {
-          b.toggle(a)
-      }, a.setFont = function(a) {
-          b.set("fontSize", a)
+  function($scope, settings) {
+      window.settings = settings.settings;
+      $scope.settings = settings.settings;
+      $scope.toggle = function(property) {
+          settings.toggle(property)
+      };
+      $scope.setFont = function(size) {
+          settings.set("fontSize", size)
       }
   }
-  ]);
+]);
+
 app.controller("shareController", ["$scope", "$routeParams", "$rootScope", "md5", "util",
   function(a, b, c, d, e) {
       var f = e.list,
@@ -246,17 +252,14 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
 
 //THREEJS
 
-angular.module('threeViewer.controllers', ['threeViewer.services'])
-
 // Control that manages changes to the 3d scene
-.controller('SceneControl', ['$scope', 'ModelFactory', 'CameraService',
+app.controller('SceneControl', ['$scope', 'ModelFactory', 'CameraService',
   function ($scope, ModelFactory, CameraService) {
-      $scope.camera = { x:-6000 , y:75000, z:1000};
+      $scope.camera = { x:10000 , y:10000, z:10000};
      
       var cells = new Set();
       $scope.cellID = 11;
 
-      //ModelFactory.showGrid();
 
       $scope.addCell = function () {
 
