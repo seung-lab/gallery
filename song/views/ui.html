@@ -1,4 +1,5 @@
  <div class=icon-songpane ng-controller=uiController>
+<!--     Menu on the right with song details -->    
     <div id=song-view ng-class={cr:cr,ic:r.songId,fs:fs}>
         <aside>
             <article id=info>
@@ -6,19 +7,33 @@
                 <ul class=list>
                     <li>
                         <div class=group>
-                            <a class="btn icon-add flex" sp-tap="modal('add')" id=add_to_set></a>
-                            <a sp-tap=editSong(1) class="btn icon-copy flex"></a>
-                            <a sp-if=isSongOwner() sp-tap=editSong() class="btn icon-pencil flex"></a>
-                            <a sp-if=isSongOwner() sp-tap="modal('confirm')" class="btn danger icon-bin flex"></a>
+                            <a class="btn icon-add flex" sp-tap="modal('views/add.html')" id=add_to_set></a>
+                            <a sp-tap="editSong(true)" class="btn icon-copy flex"></a>
+                            <a sp-if=isSongOwner() sp-tap="editSong()" class="btn icon-pencil flex"></a>
+                            <a sp-if=isSongOwner() sp-tap="modal('views/confirm.html')" class="btn danger icon-bin flex"></a>
                         </div>
                     </li>
-                    <li><q>{{_.key}}</q><span class=select-wrap sp-if=canChangeKey()><select ng-change="updateKey(k)+clean('k')" ng-model=k ng-options="k for k in getKeys()"></select><span class="select btn">{{k}}</span></span><span sp-if=!canChangeKey()>{{k}}</span>&nbsp;({{songs[r.songId].key}})</li>
-                    <li><q>{{_.tempo}}</q>{{songs[r.songId].tempo}}</li>
-                    <li><q>{{_.signature}}</q>{{songs[r.songId].signature}}</li>
-                    <li><q>{{_.artist}}</q>
+                    <li>
+                        <q>{{_.key}}</q>
+                        <span class=select-wrap sp-if=canChangeKey()>
+                            <select ng-change="updateKey(k)+clean('k')" ng-model=k ng-options="k for k in getKeys()"></select>
+                            <span class="select btn">{{k}}</span>
+                        </span>
+                        <span sp-if=!canChangeKey()>{{k}}</span>
+                        &nbsp;({{songs[r.songId].key}})</li>
+                    <li>
+                        <q>{{_.tempo}}</q>
+                        {{songs[r.songId].tempo}}
+                    </li>
+                    <li>
+                        <q>{{_.signature}}</q>
+                        {{songs[r.songId].signature}}</li>
+                    <li>
+                        <q>{{_.artist}}</q>
                         <p>{{songs[r.songId].artists.join(', ')}}</p>
                     </li>
-                    <li class=drop sp-tap="c=!c" ng-class="{'active':c}"><q>{{_.copyright}}</q>
+                    <li class=drop sp-tap="c=!c" ng-class="{'active':c}">
+                        <q>{{_.copyright}}</q>
                         <p ng-show=c>{{songs[r.songId].copyright}}</p>
                     </li>
                 </ul>
@@ -33,22 +48,27 @@
                 </article>
             </div>
             <button class=overlaybutton sp-tap="p(r.setId&&'set/'+r.setId + '/'||r.view+'/')" id=back-button><span class="overlaybutton-inner icon-back"></span></button>
-            <button class=overlaybutton sp-tap="fs=!fs" sp-kbd="'f'" id=fullscreen-button><span class=overlaybutton-inner ng-class="fs&&'icon-min'||'icon-max'"></span></button>
-            <button class=overlaybutton sp-tap="cr=!cr" sp-kbd="'i'" id=aside-button><span class="overlaybutton-inner icon-info"></span></button>
+            <button class=overlaybutton sp-tap="fs=!fs" sp-kbd="'f'" id=fullscreen-button>
+                <span class=overlaybutton-inner ng-class="fs&&'icon-min'||'icon-max'"></span>
+            </button>
+            <button class=overlaybutton sp-tap="cr=!cr" sp-kbd="'i'" id=aside-button>
+                <span class="overlaybutton-inner icon-info"></span>
+            </button>
         </section>
     </div>
     <aside id=menu>
-        <ul>
-            <li sp-tap="p('sets/')" ng-class="{open: r.view == 'sets'}"><i class=icon-sets></i><span>{{_.sets}}</span></li>
+        <!-- Dark menu on the left -->
+        <ul> 
             <li sp-tap="p('catalog/')" sp-kbd="'b'" ng-class="{open: r.view == 'catalog'}"><i class=icon-book></i><span>{{_.catalog}}</span></li>
+            <li sp-tap="p('sets/')" ng-class="{open: r.view == 'sets'}"><i class=icon-sets></i><span>{{_.sets}}</span></li>
             <li sp-tap="p('search/')" sp-kbd="'/'" ng-class="{open: r.view == 'search'}"><i class=icon-search></i><span>{{_.search}}</span></li>
-            <li sp-tap="modal('settings')" sp-kbd="[',', 'command+,', 'control+,']"><i class=icon-cog></i><span>{{_.settings}}</span></li>
+            <li sp-tap="modal('views/settings.html')" sp-kbd="[',', 'command+,', 'control+,']"><i class=icon-cog></i><span>{{_.settings}}</span></li>
         </ul>
     </aside>
     <section id=nav class="fill w" ng-class={open:menu}>
         <header>
             <div class=b sp-tap="toggleState('menu')" sp-kbd="'m'" ng-class={on:menu}><i class=icon-more></i></div>
-            <div class=b sp-tap="modal('new')" sp-kbd="'n'" ng-class="{on:modal.isOn('new')}"><i class=icon-plus></i></div>
+            <div class=b sp-tap="modal('views/new.html')" sp-kbd="'n'" ng-class="{on:modal.isOn('new')}"><i class=icon-plus></i></div>
             <h1 sp-tap="p('sets/')" sp-kbd="'s'"><b>Song</b>Pane</h1></header>
             <div id=view ng-class=navClass>
                 <article sp-slide=viewSlide id={{model}} ng-include="'views/'+model + '-template.html'"></article>

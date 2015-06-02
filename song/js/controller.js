@@ -195,7 +195,7 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
             return $routeParams.songId && songs.isOwner(songs[$routeParams.songId])
         };
         $scope.editSong = function(a) {
-            $location.search("edit", a ? "clone" : void 0), modal("new")
+            $location.search("edit", a ? "clone" : void 0), modal("views/new.html")
         };
         $scope.canChangeKey = function() {
             var a = $routeParams.setId;

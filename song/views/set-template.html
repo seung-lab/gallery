@@ -1,6 +1,6 @@
 <div ng-init="i=r.setId;set=sets[i]">
     <ul class=toolbar id=em>
-        <li sp-tap="modal('share')" class="btn icon-share flex"></li>
+        <li sp-tap="modal('views/share.html')" class="btn icon-share flex"></li>
         <li sp-if=sets.isWriter(set) sp-tap="modal('rename')" class="btn icon-pencil flex"></li>
         <li sp-tap=duplicateSet() class="btn icon-copy flex"></li>
         <li sp-if=sets.isWriter(set) sp-tap=trashSet() class="btn icon-bin flex"></li>
@@ -9,11 +9,13 @@
         <header>
             <button sp-tap="p('sets/')" class="btn simple icon-left"></button>
             <button sp-tap="toggleState('em')" class=btn ng-class="{active:em,'icon-down':!em,'icon-up':em}"></button>
-            <h2 class=trim>{{set.title}}</h2></header>
+            <h2 class=trim>{{set.title}}</h2>
+        </header>
         <menu sp-sortable=sets.isWriter(set) onsort=sortSong class=songs>
             <li ng-repeat="song in set.songs" ng-init="id=song._id" ng-class="{on:id==r.songId}">
                 <button class="btn danger icon-minus" ng-show=em sp-tap=rmSong($index)></button>
-                <h3 class=trim sp-tap="p('set/'+i+'/'+id)">{{songs[id].title}}</h3></li>
+                <h3 class=trim sp-tap="p('set/'+i+'/'+id)">{{songs[id].title}}</h3>
+            </li>
         </menu>
     </div>
 </div>
