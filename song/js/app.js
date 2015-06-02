@@ -4,68 +4,6 @@ app.config(["$routeProvider", function($routeProvider) {
     $routeProvider.when("/").when("/set/:setId/:songId").when("/:view/:songId").otherwise("/")
 }]);
     
-// app.run(["$rootScope", "collection", "util", "transitioner", "keyboard", "modal", "notifier", "$window", "platform", "locale",
-//     function($rootScope, collection, util, transitioner, keyboard, modal, notifier, $window, platform, locale) {
-//             var m = ($window.navigator, locale._);
-//             $window.notify = notifier.notify;
-//             $rootScope._ = m;
-//             $rootScope.change = !1;
-//             $rootScope.$on("ready", function() {
-//                 $rootScope.ready = true;
-//             });
-//             $rootScope.sets = $rootScope.sets = collection({
-//                 songs: [],
-//                 isNeeded: function(a) {
-//                     var b = this.songs,
-//                     transitioner = a.songs;
-//                     return transitioner.forEach(function(a) {
-//                         var e = a._id;
-//                         transitioner[e] = a, util.list(b, e)
-//                     }), !0
-//                 },
-//                 getSong: function(a, b) {
-//                     var c, d, e = this[a].songs;
-//                     for (d = 0, c = e.length; c > d; d++)
-//                         if (e[d]._id == b) return e[d]
-//                     },
-//                 url: "sets.json"
-//             });
-//             $rootScope.songs = collection({
-//                 url: "songs.json",
-//                 getKey: function(a, b) {
-//                     var c = b && $rootScope.sets.getSong(b, a),
-//                     transitioner = l[a];
-//                     return c && c.key || transitioner.key
-//                 }
-//             });
-//             $rootScope.sets.run(function() {
-//                 $rootScope.songs.run(function() {
-//                     $rootScope.$emit("ready")
-//                 })
-//             });
-//             $rootScope.modal = modal;
-
-//             $rootScope.toggleState = function(b) {
-//                 $rootScope[b] = !$rootScope[b]
-//                 $rootScope.changedState = true;
-//             };
-//             $rootScope.resetState = function() {
-//                 return $rootScope.changedState ? void($rootScope.changedState = !1) : void["menu", "em"].forEach(function(b) {
-//                     $rootScope[b] && ($rootScope[b] = !1);
-               
-//                 });
-//             };
-//             keyboard.on("ctrl+shift", function() {
-//                 $rootScope.slow = !$rootScope.slow;
-//             });
-//             keyboard.on(["h", "?"], function() {
-//                 return modal("keyboard"), $rootScope.$apply(), false
-//             });
-//             keyboard.on("esc", function() {
-//                 return false;
-//             });
-// }]);
-
 app.run(["$rootScope", "collection", "util", "transitioner", "keyboard", "modal", "notifier", "$window", "platform", "locale", function(a, b, c, d, e, f, g, h, i, j) {
                         var k, l, m = (h.navigator, j._);
                         h.notify = g.notify, a._ = m, a.change = !1, a.$on("ready", function() {
@@ -191,3 +129,6 @@ app.value("songMode", {
         return "part" == b.next ? a.match(/^\[[1-9BCPIO]\](?=$|\n)/) ? (c = "part", b.next = "chords") : a.skip() : "chords" == b.next ? a.eat("\n") ? (c = "chords", b.next = "chord") : a.skip() : "chord" == b.next ? a.eat("\n") ? b.next = "text" : a.eatWhile(" ") ? /^[A-G]$/.test(a.peek()) || a.skip() : a.match(/^[A-G][#b12345679adgijmsu,\(\)]*(?:\/[A-G][#b]?)?(?=($| +|\n))/) ? c = "chord" : a.skip() : "text" == b.next ? a.match(/^.+\S/) ? (c = "text", b.next = "partOrChords") : a.skip() : "partOrChords" == b.next ? a.match(/^\n(?=\[)/) ? b.next = "part" : a.eat("\n") ? (c = "chords", b.next = "chord") : a.skip() : a.skip(), c
     }
 });
+
+
+//THREEJS

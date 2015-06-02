@@ -39,19 +39,25 @@
                 </ul>
             </article>
         </aside>
-        <section id=sheet>
+        <section id="sheet">
             <div id=space sp-tap=nextSong() sp-kbd="['space', 'right', 'j', 'down', 'pagedown']" ng-class=spaceClass>
-                <article sp-slide=songSlide>
+<!--                 <article sp-slide=songSlide>
                     <div ng-class="{m:s.fontSize==1,l:s.fontSize==2,h:s.hideChords}" class=song-wrap>
                         <p ng-repeat="part in model" ng-class="'part-'+part.type" ng-bind-html-unsafe=part.text></p>
                     </div>
-                </article>
+                </article> -->
+                
+                    <!--A directive is the reusable package created with AngularJS-->
+                    <!--This directive wraps Three JS-->
+                    <div three-viewport style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; width: 100%;"></div>
             </div>
-            <button class=overlaybutton sp-tap="p(r.setId&&'set/'+r.setId + '/'||r.view+'/')" id=back-button><span class="overlaybutton-inner icon-back"></span></button>
-            <button class=overlaybutton sp-tap="fs=!fs" sp-kbd="'f'" id=fullscreen-button>
+            <button class=overlaybutton sp-tap="p(r.setId&&'set/'+r.setId + '/'||r.view+'/')" id="back-button">
+                <span class="overlaybutton-inner icon-back"></span>
+            </button>
+            <button class=overlaybutton sp-tap="fs=!fs" sp-kbd="'f'" id="fullscreen-button">
                 <span class=overlaybutton-inner ng-class="fs&&'icon-min'||'icon-max'"></span>
             </button>
-            <button class=overlaybutton sp-tap="cr=!cr" sp-kbd="'i'" id=aside-button>
+            <button class=overlaybutton sp-tap="cr=!cr" sp-kbd="'i'" id="aside-button">
                 <span class="overlaybutton-inner icon-info"></span>
             </button>
         </section>
@@ -69,8 +75,10 @@
         <header>
             <div class=b sp-tap="toggleState('menu')" sp-kbd="'m'" ng-class={on:menu}><i class=icon-more></i></div>
             <div class=b sp-tap="modal('views/new.html')" sp-kbd="'n'" ng-class="{on:modal.isOn('new')}"><i class=icon-plus></i></div>
-            <h1 sp-tap="p('sets/')" sp-kbd="'s'"><b>Song</b>Pane</h1></header>
-            <div id=view ng-class=navClass>
+            <h1 sp-tap="p('sets/')" sp-kbd="'s'">
+            <b>Cell</b>Gallery</h1>
+            </header>
+        <div id=view ng-class=navClass>
                 <article sp-slide=viewSlide id={{model}} ng-include="'views/'+model + '-template.html'"></article>
             </div>
         </section>
