@@ -6,22 +6,22 @@ app.controller("addController", ["$scope", "$routeParams", "$rootScope",
       $scope.s = sets.filter(function(a) {
           return sets.isWriter(a)
       });
-      $scope.addNew = function(title) {
+      $scope.addNew = function(name) {
 
           return sets.save({
-              title: title,
-              songs: [{
-                  _id: $routeParams.songId
+              name: name,
+              cells: [{
+                  _id: $routeParams.cellId
               }]
           })
       };
 
       $scope.addExisting = function(a) {
-          var songId = $routeParams.songId,
+          var cellId = $routeParams.cellId,
           e = sets[a],
-          f = e.songs;
-          return f[songId] ? true : (f.push(f[songId] = {
-              _id: songId
+          f = e.cells;
+          return f[cellId] ? true : (f.push(f[cellId] = {
+              _id: cellId
           }), sets.save(e))
       }
   }
@@ -29,22 +29,22 @@ app.controller("addController", ["$scope", "$routeParams", "$rootScope",
 app.controller("confirmController", ["$scope", "$routeParams", "$rootScope", "util", "$location",
   function(a, b, c, d, e) {
       var f = c.sets,
-      g = c.songs;
-      a.trashSong = function() {
-          var a = b.songId,
+      g = c.cells;
+      a.trashcell = function() {
+          var a = b.cellId,
           c = b.setId;
           return f.forEach(function(b) {
-              d.unlist(b.songs, a) || f.remove(b._id)
+              d.unlist(b.cells, a) || f.remove(b._id)
           }), e.path((c ? "set" : b.view) + "/" + (f[c] ? c + "/" : "")), g.remove(a)
       }
   }
   ]);
-app.controller("newController", ["$scope", "$rootScope", "transposer", "songMode", "$routeParams", "util", "locale", "notifier",
+app.controller("newController", ["$scope", "$rootScope", "transposer", "cellMode", "$routeParams", "util", "locale", "notifier",
   function(a, b, c, d, e, f, g, h) {
-      var i = b.songs,
+      var i = b.cells,
       j = e.edit,
       k = g._;
-      a.songMode = d, a.langs = g.langs, j && (a.song = f.extend({}, i[e.songId]), "clone" == j && delete a.song._id, a.song.tempo = a.song.tempo - 0), a.saveSong = function(a, b) {
+      a.cellMode = d, a.langs = g.langs, j && (a.cell = f.extend({}, i[e.cellId]), "clone" == j && delete a.cell._id, a.cell.tempo = a.cell.tempo - 0), a.savecell = function(a, b) {
           var d = "(" + c.getScale(a.key).join("|") + ")";
           return~ a.body.search("^(?:\\[[1-9BCPIO]\\]\\n(?:(?: *" + d + "[1-9adgijmsu,\\(\\)]*(?:\\/" + d + ")?)*\\n[^\\[\\n].+\\S(?:\\n|$))+)+$") ? (a._acl = {}, b && (a._acl = {
               gr: !1
@@ -60,13 +60,13 @@ app.controller("renameController", ["$scope", "$rootScope",
       var c = b.sets;
       a.renameSet = function(a, b) {
           var d = c[a];
-          return b !== d.title ? (d.title = b, c.save(d)) : !1
+          return b !== d.name ? (d.name = b, c.save(d)) : !1
       }
   }
   ]);
 app.controller("searchController", ["$scope", "$rootScope", "locale",
   function(a, b, c) {
-      b.songs;
+      b.cells;
       a._ = c._, a.message = "", a.search = function() {}
   }
   ]);
@@ -124,8 +124,8 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
       }
       var n = locale._;
       var sets = $rootScope.sets;
-      var songs = $rootScope.songs;
-      q = $rootScope.songSlide = {
+      var cells = $rootScope.cells;
+      q = $rootScope.cellSlide = {
           to: "left"
       },
       r = $rootScope.viewSlide = {
@@ -143,22 +143,22 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
       $scope.s = settings.settings;
       $scope.pad = util.pad;
 
-      $scope.nextSong = function() {
+      $scope.nextcell = function() {
           var a, b, e = $routeParams.setId,
-          f = $routeParams.songId;
-          e && f && (a = sets[e].songs, a.forEach(function(a, c) {
+          f = $routeParams.cellId;
+          e && f && (a = sets[e].cells, a.forEach(function(a, c) {
               a._id == f && (b = c)
           }), b < a.length - 1 ? b++ : b = 0, $location.path("/set/" + e + "/" + a[b]._id))
       };
-      $scope.prevSong = function() {
+      $scope.prevcell = function() {
           var a, b, e = $routeParams.setId,
-          f = $routeParams.songId;
-          e && f && (a = sets[e].songs, a.forEach(function(a, c) {
+          f = $routeParams.cellId;
+          e && f && (a = sets[e].cells, a.forEach(function(a, c) {
               a._id == f && (b = c)
           }), b > 0 ? b-- : b = a.length - 1, $location.path("/set/" + e + "/" + a[b]._id))
       };
       $scope.getKeys = function() {
-          return $routeParams.songId && songs[$routeParams.songId] && transposer.getKeys("m" === songs[$routeParams.songId].key.slice(-1)) || []
+          return $routeParams.cellId && cells[$routeParams.cellId] && transposer.getKeys("m" === cells[$routeParams.cellId].key.slice(-1)) || []
       };
       $scope.trashSet = function() {
           $location.path("/"), sets.remove($routeParams.setId)
@@ -166,25 +166,25 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
       $scope.duplicateSet = function() {
           var a = sets[$routeParams.setId];
           $location.path("set/" + sets.save({
-              title: a.title + " (" + n.copy + ")",
-              songs: a.songs.slice(0)
+              name: a.name + " (" + n.copy + ")",
+              cells: a.cells.slice(0)
           }) + "/")
       };
-      $scope.rmSong = function(b) {
+      $scope.rmcell = function(b) {
           var e = $routeParams.setId,
           f = sets[e],
-          g = f.songs;
+          g = f.cells;
           $location.path("set/" + e + "/"), g.splice(b, 1), g.length ? sets.save(f) : $scope.trashSet()
       };
       $scope.curKey = function() {
-          var a = $routeParams.songId;
-          return a && songs.getKey(a, $routeParams.setId)
+          var a = $routeParams.cellId;
+          return a && cells.getKey(a, $routeParams.setId)
       };
       $scope.updateKey = function(b, d) {
           var e, f, g = $routeParams.setId,
-          h = $routeParams.songId,
-          i = songs[h];
-          g && (e = sets[g], f = sets.getSong(g, h), b !== i.key ? f.key = b : delete f.key, !d && sets.save(e)), $scope.k != b && (q.model = m(i.body, i.key, b), $scope.k = b)
+          h = $routeParams.cellId,
+          i = cells[h];
+          g && (e = sets[g], f = sets.getcell(g, h), b !== i.key ? f.key = b : delete f.key, !d && sets.save(e)), $scope.k != b && (q.model = m(i.body, i.key, b), $scope.k = b)
       };
       $scope.clean = function(a) {
           delete this[a]
@@ -192,14 +192,14 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
       $scope.sortSet = function(a, b) {
           util.move(sets, a, b)
       };
-      $scope.sortSong = function(a, b) {
+      $scope.sortcell = function(a, b) {
           var d = sets[$routeParams.setId];
-          util.move(d.songs, a, b), sets.save(d)
+          util.move(d.cells, a, b), sets.save(d)
       };
-      $scope.isSongOwner = function() {
-          return $routeParams.songId && songs.isOwner(songs[$routeParams.songId])
+      $scope.iscellOwner = function() {
+          return $routeParams.cellId && cells.isOwner(cells[$routeParams.cellId])
       };
-      $scope.editSong = function(a) {
+      $scope.editcell = function(a) {
           $location.search("edit", a ? "clone" : void 0), modal("views/new.html")
       };
       $scope.canChangeKey = function() {
@@ -212,8 +212,8 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
               var f, g, h, j;
               var view = to.params.view;
               var setId = to.params.setId;
-              var songId = to.params.songId;
-              if (from && (f = from.params.view, g = from.params.setId, h = from.params.songId), view) {
+              var cellId = to.params.cellId;
+              if (from && (f = from.params.view, g = from.params.setId, h = from.params.cellId), view) {
                   if (-1 == ["sets", "catalog", "search"].indexOf(view)) return void $location.path(sets.length ? "sets/" : "search/");
                   g ? (r.to = "right", r.model = view) : view != f && (r.to = "left", r.model = view)
               }
@@ -221,17 +221,17 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
                   if (!sets[setId]) return void $location.path(sets.length ? "sets/" : "search/");
                   setId != g && (r.force = !0, r.to = "left", r.model = "set")
               }
-              if (songId) {
-                  if (!songs[songId]) return void $location.path(view + "/");
-                  j = m(songs[songId].body, songs[songId].key, songs.getKey(songId, setId)), $scope.k = $scope.curKey(), from ? songId !== h && (g && g === setId && sets[setId].songs.indexOf(songId) < sets[setId].songs.indexOf(h) ? (q.to = "right", q.model = j) : (q.to = "left", q.model = j)) : (q.to = "left", q.model = j)
-              } else h && transitioner.apply("song-view", function() {
+              if (cellId) {
+                  if (!cells[cellId]) return void $location.path(view + "/");
+                  j = m(cells[cellId].body, cells[cellId].key, cells.getKey(cellId, setId)), $scope.k = $scope.curKey(), from ? cellId !== h && (g && g === setId && sets[setId].cells.indexOf(cellId) < sets[setId].cells.indexOf(h) ? (q.to = "right", q.model = j) : (q.to = "left", q.model = j)) : (q.to = "left", q.model = j)
+              } else h && transitioner.apply("cell-view", function() {
                   q.model = ""
               })
           }
       });
       keyboard.on(["left", "k", "up", "pageup"], function() {
           return $scope.$apply(function() {
-              $scope.prevSong()
+              $scope.prevcell()
           }), !1
       }).on("c", function() {
           return $scope.$apply(function() {

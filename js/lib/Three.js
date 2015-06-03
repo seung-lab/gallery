@@ -6534,7 +6534,7 @@ THREE.Plane.prototype = {
 		return function ( matrix, optionalNormalMatrix ) {
 
 			// compute new normal based on theory here:
-			// http://www.songho.ca/opengl/gl_normaltransform.html
+			// http://www.cellho.ca/opengl/gl_normaltransform.html
 			var normalMatrix = optionalNormalMatrix || m1.getNormalMatrix( matrix );
 			var newNormal = v1.copy( this.normal ).applyMatrix3( normalMatrix );
 

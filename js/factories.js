@@ -30,7 +30,7 @@ function(a, $http, c, util) {
     }, k = function(a, b) {
         var c = this,
         e = a._id;
-        if (e || (e = a._id = util.generateId(), a._acl || (a._acl = {}), a._acl.creator = "demo@songpane.com", !c.onNew || c.onNew(a))) return c[e] ? util.extend(c[e], a) : c.push(c[e] = a), b && b(), e
+        if (e || (e = a._id = util.generateId(), a._acl || (a._acl = {}), a._acl.creator = "demo@cellpane.com", !c.onNew || c.onNew(a))) return c[e] ? util.extend(c[e], a) : c.push(c[e] = a), b && b(), e
     }, l = function() {
         return !0
     }, m = function(a) {
@@ -202,14 +202,14 @@ app.factory("locale", function() {
         "native": "Українська"
     }];
       return locale._ = {
-        newSong: "New Song",
-        editSong: "Edit Song",
+        newCell: "New Cell",
+        editCell: "Edit Cell",
         addToSet: "Add to Set",
         renameSet: "Rename Set",
         shareSet: "Share Set",
         settings: "Settings",
         noConnection: "Could not connect to the server!",
-        outOfSync: "SongPane is out of sync. Please make sure you have an active internet connection.",
+        outOfSync: "cellPane is out of sync. Please make sure you have an active internet connection.",
         quotaExceeded: "The local storage limit has been reached or local storage is disabled.",
         alert: "Alert",
         copy: "copy",
@@ -229,7 +229,7 @@ app.factory("locale", function() {
         owner: "Owner",
         save: "Save",
         add: "Add",
-        addToNewSet: "Add the song to a new set",
+        addToNewSet: "Add the cell to a new set",
         addToExistingSet: "or an existing set",
         selectSet: "Select a set",
         hideChords: "Hide chords",
@@ -240,23 +240,23 @@ app.factory("locale", function() {
         toggleAxes: "Show Axes",
         disconnect: "Disconnect",
         disconnectAccount: "Disconnect account",
-        songTitle: "Song title",
-        lyricsAndChords: "Lyrics and chords",
+        cellname: "Cell Name",
+        cellDescription: "Cell Description",
         nameSet: "Give this set a name",
         done: "Done",
         email: "Email",
         password: "Password",
         createAccount: "Create Account",
         resetPassword: "Reset Password",
-        searchSongs: "Search cells",
-        filterSongs: "Filter cells",
+        searchcells: "Search cells",
+        filtercells: "Filter cells",
         sets: "Sets",
         catalog: "Catalog",
         search: "Search",
         noSets: "No Sets",
-        creatingSets: "Sets are created by adding songs to them.",
+        creatingSets: "Sets are created by adding cells to them.",
         emptyCatalog: "Empty Catalog",
-        aboutCatalog: "The catalog contains all the songs that you use or songs that you add to SongPane.",
+        aboutCatalog: "The catalog contains all the cells that you use or cells that you add to cellPane.",
         noResults: "No Results",
         searching: "Searching...",
         wait: "Wait...",
@@ -265,11 +265,11 @@ app.factory("locale", function() {
         notFound: "The resource was not found on the server.",
         genericError: "Something went wrong and it’s probably our fault.",
         confirm: "Are you sure?",
-        explainDelSong: "Deleting the song makes it unavailable to any set that is currently using it!",
+        explainDelcell: "Deleting the cell makes it unavailable to any set that is currently using it!",
         del: "Delete",
         cancel: "Cancel",
-        nextSongOrSet: "Next song or set",
-        prevSongOrSet: "Previous song or set",
+        nextcellOrSet: "Next cell or set",
+        prevcellOrSet: "Previous cell or set",
         toggleChords: "Toggle chord display",
         changeFontSize: "Decrease/increase font size",
         fontSize: "Font size",
@@ -281,11 +281,11 @@ app.factory("locale", function() {
         language: "Language",
         visibility: "Visibility",
         toggleFullscreen: "Toggle fullscreen",
-        toggleInfo: "Toggle song info",
+        toggleInfo: "Toggle cell info",
         toggleHelp: "Toggle help (this screen)",
         toggleSettings: "Toggle settings",
         esc: "Cancel actions, close modal windows",
-        checkBody: "Please check the body of the song.",
+        checkBody: "Please check the body of the cell.",
         sharedSet: "A new set has been shared with you!",
         checkEmail: "Please check your email.",
         invalidCredentials: "Invalid credentials!",
@@ -384,7 +384,7 @@ app.factory("modal", ["$rootScope", "$location", "$routeParams", "transitioner",
         }
         ]), app.factory("notifier", function() {
             var a, b = {
-                title: "",
+                name: "",
                 icon: "info",
                 delay: 5e3
             }, c = [],

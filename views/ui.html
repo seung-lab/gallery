@@ -1,16 +1,16 @@
- <div class=icon-songpane ng-controller=uiController>
-<!--     Menu on the right with song details -->    
-    <div id=song-view ng-class={cr:cr,ic:r.songId,fs:fs}>
+ <div class=icon-cellpane ng-controller=uiController>
+<!--     Menu on the right with cell details -->    
+    <div id=cell-view ng-class={cr:cr,ic:r.cellId,fs:fs}>
         <aside>
             <article id=info>
-                <h1>{{songs[r.songId].title}}</h1>
+                <h1>{{cells[r.cellId].name}}</h1>
                 <ul class=list>
                     <li>
                         <div class=group>
                             <a class="btn icon-add flex" sp-tap="modal('views/add.html')" id=add_to_set></a>
-                            <a sp-tap="editSong(true)" class="btn icon-copy flex"></a>
-                            <a sp-if=isSongOwner() sp-tap="editSong()" class="btn icon-pencil flex"></a>
-                            <a sp-if=isSongOwner() sp-tap="modal('views/confirm.html')" class="btn danger icon-bin flex"></a>
+                            <a sp-tap="editcell(true)" class="btn icon-copy flex"></a>
+                            <a sp-if=iscellOwner() sp-tap="editcell()" class="btn icon-pencil flex"></a>
+                            <a sp-if=iscellOwner() sp-tap="modal('views/confirm.html')" class="btn danger icon-bin flex"></a>
                         </div>
                     </li>
                     <li>
@@ -20,29 +20,29 @@
                             <span class="select btn">{{k}}</span>
                         </span>
                         <span sp-if=!canChangeKey()>{{k}}</span>
-                        &nbsp;({{songs[r.songId].key}})</li>
+                        &nbsp;({{cells[r.cellId].key}})</li>
                     <li>
                         <q>{{_.tempo}}</q>
-                        {{songs[r.songId].tempo}}
+                        {{cells[r.cellId].tempo}}
                     </li>
                     <li>
                         <q>{{_.signature}}</q>
-                        {{songs[r.songId].signature}}</li>
+                        {{cells[r.cellId].signature}}</li>
                     <li>
                         <q>{{_.artist}}</q>
-                        <p>{{songs[r.songId].artists.join(', ')}}</p>
+                        <p>{{cells[r.cellId].artists.join(', ')}}</p>
                     </li>
                     <li class=drop sp-tap="c=!c" ng-class="{'active':c}">
                         <q>{{_.copyright}}</q>
-                        <p ng-show=c>{{songs[r.songId].copyright}}</p>
+                        <p ng-show=c>{{cells[r.cellId].copyright}}</p>
                     </li>
                 </ul>
             </article>
         </aside>
         <section id="sheet">
-            <div id=space sp-tap=nextSong() sp-kbd="['space', 'right', 'j', 'down', 'pagedown']" ng-class=spaceClass>
-<!--                 <article sp-slide=songSlide>
-                    <div ng-class="{m:s.fontSize==1,l:s.fontSize==2,h:s.hideChords}" class=song-wrap>
+            <div id=space sp-tap=nextcell() sp-kbd="['space', 'right', 'j', 'down', 'pagedown']" ng-class=spaceClass>
+<!--                 <article sp-slide=cellSlide>
+                    <div ng-class="{m:s.fontSize==1,l:s.fontSize==2,h:s.hideChords}" class=cell-wrap>
                         <p ng-repeat="part in model" ng-class="'part-'+part.type" ng-bind-html-unsafe=part.text></p>
                     </div>
                 </article> -->

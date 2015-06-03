@@ -1,17 +1,31 @@
-<form novalidate id=new-song name=newSong method=post ng-controller=newController>
-    <header>
-        <button type=button class="btn x" sp-tap="modal();q('edit',null)" sp-kbd="'esc'"></button>
-        <input class="btn action" type=submit ng-disabled=newSong.$invalid ng-click="saveSong(song,v==_.priv||0)&&modal()&&q('edit',null)" value={{_.save}}>
-        <h2>{{song._id&&_.editSong||_.newSong}}</h2></header>
-    <fieldset>
-        <input class=input ng-model=song.title name=song-title sp-focus="" autocomplete=off required placeholder={{_.songTitle}}>
-        <editor mode=songMode placeholder={{_.lyricsAndChords}} model=song.body></editor>
-        <div class=group><span class="select-wrap flex"><select ng-model=song.key name=song-key required ng-options="key for key in keys"></select><span class="select input block" placeholder={{_.key}}>{{song.key}}</span></span><span class="select-wrap flex"><select ng-model=song.signature name=song-timesig required ng-options="ts for ts in ['2/4','3/4','4/4']"></select><span class="select input block" placeholder={{_.signature}}>{{song.signature}}</span></span>
-            <input class="input flex" type=number ng-model=song.tempo name=song-tempo min=20 max=240 required placeholder={{_.tempo}}>
+<form novalidate id="new-cell" name="newcell" method=post ng-controller=newController>
+  <header>
+    <button type=button class="btn x" sp-tap="modal();q('edit',null)" sp-kbd="'esc'"></button>
+    <input class="btn action" type=submit ng-disabled=newcell.$invalid ng-click="savecell(cell,v==_.priv||0)&&modal()&&q('edit',null)" value={{_.save}}>
+  <h2>{{cell._id&&_.editCell||_.newCell}}</h2></header>
+  <fieldset>
+    <input class=input ng-model=cell.name name=cell-name sp-focus="" autocomplete=off required placeholder={{_.cellname}}>
+    <editor mode=cellMode placeholder={{_.cellDescription}} model=cell.body></editor>
+    <div class=group>
+      <span class="select-wrap flex">
+          <select ng-model=cell.key name=cell-key required ng-options="key for key in keys"></select>
+          <span class="select input block" placeholder={{_.key}}>{{cell.key}}</span></span>
+          <span class="select-wrap flex">
+            <select ng-model=cell.signature name=cell-timesig required ng-options="ts for ts in ['2/4','3/4','4/4']"></select>
+            <span class="select input block" placeholder={{_.signature}}>{{cell.signature}}</span>
+          </span>
+          <input class="input flex" type=number ng-model=cell.tempo name=cell-tempo min=20 max=240 required placeholder={{_.tempo}}>
         </div>
-        <div class=group><span class="select-wrap flex"><select ng-model=song.language name=song-language required ng-options="l.code as l.native for l in langs"></select><span class="select input block" placeholder={{_.language}}>{{langs[song.language].native}}</span></span><span class="select-wrap flex"><select ng-init="v=song._acl.gr==!1&&_.priv||song.title&&_.pub||''" ng-model=v name=song-timesig required ng-options="v for v in [_.pub, _.priv]"></select><span class="select input block" placeholder={{_.visibility}}>{{v}}</span></span>
-        </div>
-        <input class=input ng-model=song.artists name=song-artist required placeholder={{_.artist}} ng-list="">
-        <input class=input ng-model=song.copyright name=song-copyright required placeholder={{_.copyright}}>
-    </fieldset>
+        <div class=group><span class="select-wrap flex">
+        <select ng-model=cell.language name=cell-language required ng-options="l.code as l.native for l in langs"></select>
+        <span class="select input block" placeholder={{_.language}}>{{langs[cell.language].native}}</span>
+      </span>
+      <span class="select-wrap flex">
+          <select ng-init="v=cell._acl.gr==!1&&_.priv||cell.name&&_.pub||''" ng-model=v name=cell-timesig required ng-options="v for v in [_.pub, _.priv]"></select>
+          <span class="select input block" placeholder={{_.visibility}}>{{v}}</span>
+      </span>
+    </div>
+    <input class=input ng-model=cell.artists name=cell-artist required placeholder={{_.artist}} ng-list="">
+    <input class=input ng-model=cell.copyright name=cell-copyright required placeholder={{_.copyright}}>
+  </fieldset>
 </form>

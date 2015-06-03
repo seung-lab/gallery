@@ -1,6 +1,6 @@
 [{
-  "title": "Amacrine Cells",
-  "songs": [{
+  "name": "Amacrine Cells",
+  "cells": [{
     "_id": "i"
   }, {
     "_id": "f"
@@ -15,14 +15,14 @@
   }],
   "_id": "a",
   "_acl": {
-    "creator": "demo@songpane.com"
+    "creator": "demo@cellpane.com"
   },
   "_kmd": {
     "lmt": "2013-01-10T21:54:42.600Z"
   }
 }, {
-  "title": "Bipolar Cells",
-  "songs": [{
+  "name": "Bipolar Cells",
+  "cells": [{
     "_id": "a"
   }, {
     "_id": "c"
@@ -41,15 +41,15 @@
   }],
   "_id": "b",
   "_acl": {
-    "creator": "demo@songpane.com",
+    "creator": "demo@cellpane.com",
     "r": ["sorin@iclanzan.com"]
   },
   "_kmd": {
     "lmt": "2013-01-09T15:20:49.201Z"
   }
 }, {
-  "title": "Ganglion Cells",
-  "songs": [{
+  "name": "Ganglion Cells",
+  "cells": [{
     "_id": "d",
     "key": "A"
   }, {
@@ -61,14 +61,14 @@
   }],
   "_id": "c",
   "_acl": {
-    "creator": "demo@songpane.com"
+    "creator": "demo@cellpane.com"
   },
   "_kmd": {
     "lmt": "2013-01-10T14:15:25.514Z"
   }
 }, {
-  "title": "Horizontal Cells",
-  "songs": [{
+  "name": "Horizontal Cells",
+  "cells": [{
     "_id": "l"
     }, {
     "_id": "k"
@@ -81,7 +81,7 @@
   }],
   "_id": "d",
   "_acl": {
-    "creator": "demo@songpane.com"
+    "creator": "demo@cellpane.com"
   },
   "_kmd": {
     "lmt": "2013-01-12T15:45:54.013Z"

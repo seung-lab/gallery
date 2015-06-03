@@ -100,7 +100,7 @@ font-style:normal
 .icon-share:before {
     content: "\f11a"
 }
-.icon-songpane:before {
+.icon-cellpane:before {
     content: "\f11b"
 }
 .icon-up:before,
@@ -191,7 +191,7 @@ strong {
     white-space: nowrap
 }
 #ui,
-#song-view,
+#cell-view,
 section,
 .t3d,
 .t3d>*,
@@ -202,7 +202,7 @@ figure {
 }
 #ui.run,
 .view-container,
-#song-view.ic,
+#cell-view.ic,
 section,
 .t3d,
 .t3d>*,
@@ -216,7 +216,7 @@ figure.on {
 .transition,
 #ui.run,
 .view-container,
-#song-view,
+#cell-view,
 .sorting>li:not(.dragged),
 section,
 figure,
@@ -229,7 +229,7 @@ figure,
 .slow .transition,
 .slow #ui.run,
 .slow .view-container,
-.slow #song-view,
+.slow #cell-view,
 .slow .sorting>li:not(.dragged),
 .slow section,
 .slow figure,
@@ -289,7 +289,7 @@ figure>* {
 .flex:first-child:nth-last-child(4) ~ .flex {
     width: 25%
 }
-body.icon-songpane:before,
+body.icon-cellpane:before,
 #ui>div:before {
     position: absolute;
     top: 50%;
@@ -335,7 +335,7 @@ body {
     -moz-perspective: 800px;
     perspective: 800px
 }
-body.icon-songpane:before {
+body.icon-cellpane:before {
     color: #2ea2ef;
     text-shadow: 0 1px #2b2e30
 }
@@ -532,7 +532,7 @@ fieldset .group *:last-child select+.select {
     -moz-transform: translate3d(0, 4.4rem, 0);
     transform: translate3d(0, 4.4rem, 0)
 }
-#song-view {
+#cell-view {
     -ms-transform: translate(101%, 0);
     -o-transform: translate(101%, 0);
     -webkit-transform: translate3d(101%, 0, 0);
@@ -542,17 +542,17 @@ fieldset .group *:last-child select+.select {
     z-index: 3;
     height: 100%
 }
-#song-view.fs {
+#cell-view.fs {
     margin: 0 -27.6rem 0 0
 }
-#song-view.cr {
+#cell-view.cr {
     -ms-transform: translate(-27.6rem, 0);
     -o-transform: translate(-27.6rem, 0);
     -webkit-transform: translate3d(-27.6rem, 0, 0);
     -moz-transform: translate3d(-27.6rem, 0, 0);
     transform: translate3d(-27.6rem, 0, 0)
 }
-#song-view aside {
+#cell-view aside {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -568,7 +568,7 @@ fieldset .group *:last-child select+.select {
 #sheet article {
     background: none
 }
-.song-wrap {
+.cell-wrap {
     line-height: 1;
     display: inline-block;
     min-width: 100%
@@ -648,11 +648,11 @@ q {
     display: inline-block;
     width: 50%
 }
-.songs li h3 {
+.cells li h3 {
     padding-left: 1.4rem
 }
-.songs li:before,
-.songs li:after {
+.cells li:before,
+.cells li:after {
     content: "";
     display: block;
     position: absolute;
@@ -662,7 +662,7 @@ q {
     height: 4px;
     border-top: 1px solid rgba(0, 0, 0, 0.3)
 }
-.songs li:before {
+.cells li:before {
     top: 18px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.3)
 }
@@ -795,7 +795,7 @@ li.room:last-child {
     }
 }
 @media (min-width: 800px) {
-    #song-view {
+    #cell-view {
         margin-left: 32rem
     }
     #back-button {
@@ -809,13 +809,13 @@ li.room:last-child {
     #sheet {
         margin-right: 27.6rem
     }
-    #song-view aside {
+    #cell-view aside {
         right: 0
     }
     #aside-button {
         display: none
     }
-    #song-view.cr {
+    #cell-view.cr {
         -webkit-transform: none;
         -moz-transform: none;
         -ms-transform: none;
@@ -832,8 +832,8 @@ li.room:last-child {
         -o-transform:none !important;
         transform:none !important
     }
-    .song-wrap,
-    .song-wrap * {
+    .cell-wrap,
+    .cell-wrap * {
         visibility: visible !important;
         background: transparent !important;
         color: #000 !important;
@@ -841,14 +841,14 @@ li.room:last-child {
         box-shadow: none !important;
         text-shadow: none !important
     }
-    .song-wrap {
+    .cell-wrap {
         position: absolute !important;
         top: 0;
         left: 0;
         min-height: 100%;
         overflow: auto
     }
-    .song-wrap p {
+    .cell-wrap p {
         page-break-inside: avoid
     }
     .part-c {

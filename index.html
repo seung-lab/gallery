@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html dir=ltr lang=en ng-app=SongPane>
+<html dir="ltr" lang="en" ng-app="cellPane">
 
 <head>
-    <meta charset=UTF-8>
+    <meta charset="UTF-8">
     <link href="stylesheet.css" rel="stylesheet" type="text/css">
-    <link rel="shortcut icon" href=//songpane.com/favicon.ico>
-    <title ng-bind="songs[r.songId].title||sets[r.setId].title||'CellGallery'"></title>
-    <meta name=description content="">
+    <link rel="shortcut icon" href="//cellpane.com/favicon.ico">
+    <title ng-bind="cells[r.cellId].name||sets[r.setId].name||'CellGallery'"></title>
+    <meta name="description" content="">
     <meta name=viewport content="initial-scale=1.0, user-scalable=no">
 </head>
 
-<body sp-tap=resetState() ng-class="slow&&'slow'||''" class=icon-songpane>
+<body sp-tap=resetState() ng-class="slow&&'slow'||''" class=icon-cellpane>
 
     <div id="ui" ng-include="ready&&'views/ui.html'" ng-class="{on:modalClass, run:ready}"></div>
     <div ng-view=""></div>

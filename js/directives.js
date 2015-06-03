@@ -139,7 +139,7 @@ app.directive("spNotifier", ["util", "notifier", "transitioner", "$compile", "to
             k.addClass("tl")
           }), e.tap(k, i), l = f(i, b.delay || 5e3)
         }
-        var j = '<div class="notification"><article ng-class="\'icon-\'+icon"><h6>{{title}}</h6><p>{{message}}</p></article></div>';
+        var j = '<div class="notification"><article ng-class="\'icon-\'+icon"><h6>{{name}}</h6><p>{{message}}</p></article></div>';
         b.setCallback(i).get().forEach(i)
       }
     }

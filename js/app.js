@@ -1,10 +1,10 @@
-var app = angular.module("SongPane", []);
+var app = angular.module("cellPane", []);
 
 app.config(["$routeProvider", function($routeProvider) {
     $routeProvider.caseInsensitiveMatch = true;
     $routeProvider.when("/");
-    $routeProvider.when("/set/:setId/:songId");
-    $routeProvider.when("/:view/:songId");
+    $routeProvider.when("/set/:setId/:cellId");
+    $routeProvider.when("/:view/:cellId");
     $routeProvider.otherwise("/");
 }]);
 
@@ -19,25 +19,25 @@ app.run(["$rootScope", "collection", "util", "transitioner", "keyboard", "modal"
                         h.notify = g.notify, a._ = m, a.change = !1, a.$on("ready", function() {
                             a.ready = !0
                         }), k = a.sets = b({
-                            songs: [],
+                            cells: [],
                             isNeeded: function(a) {
-                                var b = this.songs,
-                                    d = a.songs;
+                                var b = this.cells,
+                                    d = a.cells;
                                 return d.forEach(function(a) {
                                     var e = a._id;
                                     d[e] = a, c.list(b, e)
                                 }), !0
                             },
-                            getSong: function(a, b) {
-                                var c, d, e = this[a].songs;
+                            getcell: function(a, b) {
+                                var c, d, e = this[a].cells;
                                 for (d = 0, c = e.length; c > d; d++)
                                     if (e[d]._id == b) return e[d]
                             },
                             url: "sets.json"
-                        }), l = a.songs = b({
-                            url: "songs.json",
+                        }), l = a.cells = b({
+                            url: "cells.json",
                             getKey: function(a, b) {
-                                var c = b && k.getSong(b, a),
+                                var c = b && k.getcell(b, a),
                                     d = l[a];
                                 return c && c.key || d.key
                             }
@@ -128,7 +128,7 @@ var k = function(a, b) {
         ])
 }(angular);
 
-app.value("songMode", {
+app.value("cellMode", {
     startState: function() {
         return {
             next: "part"
