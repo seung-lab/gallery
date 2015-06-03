@@ -1,36 +1,36 @@
 app.factory("collection", ["$templateCache", "$http", "$timeout", "util",
-function(a, b, c, d) {
+function(a, $http, c, util) {
     var e = function(a) {
         var b = this;
-        return b.syncDown(a || d.noop), b
+        return b.syncDown(a || util.noop), b
     }, f = function(a) {
         var c = this;
-        return b.get(d.buildUrl(c.url, c.params)).success(function(a) {
+        return $http.get(util.buildUrl(c.url, c.params)).success(function(a) {
             a.forEach(function(a) {
                 c[a._id] ? c.saveLocal(a) : c.add(a, null, !0)
             })
-        }).success(a || d.noop).error(a || d.noop), c
+        }).success(a || util.noop).error(a || util.noop), c
     }, g = function(a) {
         var b = this,
         c = a._id;
-        "trash" == a.status ? b.removeLocal(c) : d.extend(b[c], a)
+        "trash" == a.status ? b.removeLocal(c) : util.extend(b[c], a)
     }, h = function(a, b) {
         var c = this;
-        d.toArray(a).forEach(function(a) {
+        util.toArray(a).forEach(function(a) {
             "trash" != a.status && (c[a._id] || (c.isNeeded(a) ? c.push(a) : c.aux.push(a), c[a._id] = a))
         }), b && b.call(c, a)
     }, i = function(a) {
         var b = this;
-        d.unlist(b, b[a]), delete b[a]
+        util.unlist(b, b[a]), delete b[a]
     }, j = function(a) {
         var b = this;
-        return b[a].status = "trash", d.unlist(b, b[a]), b.save(b[a], function() {
+        return b[a].status = "trash", util.unlist(b, b[a]), b.save(b[a], function() {
             b.removeLocal(a)
         })
     }, k = function(a, b) {
         var c = this,
         e = a._id;
-        if (e || (e = a._id = d.generateId(), a._acl || (a._acl = {}), a._acl.creator = "demo@songpane.com", !c.onNew || c.onNew(a))) return c[e] ? d.extend(c[e], a) : c.push(c[e] = a), b && b(), e
+        if (e || (e = a._id = util.generateId(), a._acl || (a._acl = {}), a._acl.creator = "demo@songpane.com", !c.onNew || c.onNew(a))) return c[e] ? util.extend(c[e], a) : c.push(c[e] = a), b && b(), e
     }, l = function() {
         return !0
     }, m = function(a) {
@@ -40,19 +40,19 @@ function(a, b, c, d) {
     }, o = function(a, b) {
         var c = this,
         e = c[a]._acl.r;
-        return e || (e = c[a]._acl.r = []), d.list(e, b), c
+        return e || (e = c[a]._acl.r = []), util.list(e, b), c
     }, p = function(a, b) {
         var c = this,
         e = c[a]._acl.w;
-        return e || (e = c[a]._acl.w = []), d.list(e, b), c
+        return e || (e = c[a]._acl.w = []), util.list(e, b), c
     }, q = function(a, b) {
         var c = this,
         e = c[a]._acl.r;
-        return e && d.unlist(e, b), c
+        return e && util.unlist(e, b), c
     }, r = function(a, b) {
         var c = this,
         e = c[a]._acl.w;
-        return e && d.unlist(e, b), c
+        return e && util.unlist(e, b), c
     }, s = function(a) {
         var b = this[a]._acl;
         return b && b.r || []
@@ -94,7 +94,7 @@ function(a, b, c, d) {
                 return !0
             }
         };
-        return d.extend(b, c, a), b
+        return util.extend(b, c, a), b
     }
 }]);
 
@@ -237,7 +237,7 @@ app.factory("locale", function() {
         toggleYZGrid: "Show YZ Grid",
         toggleXYGrid: "Show XY Grid",
         toggleGround: "Show Ground",
-        toggleAxes: "Show axes",
+        toggleAxes: "Show Axes",
         disconnect: "Disconnect",
         disconnectAccount: "Disconnect account",
         songTitle: "Song title",
@@ -609,7 +609,12 @@ app.factory("parse", ["$window",
 app.factory("settings", function() {
 
     var instance = {
-        settings: {},
+        settings: {
+            toggleGround: true,
+            toggleAxes: true,
+            toggleXZGrid: true,
+            toggleXYGrid: true
+        },
         set: function(property, value) {
             console.log("setting property "+property);
             this.settings[property] = value;

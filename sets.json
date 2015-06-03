@@ -1,5 +1,5 @@
 [{
-  "title": "Amacrine Cell",
+  "title": "Amacrine Cells",
   "songs": [{
     "_id": "i"
   }, {
@@ -21,7 +21,7 @@
     "lmt": "2013-01-10T21:54:42.600Z"
   }
 }, {
-  "title": "Bipolar Cell",
+  "title": "Bipolar Cells",
   "songs": [{
     "_id": "a"
   }, {
@@ -48,7 +48,7 @@
     "lmt": "2013-01-09T15:20:49.201Z"
   }
 }, {
-  "title": "Ganglion Cell",
+  "title": "Ganglion Cells",
   "songs": [{
     "_id": "d",
     "key": "A"
@@ -67,7 +67,7 @@
     "lmt": "2013-01-10T14:15:25.514Z"
   }
 }, {
-  "title": "Horizontal Cell",
+  "title": "Horizontal Cells",
   "songs": [{
     "_id": "l"
     }, {

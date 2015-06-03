@@ -1,17 +1,35 @@
 'use strict';
-
-
-
-
 //THREEJS
 // For this example this is consumed by the directive and
 // the model factory.
 
 // Is this cached or is it actually returning a new scene?
 app.service('SceneService', function () {
+    var scene = new THREE.Scene();
+    //scene.fog = new THREE.Fog( 0x808080, 3000, 6000 );
+    // LIGHTS
+    var ambientLight = new THREE.AmbientLight( 0x222222 );
+    var light = new THREE.DirectionalLight( 0xffffff, 1.0 );
+    light.position.set( 200, 400, 500 );
+    
+    var light2 = new THREE.DirectionalLight( 0xffffff, 1.0 );
+    light2.position.set( -400, 200, -300 );
 
-    var Coordinates = {
-        drawGrid:function(params) {
+    scene.add(ambientLight);
+    scene.add(light);
+    scene.add(light2);
+
+    return {
+        scene: scene
+    }
+});
+
+app.service('CoordinatesService', ['SceneService' , function(SceneService){
+
+    var scene = SceneService.scene;
+
+    this.grid = {};
+    this.drawGrid = function(params) {
             params = params || {};
             var size = params.size !== undefined ? params.size:100;
             var scale = params.scale !== undefined ? params.scale:0.1;
@@ -41,8 +59,9 @@ app.service('SceneService', function () {
             }
 
             scene.add(grid);
-        },
-        drawGround:function(params) {
+            this.grid[orientation] = grid;
+    };
+    this.drawGround = function(params) {
             params = params || {};
             var size = params.size !== undefined ? params.size:100;
             var color = params.color !== undefined ? params.color:0xFFFFFF;
@@ -62,46 +81,12 @@ app.service('SceneService', function () {
             ground.rotation.x = - Math.PI / 2;
             ground.position.x = size/2;
             ground.position.z = size/2;
-
             scene.add(ground);
-        },
-        drawAxes:function(params) {
-            // x = red, y = green, z = blue  (RGB = xyz)
-            params = params || {};
-            var axisRadius = params.axisRadius !== undefined ? params.axisRadius:0.04;
-            var axisLength = params.axisLength !== undefined ? params.axisLength:11;
-            var axisTess = params.axisTess !== undefined ? params.axisTess:48;
-            var axisOrientation = params.axisOrientation !== undefined ? params.axisOrientation:"x";
 
-            var axisMaterial = new THREE.MeshLambertMaterial({ color: 0x000000, side: THREE.DoubleSide });
-            var axis = new THREE.Mesh(
-                new THREE.CylinderGeometry(axisRadius, axisRadius, axisLength, axisTess, 1, true), 
-                axisMaterial
-                );
-            if (axisOrientation === "x") {
-                axis.rotation.z = - Math.PI / 2;
-                axis.position.x = axisLength/2-1;
-            } else if (axisOrientation === "y") {
-                    axis.position.y = axisLength/2-1;
-            }
-            
-            scene.add( axis );
-            
-            var arrow = new THREE.Mesh(
-                new THREE.CylinderGeometry(0, 4*axisRadius, 8*axisRadius, axisTess, 1, true), 
-                axisMaterial
-                );
-            if (axisOrientation === "x") {
-                arrow.rotation.z = - Math.PI / 2;
-                arrow.position.x = axisLength - 1 + axisRadius*4/2;
-            } else if (axisOrientation === "y") {
-                arrow.position.y = axisLength - 1 + axisRadius*4/2;
-            }
+            this.ground = ground;
+    };
 
-            scene.add( arrow );
-
-        },
-        drawAllAxes:function(params) {
+    this.drawAllAxes = function(params) {
             params = params || {};
             var axisRadius = params.axisRadius !== undefined ? params.axisRadius:0.04;
             var axisLength = params.axisLength !== undefined ? params.axisLength:11;
@@ -163,52 +148,25 @@ app.service('SceneService', function () {
             scene.add( arrowY );
             scene.add( arrowZ );
 
-        }
-
+            this.axes = [ axisX , axisY, axisZ , arrowX , arrowY , arrowZ];
     };
 
-    var scene = new THREE.Scene();
-    //scene.fog = new THREE.Fog( 0x808080, 3000, 6000 );
-    // LIGHTS
-    var ambientLight = new THREE.AmbientLight( 0x222222 );
-    var light = new THREE.DirectionalLight( 0xffffff, 1.0 );
-    light.position.set( 200, 400, 500 );
-    
-    var light2 = new THREE.DirectionalLight( 0xffffff, 1.0 );
-    light2.position.set( -400, 200, -300 );
+    this.removeGround = function () {
+        scene.remove(this.ground);
+    };
 
-    scene.add(ambientLight);
-    scene.add(light);
-    scene.add(light2);
+    this.removeAxes = function () {
+        this.axes.forEach(function(object){
+            scene.remove(object);
+        });
+    };
 
-
-    var ground = true;
-    var gridX = true;
-    var gridY = true;
-    var gridZ = true;
-    var axes = true;
-
-    if (ground) {
-        Coordinates.drawGround({size:10000});        
-    }
-    if (gridX) {
-        Coordinates.drawGrid({size:10000,scale:0.001});
-    }
-    if (gridY) {
-        Coordinates.drawGrid({size:10000,scale:0.001, orientation:"y"});
-    }
-    if (gridZ) {
-        Coordinates.drawGrid({size:10000,scale:0.001, orientation:"z"});  
-    }
-    if (axes) {
-        Coordinates.drawAllAxes({axisLength:3000,axisRadius:100,axisTess:50});
-    }
+    this.removeGrid = function (orientation) {
+        scene.remove(this.grid[orientation]);
+    };
 
 
-    return {
-        scene: scene
-    }
-})
+}]);
 
 // Returns a single instance of a camera.  Consumed by directive and controls.
 app.service('CameraService', function () {
@@ -216,11 +174,10 @@ app.service('CameraService', function () {
     var viewAngle = 45;
     var aspectRatio = window.innerWidth / window.innerHeight;
     var near = 0.1
-    var far = 1500000;
+    var far = 150000;
 
-    return {
-        perspectiveCam:  new THREE.PerspectiveCamera(viewAngle, aspectRatio, near, far)}
-    })
+    return { perspectiveCam:  new THREE.PerspectiveCamera(viewAngle, aspectRatio, near, far)}
+});
 
 app.service('MeshDataService', ['$http','SceneService', function ($http, SceneService) {
     this.getMesh = function (cellID, mip , x, y, z, color) {
@@ -275,7 +232,7 @@ app.service('MeshDataService', ['$http','SceneService', function ($http, SceneSe
 
 // Adds a new model to the viewer with the provided x, y offset from the UI.  This specific model
 // creates a tube that follows a collection of 3d points.
-app.service('ModelFactory', ['SceneService','MeshDataService', function (SceneService, MeshDataService) {
+app.service('CellService', ['SceneService','MeshDataService', function (SceneService, MeshDataService) {
     this.addCell = function (cellID) {
         var mip = 6;
         var color = '#'+Math.floor(Math.random()*16777215).toString(16);

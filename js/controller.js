@@ -1,4 +1,3 @@
-
 app.controller("addController", ["$scope", "$routeParams", "$rootScope",
   function($scope, $routeParams, $rootScope) {
       {
@@ -253,8 +252,8 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
 //THREEJS
 
 // Control that manages changes to the 3d scene
-app.controller('SceneControl', ['$scope', 'ModelFactory', 'CameraService',
-  function ($scope, ModelFactory, CameraService) {
+app.controller('SceneControl', ['$scope', 'CellService', 'CameraService',
+  function ($scope, CellService, CameraService) {
       $scope.camera = { x:10000 , y:10000, z:10000};
      
       var cells = new Set();
@@ -265,7 +264,7 @@ app.controller('SceneControl', ['$scope', 'ModelFactory', 'CameraService',
 
           if(!cells.has($scope.cellID)){
               cells.add($scope.cellID);
-              ModelFactory.addCell($scope.cellID);
+              CellService.addCell($scope.cellID);
           }
       }
 
@@ -273,7 +272,7 @@ app.controller('SceneControl', ['$scope', 'ModelFactory', 'CameraService',
 
           if(cells.has($scope.cellID)){
               cells.delete($scope.cellID);
-              ModelFactory.removeCell($scope.cellID);
+              CellService.removeCell($scope.cellID);
           }
       }
 
