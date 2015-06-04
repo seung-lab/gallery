@@ -14,51 +14,81 @@ app.config(function ($httpProvider) {
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 });
     
-app.run(["$rootScope", "collection", "util", "transitioner", "keyboard", "modal", "notifier", "$window", "platform", "locale", function(a, b, c, d, e, f, g, h, i, j) {
-                        var k, l, m = (h.navigator, j._);
-                        h.notify = g.notify, a._ = m, a.change = !1, a.$on("ready", function() {
-                            a.ready = !0
-                        }), k = a.sets = b({
-                            cells: [],
-                            isNeeded: function(a) {
-                                var b = this.cells,
-                                    d = a.cells;
-                                return d.forEach(function(a) {
-                                    var e = a._id;
-                                    d[e] = a, c.list(b, e)
-                                }), !0
-                            },
-                            getcell: function(a, b) {
-                                var c, d, e = this[a].cells;
-                                for (d = 0, c = e.length; c > d; d++)
-                                    if (e[d]._id == b) return e[d]
-                            },
-                            url: "sets.json"
-                        }), l = a.cells = b({
-                            url: "cells.json",
-                            getKey: function(a, b) {
-                                var c = b && k.getcell(b, a),
-                                    d = l[a];
-                                return c && c.key || d.key
-                            }
-                        }), k.run(function() {
-                            l.run(function() {
-                                a.$emit("ready")
-                            })
-                        }), a.modal = f, a.toggleState = function(b) {
-                            a[b] = !a[b], a.changedState = !0
-                        }, a.resetState = function() {
-                            return a.changedState ? void(a.changedState = !1) : void["menu", "em"].forEach(function(b) {
-                                a[b] && (a[b] = !1)
-                            })
-                        }, e.on("ctrl+shift", function() {
-                            a.slow = !a.slow
-                        }).on(["h", "?"], function() {
-                            return f("keyboard"), a.$apply(), !1
-                        }).on("esc", function() {
-                            return !1
-                        })
-                    }]);
+//transitioner and platform not used
+app.run(["$rootScope", "collection", "util",  "keyboard", "modal", "notifier", "$window", "locale", 
+    function($rootScope, collection, util,  keyboard, modal, notifier, $window, locale) {
+
+      $window.notify = notifier.notify;
+      $rootScope._ =  ($window.navigator, locale._);
+      $rootScope.change = false;
+      $rootScope.$on("ready", function() {
+          $rootScope.ready = true
+      });
+
+      $rootScope.sets = collection({
+          cells: [],
+          isNeeded: function(a) {
+              var cells = this.cells,
+                  d = a.cells;
+
+              d.forEach(function(a) {
+                  var id = a._id;
+                  d[id] = a, util.list(cells, id)
+              })
+
+              return true;
+          },
+          getcell: function(setID, cellID) {
+            var cells = this[setID].cells;
+            for (var i = 0; i < cells.length; i++) {
+              if (cells[i]._id == cellID) {
+                return cells[i]
+              }
+            }
+          },
+          url: "sets.json"
+      });
+      $rootScope.cells = collection({
+          url: "cells.json",
+          getKey: function(cellID) {
+              return  $rootScope.cells[cellID].key;
+          }
+      });
+
+       $rootScope.sets.run(function() {
+          $rootScope.cells.run(function() {
+              $rootScope.$emit("ready")
+          });
+      });
+
+
+      $rootScope.modal = modal;
+      $rootScope.toggleState = function(b) {
+          $rootScope[b] = !$rootScope[b];
+          $rootScope.changedState = true;
+      };
+      $rootScope.resetState = function() {
+          return $rootScope.changedState ? void($rootScope.changedState = false) : void["menu", "em"].forEach(function(b) {
+              $rootScope[b] && ($rootScope[b] = false)
+          });
+      };
+
+      //This slow down all animations
+      //But there has to be another event after this changed is update
+      keyboard.on("ctrl+shift", function() {
+          $rootScope.slow = !$rootScope.slow;
+      });
+
+      //Displays some of the key bindings
+      keyboard.on(["h", "?"], function() {
+          modal("views/keyboard.html");
+          $rootScope.$apply();
+          return false;
+      });
+      keyboard.on("esc", function() {
+          return true;
+      });
+}]);
 
 
 

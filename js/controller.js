@@ -177,8 +177,7 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
           $location.path("set/" + e + "/"), g.splice(b, 1), g.length ? sets.save(f) : $scope.trashSet()
       };
       $scope.curKey = function() {
-          var a = $routeParams.cellId;
-          return a && cells.getKey(a, $routeParams.setId)
+          return cells.getKey($routeParams.cellId);
       };
       $scope.updateKey = function(b, d) {
           var e, f, g = $routeParams.setId,

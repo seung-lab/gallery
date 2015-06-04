@@ -248,13 +248,36 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
 
         toggleViewBasedOnSettings(scope);
 
+        // var activeCells = new Set();
+        // scope.$watch('sets[r.setId].cells', function(arrayCells){
+          
+        //   if(!arrayCells){
+        //     return;
+        //   }
+          
+        //   // arrayCells.forEach(function(cellObject){
+        //   //   var cellID = cellObject._id;
+        //   //   console.log(cellID);
+        //   //   if(!activeCells.has(cellID)){
+        //   //     activeCells.add(cellID);
+        //   //     CellService.addCell(cellID);
+        //   //   }
+        //   //   else {
+        //   //     activeCells.delete(cellID);
+        //   //     CellService.removeCell(cellID);
+        //   //   }
+        //   // });
+        // });
+
         var renderer;
         var controls;
 
         init();
         animate();
 
-        function init() {
+      function init() {
+
+        window.scope = scope;
         // Add the camera
         CameraService.perspectiveCam.position.set(10000, 10000, 10000);
         window.camera = CameraService.perspectiveCam;
@@ -272,9 +295,7 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
         element[0].appendChild(renderer.domElement);
 
         // handles resizing the renderer when the window is resized
-        window.addEventListener('resize', onWindowResize, false);
-        CellService.addCell(11);
-        
+        window.addEventListener('resize', onWindowResize, false);        
       }
 
       function animate() {
@@ -283,7 +304,7 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
         controls.update();
       }
 
-      function onWindowResize(event) {
+      function onWindowResize() {
         renderer.setSize(window.innerWidth, window.innerHeight);
         CameraService.perspectiveCam.aspect = window.innerWidth / window.innerHeight;
         CameraService.perspectiveCam.updateProjectionMatrix();

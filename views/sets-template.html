@@ -1,10 +1,12 @@
-<div sp-if=!sets.length class=center>
-    <div class=placeholder><i class=icon-sets></i>
+<div sp-if=!sets.length class="center">
+    <div class="placeholder">
+    		<i class="icon-sets"></i>
         <h6>{{_.noSets}}</h6>
         <p>{{_.creatingSets}}</p>
     </div>
 </div>
-<ul sp-sortable="" onsort=sortSet class=nav>
+<ul sp-sortable="" onsort="sortSet" class="nav">
     <li ng-repeat="set in sets" sp-tap="p('set/'+set._id+'/')" class="icon-right set">
-        <h3 class=trim>{{set.name}}</h3></li>
+        <h3 class="trim">{{set.name}}</h3>
+    </li>
 </ul>
