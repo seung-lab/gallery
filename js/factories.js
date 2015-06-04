@@ -86,9 +86,8 @@ app.factory("collection", ["$http", "util",
       d = c[a]._acl;
       return d.w = b, c
     };
-    return function(a) {
-      var b = [],
-      c = {
+    return function(argObject) {
+      var srcObject = {
         url: "",
         run: run,
         save: save,
@@ -114,8 +113,10 @@ app.factory("collection", ["$http", "util",
         }
       };
 
-      util.extend(b, c, a);
-      return b;
+      //Extends the destination object dst by copying own enumerable properties from the src and arg object(s) to dst. 
+      var dstObject = [];
+      util.extend(dstObject, srcObject, argObject);
+      return dstObject;
     }
   }]);
 
@@ -358,34 +359,147 @@ app.factory("md5", function() {
       if (f[c >> 2] |= 128 << (c % 4 << 3), c > 55)
         for (a(e, f), c = 0; 16 > c; c++) f[c] = 0;
           return f[14] = 8 * d, a(e, f), e
-      }
+  }
 
-      function h(a) {
-        var b, c = [];
-        for (b = 0; 64 > b; b += 4) c[b >> 2] = a.charCodeAt(b) + (a.charCodeAt(b + 1) << 8) + (a.charCodeAt(b + 2) << 16) + (a.charCodeAt(b + 3) << 24);
-          return c
-      }
+  function h(a) {
+    var b, c = [];
+    for (b = 0; 64 > b; b += 4) c[b >> 2] = a.charCodeAt(b) + (a.charCodeAt(b + 1) << 8) + (a.charCodeAt(b + 2) << 16) + (a.charCodeAt(b + 3) << 24);
+      return c
+  }
 
-      function i(a) {
-        for (var b = "", c = 0; 4 > c; c++) b += m[a >> 8 * c + 4 & 15] + m[a >> 8 * c & 15];
-          return b
-      }
+  function i(a) {
+    for (var b = "", c = 0; 4 > c; c++) b += m[a >> 8 * c + 4 & 15] + m[a >> 8 * c & 15];
+      return b
+  }
 
-      function j(a) {
-        for (var b = 0; b < a.length; b++) a[b] = i(a[b]);
-          return a.join("")
-      }
+  function j(a) {
+    for (var b = 0; b < a.length; b++) a[b] = i(a[b]);
+      return a.join("")
+  }
 
-      function k(a, b) {
-        return a + b & 4294967295
-      }
+  function k(a, b) {
+    return a + b & 4294967295
+  }
 
-      function l(a) {
-        return j(g(a || ""))
+  function l(a) {
+    return j(g(a || ""))
+  }
+  var m = "0123456789abcdef".split("");
+    return l
+});
+
+app.factory("setOperations", function(){
+  
+  var so = {};
+
+  var uidList = [];
+  var uid;
+
+  // Create and push the uid identity method.
+  uidList.push(uid = function() {
+    return this;
+  });
+
+  // Push a new uid method onto the stack. Call this and
+  // supply a unique key generator for sets of objects.
+  // so.pushUid = function(method) {
+  //   uidList.push(method);
+  //   uid = method;
+  //   return method;
+  // };
+
+  // // Pop the previously pushed uid method off the stack and
+  // // assign top of stack to uid. Return the previous method.
+  // so.popUid = function() {
+  //   var prev;
+  //   uidList.length > 1 && (prev = uidList.pop());
+  //   uid = uidList[uidList.length-1];
+  //   return prev || null;
+  // };
+
+  // Processes a histogram consructed from two arrays, 'a' and 'b'.
+  // This function is used generically by the below set operation 
+  // methods, a.k.a, 'evaluators', to return some subset of
+  // a set union, based on frequencies in the histogram. 
+  function process(a, b, evaluator) {
+    // Create a histogram of 'a'.
+    var hist = Object.create(null), out = [], ukey, k;
+    a.forEach(function(value) {
+      ukey = uid.call(value);
+      if(!hist[ukey]) {
+        hist[ukey] = { value: value, freq: 1 };
       }
-      var m = "0123456789abcdef".split("");
-      return l
     });
+    // Merge 'b' into the histogram.
+    b.forEach(function(value) {
+      ukey = uid.call(value);
+      if (hist[ukey]) {
+        if (hist[ukey].freq === 1)
+          hist[ukey].freq = 3;
+      } else {
+        hist[ukey] = { value: value, freq: 2 };
+      }
+    });
+    // Call the given evaluator.
+    if (evaluator) {
+      for (k in hist) {
+        if (evaluator(hist[k].freq)) out.push(hist[k].value);
+      }
+      return out;
+    } else {
+      return hist;
+    }
+  };
+
+  // Join two sets together.
+  // Set.union([1, 2, 2], [2, 3]) => [1, 2, 3]
+  so.union = function(a, b) {
+    return process(a, b, function(freq) {
+      return true;
+    });
+  };
+
+  // Return items common to both sets. 
+  // Set.intersection([1, 1, 2], [2, 2, 3]) => [2]
+  so.intersection = function(a, b) {
+    return process(a, b, function(freq) {
+      return freq === 3;
+    });
+  };
+
+  // Symmetric difference. Items from either set that
+  // are not in both sets.
+  // Set.difference([1, 1, 2], [2, 3, 3]) => [1, 3]
+  so.difference = function(a, b) {
+    return process(a, b, function(freq) {
+      return freq < 3;
+    });
+  };
+
+  // Relative complement. Items from 'a' which are
+  // not also in 'b'.
+  // Set.complement([1, 2, 2], [2, 2, 3]) => [3]
+  so.complement = function(a, b) {
+    return process(a, b, function(freq) {
+      return freq === 1;
+    });
+  };
+
+  // Returns true if both sets are equivalent, false otherwise.
+  // Set.equals([1, 1, 2], [1, 2, 2]) => true
+  // Set.equals([1, 1, 2], [1, 2, 3]) => false
+  so.equals = function(a, b) {
+    var max = 0, min = Math.pow(2, 53), key,
+      hist = process(a, b);
+    for (var key in hist) {
+      max = Math.max(max, hist[key].freq);
+      min = Math.min(min, hist[key].freq);
+    }
+    return min === 3 && max === 3;
+  };
+
+  return so;
+});
 
 app.factory("modal", ["$rootScope", "$location", "$routeParams", "transitioner", "$timeout",
   function(a, b, c, d, e) {

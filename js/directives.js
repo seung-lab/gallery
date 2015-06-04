@@ -213,8 +213,8 @@ app.directive("editor", ["$window", "util", "parse",
 // services are used to manipulate the scene else where.
 // Currently the Renderer and controls are part of the directive but could just as easily be 
 // moved into their own services if functionality they provide need to be manipulated by a UI control.
-app.directive('threeViewport', ['SceneService', 'CameraService','CellService', 'CoordinatesService' , 'settings', 
-  function (SceneService, CameraService, CellService, CoordinatesService, settings) {
+app.directive('threeViewport', ['SceneService', 'CameraService','CellService', 'CoordinatesService' , 'settings', 'setOperations', 'md5', 
+  function (SceneService, CameraService, CellService, CoordinatesService, settings, setOperations, md5) {
 
     function toggleViewBasedOnSettings (scope) {
 
@@ -239,35 +239,40 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
       });
 
     }
+    
+    function updateVisibleCells (scope) {
+      var activeCells = new Set();
+      scope.$watch('sets[r.setId].cells', function(updatedArray){
+        if(!updatedArray){
+          return;
+        }
 
+        var updatedCells = new Set();
+        updatedArray.forEach(function(cellObject){
+          updatedCells.add(cellObject._id);
+        });
+
+        var toAdd = setOperations.complement(updatedCells,activeCells);
+        toAdd.forEach(function(cellID){
+            activeCells.add(cellID);
+            console.log('adding cell ' + cellID);
+            //CellService.addCell(cellID);
+        });
+        var toRemove = setOperations.complement(activeCells,updatedCells);
+
+        toRemove.forEach(function(cellID){
+               activeCells.delete(cellID);
+            console.log('removing cell ' + cellID);
+            //CellService.removeCell(cellID);
+        });
+      });
+    }
 
     return {
       restrict: "AE",
 
       link: function (scope, element, attribute) {
 
-        toggleViewBasedOnSettings(scope);
-
-        // var activeCells = new Set();
-        // scope.$watch('sets[r.setId].cells', function(arrayCells){
-          
-        //   if(!arrayCells){
-        //     return;
-        //   }
-          
-        //   // arrayCells.forEach(function(cellObject){
-        //   //   var cellID = cellObject._id;
-        //   //   console.log(cellID);
-        //   //   if(!activeCells.has(cellID)){
-        //   //     activeCells.add(cellID);
-        //   //     CellService.addCell(cellID);
-        //   //   }
-        //   //   else {
-        //   //     activeCells.delete(cellID);
-        //   //     CellService.removeCell(cellID);
-        //   //   }
-        //   // });
-        // });
 
         var renderer;
         var controls;
@@ -295,7 +300,11 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
         element[0].appendChild(renderer.domElement);
 
         // handles resizing the renderer when the window is resized
-        window.addEventListener('resize', onWindowResize, false);        
+        window.addEventListener('resize', onWindowResize, false);  
+
+        toggleViewBasedOnSettings(scope);
+        updateVisibleCells (scope);
+      
       }
 
       function animate() {
