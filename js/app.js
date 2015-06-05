@@ -29,15 +29,7 @@ app.run(["$rootScope", "collection", "util",  "keyboard", "modal", "notifier", "
 
       $rootScope.sets = collection({
           cells: [],
-          isNeeded: function(a) {
-              var cells = this.cells,
-                  d = a.cells;
-
-              d.forEach(function(a) {
-                  var id = a._id;
-                  d[id] = a, util.list(cells, id)
-              })
-
+          isNeeded: function(set) {
               return true;
           },
           getcell: function(setID, cellID) {
@@ -53,7 +45,8 @@ app.run(["$rootScope", "collection", "util",  "keyboard", "modal", "notifier", "
       $rootScope.cells = collection({
           url: "cells.json",
           getKey: function(cellID) {
-              return  $rootScope.cells[cellID].key;
+              var index = $rootScope.cells.getIndex(cellID);
+              return  $rootScope.cells[index].key;
           },
           has: function(cellID) {
             for ( var i = 0; $rootScope.cells.length ; i++){

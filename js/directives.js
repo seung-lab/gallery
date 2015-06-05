@@ -242,28 +242,24 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
     
     function updateVisibleCells (scope) {
       var activeCells = new Set();
-      scope.$watch('sets[r.setId].cells', function(updatedArray){
-        if(!updatedArray){
+      scope.$watch('r.setId', function(setId){
+        if(!setId){
           return;
         }
-
-        var updatedCells = new Set();
-        updatedArray.forEach(function(cellObject){
-          updatedCells.add(cellObject._id);
-        });
+        var setIndex = scope.sets.getIndex(setId);
+        var updatedCells = new Set(scope.sets[setIndex].cells);
 
         var toAdd = setOperations.complement(updatedCells,activeCells);
         toAdd.forEach(function(cellID){
             activeCells.add(cellID);
             console.log('adding cell ' + cellID);
-            //CellService.addCell(cellID);
+            CellService.addCell(cellID);
         });
         var toRemove = setOperations.complement(activeCells,updatedCells);
-
         toRemove.forEach(function(cellID){
-               activeCells.delete(cellID);
+            activeCells.delete(cellID);
             console.log('removing cell ' + cellID);
-            //CellService.removeCell(cellID);
+            CellService.removeCell(cellID);
         });
       });
     }

@@ -10,9 +10,10 @@ app.factory("collection", ["$http", "util",
       var url = util.buildUrl(this.url, this.params);
 
       $http.get(url).success(function(jsonArray) {
+        console.log(jsonArray);
         jsonArray.forEach(function(element) {
           this[element._id] ? this.saveLocal(element) : c.add(element, null)
-        })
+        });
       }).success(callback).error(callback)
 
       return this;
@@ -24,21 +25,23 @@ app.factory("collection", ["$http", "util",
     };
 
     var add = function(element, b) {
-
+      console.log("adding");
       var c = this;
+      this.push(element);
+
       if (this.isNeeded(element)){
-        this[element._id] = element;
-        this.push(element);
+        //this[element._id] = element;
+        console.log("pushing");
       } 
       else {
-        this.aux[element._id] = element;
+        //this.aux[element._id] = element;
         this.aux.push(element);
       } 
       if(b){
         b.call(c, element);
       }
+      console.log(element);
 
-      console.log(this);
     };
     var removeLocal = function(a) {
       var b = this;
@@ -102,6 +105,16 @@ app.factory("collection", ["$http", "util",
       d = c[a]._acl;
       return d.w = b, c
     };
+
+    var getIndex = function(id){
+      for (var index = 0; index < this.length; index++) {
+        if (this[index]._id == id){
+          return index;
+        }
+      }
+      return -1;
+    }
+
     //This is overwrite for cells and sets
     var isNeeded = function() {
           return true;
@@ -127,6 +140,7 @@ app.factory("collection", ["$http", "util",
         add: add,
         saveLocal: saveLocal,
         removeLocal: removeLocal,
+        getIndex: getIndex,
         isNeeded: isNeeded
       };
 
@@ -335,7 +349,6 @@ app.factory("locale", function() {
     languages[lang.code] = lang
   }), locale
 });
-
 
 app.factory("md5", function() {
   function a(a, b) {

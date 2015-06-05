@@ -1,6 +1,6 @@
 [{
   "name": "Amacrine Cells",
-  "cells": [{"_id": "a"}, {"_id": "b"}, {"_id": "c"}],
+  "cells": ["11","878","879"],
   "_id": "a",
   "_acl": {
     "creator": "demo@cellpane.com"
@@ -10,7 +10,7 @@
   }
 }, {
   "name": "Bipolar Cells",
-  "cells": [{"_id": "b"}, {"_id": "c"}],
+  "cells": ["878","879"],
   "_id": "b",
   "_acl": {
     "creator": "demo@cellpane.com",
@@ -21,7 +21,7 @@
   }
 }, {
   "name": "Ganglion Cells",
-  "cells": [{"_id": "a"}, {"_id": "c"}],
+  "cells": ["11", "879"],
   "_id": "c",
   "_acl": {
     "creator": "demo@cellpane.com"
@@ -31,7 +31,7 @@
   }
 }, {
   "name": "Horizontal Cells",
-  "cells": [{"_id": "b"}, {"_id": "c"}],
+  "cells": ["878", "879"],
   "_id": "d",
   "_acl": {
     "creator": "demo@cellpane.com"

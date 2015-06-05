@@ -123,13 +123,12 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
       //     })
            return o;
       }
-      var locale_ = locale._;
       var sets = $rootScope.sets;
       var cells = $rootScope.cells;
-      q = $rootScope.cellSlide = {
+      $rootScope.cellSlide = {
           to: "left"
-      },
-      r = $rootScope.viewSlide = {
+      };
+      $rootScope.viewSlide = {
           to: "left"
       };
       $rootScope.r = $routeParams;
@@ -140,7 +139,7 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
       $rootScope.q = function(a, b) {
           $location.search(a, b)
       };
-      $rootScope._ = locale_;
+      $rootScope._ = locale._;
       $scope.s = settings.settings;
       $scope.pad = util.pad;
 
@@ -167,7 +166,7 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
       $scope.duplicateSet = function() {
           var a = sets[$routeParams.setId];
           $location.path("set/" + sets.save({
-              name: a.name + " (" + locale_.copy + ")",
+              name: a.name + " (" + locale._.copy + ")",
               cells: a.cells.slice(0)
           }) + "/")
       };
@@ -184,7 +183,7 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
           var e, f, g = $routeParams.setId,
           h = $routeParams.cellId,
           i = cells[h];
-          g && (e = sets[g], f = sets.getcell(g, h), b !== i.key ? f.key = b : delete f.key, !d && sets.save(e)), $scope.k != b && (q.model = m(i.body, i.key, b), $scope.k = b)
+          g && (e = sets[g], f = sets.getcell(g, h), b !== i.key ? f.key = b : delete f.key, !d && sets.save(e)), $scope.k != b && ($rootScope.cellSlide.model = m(i.body, i.key, b), $scope.k = b)
       };
       $scope.clean = function(a) {
           delete this[a]
@@ -230,62 +229,62 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
                 }
 
                 if (fromSetId) {
-                  r.to = "right";
-                  r.model = to.params.view;
+                  $rootScope.viewSlide.to = "right";
+                  $rootScope.viewSlide.model = to.params.view;
                 }
                 else if (to.params.view != fromView) {
-                  r.to = "left", r.model = to.params.view;
+                  $rootScope.viewSlide.to = "left";
+                  $rootScope.viewSlide.model = to.params.view;
                 }
             }
             
             if (to.params.setId) {
-                if (!sets[to.params.setId]){
+                var setIndex = sets.getIndex(to.params.setId);
+                if (!sets[setIndex]){
                   $location.path(sets.length ? "sets/" : "search/");
-                } return;  
+                  return;
+                }   
                 
                 if(to.params.setId != fromSetId) {
-                  r.force = true;
-                  r.to = "left";
-                  r.model = "set";
+                  $rootScope.viewSlide.force = true;
+                  $rootScope.viewSlide.to = "left";
+                  $rootScope.viewSlide.model = "set";
                 }
             }
 
             if (to.params.cellId) {
-              console.log('moving to '+ to.params.cellId);
-              for(var cellIndex = 0; cellIndex < cells.length; cellIndex++) {
-                if (cells[cellIndex]._id == to.params.cellId){
-                  console.log(cellIndex);
+              var cellIndex = cells.getIndex(to.params.cellId);
+              if (cells[cellIndex]){
 
-                  var body = m(cells[cellIndex].body);
-                  $scope.k = $scope.curKey();
+                var body = m(cells[cellIndex].body);
+                $scope.k = $scope.curKey();
 
-                  if (to.params.cellId !== fromCellId) {
-                    if (fromSetId === to.params.setId 
-                      //&& sets[to.params.setId].cells.indexOf(cellId) < sets[to.params.setId].cells.indexOf(fromCellId) 
-                      ) {
-                      q.to = "right";
-                      q.model = body;
-                      return;
-                    }
-                    else {
-                      q.to = "left"; 
-                      q.model = body;
-                      return; 
-                    }
-                  } 
-                  else {
-                    transitioner.apply("cell-view", function() {
-                      q.model = ""
-                    });
+                if (to.params.cellId !== fromCellId) {
+                  if (fromSetId === to.params.setId 
+                    //&& sets[to.params.setId].cells.indexOf(cellId) < sets[to.params.setId].cells.indexOf(fromCellId) 
+                    ) {
+                    $rootScope.cellSlide.to = "left";
+                    $rootScope.cellSlide.model = body;
                     return;
-                  }   
-                }
+                  }
+                  else {
+                    $rootScope.cellSlide.to = "left"; 
+                    $rootScope.cellSlide.model = body;
+                    return; 
+                  }
+                } 
+                else {
+                  transitioner.apply("cell-view", function() {
+                    $rootScope.cellSlide.model = ""
+                  });
+                  return;
+                }   
               }
-              
-              //If we couldn't find the cell go back to the view
-              $location.path(to.params.view + "/");
-              return;
-            }
+                        
+            //If we couldn't find the cell go back to the view
+            $location.path(to.params.view + "/");
+            return;
+          }
           } 
       });
       keyboard.on(["left", "k", "up", "pageup"], function() {
