@@ -3,17 +3,17 @@
     <div id="cell-view" ng-class="{cr:cr,ic:r.cellId,fs:fs}">
         <aside>
             <article id="info">
-                <h1>{{cells[r.cellId].name}}</h1>
+                <h1>{{cells[cells.getIndex(r.cellId)].name}}</h1>
                 <ul class=list>
                     <li>
                         <div class=group>
-                            <a class="btn icon-add flex" sp-tap="modal('views/add.html')" id=add_to_set></a>
+                            <a class="btn icon-add flex" sp-tap="modal('views/add.html')" id="add_to_set"></a>
                             <a sp-tap="editcell(true)" class="btn icon-copy flex"></a>
-                            <a sp-if=iscellOwner() sp-tap="editcell()" class="btn icon-pencil flex"></a>
+                            <a sp-if=iscellOwner() sp-tap="modal('views/twoD.html')" class="btn icon-pencil flex"></a>
                             <a sp-if=iscellOwner() sp-tap="modal('views/confirm.html')" class="btn danger icon-bin flex"></a>
                         </div>
                     </li>
-                    <li>
+                    <!-- <li>
                         <q>{{_.key}}</q>
                         <span class=select-wrap sp-if=canChangeKey()>
                             <select ng-change="updateKey(k)+clean('k')" ng-model=k ng-options="k for k in getKeys()"></select>
@@ -21,32 +21,20 @@
                         </span>
                         <span sp-if=!canChangeKey()>{{k}}</span>
                         &nbsp;({{cells[r.cellId].key}})</li>
+                    </li> -->
                     <li>
-                        <q>{{_.tempo}}</q>
-                        {{cells[r.cellId].tempo}}
-                    </li>
-                    <li>
-                        <q>{{_.signature}}</q>
-                        {{cells[r.cellId].signature}}</li>
-                    <li>
-                        <q>{{_.artist}}</q>
-                        <p>{{cells[r.cellId].artists.join(', ')}}</p>
+                        <q>{{_.description}}</q>
+                        {{cells[cells.getIndex(r.cellId)].description}}
                     </li>
                     <li class=drop sp-tap="c=!c" ng-class="{'active':c}">
                         <q>{{_.copyright}}</q>
-                        <p ng-show=c>{{cells[r.cellId].copyright}}</p>
+                        <p ng-show=c>{{cells[cells.getIndex(r.cellId)].copyright}}</p>
                     </li>
                 </ul>
             </article>
         </aside>
         <section id="sheet">
-            <div id=space sp-tap=nextcell() sp-kbd="['space', 'right', 'j', 'down', 'pagedown']" ng-class=spaceClass>
-<!--                 <article sp-slide=cellSlide>
-                    <div ng-class="{m:s.fontSize==1,l:s.fontSize==2,h:s.hideChords}" class=cell-wrap>
-                        <p ng-repeat="part in model" ng-class="'part-'+part.type" ng-bind-html-unsafe=part.text></p>
-                    </div>
-                </article> -->
-                
+            <div id=space sp-tap="nextcell()" sp-kbd="['space', 'right', 'j', 'down', 'pagedown']" ng-class=spaceClass>
                     <!--A directive is the reusable package created with AngularJS-->
                     <!--This directive wraps Three JS-->
                     <div three-viewport></div>

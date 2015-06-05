@@ -213,8 +213,8 @@ app.directive("editor", ["$window", "util", "parse",
 // services are used to manipulate the scene else where.
 // Currently the Renderer and controls are part of the directive but could just as easily be 
 // moved into their own services if functionality they provide need to be manipulated by a UI control.
-app.directive('threeViewport', ['SceneService', 'CameraService','CellService', 'CoordinatesService' , 'settings', 'setOperations', 'md5', 
-  function (SceneService, CameraService, CellService, CoordinatesService, settings, setOperations, md5) {
+app.directive('threeViewport', ['SceneService', 'CameraService','CellService', 'CoordinatesService' , 'settings', 'setOperations', 
+  function (SceneService, CameraService, CellService, CoordinatesService, settings, setOperations) {
 
     function toggleViewBasedOnSettings (scope) {
 
@@ -252,15 +252,31 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
         var toAdd = setOperations.complement(updatedCells,activeCells);
         toAdd.forEach(function(cellID){
             activeCells.add(cellID);
-            console.log('adding cell ' + cellID);
             CellService.addCell(cellID);
         });
         var toRemove = setOperations.complement(activeCells,updatedCells);
         toRemove.forEach(function(cellID){
             activeCells.delete(cellID);
-            console.log('removing cell ' + cellID);
             CellService.removeCell(cellID);
         });
+      });
+
+      scope.$watch("r.cellId", function(cellId){
+        if (scope.viewSlide.model == "catalog" && cellId != ""){
+          var updatedCells = new Set([cellId,]);
+          var toAdd = setOperations.complement(updatedCells,activeCells);
+          toAdd.forEach(function(cellID){
+            activeCells.add(cellID);
+            CellService.addCell(cellID);
+          });
+          var toRemove = setOperations.complement(activeCells,updatedCells);
+          toRemove.forEach(function(cellID){
+            activeCells.delete(cellID);
+            CellService.removeCell(cellID);
+          });
+
+        }
+
       });
     }
 
@@ -318,3 +334,40 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
   }
 }
 ]);
+
+app.directive('twoViewport', [
+  function() {
+  return {
+      restrict: "AE",
+
+      link: function (scope, element, attribute) {
+
+        var renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(640, 640);
+        renderer.setClearColor( "#5Caadb", 1.0 );
+
+        element[0].appendChild(renderer.domElement);
+
+        var _scene = new THREE.Scene();
+        var _camera = new THREE.PerspectiveCamera(35, 1, 0.1, 10000);
+        _camera.rotation.set(0, 0, 0);
+
+        var _world = new THREE.Object3D();
+
+        var material = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('./crate.jpg') } );
+        var mesh = new THREE.Mesh(new THREE.PlaneGeometry(1000, 1000, 5, 5), material );
+
+
+
+        _scene.add(_camera);
+        _scene.add(mesh);
+
+        animate();
+
+        function animate() {
+          requestAnimationFrame(animate);
+          renderer.render(_scene, _camera);
+        }
+      }
+  }   
+}]);

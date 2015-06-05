@@ -10,7 +10,6 @@ app.factory("collection", ["$http", "util",
       var url = util.buildUrl(this.url, this.params);
 
       $http.get(url).success(function(jsonArray) {
-        console.log(jsonArray);
         jsonArray.forEach(function(element) {
           this[element._id] ? this.saveLocal(element) : c.add(element, null)
         });
@@ -25,22 +24,16 @@ app.factory("collection", ["$http", "util",
     };
 
     var add = function(element, b) {
-      console.log("adding");
-      var c = this;
-      this.push(element);
-
       if (this.isNeeded(element)){
-        //this[element._id] = element;
-        console.log("pushing");
+        this.push(element);
       } 
       else {
-        //this.aux[element._id] = element;
         this.aux.push(element);
-      } 
-      if(b){
-        b.call(c, element);
       }
-      console.log(element);
+
+      if(b){
+        b.call(this, element);
+      }
 
     };
     var removeLocal = function(a) {
@@ -271,10 +264,8 @@ app.factory("locale", function() {
     key: "Key",
     currentKey: "Current Key",
     originalKey: "Original Key",
-    tempo: "Tempo",
-    signature: "Signature",
     timeSignature: "Time Signature",
-    artist: "Artist(s)",
+    description: "Description",
     copyright: "Copyright",
     profile: "Profile",
     buddies: "Buddies",
@@ -793,7 +784,6 @@ app.factory("settings", function() {
       toggleXYGrid: true
     },
     set: function(property, value) {
-      console.log("setting property "+property);
       this.settings[property] = value;
     },
     toggle: function(property) {

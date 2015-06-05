@@ -251,7 +251,6 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
                   $rootScope.viewSlide.model = "set";
                 }
             }
-
             if (to.params.cellId) {
               var cellIndex = cells.getIndex(to.params.cellId);
               if (cells[cellIndex]){
