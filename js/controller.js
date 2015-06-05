@@ -109,20 +109,21 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
   function($scope, $rootScope, $routeParams, $location, settings, util, keyboard, transposer, transitioner, locale, $timepout, modal) {
       function m(a, b, c) {
           var d, e, g, i, j, k, l, m, n, o = [];
-          return a.split("[").forEach(function(a) {
-              if ("" !== a) {
-                  for (d = a.split("]"), k = "", g = d[1].replace(/[\r\t\v\f\0\x0B]|^\n+|\s+$/g, "").split("\n"), i = 0, j = g.length; j > i; i += 2) {
-                      for (e = g[i + 1], e.length < g[i].length && (e += util.pad(g[i].length - e.length, " ")), n = 0, l = /\S+/g; m = l.exec(g[i]);) k += e.substring(n, m.index) + '<span class="c"><span>' + (b !== c ? transposer.transpose(m[0], b, c) : m[0]) + "</span></span>", n = m.index;
-                          k += g[i + 1].substr(n) + "\n"
-                  }
-                  o.push({
-                      type: d[0].toLowerCase(),
-                      text: k
-                  })
-              }
-          }), o
+      //     a.split("[").forEach(function(a) {
+      //         if ("" !== a) {
+      //             for (d = a.split("]"), k = "", g = d[1].replace(/[\r\t\v\f\0\x0B]|^\n+|\s+$/g, "").split("\n"), i = 0, j = g.length; j > i; i += 2) {
+      //                 for (e = g[i + 1], e.length < g[i].length && (e += util.pad(g[i].length - e.length, " ")), n = 0, l = /\S+/g; m = l.exec(g[i]);) k += e.substring(n, m.index) + '<span class="c"><span>' + (b !== c ? transposer.transpose(m[0], b, c) : m[0]) + "</span></span>", n = m.index;
+      //                     k += g[i + 1].substr(n) + "\n"
+      //             }
+      //             o.push({
+      //                 type: d[0].toLowerCase(),
+      //                 text: k
+      //             })
+      //         }
+      //     })
+           return o;
       }
-      var n = locale._;
+      var locale_ = locale._;
       var sets = $rootScope.sets;
       var cells = $rootScope.cells;
       q = $rootScope.cellSlide = {
@@ -139,7 +140,7 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
       $rootScope.q = function(a, b) {
           $location.search(a, b)
       };
-      $rootScope._ = n;
+      $rootScope._ = locale_;
       $scope.s = settings.settings;
       $scope.pad = util.pad;
 
@@ -166,7 +167,7 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
       $scope.duplicateSet = function() {
           var a = sets[$routeParams.setId];
           $location.path("set/" + sets.save({
-              name: a.name + " (" + n.copy + ")",
+              name: a.name + " (" + locale_.copy + ")",
               cells: a.cells.slice(0)
           }) + "/")
       };
@@ -205,28 +206,87 @@ app.controller("uiController", ["$scope", "$rootScope", "$routeParams", "$locati
           var a = $routeParams.setId;
           return a ? sets.isWriter(sets[a]) : true
       };
-      $scope.$on("$routeChangeSuccess", function($routeChangeSuccess, to, from) {
-          if ("/" === $location.path()) return void $location.path(sets.length ? "sets/" : "search/");
-          if (to) {
-              var f, g, h, j;
-              var view = to.params.view;
-              var setId = to.params.setId;
-              var cellId = to.params.cellId;
-              if (from && (f = from.params.view, g = from.params.setId, h = from.params.cellId), view) {
-                  if (-1 == ["sets", "catalog", "search"].indexOf(view)) return void $location.path(sets.length ? "sets/" : "search/");
-                  g ? (r.to = "right", r.model = view) : view != f && (r.to = "left", r.model = view)
-              }
-              if (setId) {
-                  if (!sets[setId]) return void $location.path(sets.length ? "sets/" : "search/");
-                  setId != g && (r.force = !0, r.to = "left", r.model = "set")
-              }
-              if (cellId) {
-                  if (!cells[cellId]) return void $location.path(view + "/");
-                  j = m(cells[cellId].body, cells[cellId].key, cells.getKey(cellId, setId)), $scope.k = $scope.curKey(), from ? cellId !== h && (g && g === setId && sets[setId].cells.indexOf(cellId) < sets[setId].cells.indexOf(h) ? (q.to = "right", q.model = j) : (q.to = "left", q.model = j)) : (q.to = "left", q.model = j)
-              } else h && transitioner.apply("cell-view", function() {
-                  q.model = ""
-              })
+
+      //This changes the views when the location
+      $scope.$on("$routeChangeSuccess",
+       function($routeChangeSuccess, to, from) {
+          if ("/" === $location.path()){
+            $location.path(sets.length ? "sets/" : "search/");
+            return;
           }
+
+          var fromView, fromSetId, fromCellId;
+          if ( from ){
+            fromView = from.params.view;
+            fromSetId = from.params.setId;
+            fromCellId = from.params.cellId;
+          }
+
+          if (to) {
+            if (to.params.view) {
+                if (-1 == ["sets", "catalog", "search"].indexOf(to.params.view)){
+                  $location.path(sets.length ? "sets/" : "search/");
+                  return;
+                }
+
+                if (fromSetId) {
+                  r.to = "right";
+                  r.model = to.params.view;
+                }
+                else if (to.params.view != fromView) {
+                  r.to = "left", r.model = to.params.view;
+                }
+            }
+            
+            if (to.params.setId) {
+                if (!sets[to.params.setId]){
+                  $location.path(sets.length ? "sets/" : "search/");
+                } return;  
+                
+                if(to.params.setId != fromSetId) {
+                  r.force = true;
+                  r.to = "left";
+                  r.model = "set";
+                }
+            }
+
+            if (to.params.cellId) {
+              console.log('moving to '+ to.params.cellId);
+              for(var cellIndex = 0; cellIndex < cells.length; cellIndex++) {
+                if (cells[cellIndex]._id == to.params.cellId){
+                  console.log(cellIndex);
+
+                  var body = m(cells[cellIndex].body);
+                  $scope.k = $scope.curKey();
+
+                  if (to.params.cellId !== fromCellId) {
+                    if (fromSetId === to.params.setId 
+                      //&& sets[to.params.setId].cells.indexOf(cellId) < sets[to.params.setId].cells.indexOf(fromCellId) 
+                      ) {
+                      q.to = "right";
+                      q.model = body;
+                      return;
+                    }
+                    else {
+                      q.to = "left"; 
+                      q.model = body;
+                      return; 
+                    }
+                  } 
+                  else {
+                    transitioner.apply("cell-view", function() {
+                      q.model = ""
+                    });
+                    return;
+                  }   
+                }
+              }
+              
+              //If we couldn't find the cell go back to the view
+              $location.path(to.params.view + "/");
+              return;
+            }
+          } 
       });
       keyboard.on(["left", "k", "up", "pageup"], function() {
           return $scope.$apply(function() {

@@ -1,28 +1,44 @@
 app.factory("collection", ["$http", "util",
   function($http, util) {
 
-    var run = function(a) {
-      this.syncDown(a || util.noop);
+    var run = function(callback) {
+      this.syncDown(callback || util.noop);
       return  this;
     };
-    var syncDown = function(a) {
+    var syncDown = function(callback) {
       var c = this;
-      return $http.get(util.buildUrl(c.url, c.params)).success(function(a) {
-        a.forEach(function(a) {
-          c[a._id] ? c.saveLocal(a) : c.add(a, null, !0)
+      var url = util.buildUrl(this.url, this.params);
+
+      $http.get(url).success(function(jsonArray) {
+        jsonArray.forEach(function(element) {
+          this[element._id] ? this.saveLocal(element) : c.add(element, null)
         })
-      }).success(a || util.noop).error(a || util.noop), c
+      }).success(callback).error(callback)
+
+      return this;
     };
     var saveLocal = function(a) {
       var b = this,
-      c = a._id;
-      "trash" == a.status ? b.removeLocal(c) : util.extend(b[c], a)
+      id = a._id;
+      "trash" == a.status ? b.removeLocal(id) : util.extend(b[id], a)
     };
-    var add = function(a, b) {
+
+    var add = function(element, b) {
+
       var c = this;
-      util.toArray(a).forEach(function(a) {
-        "trash" != a.status && (c[a._id] || (c.isNeeded(a) ? c.push(a) : c.aux.push(a), c[a._id] = a))
-      }), b && b.call(c, a)
+      if (this.isNeeded(element)){
+        this[element._id] = element;
+        this.push(element);
+      } 
+      else {
+        this.aux[element._id] = element;
+        this.aux.push(element);
+      } 
+      if(b){
+        b.call(c, element);
+      }
+
+      console.log(this);
     };
     var removeLocal = function(a) {
       var b = this;
@@ -86,6 +102,10 @@ app.factory("collection", ["$http", "util",
       d = c[a]._acl;
       return d.w = b, c
     };
+    //This is overwrite for cells and sets
+    var isNeeded = function() {
+          return true;
+    }
     return function(argObject) {
       var srcObject = {
         url: "",
@@ -107,10 +127,7 @@ app.factory("collection", ["$http", "util",
         add: add,
         saveLocal: saveLocal,
         removeLocal: removeLocal,
-        
-        isNeeded: function() {
-          return true;
-        }
+        isNeeded: isNeeded
       };
 
       //Extends the destination object dst by copying own enumerable properties from the src and arg object(s) to dst. 
@@ -517,7 +534,9 @@ app.factory("modal", ["$rootScope", "$location", "$routeParams", "transitioner",
       return b ? a.modalClass === b : a.modalClass
     }, g
   }
-  ]), app.factory("notifier", function() {
+]);
+
+app.factory("notifier", function() {
     var a, b = {
       name: "",
       icon: "info",
@@ -537,57 +556,69 @@ app.factory("modal", ["$rootScope", "$location", "$routeParams", "transitioner",
         return c
       }
     }
-  });
+});
 
-  app.factory("touch", ["$window", "$timeout", "util",
-    function(a, b) {
-      function c(a) {
-        return s && (a = a.touches[0] || a.changedTouches[0]), {
-          x: a.pageX,
-          y: a.pageY
-        }
+app.factory("touch", ["$window", "$timeout",
+  function($window, $timeout) {
+    function c(a) {
+      
+      s && (a = a.touches[0] || a.changedTouches[0]);
+      return {
+        x: a.pageX,
+        y: a.pageY
       }
+    }
 
-      function d(a) {
-        var b = c(a);
-        return b.dx = b.x - p.x, b.dy = b.y - p.y, b
-      }
+    function d(a) {
+      var b = c(a);
+      return b.dx = b.x - p.x, b.dy = b.y - p.y, b
+    }
 
-      function e(a, b) {
-        return x(w(b.x - a.x, 2) + w(b.y - a.y, 2))
-      }
+    function e(a, b) {
+      return sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2))
+    }
 
-      function f(a) {
-        m = !0, p = c(a), n = a.target, q = b(function() {
-          i("hold", p, a), o = !0
-        }, 1e3)
-      }
+    function processHold(a) {
+      p = c(a), n = a.target, q = $timeout(function() {
+        i("hold", p, a), o = !0
+      }, 1e3)
+    }
 
-      function g(a) {
-        m && (o ? i("drag", d(a), a) : b.cancel(q))
-      }
+    function processMove(a) {
+      (o ? i("drag", d(a), a) : $timeout.cancel(q))
+    }
 
-      function h(a) {
-        m && (b.cancel(q), o ? i("release", d(a), a) : e(c(a), p) < 10 && i("tap", a), n = m = o = !1)
-      }
+    function processRelease(a) {
+      ($timeout.cancel(q), o ? i("release", d(a), a) : e(c(a), p) < 10 && i("tap", a), n =  o = !1)
+    }
 
-      function i(a, b, c) {
-        for (var d, e, f = n; f && f != t && (d = f.parentNode, e = u.indexOf(f), -1 == e || !v[e][a] || !1 !== v[e][a](c, b));) f = d
-      }
-    var j, k, l, m, n, o, p, q, r = {}, s = "ontouchstart" in a,
-    t = a.document,
+    function i(a, b, c) {
+      for (var d, e, f = n; f && f != $window.document && (d = f.parentNode, e = u.indexOf(f), -1 == e || !v[e][a] || !1 !== v[e][a](c, b));) f = d
+    }
+  
+    var touch = {};
+    
+    var hold, move, release, n, o, p, q, s = "ontouchstart" in $window,
     u = [],
     v = [],
-    w = Math.pow,
-    x = Math.sqrt;
-    return s ? (j = "touchstart", k = "touchmove", l = "touchend") : (j = "mousedown", k = "mousemove", l = "mouseup"), t.addEventListener(j, f, !0), t.addEventListener(k, g, !0), t.addEventListener(l, h, !0), ["tap", "hold", "drag", "release"].forEach(function(a) {
-      r[a] = function(b, c) {
+    pow = Math.pow,
+    sqrt = Math.sqrt;
+    
+    s ? (hold = "touchstart", move = "touchmove", release = "touchend") : (hold = "mousedown", move = "mousemove", release = "mouseup");
+
+    $window.document.addEventListener(hold, processHold, true);
+    $window.document.addEventListener(move, processMove, true);
+    $window.document.addEventListener(release, processRelease, true);
+    ["tap", "hold", "drag", "release"].forEach(function(event) {
+      touch[event] = function(b, c) {
         b.length && (b = b[0]);
-        var d = u.indexOf(b); - 1 == d && (d = u.push(b) - 1, v[d] = {}), v[d][a] = c
+        var d = u.indexOf(b); - 1 == d && (d = u.push(b) - 1, v[d] = {}), v[d][event] = c
       }
-    }), r
+    });
+
+    return  touch;
   }
-  ]);
+]);
 
 app.factory("transitioner", ["$rootScope", "$document", "util",
   function(a, b, c) {
@@ -735,7 +766,7 @@ app.factory("parse", ["$window",
       var e, f, g = c.startState() || !0;
       for (e = new a(b); !e.eof();) f = c.token(e, g), d(e.current(), f), e.start = e.pos
     }
-}
+  }
 ]);
 
 //This factory is consume by the settings controller
