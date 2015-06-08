@@ -296,8 +296,7 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
 
         window.scope = scope;
         // Add the camera
-        CameraService.perspectiveCam.position.set(10000, 10000, 10000);
-        window.camera = CameraService.perspectiveCam;
+        CameraService.perspectiveCam.position.set(1000, 20000, 1500);
         SceneService.scene.add(CameraService.perspectiveCam);
 
         // create the renderer
@@ -307,7 +306,7 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
 
         // set up the controls with the camera and renderer
         controls = new THREE.OrbitControls(CameraService.perspectiveCam, renderer.domElement);
-
+        //controls = new THREE.TrackballControls( camera, renderer.domElement );
         // add renderer to DOM
         element[0].appendChild(renderer.domElement);
 
@@ -337,36 +336,437 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
 
 app.directive('twoViewport', [
   function() {
+    var viewSize = 256;
+
+    TwoDCameraController = function ( camera, domElement ) {
+
+      this.object = camera;
+      this.domElement = ( domElement !== undefined ) ? domElement : document;
+
+      // API
+
+      this.enabled = true;
+
+      this.center = new THREE.Vector3();
+
+      this.userZoom = true;
+      this.userZoomSpeed = 1.0;
+
+      this.userRotate = true;
+      this.userRotateSpeed = 1.0;
+
+      this.userPan = true;
+      this.userPanSpeed = 1.0;
+
+      this.autoRotate = false;
+      this.autoRotateSpeed = 2.0; // 30 seconds per round when fps is 60
+
+      this.minPolarAngle = 0; // radians
+      this.maxPolarAngle = Math.PI; // radians
+
+      this.minDistance = 0;
+      this.maxDistance = Infinity;
+
+      // 65 /*A*/, 83 /*S*/, 68 /*D*/
+      this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40, ROTATE: 65, ZOOM: 83, PAN: 68 };
+
+      // internals
+
+      var scope = this;
+
+      var EPS = 0.000001;
+      var PIXELS_PER_ROUND = 1800;
+
+      var rotateStart = new THREE.Vector2();
+      var rotateEnd = new THREE.Vector2();
+      var rotateDelta = new THREE.Vector2();
+
+      var zoomStart = new THREE.Vector2();
+      var zoomEnd = new THREE.Vector2();
+      var zoomDelta = new THREE.Vector2();
+
+      var phiDelta = 0;
+      var thetaDelta = 0;
+      var scale = 1;
+
+      var lastPosition = new THREE.Vector3();
+
+      var STATE = { NONE: -1, ROTATE: 0, ZOOM: 1, PAN: 2 };
+      var state = STATE.NONE;
+
+      // events
+
+      var changeEvent = { type: 'change' };
+
+
+      this.rotateLeft = function ( angle ) {
+
+        if ( angle === undefined ) {
+
+          angle = getAutoRotationAngle();
+
+        }
+
+        thetaDelta -= angle;
+
+      };
+
+      this.rotateRight = function ( angle ) {
+
+        if ( angle === undefined ) {
+
+          angle = getAutoRotationAngle();
+
+        }
+
+        thetaDelta += angle;
+
+      };
+
+      this.rotateUp = function ( angle ) {
+
+        if ( angle === undefined ) {
+
+          angle = getAutoRotationAngle();
+
+        }
+
+        phiDelta -= angle;
+
+      };
+
+      this.rotateDown = function ( angle ) {
+
+        if ( angle === undefined ) {
+
+          angle = getAutoRotationAngle();
+
+        }
+
+        phiDelta += angle;
+
+      };
+
+      this.zoomIn = function ( zoomScale ) {
+
+        if ( zoomScale === undefined ) {
+
+          zoomScale = getZoomScale();
+
+        }
+
+        scale /= zoomScale;
+
+      };
+
+      this.zoomOut = function ( zoomScale ) {
+
+        if ( zoomScale === undefined ) {
+
+          zoomScale = getZoomScale();
+
+        }
+
+        scale *= zoomScale;
+
+      };
+
+      this.pan = function ( distance ) {
+
+        this.object.position.add( distance );
+        this.center.add( distance );
+
+        var up = this.center.y + (viewSize - 128 / 2) / 128;
+        console.log(up);
+      };
+
+      this.update = function () {
+
+        // var position = this.object.position;
+        // var offset = position.clone().sub( this.center );
+
+        // // angle from z-axis around y-axis
+
+        // var theta = Math.atan2( offset.x, offset.z );
+
+        // // angle from y-axis
+
+        // var phi = Math.atan2( Math.sqrt( offset.x * offset.x + offset.z * offset.z ), offset.y );
+
+        // if ( this.autoRotate ) {
+
+        //   this.rotateLeft( getAutoRotationAngle() );
+
+        // }
+
+        // theta += thetaDelta;
+        // phi += phiDelta;
+
+        // // restrict phi to be between desired limits
+        // phi = Math.max( this.minPolarAngle, Math.min( this.maxPolarAngle, phi ) );
+
+        // // restrict phi to be betwee EPS and PI-EPS
+        // phi = Math.max( EPS, Math.min( Math.PI - EPS, phi ) );
+
+        // var radius = offset.length() * scale;
+
+        // // restrict radius to be between desired limits
+        // radius = Math.max( this.minDistance, Math.min( this.maxDistance, radius ) );
+
+        // offset.x = radius * Math.sin( phi ) * Math.sin( theta );
+        // offset.y = radius * Math.cos( phi );
+        // offset.z = radius * Math.sin( phi ) * Math.cos( theta );
+
+        // position.copy( this.center ).add( offset );
+
+        // this.object.lookAt( this.center );
+
+        // thetaDelta = 0;
+        // phiDelta = 0;
+        // scale = 1;
+
+        // if ( lastPosition.distanceTo( this.object.position ) > 0 ) {
+
+        //   this.dispatchEvent( changeEvent );
+
+        //   lastPosition.copy( this.object.position );
+
+        // }
+
+      };
+
+
+      function getAutoRotationAngle() {
+
+        return 2 * Math.PI / 60 / 60 * scope.autoRotateSpeed;
+
+      }
+
+      function getZoomScale() {
+
+        return Math.pow( 0.95, scope.userZoomSpeed );
+
+      }
+
+      function onMouseDown( event ) {
+
+        if ( scope.enabled === false ) return;
+        if ( scope.userRotate === false ) return;
+
+        event.preventDefault();
+
+        if ( state === STATE.NONE )
+        {
+          if ( event.button === 0 )
+            state = STATE.ROTATE;
+          if ( event.button === 1 )
+            state = STATE.ZOOM;
+          if ( event.button === 2 )
+            state = STATE.PAN;
+        }
+        
+        
+        if ( state === STATE.ROTATE ) {
+
+          //state = STATE.ROTATE;
+
+          rotateStart.set( event.clientX, event.clientY );
+
+        } else if ( state === STATE.ZOOM ) {
+
+          //state = STATE.ZOOM;
+
+          zoomStart.set( event.clientX, event.clientY );
+
+        } else if ( state === STATE.PAN ) {
+
+          //state = STATE.PAN;
+
+        }
+
+        document.addEventListener( 'mousemove', onMouseMove, false );
+        document.addEventListener( 'mouseup', onMouseUp, false );
+
+      }
+
+      function onMouseMove( event ) {
+
+        if ( scope.enabled === false ) return;
+
+        event.preventDefault();
+
+        
+        
+        if ( state === STATE.ROTATE ) {
+
+          rotateEnd.set( event.clientX, event.clientY );
+          rotateDelta.subVectors( rotateEnd, rotateStart );
+
+          scope.rotateLeft( 2 * Math.PI * rotateDelta.x / PIXELS_PER_ROUND * scope.userRotateSpeed );
+          scope.rotateUp( 2 * Math.PI * rotateDelta.y / PIXELS_PER_ROUND * scope.userRotateSpeed );
+
+          rotateStart.copy( rotateEnd );
+
+        } else if ( state === STATE.ZOOM ) {
+
+          zoomEnd.set( event.clientX, event.clientY );
+          zoomDelta.subVectors( zoomEnd, zoomStart );
+
+          if ( zoomDelta.y > 0 ) {
+
+            scope.zoomIn();
+
+          } else {
+
+            scope.zoomOut();
+
+          }
+
+          zoomStart.copy( zoomEnd );
+
+        } else if ( state === STATE.PAN ) {
+
+          var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+          var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+
+          scope.pan( new THREE.Vector3( - movementX, movementY, 0 ) );
+
+        }
+
+      }
+
+      function onMouseUp( event ) {
+
+        if ( scope.enabled === false ) return;
+        if ( scope.userRotate === false ) return;
+
+        document.removeEventListener( 'mousemove', onMouseMove, false );
+        document.removeEventListener( 'mouseup', onMouseUp, false );
+
+        state = STATE.NONE;
+
+      }
+
+      function onMouseWheel( event ) {
+
+        if ( scope.enabled === false ) return;
+        if ( scope.userZoom === false ) return;
+
+        var delta = 0;
+
+        if ( event.wheelDelta ) { // WebKit / Opera / Explorer 9
+
+          delta = event.wheelDelta;
+
+        } else if ( event.detail ) { // Firefox
+
+          delta = - event.detail;
+
+        }
+
+        if ( delta > 0 ) {
+
+          scope.zoomOut();
+
+        } else {
+
+          scope.zoomIn();
+
+        }
+
+      }
+
+      function onKeyDown( event ) {
+
+        if ( scope.enabled === false ) return;
+        if ( scope.userPan === false ) return;
+
+        switch ( event.keyCode ) {
+
+          case scope.keys.ROTATE:
+            state = STATE.ROTATE;
+            break;
+          case scope.keys.ZOOM:
+            state = STATE.ZOOM;
+            break;
+          case scope.keys.PAN:
+            state = STATE.PAN;
+            break;
+            
+        }
+
+      }
+      
+      function onKeyUp( event ) {
+
+        switch ( event.keyCode ) {
+
+          case scope.keys.ROTATE:
+          case scope.keys.ZOOM:
+          case scope.keys.PAN:
+            state = STATE.NONE;
+            break;
+        }
+
+      }
+
+      this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
+      this.domElement.addEventListener( 'mousedown', onMouseDown, false );
+      this.domElement.addEventListener( 'mousewheel', onMouseWheel, false );
+      this.domElement.addEventListener( 'DOMMouseScroll', onMouseWheel, false ); // firefox
+      window.addEventListener( 'keydown', onKeyDown, false );
+      window.addEventListener( 'keyup', onKeyUp, false );
+
+    };
+    TwoDCameraController.prototype = Object.create( THREE.EventDispatcher.prototype );
+
   return {
       restrict: "AE",
 
       link: function (scope, element, attribute) {
 
+        canvasWidth = 640;
+        canvasHeight = 640;
+
         var renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(640, 640);
+        renderer.setSize(canvasHeight, canvasWidth);
         renderer.setClearColor( "#5Caadb", 1.0 );
 
         element[0].appendChild(renderer.domElement);
 
         var _scene = new THREE.Scene();
-        var _camera = new THREE.PerspectiveCamera(35, 1, 0.1, 10000);
-        _camera.rotation.set(0, 0, 0);
+        // var _camera = new THREE.PerspectiveCamera(35, 1, 0.1, 10000);
+        // _camera.rotation.set(0, 0, 0);
+        
+        // left, right, top, bottom, near , far
+        var aspectRatio = canvasWidth / canvasHeight;
+        var _camera = new THREE.OrthographicCamera(
+          -aspectRatio* viewSize/ 2, aspectRatio * viewSize /2,
+          viewSize/ 2, - viewSize/2,
+          -1000, 1000
+          );
 
-        var _world = new THREE.Object3D();
+        // var _world = new THREE.Object3D();
 
-        var material = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('./crate.jpg') } );
-        var mesh = new THREE.Mesh(new THREE.PlaneGeometry(1000, 1000, 5, 5), material );
-
+        //var material = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('./crate.jpg') } );
 
 
         _scene.add(_camera);
-        _scene.add(mesh);
+
+        var object = new THREE.Object3D();
+        var material = new THREE.MeshBasicMaterial( {color: 0x00ffff} );
+        var box = new THREE.Mesh(new THREE.PlaneBufferGeometry(128, 128, 1, 1), material );
+        object.add(box);
+        _scene.add(object);
+
+        var controls = new TwoDCameraController(_camera, renderer.domElement);
 
         animate();
 
         function animate() {
           requestAnimationFrame(animate);
           renderer.render(_scene, _camera);
+          controls.update();
         }
       }
   }   

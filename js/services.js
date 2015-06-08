@@ -66,7 +66,7 @@ app.service('CoordinatesService', ['SceneService' , function(SceneService){
             var size = params.size !== undefined ? params.size:100;
             var color = params.color !== undefined ? params.color:0xFFFFFF;
             var ground = new THREE.Mesh(
-                new THREE.PlaneGeometry(size, size),
+                new THREE.PlaneBufferGeometry(size, size),
                 // When we use a ground plane we use directional lights, so illuminating
                 // just the corners is sufficient.
                 // Use MeshPhongMaterial if you want to capture per-pixel lighting:
@@ -206,12 +206,7 @@ app.service('MeshDataService', ['$http','SceneService', function ($http, SceneSe
                 return false;
             }
             var vertices = new Float32Array(response.data);
-            var material = new THREE.MeshPhongMaterial( { color: color, wireframe:false } );
-            material.shinines = 150;
-            material.specular.setHex(0x000000);
-            
-            //In case you are using a Lambert material
-            //material.ambient.copy( material.color );
+            var material = new THREE.MeshLambertMaterial( { color: color, wireframe:false } );
             var mesh = new THREE.Segment( vertices, material );
 
             mesh.position.set(x,y,z).multiplyScalar(128 * Math.pow(2, mip));
