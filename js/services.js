@@ -10,10 +10,10 @@ app.service('SceneService', function () {
     // LIGHTS
     var ambientLight = new THREE.AmbientLight( 0x222222 );
     var light = new THREE.DirectionalLight( 0xffffff, 1.0 );
-    light.position.set( 200, 400, 500 );
+    light.position.set( 2, 4, 5 );
     
     var light2 = new THREE.DirectionalLight( 0xffffff, 1.0 );
-    light2.position.set( -400, 200, -300 );
+    light2.position.set( -4, 2, -3 );
 
     scene.add(ambientLight);
     scene.add(light);
@@ -206,7 +206,12 @@ app.service('MeshDataService', ['$http','SceneService', function ($http, SceneSe
                 return false;
             }
             var vertices = new Float32Array(response.data);
-            var material = new THREE.MeshBasicMaterial( { color: color, wireframe:false } );
+            var material = new THREE.MeshPhongMaterial( { color: color, wireframe:false } );
+            material.shinines = 150;
+            material.specular.setHex(0x000000);
+            
+            //In case you are using a Lambert material
+            //material.ambient.copy( material.color );
             var mesh = new THREE.Segment( vertices, material );
 
             mesh.position.set(x,y,z).multiplyScalar(128 * Math.pow(2, mip));
