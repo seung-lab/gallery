@@ -258,8 +258,6 @@ app.service('CellService', ['SceneService','MeshDataService', function (SceneSer
     }
 }]);
 
-
-
 app.service("util", ["$window",
   function($window) {
       var util = this;
@@ -320,3 +318,83 @@ app.service("util", ["$window",
       });
   }
 ]);
+
+
+//Two Dimensional view services
+app.service('TileService', ['$http', function($http) {
+
+  this.tiles = {};
+  this.createTile = function(position, scene) {
+    if (this.tiles[JSON.stringify(position)] != undefined){
+        return;
+    }
+    var object = new THREE.Object3D();
+    var color = '#'+Math.floor(Math.random()*16777215).toString(16);
+
+    var _empty = {
+      channel: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAIAAABMXPacAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAATpJREFUeNrs18ENgCAQAEE09iJl0H8F2o0N+DTZh7NPcr/JEdjWWuOtc87X8/u6zH84vw+lAQAAQAAACMA/O7zH23kb4AoCIAAABACAin+A93g7bwNcQQAEAIAAAFDxD/Aeb+dtgCsIgAAAEAAAKv4B3uPtvA1wBQEQAAACAEDFP8B7vJ23Aa4gAAIAQAAAqPgHeI+38zbAFQRAAAAIAAAV/wDv8XbeBriCAAgAAAEAoOIf4D3eztsAVxAAAQAgAABU/AO8x9t5G+AKAiAAAAQAgIp/gPd4O28DXEEABACAAABQ8Q/wHm/nbYArCIAAABAAACr+Ad7j7bwNcAUBEAAAAgBAxT/Ae7ydtwGuIAACAEAAAKj4B3iPt/M2wBUEQAAACAAAFf8A7/F23ga4ggAIAAABAKCgR4ABAIa/f2QspBp6AAAAAElFTkSuQmCC",
+      segmentation: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC"
+    };
+
+    var texture = THREE.ImageUtils.loadTexture("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAIAAABMXPacAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAATpJREFUeNrs18ENgCAQAEE09iJl0H8F2o0N+DTZh7NPcr/JEdjWWuOtc87X8/u6zH84vw+lAQAAQAAACMA/O7zH23kb4AoCIAAABACAin+A93g7bwNcQQAEAIAAAFDxD/Aeb+dtgCsIgAAAEAAAKv4B3uPtvA1wBQEQAAACAEDFP8B7vJ23Aa4gAAIAQAAAqPgHeI+38zbAFQRAAAAIAAAV/wDv8XbeBriCAAgAAAEAoOIf4D3eztsAVxAAAQAgAABU/AO8x9t5G+AKAiAAAAQAgIp/gPd4O28DXEEABACAAABQ8Q/wHm/nbYArCIAAABAAACr+Ad7j7bwNcAUBEAAAAgBAxT/Ae7ydtwGuIAACAEAAAKj4B3iPt/M2wBUEQAAACAAAFf8A7/F23ga4ggAIAAABAKCgR4ABAIa/f2QspBp6AAAAAElFTkSuQmCC");
+
+    var material = new THREE.MeshBasicMaterial();
+    material.map = texture;
+    var box = new THREE.Mesh(new THREE.PlaneBufferGeometry(128, 128, 1, 1), material );
+    
+    object.add(box);
+
+    object.position.x =  position.x * 128;
+    object.position.y = position.y * 128;
+
+    this.tiles[JSON.stringify(position)] = "loaded";
+    scene.add(object);
+
+
+    var handleError = function( response ) {
+      console.error('failed to load tile');
+    };
+
+    var handleSuccess = function( response ) {
+      var image = new Image();
+      image.src = response.data[0].data;
+
+      texture.image = image;
+      image.onload = function() {
+        texture.needsUpdate = true;
+        material.map.needsUpdate = true;
+        console.log('image loaded');
+      };
+    };
+
+
+    var volume_id = 2988;
+    var mip = 0;
+    var x = 0;
+    var y = 0;
+    var z = 0;
+    var request = $http({
+        responseType: 'json',
+        method: 'GET',
+        url: 'http://data.eyewire.org/volume/'+volume_id+'/chunk/'+mip+'/'+x+'/'+y+'/'+z+'/tile/xy/0:1'
+    });
+    request.then(handleSuccess,handleError);
+  }
+    //http://data.eyewire.org/volume/11605/chunk/0/1/0/1/tile/xy/0
+
+  this.createTileAndSurrounding = function(position, scene) {
+    this.createTile({x: position.x, y:position.y}, scene);
+    this.createTile({x: position.x+1, y:position.y}, scene);
+    this.createTile({x: position.x-1, y:position.y}, scene);         
+    this.createTile({x: position.x,   y:position.y+1}, scene);
+    this.createTile({x: position.x,   y:position.y-1}, scene);
+    
+    //Diagonals
+    this.createTile({x: position.x+1, y:position.y+1}, scene);
+    this.createTile({x: position.x-1, y:position.y+1}, scene);
+    this.createTile({x: position.x+1, y:position.y-1}, scene);
+    this.createTile({x: position.x-1, y:position.y-1}, scene);
+
+  }
+
+}]);

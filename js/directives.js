@@ -334,10 +334,10 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
 }
 ]);
 
-app.directive('twoViewport', [
-  function() {
+app.directive('twoViewport', ['TileService',
+  function(TileService) {
     var viewSize = 256;
-    var _scene = new THREE.Scene();
+    var scene = new THREE.Scene();
 
     var canvasWidth = 640;
     var canvasHeight = 640;
@@ -349,10 +349,9 @@ app.directive('twoViewport', [
           -1000, 1000
           );
 
-    _scene.add(_camera);
+    scene.add(_camera);
 
     //Map to store the status of each tile
-    var tiles = {};
 
     TwoDCameraController = function ( camera, domElement ) {
 
@@ -360,17 +359,7 @@ app.directive('twoViewport', [
       this.domElement = ( domElement !== undefined ) ? domElement : document;
 
       // API
-
-      this.enabled = true;
-
       this.center = new THREE.Vector3();
-
-      this.userZoom = true;
-      this.userZoomSpeed = 1.0;
-
-      this.userRotate = true;
-      this.userRotateSpeed = 1.0;
-
       this.userPan = true;
       this.userPanSpeed = 1.0;
 
@@ -424,17 +413,7 @@ app.directive('twoViewport', [
         var x = Math.round(this.center.x / 128);
         var y = Math.round(this.center.y / 128);
 
-        createTile({x: x, y:y});
-        createTile({x: x+1, y:y});
-        createTile({x: x-1, y:y});         
-        createTile({x: x, y:y+1});
-        createTile({x: x, y:y-1});
-        
-        //Diagonals
-        createTile({x: x+1, y:y+1});
-        createTile({x: x-1, y:y+1});
-        createTile({x: x+1, y:y-1});
-        createTile({x: x-1, y:y-1});
+        TileService.createTileAndSurrounding({x: x, y:y}, scene);
       };
 
       function onMouseDown( event ) {
@@ -553,26 +532,6 @@ app.directive('twoViewport', [
     };
     TwoDCameraController.prototype = Object.create( THREE.EventDispatcher.prototype );
 
-    var createTile = function ( pos ) {
-
-      if (tiles[JSON.stringify(pos)] != undefined){
-        return;
-      }
-
-      var object = new THREE.Object3D();
-      var color = '#'+Math.floor(Math.random()*16777215).toString(16);
-      var material = new THREE.MeshBasicMaterial( {color: color} );
-      var box = new THREE.Mesh(new THREE.PlaneBufferGeometry(128, 128, 1, 1), material );
-      
-      object.add(box);
-
-      object.position.x =  pos.x * 128;
-      object.position.y = pos.y * 128;
-      
-      tiles[JSON.stringify(pos)] = "loaded";
-      _scene.add(object);
-    }
-
   return {
       restrict: "AE",
 
@@ -585,13 +544,8 @@ app.directive('twoViewport', [
 
         element[0].appendChild(renderer.domElement);
 
-       
 
-        
-
-        //Add first tile
-        pos = {x:0, y:0};
-        createTile(pos);
+        TileService.createTileAndSurrounding({x:0, y:0},scene);
 
         var controls = new TwoDCameraController(_camera, renderer.domElement);
 
@@ -599,8 +553,9 @@ app.directive('twoViewport', [
 
         function animate() {
           requestAnimationFrame(animate);
-          renderer.render(_scene, _camera);
+          renderer.render(scene, _camera);
         }
       }
-  }   
-}]);
+  };   
+  }]
+);
