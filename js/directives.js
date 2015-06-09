@@ -337,6 +337,22 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
 app.directive('twoViewport', [
   function() {
     var viewSize = 256;
+    var _scene = new THREE.Scene();
+
+    var canvasWidth = 640;
+    var canvasHeight = 640;
+    var aspectRatio = canvasWidth / canvasHeight;
+    // left, right, top, bottom, near , far
+    var _camera = new THREE.OrthographicCamera(
+          -aspectRatio* viewSize/ 2, aspectRatio * viewSize /2,
+          viewSize/ 2, - viewSize/2,
+          -1000, 1000
+          );
+
+    _scene.add(_camera);
+
+    //Map to store the status of each tile
+    var tiles = {};
 
     TwoDCameraController = function ( camera, domElement ) {
 
@@ -394,159 +410,32 @@ app.directive('twoViewport', [
       var STATE = { NONE: -1, ROTATE: 0, ZOOM: 1, PAN: 2 };
       var state = STATE.NONE;
 
+      var zpos = 0;
+
       // events
 
       var changeEvent = { type: 'change' };
-
-
-      this.rotateLeft = function ( angle ) {
-
-        if ( angle === undefined ) {
-
-          angle = getAutoRotationAngle();
-
-        }
-
-        thetaDelta -= angle;
-
-      };
-
-      this.rotateRight = function ( angle ) {
-
-        if ( angle === undefined ) {
-
-          angle = getAutoRotationAngle();
-
-        }
-
-        thetaDelta += angle;
-
-      };
-
-      this.rotateUp = function ( angle ) {
-
-        if ( angle === undefined ) {
-
-          angle = getAutoRotationAngle();
-
-        }
-
-        phiDelta -= angle;
-
-      };
-
-      this.rotateDown = function ( angle ) {
-
-        if ( angle === undefined ) {
-
-          angle = getAutoRotationAngle();
-
-        }
-
-        phiDelta += angle;
-
-      };
-
-      this.zoomIn = function ( zoomScale ) {
-
-        if ( zoomScale === undefined ) {
-
-          zoomScale = getZoomScale();
-
-        }
-
-        scale /= zoomScale;
-
-      };
-
-      this.zoomOut = function ( zoomScale ) {
-
-        if ( zoomScale === undefined ) {
-
-          zoomScale = getZoomScale();
-
-        }
-
-        scale *= zoomScale;
-
-      };
 
       this.pan = function ( distance ) {
 
         this.object.position.add( distance );
         this.center.add( distance );
 
-        var up = this.center.y + (viewSize - 128 / 2) / 128;
-        console.log(up);
+        var x = Math.round(this.center.x / 128);
+        var y = Math.round(this.center.y / 128);
+
+        createTile({x: x, y:y});
+        createTile({x: x+1, y:y});
+        createTile({x: x-1, y:y});         
+        createTile({x: x, y:y+1});
+        createTile({x: x, y:y-1});
+        
+        //Diagonals
+        createTile({x: x+1, y:y+1});
+        createTile({x: x-1, y:y+1});
+        createTile({x: x+1, y:y-1});
+        createTile({x: x-1, y:y-1});
       };
-
-      this.update = function () {
-
-        // var position = this.object.position;
-        // var offset = position.clone().sub( this.center );
-
-        // // angle from z-axis around y-axis
-
-        // var theta = Math.atan2( offset.x, offset.z );
-
-        // // angle from y-axis
-
-        // var phi = Math.atan2( Math.sqrt( offset.x * offset.x + offset.z * offset.z ), offset.y );
-
-        // if ( this.autoRotate ) {
-
-        //   this.rotateLeft( getAutoRotationAngle() );
-
-        // }
-
-        // theta += thetaDelta;
-        // phi += phiDelta;
-
-        // // restrict phi to be between desired limits
-        // phi = Math.max( this.minPolarAngle, Math.min( this.maxPolarAngle, phi ) );
-
-        // // restrict phi to be betwee EPS and PI-EPS
-        // phi = Math.max( EPS, Math.min( Math.PI - EPS, phi ) );
-
-        // var radius = offset.length() * scale;
-
-        // // restrict radius to be between desired limits
-        // radius = Math.max( this.minDistance, Math.min( this.maxDistance, radius ) );
-
-        // offset.x = radius * Math.sin( phi ) * Math.sin( theta );
-        // offset.y = radius * Math.cos( phi );
-        // offset.z = radius * Math.sin( phi ) * Math.cos( theta );
-
-        // position.copy( this.center ).add( offset );
-
-        // this.object.lookAt( this.center );
-
-        // thetaDelta = 0;
-        // phiDelta = 0;
-        // scale = 1;
-
-        // if ( lastPosition.distanceTo( this.object.position ) > 0 ) {
-
-        //   this.dispatchEvent( changeEvent );
-
-        //   lastPosition.copy( this.object.position );
-
-        // }
-
-      };
-
-
-      function getAutoRotationAngle() {
-
-        return 2 * Math.PI / 60 / 60 * scope.autoRotateSpeed;
-
-      }
-
-      function getZoomScale() {
-
-        return Math.pow( 0.95, scope.userZoomSpeed );
-
-      }
 
       function onMouseDown( event ) {
 
@@ -557,8 +446,6 @@ app.directive('twoViewport', [
 
         if ( state === STATE.NONE )
         {
-          if ( event.button === 0 )
-            state = STATE.ROTATE;
           if ( event.button === 1 )
             state = STATE.ZOOM;
           if ( event.button === 2 )
@@ -566,27 +453,11 @@ app.directive('twoViewport', [
         }
         
         
-        if ( state === STATE.ROTATE ) {
-
-          //state = STATE.ROTATE;
-
-          rotateStart.set( event.clientX, event.clientY );
-
-        } else if ( state === STATE.ZOOM ) {
-
-          //state = STATE.ZOOM;
-
+        if ( state === STATE.ZOOM ) {
           zoomStart.set( event.clientX, event.clientY );
-
-        } else if ( state === STATE.PAN ) {
-
-          //state = STATE.PAN;
-
-        }
-
+        } 
         document.addEventListener( 'mousemove', onMouseMove, false );
         document.addEventListener( 'mouseup', onMouseUp, false );
-
       }
 
       function onMouseMove( event ) {
@@ -594,20 +465,8 @@ app.directive('twoViewport', [
         if ( scope.enabled === false ) return;
 
         event.preventDefault();
-
         
-        
-        if ( state === STATE.ROTATE ) {
-
-          rotateEnd.set( event.clientX, event.clientY );
-          rotateDelta.subVectors( rotateEnd, rotateStart );
-
-          scope.rotateLeft( 2 * Math.PI * rotateDelta.x / PIXELS_PER_ROUND * scope.userRotateSpeed );
-          scope.rotateUp( 2 * Math.PI * rotateDelta.y / PIXELS_PER_ROUND * scope.userRotateSpeed );
-
-          rotateStart.copy( rotateEnd );
-
-        } else if ( state === STATE.ZOOM ) {
+        if ( state === STATE.ZOOM ) {
 
           zoomEnd.set( event.clientX, event.clientY );
           zoomDelta.subVectors( zoomEnd, zoomStart );
@@ -632,7 +491,6 @@ app.directive('twoViewport', [
           scope.pan( new THREE.Vector3( - movementX, movementY, 0 ) );
 
         }
-
       }
 
       function onMouseUp( event ) {
@@ -644,48 +502,28 @@ app.directive('twoViewport', [
         document.removeEventListener( 'mouseup', onMouseUp, false );
 
         state = STATE.NONE;
-
       }
 
       function onMouseWheel( event ) {
-
-        if ( scope.enabled === false ) return;
-        if ( scope.userZoom === false ) return;
-
         var delta = 0;
 
         if ( event.wheelDelta ) { // WebKit / Opera / Explorer 9
-
           delta = event.wheelDelta;
-
         } else if ( event.detail ) { // Firefox
-
           delta = - event.detail;
-
         }
 
         if ( delta > 0 ) {
 
-          scope.zoomOut();
-
+          zpos = zpos + 1;
         } else {
-
-          scope.zoomIn();
-
+          zpos = zpos - 1;
         }
-
+        console.log('z position is '+ zpos);
       }
 
       function onKeyDown( event ) {
-
-        if ( scope.enabled === false ) return;
-        if ( scope.userPan === false ) return;
-
         switch ( event.keyCode ) {
-
-          case scope.keys.ROTATE:
-            state = STATE.ROTATE;
-            break;
           case scope.keys.ZOOM:
             state = STATE.ZOOM;
             break;
@@ -694,20 +532,15 @@ app.directive('twoViewport', [
             break;
             
         }
-
       }
       
       function onKeyUp( event ) {
-
         switch ( event.keyCode ) {
-
-          case scope.keys.ROTATE:
           case scope.keys.ZOOM:
           case scope.keys.PAN:
             state = STATE.NONE;
             break;
         }
-
       }
 
       this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
@@ -720,44 +553,45 @@ app.directive('twoViewport', [
     };
     TwoDCameraController.prototype = Object.create( THREE.EventDispatcher.prototype );
 
+    var createTile = function ( pos ) {
+
+      if (tiles[JSON.stringify(pos)] != undefined){
+        return;
+      }
+
+      var object = new THREE.Object3D();
+      var color = '#'+Math.floor(Math.random()*16777215).toString(16);
+      var material = new THREE.MeshBasicMaterial( {color: color} );
+      var box = new THREE.Mesh(new THREE.PlaneBufferGeometry(128, 128, 1, 1), material );
+      
+      object.add(box);
+
+      object.position.x =  pos.x * 128;
+      object.position.y = pos.y * 128;
+      
+      tiles[JSON.stringify(pos)] = "loaded";
+      _scene.add(object);
+    }
+
   return {
       restrict: "AE",
 
       link: function (scope, element, attribute) {
 
-        canvasWidth = 640;
-        canvasHeight = 640;
-
+        
         var renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(canvasHeight, canvasWidth);
         renderer.setClearColor( "#5Caadb", 1.0 );
 
         element[0].appendChild(renderer.domElement);
 
-        var _scene = new THREE.Scene();
-        // var _camera = new THREE.PerspectiveCamera(35, 1, 0.1, 10000);
-        // _camera.rotation.set(0, 0, 0);
+       
+
         
-        // left, right, top, bottom, near , far
-        var aspectRatio = canvasWidth / canvasHeight;
-        var _camera = new THREE.OrthographicCamera(
-          -aspectRatio* viewSize/ 2, aspectRatio * viewSize /2,
-          viewSize/ 2, - viewSize/2,
-          -1000, 1000
-          );
 
-        // var _world = new THREE.Object3D();
-
-        //var material = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('./crate.jpg') } );
-
-
-        _scene.add(_camera);
-
-        var object = new THREE.Object3D();
-        var material = new THREE.MeshBasicMaterial( {color: 0x00ffff} );
-        var box = new THREE.Mesh(new THREE.PlaneBufferGeometry(128, 128, 1, 1), material );
-        object.add(box);
-        _scene.add(object);
+        //Add first tile
+        pos = {x:0, y:0};
+        createTile(pos);
 
         var controls = new TwoDCameraController(_camera, renderer.domElement);
 
@@ -766,7 +600,6 @@ app.directive('twoViewport', [
         function animate() {
           requestAnimationFrame(animate);
           renderer.render(_scene, _camera);
-          controls.update();
         }
       }
   }   
