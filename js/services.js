@@ -323,32 +323,26 @@ app.service("util", ["$window",
 //Two Dimensional view services
 app.service('TileService', ['$http', function($http) {
 
+  var plane = new THREE.PlaneBufferGeometry(128, 128, 1, 1);
+  var empty = {
+    channel: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAIAAABMXPacAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAATpJREFUeNrs18ENgCAQAEE09iJl0H8F2o0N+DTZh7NPcr/JEdjWWuOtc87X8/u6zH84vw+lAQAAQAAACMA/O7zH23kb4AoCIAAABACAin+A93g7bwNcQQAEAIAAAFDxD/Aeb+dtgCsIgAAAEAAAKv4B3uPtvA1wBQEQAAACAEDFP8B7vJ23Aa4gAAIAQAAAqPgHeI+38zbAFQRAAAAIAAAV/wDv8XbeBriCAAgAAAEAoOIf4D3eztsAVxAAAQAgAABU/AO8x9t5G+AKAiAAAAQAgIp/gPd4O28DXEEABACAAABQ8Q/wHm/nbYArCIAAABAAACr+Ad7j7bwNcAUBEAAAAgBAxT/Ae7ydtwGuIAACAEAAAKj4B3iPt/M2wBUEQAAACAAAFf8A7/F23ga4ggAIAAABAKCgR4ABAIa/f2QspBp6AAAAAElFTkSuQmCC",
+    segmentation: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC"
+  };
   this.tiles = {};
+
   this.createTile = function(position, scene) {
     if (this.tiles[JSON.stringify(position)] != undefined){
         return;
     }
-    var object = new THREE.Object3D();
-    var color = '#'+Math.floor(Math.random()*16777215).toString(16);
+    var texture = THREE.ImageUtils.loadTexture(empty.channel);
+    var material = new THREE.MeshBasicMaterial({ map:texture });
+    var planeMesh = new THREE.Mesh(plane , material );
 
-    var _empty = {
-      channel: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAIAAABMXPacAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAATpJREFUeNrs18ENgCAQAEE09iJl0H8F2o0N+DTZh7NPcr/JEdjWWuOtc87X8/u6zH84vw+lAQAAQAAACMA/O7zH23kb4AoCIAAABACAin+A93g7bwNcQQAEAIAAAFDxD/Aeb+dtgCsIgAAAEAAAKv4B3uPtvA1wBQEQAAACAEDFP8B7vJ23Aa4gAAIAQAAAqPgHeI+38zbAFQRAAAAIAAAV/wDv8XbeBriCAAgAAAEAoOIf4D3eztsAVxAAAQAgAABU/AO8x9t5G+AKAiAAAAQAgIp/gPd4O28DXEEABACAAABQ8Q/wHm/nbYArCIAAABAAACr+Ad7j7bwNcAUBEAAAAgBAxT/Ae7ydtwGuIAACAEAAAKj4B3iPt/M2wBUEQAAACAAAFf8A7/F23ga4ggAIAAABAKCgR4ABAIa/f2QspBp6AAAAAElFTkSuQmCC",
-      segmentation: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC"
-    };
+    planeMesh.position.x =  position.x * 128;
+    planeMesh.position.y =  position.y * 128;
 
-    var texture = THREE.ImageUtils.loadTexture("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAIAAABMXPacAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAATpJREFUeNrs18ENgCAQAEE09iJl0H8F2o0N+DTZh7NPcr/JEdjWWuOtc87X8/u6zH84vw+lAQAAQAAACMA/O7zH23kb4AoCIAAABACAin+A93g7bwNcQQAEAIAAAFDxD/Aeb+dtgCsIgAAAEAAAKv4B3uPtvA1wBQEQAAACAEDFP8B7vJ23Aa4gAAIAQAAAqPgHeI+38zbAFQRAAAAIAAAV/wDv8XbeBriCAAgAAAEAoOIf4D3eztsAVxAAAQAgAABU/AO8x9t5G+AKAiAAAAQAgIp/gPd4O28DXEEABACAAABQ8Q/wHm/nbYArCIAAABAAACr+Ad7j7bwNcAUBEAAAAgBAxT/Ae7ydtwGuIAACAEAAAKj4B3iPt/M2wBUEQAAACAAAFf8A7/F23ga4ggAIAAABAKCgR4ABAIa/f2QspBp6AAAAAElFTkSuQmCC");
-
-    var material = new THREE.MeshBasicMaterial();
-    material.map = texture;
-    var box = new THREE.Mesh(new THREE.PlaneBufferGeometry(128, 128, 1, 1), material );
-    
-    object.add(box);
-
-    object.position.x =  position.x * 128;
-    object.position.y = position.y * 128;
-
-    this.tiles[JSON.stringify(position)] = "loaded";
-    scene.add(object);
+    this.tiles[JSON.stringify(position)] = "empty";
+    scene.add(planeMesh);
 
 
     var handleError = function( response ) {
@@ -363,7 +357,6 @@ app.service('TileService', ['$http', function($http) {
       image.onload = function() {
         texture.needsUpdate = true;
         material.map.needsUpdate = true;
-        console.log('image loaded');
       };
     };
 
@@ -380,10 +373,11 @@ app.service('TileService', ['$http', function($http) {
     });
     request.then(handleSuccess,handleError);
   }
-    //http://data.eyewire.org/volume/11605/chunk/0/1/0/1/tile/xy/0
 
   this.createTileAndSurrounding = function(position, scene) {
-    this.createTile({x: position.x, y:position.y}, scene);
+    //Center
+    this.createTile({x: position.x,   y:position.y}, scene);
+
     this.createTile({x: position.x+1, y:position.y}, scene);
     this.createTile({x: position.x-1, y:position.y}, scene);         
     this.createTile({x: position.x,   y:position.y+1}, scene);
@@ -394,7 +388,136 @@ app.service('TileService', ['$http', function($http) {
     this.createTile({x: position.x-1, y:position.y+1}, scene);
     this.createTile({x: position.x+1, y:position.y-1}, scene);
     this.createTile({x: position.x-1, y:position.y-1}, scene);
+  };
+}]);
 
-  }
+app.service('TwoDCameraController', ['TileService' , function (TileService) {
+  
+  var STATES = { NONE: -1, ROTATE: 0, ZOOM: 1, PAN: 2 };
+  var zpos = 0;
+  // 65 /*A*/, 83 /*S*/, 68 /*D*/
+  var keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40, ROTATE: 65, ZOOM: 83, PAN: 68 };
+
+
+  var zoomStart = new THREE.Vector2();
+  var zoomEnd = new THREE.Vector2();
+  var zoomDelta = new THREE.Vector2();
+  var _state = STATES.NONE;
+  var _scene;
+  var _camera;
+  
+  this.createControls = function ( camera , domElement, scene ) {
+    _camera = camera;
+    _scene = scene;
+    this.domElement = domElement;
+
+    this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
+    this.domElement.addEventListener( 'mousedown', onMouseDown, false );
+    this.domElement.addEventListener( 'mousewheel', onMouseWheel, false );
+    window.addEventListener( 'keydown', onKeyDown, false );
+    window.addEventListener( 'keyup', onKeyUp, false );
+  };
+
+  var pan = function ( distance ) {
+    console.log('panning');
+    _camera.position.add( distance );
+
+    var x = Math.round(_camera.position.x / 128);
+    var y = Math.round(_camera.position.y / 128);
+
+    TileService.createTileAndSurrounding({x: x, y:y}, _scene);
+  };
+
+  var onMouseDown = function( event ) {
+
+    event.preventDefault();
+
+    console.log(STATES);
+    switch ( _state ){
+      case STATES.NONE:
+        if ( event.button === 1 ){
+          _state = STATES.ZOOM;
+        }
+        else if ( event.button === 2 ){
+          _state = STATES.PAN;
+        }
+        break;
+      case STATES.ZOOM:
+        zoomStart.set( event.clientX, event.clientY );
+        break;
+    }
+
+    document.addEventListener( 'mousemove', onMouseMove, false );
+    document.addEventListener( 'mouseup', onMouseUp, false );
+  };
+
+  var onMouseMove = function( event ) {
+
+    event.preventDefault();
+    if ( _state === STATES.ZOOM ) {
+      zoomEnd.set( event.clientX, event.clientY );
+      zoomDelta.subVectors( this.zoomEnd, this.zoomStart );
+      if ( this.zoomDelta.y > 0 ) {
+        this.zoomIn();
+      } else {
+        this.zoomOut();
+      }
+      this.zoomStart.copy( zoomEnd );
+
+    } else if ( _state === STATES.PAN ) {
+      console.log("trying to pan");
+      var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+      var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+      pan( new THREE.Vector3( - movementX, movementY, 0 ) );
+    }
+  };
+
+  var onMouseUp = function( event ) {
+
+    document.removeEventListener( 'mousemove', onMouseMove, false );
+    document.removeEventListener( 'mouseup', onMouseUp, false );
+
+    _state = STATES.NONE;
+  };
+
+  var onMouseWheel = function( event ) {
+    console.log("mouse wheel "+ zpos);
+
+    var delta = 0;
+
+    if ( event.wheelDelta ) { // WebKit / Opera / Explorer 9
+      delta = event.wheelDelta;
+    } else if ( event.detail ) { // Firefox
+      delta = - event.detail;
+    }
+
+    if ( delta > 0 ) {
+      zpos = zpos + 1;
+    } else {
+      zpos = zpos - 1;
+    }
+  };
+
+  var onKeyDown = function( event ) {
+    switch ( event.keyCode ) {
+      case this.keys.ZOOM:
+        _state = STATES.ZOOM;
+        break;
+      case this.keys.PAN:
+        _state = STATES.PAN;
+        break;
+    }
+  };
+      
+  var onKeyUp = function( event ) {
+    switch ( event.keyCode ) {
+      case this.keys.ZOOM:
+      case this.keys.PAN:
+        _state = STATES.NONE;
+      break;
+    }
+  }; 
+
+  this.prototype = Object.create( THREE.EventDispatcher.prototype );
 
 }]);

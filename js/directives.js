@@ -334,8 +334,8 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
 }
 ]);
 
-app.directive('twoViewport', ['TileService',
-  function(TileService) {
+app.directive('twoViewport', ['TileService','TwoDCameraController',
+  function(TileService, controler) {
     var viewSize = 256;
     var scene = new THREE.Scene();
 
@@ -350,187 +350,6 @@ app.directive('twoViewport', ['TileService',
           );
 
     scene.add(_camera);
-
-    //Map to store the status of each tile
-
-    TwoDCameraController = function ( camera, domElement ) {
-
-      this.object = camera;
-      this.domElement = ( domElement !== undefined ) ? domElement : document;
-
-      // API
-      this.center = new THREE.Vector3();
-      this.userPan = true;
-      this.userPanSpeed = 1.0;
-
-      this.autoRotate = false;
-      this.autoRotateSpeed = 2.0; // 30 seconds per round when fps is 60
-
-      this.minPolarAngle = 0; // radians
-      this.maxPolarAngle = Math.PI; // radians
-
-      this.minDistance = 0;
-      this.maxDistance = Infinity;
-
-      // 65 /*A*/, 83 /*S*/, 68 /*D*/
-      this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40, ROTATE: 65, ZOOM: 83, PAN: 68 };
-
-      // internals
-
-      var scope = this;
-
-      var EPS = 0.000001;
-      var PIXELS_PER_ROUND = 1800;
-
-      var rotateStart = new THREE.Vector2();
-      var rotateEnd = new THREE.Vector2();
-      var rotateDelta = new THREE.Vector2();
-
-      var zoomStart = new THREE.Vector2();
-      var zoomEnd = new THREE.Vector2();
-      var zoomDelta = new THREE.Vector2();
-
-      var phiDelta = 0;
-      var thetaDelta = 0;
-      var scale = 1;
-
-      var lastPosition = new THREE.Vector3();
-
-      var STATE = { NONE: -1, ROTATE: 0, ZOOM: 1, PAN: 2 };
-      var state = STATE.NONE;
-
-      var zpos = 0;
-
-      // events
-
-      var changeEvent = { type: 'change' };
-
-      this.pan = function ( distance ) {
-
-        this.object.position.add( distance );
-        this.center.add( distance );
-
-        var x = Math.round(this.center.x / 128);
-        var y = Math.round(this.center.y / 128);
-
-        TileService.createTileAndSurrounding({x: x, y:y}, scene);
-      };
-
-      function onMouseDown( event ) {
-
-        if ( scope.enabled === false ) return;
-        if ( scope.userRotate === false ) return;
-
-        event.preventDefault();
-
-        if ( state === STATE.NONE )
-        {
-          if ( event.button === 1 )
-            state = STATE.ZOOM;
-          if ( event.button === 2 )
-            state = STATE.PAN;
-        }
-        
-        
-        if ( state === STATE.ZOOM ) {
-          zoomStart.set( event.clientX, event.clientY );
-        } 
-        document.addEventListener( 'mousemove', onMouseMove, false );
-        document.addEventListener( 'mouseup', onMouseUp, false );
-      }
-
-      function onMouseMove( event ) {
-
-        if ( scope.enabled === false ) return;
-
-        event.preventDefault();
-        
-        if ( state === STATE.ZOOM ) {
-
-          zoomEnd.set( event.clientX, event.clientY );
-          zoomDelta.subVectors( zoomEnd, zoomStart );
-
-          if ( zoomDelta.y > 0 ) {
-
-            scope.zoomIn();
-
-          } else {
-
-            scope.zoomOut();
-
-          }
-
-          zoomStart.copy( zoomEnd );
-
-        } else if ( state === STATE.PAN ) {
-
-          var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-          var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
-
-          scope.pan( new THREE.Vector3( - movementX, movementY, 0 ) );
-
-        }
-      }
-
-      function onMouseUp( event ) {
-
-        if ( scope.enabled === false ) return;
-        if ( scope.userRotate === false ) return;
-
-        document.removeEventListener( 'mousemove', onMouseMove, false );
-        document.removeEventListener( 'mouseup', onMouseUp, false );
-
-        state = STATE.NONE;
-      }
-
-      function onMouseWheel( event ) {
-        var delta = 0;
-
-        if ( event.wheelDelta ) { // WebKit / Opera / Explorer 9
-          delta = event.wheelDelta;
-        } else if ( event.detail ) { // Firefox
-          delta = - event.detail;
-        }
-
-        if ( delta > 0 ) {
-
-          zpos = zpos + 1;
-        } else {
-          zpos = zpos - 1;
-        }
-        console.log('z position is '+ zpos);
-      }
-
-      function onKeyDown( event ) {
-        switch ( event.keyCode ) {
-          case scope.keys.ZOOM:
-            state = STATE.ZOOM;
-            break;
-          case scope.keys.PAN:
-            state = STATE.PAN;
-            break;
-            
-        }
-      }
-      
-      function onKeyUp( event ) {
-        switch ( event.keyCode ) {
-          case scope.keys.ZOOM:
-          case scope.keys.PAN:
-            state = STATE.NONE;
-            break;
-        }
-      }
-
-      this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
-      this.domElement.addEventListener( 'mousedown', onMouseDown, false );
-      this.domElement.addEventListener( 'mousewheel', onMouseWheel, false );
-      this.domElement.addEventListener( 'DOMMouseScroll', onMouseWheel, false ); // firefox
-      window.addEventListener( 'keydown', onKeyDown, false );
-      window.addEventListener( 'keyup', onKeyUp, false );
-
-    };
-    TwoDCameraController.prototype = Object.create( THREE.EventDispatcher.prototype );
 
   return {
       restrict: "AE",
@@ -547,7 +366,7 @@ app.directive('twoViewport', ['TileService',
 
         TileService.createTileAndSurrounding({x:0, y:0},scene);
 
-        var controls = new TwoDCameraController(_camera, renderer.domElement);
+        var controls = controler.createControls(_camera, renderer.domElement, scene);
 
         animate();
 
@@ -557,5 +376,4 @@ app.directive('twoViewport', ['TileService',
         }
       }
   };   
-  }]
-);
+}]);
