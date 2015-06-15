@@ -335,7 +335,7 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
 ]);
 
 app.directive('twoViewport', ['TileService','TwoDCameraController',
-  function(TileService, controler) {
+  function(TileService, cameraController) {
     var viewSize = 256;
     var scene = new THREE.Scene();
 
@@ -343,13 +343,13 @@ app.directive('twoViewport', ['TileService','TwoDCameraController',
     var canvasHeight = 640;
     var aspectRatio = canvasWidth / canvasHeight;
     // left, right, top, bottom, near , far
-    var _camera = new THREE.OrthographicCamera(
+    camera = new THREE.OrthographicCamera(
           -aspectRatio* viewSize/ 2, aspectRatio * viewSize /2,
           viewSize/ 2, - viewSize/2,
           -1000, 1000
           );
 
-    scene.add(_camera);
+    scene.add(camera);
 
   return {
       restrict: "AE",
@@ -364,16 +364,22 @@ app.directive('twoViewport', ['TileService','TwoDCameraController',
         element[0].appendChild(renderer.domElement);
 
 
-        TileService.createTileAndSurrounding({x:0, y:0},scene);
-
-        var controls = controler.createControls(_camera, renderer.domElement, scene);
-
-        animate();
-
         function animate() {
           requestAnimationFrame(animate);
-          renderer.render(scene, _camera);
+          renderer.render(scene, camera);
         }
+
+        // Set the origin tile
+        TileService.volume({x:10, y:10, z:10}, function(volume){
+          center = new THREE.Vector3();
+          center.x = (volume.channel.xmax + volume.channel.xmin) / 2.0;
+          center.y = (volume.channel.ymax + volume.channel.ymin) / 2.0;
+          center.z = (volume.channel.zmax + volume.channel.zmin) / 2.0;
+          camera.position.set(center.x , center.y , center.z);
+          var controls = cameraController.createControls( camera, renderer.domElement, scene , {x: viewSize, y:viewSize});
+
+           animate();
+        });
       }
   };   
 }]);

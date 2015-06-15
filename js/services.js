@@ -328,21 +328,50 @@ app.service('TileService', ['$http', function($http) {
     channel: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAIAAABMXPacAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAATpJREFUeNrs18ENgCAQAEE09iJl0H8F2o0N+DTZh7NPcr/JEdjWWuOtc87X8/u6zH84vw+lAQAAQAAACMA/O7zH23kb4AoCIAAABACAin+A93g7bwNcQQAEAIAAAFDxD/Aeb+dtgCsIgAAAEAAAKv4B3uPtvA1wBQEQAAACAEDFP8B7vJ23Aa4gAAIAQAAAqPgHeI+38zbAFQRAAAAIAAAV/wDv8XbeBriCAAgAAAEAoOIf4D3eztsAVxAAAQAgAABU/AO8x9t5G+AKAiAAAAQAgIp/gPd4O28DXEEABACAAABQ8Q/wHm/nbYArCIAAABAAACr+Ad7j7bwNcAUBEAAAAgBAxT/Ae7ydtwGuIAACAEAAAKj4B3iPt/M2wBUEQAAACAAAFf8A7/F23ga4ggAIAAABAKCgR4ABAIa/f2QspBp6AAAAAElFTkSuQmCC",
     segmentation: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC"
   };
-  this.tiles = {};
+  var tiles = {};
+
+  this.viewportChanged = function( center, viewSize ){
+
+    //This maps from global coordinates to chunk coordinates
+    // 224 is the size of each chunk (256 - 32) where 32 is the overlapping between cubes
+    // 18 , 50 and - 14 are the offsets for each axis 
+    var chunk = { xmin:Math.floor(((center.x - viewSize.x/2) - 18)/224 - 1),
+                  ymin:Math.floor(((center.y - viewSize.y/2) - 50)/224 - 1),
+                  zmin:Math.floor((center.z + 14)/224 - 1),
+                  xmax:Math.ceil(((center.x + viewSize.x/2) - 18)/224 - 1),
+                  ymax:Math.ceil(((center.y + viewSize.y/2) - 50)/224 - 1),
+                  zmax:Math.ceil((center.z + 14)/224 - 1)
+                }
+
+    console.log(chunk);
+  };
+
+  var updateTexture = function(tile, pos) {
+    console.log('updating texture of tile '+ tile + ' to z position ' +pos);
+
+    var image = new Image();
+    image.src = tiles[tile].channel[pos].data;
+
+    tiles[tile].texture.image = image;
+    tiles[tile].texture.needsUpdate = true;
+  } 
 
   this.createTile = function(position, scene) {
-    if (this.tiles[JSON.stringify(position)] != undefined){
+    if (tiles[JSON.stringify(position)] != undefined){
         return;
     }
-    var texture = THREE.ImageUtils.loadTexture(empty.channel);
-    var material = new THREE.MeshBasicMaterial({ map:texture });
-    var planeMesh = new THREE.Mesh(plane , material );
 
-    planeMesh.position.x =  position.x * 128;
-    planeMesh.position.y =  position.y * 128;
+    var pos = JSON.stringify(position);
+    tiles[pos] = {};
 
-    this.tiles[JSON.stringify(position)] = "empty";
-    scene.add(planeMesh);
+    tiles[pos].texture = new THREE.ImageUtils.loadTexture(empty.channel);
+    tiles[pos].material = new THREE.MeshBasicMaterial({ map:tiles[pos].texture });
+    tiles[pos].planeMesh = new THREE.Mesh(plane , tiles[pos].material );
+
+    tiles[pos].planeMesh.position.x =  position.x * 128;
+    tiles[pos].planeMesh.position.y =  position.y * 128;
+
+    scene.add(tiles[pos].planeMesh);
 
 
     var handleError = function( response ) {
@@ -350,14 +379,8 @@ app.service('TileService', ['$http', function($http) {
     };
 
     var handleSuccess = function( response ) {
-      var image = new Image();
-      image.src = response.data[0].data;
-
-      texture.image = image;
-      image.onload = function() {
-        texture.needsUpdate = true;
-        material.map.needsUpdate = true;
-      };
+      tiles[pos].channel = response.data;
+      updateTexture(pos, 0);   
     };
 
 
@@ -369,12 +392,13 @@ app.service('TileService', ['$http', function($http) {
     var request = $http({
         responseType: 'json',
         method: 'GET',
-        url: 'http://data.eyewire.org/volume/'+volume_id+'/chunk/'+mip+'/'+x+'/'+y+'/'+z+'/tile/xy/0:1'
+        url: 'http://data.eyewire.org/volume/'+volume_id+'/chunk/'+mip+'/'+x+'/'+y+'/'+z+'/tile/xy/0:128'
     });
     request.then(handleSuccess,handleError);
   }
 
   this.createTileAndSurrounding = function(position, scene) {
+
     //Center
     this.createTile({x: position.x,   y:position.y}, scene);
 
@@ -389,12 +413,31 @@ app.service('TileService', ['$http', function($http) {
     this.createTile({x: position.x+1, y:position.y-1}, scene);
     this.createTile({x: position.x-1, y:position.y-1}, scene);
   };
+
+  this.moveZ = function ( zposition ) {
+    for (var tilePos in tiles) {
+      updateTexture(tilePos, zposition);
+    }
+  }
+
+  this.volume = function( coord , callback){
+    $http.get('https://eyewire.org/2.0/volumes/atcoord/'+coord.x+'/'+coord.y+'/'+coord.z).
+    success(function(data, status, headers, config) {
+    // this callback will be called asynchronously
+    // when the response is available
+    callback(data);
+   }).
+    error(function(data, status, headers, config) {
+    // called asynchronously if an error occurs
+    // or server returns response with an error status.
+    });
+  }
+
 }]);
 
 app.service('TwoDCameraController', ['TileService' , function (TileService) {
   
   var STATES = { NONE: -1, ROTATE: 0, ZOOM: 1, PAN: 2 };
-  var zpos = 0;
   // 65 /*A*/, 83 /*S*/, 68 /*D*/
   var keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40, ROTATE: 65, ZOOM: 83, PAN: 68 };
 
@@ -405,34 +448,30 @@ app.service('TwoDCameraController', ['TileService' , function (TileService) {
   var _state = STATES.NONE;
   var _scene;
   var _camera;
+  var _viewPort;
   
-  this.createControls = function ( camera , domElement, scene ) {
+  this.createControls = function ( camera , domElement, scene , viewPort) {
     _camera = camera;
     _scene = scene;
-    this.domElement = domElement;
+    _viewPort = viewPort;
 
-    this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
-    this.domElement.addEventListener( 'mousedown', onMouseDown, false );
-    this.domElement.addEventListener( 'mousewheel', onMouseWheel, false );
+    domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
+    domElement.addEventListener( 'mousedown', onMouseDown, false );
+    domElement.addEventListener( 'mousewheel', onMouseWheel, false );
     window.addEventListener( 'keydown', onKeyDown, false );
     window.addEventListener( 'keyup', onKeyUp, false );
   };
 
   var pan = function ( distance ) {
-    console.log('panning');
     _camera.position.add( distance );
-
     var x = Math.round(_camera.position.x / 128);
     var y = Math.round(_camera.position.y / 128);
 
-    TileService.createTileAndSurrounding({x: x, y:y}, _scene);
+    TileService.viewportChanged(_camera.position, _viewPort);
   };
 
   var onMouseDown = function( event ) {
 
-    event.preventDefault();
-
-    console.log(STATES);
     switch ( _state ){
       case STATES.NONE:
         if ( event.button === 1 ){
@@ -453,19 +492,13 @@ app.service('TwoDCameraController', ['TileService' , function (TileService) {
 
   var onMouseMove = function( event ) {
 
-    event.preventDefault();
     if ( _state === STATES.ZOOM ) {
       zoomEnd.set( event.clientX, event.clientY );
-      zoomDelta.subVectors( this.zoomEnd, this.zoomStart );
-      if ( this.zoomDelta.y > 0 ) {
-        this.zoomIn();
-      } else {
-        this.zoomOut();
-      }
-      this.zoomStart.copy( zoomEnd );
+      zoomDelta.subVectors( zoomEnd, zoomStart );
+      zoomDelta > 0 ? camera.position.z += 1 : camera.position.z -= 1;
+      zoomStart.copy( zoomEnd );
 
     } else if ( _state === STATES.PAN ) {
-      console.log("trying to pan");
       var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
       var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
       pan( new THREE.Vector3( - movementX, movementY, 0 ) );
@@ -481,8 +514,7 @@ app.service('TwoDCameraController', ['TileService' , function (TileService) {
   };
 
   var onMouseWheel = function( event ) {
-    console.log("mouse wheel "+ zpos);
-
+    //TileService.moveZ(zpos);
     var delta = 0;
 
     if ( event.wheelDelta ) { // WebKit / Opera / Explorer 9
@@ -491,19 +523,19 @@ app.service('TwoDCameraController', ['TileService' , function (TileService) {
       delta = - event.detail;
     }
 
-    if ( delta > 0 ) {
-      zpos = zpos + 1;
-    } else {
-      zpos = zpos - 1;
-    }
+    delta > 0 ? camera.position.z += 1 : camera.position.z -= 1;
+    
+
+    console.log(camera.position);
+
   };
 
   var onKeyDown = function( event ) {
     switch ( event.keyCode ) {
-      case this.keys.ZOOM:
+      case keys.ZOOM:
         _state = STATES.ZOOM;
         break;
-      case this.keys.PAN:
+      case keys.PAN:
         _state = STATES.PAN;
         break;
     }
@@ -511,8 +543,8 @@ app.service('TwoDCameraController', ['TileService' , function (TileService) {
       
   var onKeyUp = function( event ) {
     switch ( event.keyCode ) {
-      case this.keys.ZOOM:
-      case this.keys.PAN:
+      case keys.ZOOM:
+      case keys.PAN:
         _state = STATES.NONE;
       break;
     }
