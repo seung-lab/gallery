@@ -346,7 +346,7 @@ app.directive('twoViewport', ['TileService','TwoDCameraController',
     camera = new THREE.OrthographicCamera(
           -aspectRatio* viewSize/ 2, aspectRatio * viewSize /2,
           viewSize/ 2, - viewSize/2,
-          -1000, 1000
+          0, 10000
           );
 
     scene.add(camera);
