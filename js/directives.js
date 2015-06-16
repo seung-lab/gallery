@@ -375,7 +375,7 @@ app.directive('twoViewport', ['TileService','TwoDCameraController',
           center.x = (volume.channel.xmax + volume.channel.xmin) / 2.0;
           center.y = (volume.channel.ymax + volume.channel.ymin) / 2.0;
           center.z = (volume.channel.zmax + volume.channel.zmin) / 2.0;
-          camera.position.set(center.x , center.y , center.z);
+          camera.position.set(center.x , -center.y , center.z);
           var controls = cameraController.createControls( camera, renderer.domElement, scene , {x: viewSize, y:viewSize});
 
            animate();

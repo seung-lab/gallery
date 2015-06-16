@@ -329,118 +329,131 @@ app.service('TileService', ['$http', function($http) {
     segmentation: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC"
   };
   var volumes = {};
-  window.volumes = volumes;
-
   var visibleChunks;
+  var zpos;
 
   this.viewportChanged = function( center, viewSize , scene ){
     //This maps from global coordinates to chunk coordinates
     // 224 is the size of each chunk (256 - 32) where 32 is the overlapping between cubes
     // 18 , 50 and - 14 are the offsets for each axis 
-    var chunks = { xmin:Math.floor(((center.x - viewSize.x/2) - 18)/224 - 1),
-                  ymin:Math.floor(((center.y - viewSize.y/2) - 50)/224 - 1),
+    var chunk_coord = { xmin:Math.floor(((center.x - viewSize.x/2) - 18)/224 - 1),
+                  ymin:Math.floor(((Math.abs(center.y) - viewSize.y/2) - 50)/224 - 1),
                   zmin:Math.floor((center.z + 14)/224 - 1),
                   xmax:Math.ceil(((center.x + viewSize.x/2) - 18)/224 - 1),
-                  ymax:Math.ceil(((center.y + viewSize.y/2) - 50)/224 - 1),
+                  ymax:Math.ceil(((Math.abs(center.y) + viewSize.y/2) - 50)/224 - 1),
                   zmax:Math.ceil((center.z + 14)/224 - 1)
                 }
 
     // Load new visible chunks and maybe some soon to be visible ones
-    if ( JSON.stringify(chunks) !=  JSON.stringify(visibleChunks)) {
-      visibleChunks = chunks;
-      console.log(visibleChunks); 
+    if ( JSON.stringify(chunk_coord) !=  JSON.stringify(visibleChunks)) {
+      visibleChunks = chunk_coord;
 
-      for ( var x = chunks.xmin; x < chunks.xmax ; ++x) {
-        for ( var y = chunks.ymin; y < chunks.ymax; ++y) {
-          for ( var z = chunks.zmin ; z < chunks.zmax; ++z)
-          {
-            var coord = { x:x, y:y, z:z };
-            var str_coord = JSON.stringify(coord);
-            if (!(str_coord in volumes)) {
-              volumes[str_coord] = {};
-              volumes[str_coord].tiles = {};
-
-              for ( var x = 0; x < 2; ++x ) {
-                for ( var y = 0; y < 2; ++y) {
-                  volumes[str_coord].tiles[x*2 + y] = {};
-                  volumes[str_coord].tiles[x*2 + y].texture = new THREE.ImageUtils.loadTexture(empty.channel);
-                  var color = '#'+Math.floor(Math.random()*16777215).toString(16);
-
-                  volumes[str_coord].tiles[x*2 + y].material = new THREE.MeshBasicMaterial({ map:volumes[str_coord].tiles[x*2 + y].texture , color:color});
-                  volumes[str_coord].tiles[x*2 + y].mesh = new THREE.Mesh(plane , volumes[str_coord].tiles[x*2 + y].material );
-
-                  volumes[str_coord].tiles[x*2 + y].mesh.position.x =  (coord.x + 1) * 224 + 18 - 128 / 2 + 128 * x;
-                  volumes[str_coord].tiles[x*2 + y].mesh.position.y =  (coord.y + 1) * 224 + 50 - 128 / 2 + 128 * y;
-
-                  console.log('added tile at x=' + volumes[str_coord].tiles[x*2 + y].mesh.position.x + ' y=' + volumes[str_coord].tiles[x*2 + y].mesh.position.y);
-                  scene.add(volumes[str_coord].tiles[x*2 + y].mesh);
-                }
-              }       
-
-              this.volume(coord, function(metadata) {
-                volumes[str_coord].metadata = metadata;
-                getChannel(coord, metadata.channel.id );
-              });
-            }
-
-            
-          }
-        }
-      }
-
+      for ( var x = chunk_coord.xmin; x < chunk_coord.xmax ; ++x) 
+        for ( var y = chunk_coord.ymin; y < chunk_coord.ymax; ++y) 
+          for ( var z = chunk_coord.zmin ; z < chunk_coord.zmax; ++z) 
+            this.initializeChunk({ x:x, y:y, z:z }, scene);
     }
+
+    //update textures
+    var z_chunk = (center.z + 14)/224 - 1; 
+    var new_zpos = Math.round((z_chunk - chunk_coord.zmin) * 224);
+    if ( zpos != new_zpos ) {
+
+      zpos = new_zpos;
+      console.log({zpos:zpos, zchunk:chunk_coord.zmax});
+
+      for ( var x = chunk_coord.xmin; x < chunk_coord.xmax ; ++x) 
+        for ( var y = chunk_coord.ymin; y < chunk_coord.ymax; ++y) 
+          for ( var z = chunk_coord.zmin ; z < chunk_coord.zmax; ++z) 
+            this.updateTexture({x:x, y:y, z:z}, zpos);
+    }
+  
   };
 
-  var getChannel = function ( coord , channel_id ) {
+  this.initializeChunk = function (coord, scene) {
     var str_coord = JSON.stringify(coord);
-    volumes[str_coord].channel = {};
+    if (!(str_coord in volumes)) {
+      volumes[str_coord] = {};
+      volumes[str_coord].tiles = {};
+      
+      var color = '#'+Math.floor(Math.random()*16777215).toString(16);
+
+      for ( var x = 0; x < 2; ++x ) {
+        for ( var y = 0; y < 2; ++y) {
+          volumes[str_coord].tiles[x*2 + y] = {};
+          volumes[str_coord].tiles[x*2 + y].texture = new THREE.ImageUtils.loadTexture(empty.channel);
+          //var color = 0xffffff;
+          volumes[str_coord].tiles[x*2 + y].material = new THREE.MeshBasicMaterial({ map:volumes[str_coord].tiles[x*2 + y].texture, color:color });
+          volumes[str_coord].tiles[x*2 + y].mesh = new THREE.Mesh(plane , volumes[str_coord].tiles[x*2 + y].material );
+
+          volumes[str_coord].tiles[x*2 + y].mesh.position.x =  (coord.x + 1) * 224 + 18 + 128 / 2 + 128 * x;
+          volumes[str_coord].tiles[x*2 + y].mesh.position.y =  -1 * ((coord.y + 1) * 224 + 50 + 128 / 2 + 128 * y);
+          console.log(str_coord + 'tile'+x+','+y+' x= ' + volumes[str_coord].tiles[x*2 + y].mesh.position.y);
+
+          scene.add(volumes[str_coord].tiles[x*2 + y].mesh);
+        }
+      }       
+
+      this.volume(coord, function(metadata) {
+        volumes[str_coord].metadata = metadata;
+        console.log((volumes[str_coord].metadata.channel.ymin + volumes[str_coord].metadata.channel.ymax) /2);
+
+        getChannel(coord, metadata.channel.id );
+      });
+    }
+  }
+
+var getChannel = function ( coord , channel_id ) {
+  var str_coord = JSON.stringify(coord);
+  volumes[str_coord].channel = {};
+
+  for ( var x = 0; x < 2; ++x ) {
+    for ( var y = 0; y < 2; ++y) { 
+
+      (function (x, y ) {
+
+        var req = {
+          responseType: 'json',
+          method: 'GET',
+          url: 'http://data.eyewire.org/volume/'+channel_id+'/chunk/0/'+x+'/'+y+'/0/tile/xy/0:128',
+        };
+
+        $http(req).
+        success(function(data, status, headers, config) {
+          volumes[str_coord].channel[x*2 + y] = data;
+          console.log('recived channel');
+        }).
+        error(function(data, status, headers, config) {
+          console.error(headers);
+        });
+      })(x,y);
+    }
+  }
+
+};
+
+  this.updateTexture = function(coord, zpos) {
+
+    var str_coord = JSON.stringify(coord);
 
     for ( var x = 0; x < 2; ++x ) {
-      for ( var y = 0; y < 2; ++y) { 
-          var req = {
-            responseType: 'json',
-            method: 'GET',
-            url: 'http://data.eyewire.org/volume/'+channel_id+'/chunk/0/'+x+'/'+y+'/0/tile/xy/0:128'
-          };
-          $http(req).
-          success(function(data, status, headers, config) {
-            volumes[str_coord].channel[x*2 + y] = data;
-            console.log('recived channel');
-         }).
-          error(function(data, status, headers, config) {
-            console.error(headers);
-          });
+      for ( var y = 0; y < 2; ++y) {
+        try {
+            //console.log(volumes[str_coord].channel[x*2 + y][zpos]);
+            var src = volumes[str_coord].channel[x*2 + y][zpos].data;
+            var image = new Image();
+            image.src = src;
+            volumes[str_coord].tiles[x*2 + y].texture.image = image;
+            volumes[str_coord].tiles[x*2 + y].texture.needsUpdate = true;
+        } catch (e) {
+            console.log('there is no channel');
+        }
+        
       }
-    } 
-  };
-
-  var updateTexture = function(tile, pos) {
-    console.log('updating texture of tile '+ tile + ' to z position ' +pos);
-
-    var image = new Image();
-    image.src = tiles[tile].channel[pos].data;
-
-    tiles[tile].texture.image = image;
-    tiles[tile].texture.needsUpdate = true;
+    }
   } 
 
 
-  this.createTileAndSurrounding = function(position, scene) {
-
-    //Center
-    this.createTile({x: position.x,   y:position.y}, scene);
-
-    this.createTile({x: position.x+1, y:position.y}, scene);
-    this.createTile({x: position.x-1, y:position.y}, scene);         
-    this.createTile({x: position.x,   y:position.y+1}, scene);
-    this.createTile({x: position.x,   y:position.y-1}, scene);
-    
-    //Diagonals
-    this.createTile({x: position.x+1, y:position.y+1}, scene);
-    this.createTile({x: position.x-1, y:position.y+1}, scene);
-    this.createTile({x: position.x+1, y:position.y-1}, scene);
-    this.createTile({x: position.x-1, y:position.y-1}, scene);
-  };
 
   this.moveZ = function ( zposition ) {
     for (var tilePos in tiles) {
@@ -452,17 +465,12 @@ app.service('TileService', ['$http', function($http) {
     var url = 'https://eyewire.org/2.0/volumes/atcoord/'+coord.x+'/'+coord.y+'/'+coord.z;
     $http.get(url).
     success(function(data, status, headers, config) {
-      // this callback will be called asynchronously
-      // when the response is available
       callback(data);
    }).
     error(function(data, status, headers, config) {
-      // called asynchronously if an error occurs
-      // or server returns response with an error status.
       console.error(headers);
     });
   }
-
 }]);
 
 app.service('TwoDCameraController', ['TileService' , function (TileService) {
@@ -490,6 +498,8 @@ app.service('TwoDCameraController', ['TileService' , function (TileService) {
     domElement.addEventListener( 'mousewheel', onMouseWheel, false );
     window.addEventListener( 'keydown', onKeyDown, false );
     window.addEventListener( 'keyup', onKeyUp, false );
+
+    TileService.viewportChanged(_camera.position, _viewPort , _scene);
   };
 
   var pan = function ( distance ) {
@@ -555,7 +565,7 @@ app.service('TwoDCameraController', ['TileService' , function (TileService) {
 
     delta > 0 ? camera.position.z += 1 : camera.position.z -= 1;
     
-    TileService.viewportChanged(_camera.position, _viewPort);
+    TileService.viewportChanged(_camera.position, _viewPort, _scene);
   };
 
   var onKeyDown = function( event ) {
@@ -579,5 +589,4 @@ app.service('TwoDCameraController', ['TileService' , function (TileService) {
   }; 
 
   this.prototype = Object.create( THREE.EventDispatcher.prototype );
-
 }]);
