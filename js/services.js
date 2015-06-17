@@ -360,14 +360,12 @@ app.service('TileService', ['$http', function($http) {
     if ( zpos != new_zpos ) {
 
       zpos = new_zpos;
-      console.log({zpos:zpos, zchunk:chunk_coord.zmax});
 
       for ( var x = chunk_coord.xmin; x < chunk_coord.xmax ; ++x) 
         for ( var y = chunk_coord.ymin; y < chunk_coord.ymax; ++y) 
           for ( var z = chunk_coord.zmin ; z < chunk_coord.zmax; ++z) 
             this.updateTexture({x:x, y:y, z:z}, zpos);
     }
-  
   };
 
   this.initializeChunk = function (coord, scene) {
@@ -388,7 +386,6 @@ app.service('TileService', ['$http', function($http) {
 
           volumes[str_coord].tiles[x*2 + y].mesh.position.x =  (coord.x + 1) * 224 + 18 + 128 / 2 + 128 * x;
           volumes[str_coord].tiles[x*2 + y].mesh.position.y =  -1 * ((coord.y + 1) * 224 + 50 + 128 / 2 + 128 * y);
-          console.log(str_coord + 'tile'+x+','+y+' x= ' + volumes[str_coord].tiles[x*2 + y].mesh.position.y);
 
           scene.add(volumes[str_coord].tiles[x*2 + y].mesh);
         }
@@ -396,8 +393,6 @@ app.service('TileService', ['$http', function($http) {
 
       this.volume(coord, function(metadata) {
         volumes[str_coord].metadata = metadata;
-        console.log((volumes[str_coord].metadata.channel.ymin + volumes[str_coord].metadata.channel.ymax) /2);
-
         getChannel(coord, metadata.channel.id );
       });
     }
@@ -409,24 +404,26 @@ var getChannel = function ( coord , channel_id ) {
 
   for ( var x = 0; x < 2; ++x ) {
     for ( var y = 0; y < 2; ++y) { 
+      for ( var z = 0; z < 2; ++z) {
+        (function (x, y, z ) {
+          var req = {
+            responseType: 'json',
+            method: 'GET',
+            url: 'http://data.eyewire.org/volume/'+channel_id+'/chunk/0/'+x+'/'+y+'/'+z+'/tile/xy/0:128',
+          };
 
-      (function (x, y ) {
+          var chann_coord = JSON.stringify({x:x, y:y, z:z});
 
-        var req = {
-          responseType: 'json',
-          method: 'GET',
-          url: 'http://data.eyewire.org/volume/'+channel_id+'/chunk/0/'+x+'/'+y+'/0/tile/xy/0:128',
-        };
-
-        $http(req).
-        success(function(data, status, headers, config) {
-          volumes[str_coord].channel[x*2 + y] = data;
-          console.log('recived channel');
-        }).
-        error(function(data, status, headers, config) {
-          console.error(headers);
-        });
-      })(x,y);
+          $http(req).
+          success(function(data, status, headers, config) {
+            volumes[str_coord].channel[chann_coord] = data;
+            console.log('recived channel TODO update texture when this happens');
+          }).
+          error(function(data, status, headers, config) {
+            console.error(headers);
+          });
+        })(x,y,z);
+      }
     }
   }
 
@@ -435,20 +432,23 @@ var getChannel = function ( coord , channel_id ) {
   this.updateTexture = function(coord, zpos) {
 
     var str_coord = JSON.stringify(coord);
+    var z = zpos < 128  ? 0 : 1;
+    zpos = zpos - 128 * z;
 
     for ( var x = 0; x < 2; ++x ) {
       for ( var y = 0; y < 2; ++y) {
+        var chann_coord = JSON.stringify({x:x, y:y, z:z});
+        var src;
         try {
-            //console.log(volumes[str_coord].channel[x*2 + y][zpos]);
-            var src = volumes[str_coord].channel[x*2 + y][zpos].data;
-            var image = new Image();
-            image.src = src;
-            volumes[str_coord].tiles[x*2 + y].texture.image = image;
-            volumes[str_coord].tiles[x*2 + y].texture.needsUpdate = true;
+            src = volumes[str_coord].channel[chann_coord][zpos].data;
         } catch (e) {
-            console.log('there is no channel');
+            console.log('there is no channel for '+ str_coord+' where chann coord are '+ chann_coord);
+            src = empty.channel;
         }
-        
+        var image = new Image();
+        image.src = src;
+        volumes[str_coord].tiles[x*2 + y].texture.image = image;
+        volumes[str_coord].tiles[x*2 + y].texture.needsUpdate = true;
       }
     }
   } 
