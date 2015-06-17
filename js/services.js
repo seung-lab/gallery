@@ -328,7 +328,14 @@ app.service('TileService', ['$http', function($http) {
     channel: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAIAAABMXPacAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAATpJREFUeNrs18ENgCAQAEE09iJl0H8F2o0N+DTZh7NPcr/JEdjWWuOtc87X8/u6zH84vw+lAQAAQAAACMA/O7zH23kb4AoCIAAABACAin+A93g7bwNcQQAEAIAAAFDxD/Aeb+dtgCsIgAAAEAAAKv4B3uPtvA1wBQEQAAACAEDFP8B7vJ23Aa4gAAIAQAAAqPgHeI+38zbAFQRAAAAIAAAV/wDv8XbeBriCAAgAAAEAoOIf4D3eztsAVxAAAQAgAABU/AO8x9t5G+AKAiAAAAQAgIp/gPd4O28DXEEABACAAABQ8Q/wHm/nbYArCIAAABAAACr+Ad7j7bwNcAUBEAAAAgBAxT/Ae7ydtwGuIAACAEAAAKj4B3iPt/M2wBUEQAAACAAAFf8A7/F23ga4ggAIAAABAKCgR4ABAIa/f2QspBp6AAAAAElFTkSuQmCC",
     segmentation: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC"
   };
+
+  //volumes contains the metada for each volume, and the images for channel and/or segmentation.
   var volumes = {};
+
+  //Tile contains all the meshes for a plane , data is get from volumes and apply as a texture to the tiles.
+  var tiles = {};
+  window.tiles = tiles;
+
   var visibleChunks;
   var zpos;
 
@@ -336,11 +343,11 @@ app.service('TileService', ['$http', function($http) {
     //This maps from global coordinates to chunk coordinates
     // 224 is the size of each chunk (256 - 32) where 32 is the overlapping between cubes
     // 18 , 50 and - 14 are the offsets for each axis 
-    var chunk_coord = { xmin:Math.floor(((center.x - viewSize.x/2) - 18)/224 - 1),
-                  ymin:Math.floor(((Math.abs(center.y) - viewSize.y/2) - 50)/224 - 1),
+    var chunk_coord = { xmin:Math.floor(((center.x - viewSize.x/2 - 32) - 18)/224.0 - 1),
+                  ymin:Math.floor(((Math.abs(center.y) - viewSize.y/2 - 32) - 50)/224.0 - 1),
                   zmin:Math.floor((center.z + 14)/224 - 1),
-                  xmax:Math.ceil(((center.x + viewSize.x/2) - 18)/224 - 1),
-                  ymax:Math.ceil(((Math.abs(center.y) + viewSize.y/2) - 50)/224 - 1),
+                  xmax:Math.ceil(((center.x + viewSize.x/2 + 32) - 18)/224 - 1),
+                  ymax:Math.ceil(((Math.abs(center.y) + viewSize.y/2 + 32) - 50)/224 - 1),
                   zmax:Math.ceil((center.z + 14)/224 - 1)
                 }
 
@@ -350,61 +357,65 @@ app.service('TileService', ['$http', function($http) {
 
       for ( var x = chunk_coord.xmin; x < chunk_coord.xmax ; ++x) 
         for ( var y = chunk_coord.ymin; y < chunk_coord.ymax; ++y) 
-          for ( var z = chunk_coord.zmin ; z < chunk_coord.zmax; ++z) 
+          for ( var z = chunk_coord.zmin ; z < chunk_coord.zmax; ++z) { 
             this.initializeChunk({ x:x, y:y, z:z }, scene);
+            updateTexture({x:x, y:y, z:z});
+          }
     }
 
     //update textures
     var z_chunk = (center.z + 14)/224 - 1; 
     var new_zpos = Math.round((z_chunk - chunk_coord.zmin) * 224);
     if ( zpos != new_zpos ) {
-
       zpos = new_zpos;
-
       for ( var x = chunk_coord.xmin; x < chunk_coord.xmax ; ++x) 
         for ( var y = chunk_coord.ymin; y < chunk_coord.ymax; ++y) 
           for ( var z = chunk_coord.zmin ; z < chunk_coord.zmax; ++z) 
-            this.updateTexture({x:x, y:y, z:z}, zpos);
+            updateTexture({x:x, y:y, z:z});
     }
   };
 
-  this.initializeChunk = function (coord, scene) {
-    var str_coord = JSON.stringify(coord);
+  this.initializeChunk = function (task_coord, scene) {
+    var str_coord = JSON.stringify(task_coord);
     if (!(str_coord in volumes)) {
       volumes[str_coord] = {};
-      volumes[str_coord].tiles = {};
       
-      var color = '#'+Math.floor(Math.random()*16777215).toString(16);
+      var color = '#'+Math.floor(Math.random()*167772).toString(16);
 
       for ( var x = 0; x < 2; ++x ) {
         for ( var y = 0; y < 2; ++y) {
-          volumes[str_coord].tiles[x*2 + y] = {};
-          volumes[str_coord].tiles[x*2 + y].texture = new THREE.ImageUtils.loadTexture(empty.channel);
-          //var color = 0xffffff;
-          volumes[str_coord].tiles[x*2 + y].material = new THREE.MeshBasicMaterial({ map:volumes[str_coord].tiles[x*2 + y].texture, color:color });
-          volumes[str_coord].tiles[x*2 + y].mesh = new THREE.Mesh(plane , volumes[str_coord].tiles[x*2 + y].material );
 
-          volumes[str_coord].tiles[x*2 + y].mesh.position.x =  (coord.x + 1) * 224 + 18 + 128 / 2 + 128 * x;
-          volumes[str_coord].tiles[x*2 + y].mesh.position.y =  -1 * ((coord.y + 1) * 224 + 50 + 128 / 2 + 128 * y);
+          var chunk_coord = JSON.stringify({ x_task: task_coord.x, y_task: task_coord.y, x_chunk: x , y_chunk: y});
+          console.log('initializing chunk for '+chunk_coord);
 
-          scene.add(volumes[str_coord].tiles[x*2 + y].mesh);
+          tiles[chunk_coord] = {};
+          tiles[chunk_coord].texture = new THREE.ImageUtils.loadTexture(empty.channel);
+          var color = 0xffffff;
+          tiles[chunk_coord].material = new THREE.MeshBasicMaterial({ map:tiles[chunk_coord].texture, color:color });
+          tiles[chunk_coord].mesh = new THREE.Mesh(plane , tiles[chunk_coord].material );
+
+          tiles[chunk_coord].mesh.position.x =  (task_coord.x + 1) * 224 + 18 + 128 / 2 + 128 * x;
+          tiles[chunk_coord].mesh.position.y =  -1 * ((task_coord.y + 1) * 224 + 50 + 128 / 2 + 128 * y);
+
+          scene.add(tiles[chunk_coord].mesh);
         }
       }       
 
-      this.volume(coord, function(metadata) {
+      this.volume(task_coord, function(metadata) {
         volumes[str_coord].metadata = metadata;
-        getChannel(coord, metadata.channel.id );
+        getChannel(task_coord, metadata.channel.id );
       });
     }
   }
 
-var getChannel = function ( coord , channel_id ) {
-  var str_coord = JSON.stringify(coord);
+var getChannel = function ( task_coord , channel_id ) {
+  var str_coord = JSON.stringify(task_coord);
   volumes[str_coord].channel = {};
 
   for ( var x = 0; x < 2; ++x ) {
     for ( var y = 0; y < 2; ++y) { 
       for ( var z = 0; z < 2; ++z) {
+        
         (function (x, y, z ) {
           var req = {
             responseType: 'json',
@@ -414,14 +425,17 @@ var getChannel = function ( coord , channel_id ) {
 
           var chann_coord = JSON.stringify({x:x, y:y, z:z});
 
+          console.log( ' http requested');
+
           $http(req).
           success(function(data, status, headers, config) {
             volumes[str_coord].channel[chann_coord] = data;
-            console.log('recived channel TODO update texture when this happens');
+            updateTexture(task_coord);
           }).
           error(function(data, status, headers, config) {
             console.error(headers);
           });
+
         })(x,y,z);
       }
     }
@@ -429,37 +443,31 @@ var getChannel = function ( coord , channel_id ) {
 
 };
 
-  this.updateTexture = function(coord, zpos) {
+  var updateTexture = function(task_coord) {
+    console.log('updating texture');
 
-    var str_coord = JSON.stringify(coord);
+    var str_coord = JSON.stringify(task_coord);
     var z = zpos < 128  ? 0 : 1;
-    zpos = zpos - 128 * z;
 
-    for ( var x = 0; x < 2; ++x ) {
-      for ( var y = 0; y < 2; ++y) {
-        var chann_coord = JSON.stringify({x:x, y:y, z:z});
+    for ( var x_chunk = 0; x_chunk < 2; ++x_chunk ) {
+      for ( var y_chunk = 0; y_chunk < 2; ++y_chunk) {
+        var chann_coord = JSON.stringify({x:x_chunk, y:y_chunk, z:z});
         var src;
         try {
-            src = volumes[str_coord].channel[chann_coord][zpos].data;
+            src = volumes[str_coord].channel[chann_coord][zpos - 128 * z].data;
         } catch (e) {
-            console.log('there is no channel for '+ str_coord+' where chann coord are '+ chann_coord);
             src = empty.channel;
         }
         var image = new Image();
         image.src = src;
-        volumes[str_coord].tiles[x*2 + y].texture.image = image;
-        volumes[str_coord].tiles[x*2 + y].texture.needsUpdate = true;
+
+        var chunk_coord = JSON.stringify({ x_task: task_coord.x, y_task: task_coord.y, x_chunk: x_chunk , y_chunk: y_chunk});
+        tiles[chunk_coord].texture.image = image;
+        tiles[chunk_coord].texture.needsUpdate = true;
       }
     }
   } 
 
-
-
-  this.moveZ = function ( zposition ) {
-    for (var tilePos in tiles) {
-      updateTexture(tilePos, zposition);
-    }
-  }
 
   this.volume = function( coord , callback){
     var url = 'https://eyewire.org/2.0/volumes/atcoord/'+coord.x+'/'+coord.y+'/'+coord.z;
@@ -523,7 +531,14 @@ app.service('TwoDCameraController', ['TileService' , function (TileService) {
         zoomStart.set( event.clientX, event.clientY );
         break;
     }
-
+    console.log(
+                { 
+                  x:((_camera.position.x - _viewPort.x/2) - 18)/224 - 1,
+                  y:((Math.abs(_camera.position.y) - _viewPort.y/2) - 50)/224 - 1,
+                  z:(_camera.position.z + 14)/224 - 1
+                }
+              );
+    
     document.addEventListener( 'mousemove', onMouseMove, false );
     document.addEventListener( 'mouseup', onMouseUp, false );
   };
