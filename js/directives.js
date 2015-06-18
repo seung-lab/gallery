@@ -213,8 +213,8 @@ app.directive("editor", ["$window", "util", "parse",
 // services are used to manipulate the scene else where.
 // Currently the Renderer and controls are part of the directive but could just as easily be 
 // moved into their own services if functionality they provide need to be manipulated by a UI control.
-app.directive('threeViewport', ['SceneService', 'CameraService','CellService', 'CoordinatesService' , 'settings', 'setOperations', 
-  function (SceneService, CameraService, CellService, CoordinatesService, settings, setOperations) {
+app.directive('threeViewport', ['SceneService3D', 'CameraService3D','CellService', 'CoordinatesService3D' , 'settings', 'setOperations', 'OctLODFactory', 
+  function (SceneService, CameraService, CellService, CoordinatesService, settings, setOperations, OctLOD) {
 
     function toggleViewBasedOnSettings (scope) {
 
@@ -288,6 +288,7 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
 
         var renderer;
         var controls;
+        var clock = new THREE.Clock();
 
         init();
         animate();
@@ -303,6 +304,8 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor( "#5Caadb", 1.0 );
+        renderer.sortObjects = false;
+
 
         // set up the controls with the camera and renderer
         controls = new THREE.OrbitControls(CameraService.perspectiveCam, renderer.domElement);
@@ -320,8 +323,16 @@ app.directive('threeViewport', ['SceneService', 'CameraService','CellService', '
 
       function animate() {
         requestAnimationFrame(animate);
+
+        controls.update(clock.getDelta() );
+        SceneService.scene.updateMatrixWorld();
+
+        CellService.cells.forEach(function(cell){
+          cell.update( CameraService.perspectiveCam );
+
+        });
+        
         renderer.render(SceneService.scene, CameraService.perspectiveCam);
-        controls.update();
       }
 
       function onWindowResize() {

@@ -1,10 +1,6 @@
 'use strict';
 //THREEJS
-// For this example this is consumed by the directive and
-// the model factory.
-
-// Is this cached or is it actually returning a new scene?
-app.service('SceneService', function () {
+app.service('SceneService3D', function () {
     var scene = new THREE.Scene();
     //scene.fog = new THREE.Fog( 0x808080, 3000, 6000 );
     // LIGHTS
@@ -24,7 +20,7 @@ app.service('SceneService', function () {
     }
 });
 
-app.service('CoordinatesService', ['SceneService' , function(SceneService){
+app.service('CoordinatesService3D', ['SceneService3D' , function(SceneService){
 
     var scene = SceneService.scene;
 
@@ -164,12 +160,10 @@ app.service('CoordinatesService', ['SceneService' , function(SceneService){
     this.removeGrid = function (orientation) {
         scene.remove(this.grid[orientation]);
     };
-
-
 }]);
 
 // Returns a single instance of a camera.  Consumed by directive and controls.
-app.service('CameraService', function () {
+app.service('CameraService3D', function () {
     // default values for camera
     var viewAngle = 45;
     var aspectRatio = window.innerWidth / window.innerHeight;
@@ -179,83 +173,26 @@ app.service('CameraService', function () {
     return { perspectiveCam:  new THREE.PerspectiveCamera(viewAngle, aspectRatio, near, far)}
 });
 
-app.service('MeshDataService', ['$http','SceneService', function ($http, SceneService) {
-    this.getMesh = function (cellID, mip , x, y, z, color) {
-        // I transform the error response, unwrapping the application dta from
-        // the API response payload.
-        var handleError = function( response ) {
-            // The API response from the server should be returned in a
-            // nomralized format. However, if the request was not handled by the
-            // server (or what not handles properly - ex. server error), then we
-            // may have to normalize it on our end, as best we can.
-            if (
-                ! angular.isObject( response.data ) ||
-                ! response.data.message
-                ) {return( $q.reject( "An unknown error occurred." ) ); }
-
-            // Otherwise, use expected error message.
-            return( $q.reject( response.data.message ) );
-
-        };
-
-        // I transform the successful response, unwrapping the application data
-        // from the API response payload.
-        var handleSuccess = function( response ) {
-
-            if (response.data.length == 0){
-                return false;
-            }
-            var vertices = new Float32Array(response.data);
-            var material = new THREE.MeshLambertMaterial( { color: color, wireframe:false } );
-            var mesh = new THREE.Segment( vertices, material );
-
-            mesh.position.set(x,y,z).multiplyScalar(128 * Math.pow(2, mip));
-            mesh.scale.set(0.5, 0.5, 0.5);
-
-            // add to the scene
-            mesh.name = cellID;
-            SceneService.scene.add(mesh);
-            return true;
-
-        };
-
-
-        var cell_id = cellID * 10  + 1;
-        var request = $http({
-            responseType: 'arraybuffer',
-            method: 'GET',
-            url: 'http://data.eyewire.org/cell/'+cell_id+'/chunk/'+mip+'/'+x+'/'+y+'/'+z+'/mesh'
-        });
-        return( request.then(handleSuccess, handleError ));
-    }
-}])
-
 // Adds a new model to the viewer with the provided x, y offset from the UI.  This specific model
 // creates a tube that follows a collection of 3d points.
-app.service('CellService', ['SceneService','MeshDataService', function (SceneService, MeshDataService) {
-    this.addCell = function (cellID) {
-        var mip = 6;
-        var color = '#'+Math.floor(Math.random()*16777215).toString(16);
+app.service('CellService', ['SceneService3D', 'OctLODFactory', function (SceneService, OctLOD) {
 
-        for ( var x = 0; x < 4 ; x++){
-            for ( var y = 0; y < 4; y++){
-                for ( var z=0; z < 4; z++){
-                    MeshDataService.getMesh(cellID, mip , x, y , z, color);
-                }
-            }
-        }
+  this.cells = Array();
+  this.addCell = function (cellID) {
 
-    }
-    this.removeCell = function (cellID) {
+    this.cells.push(new OctLOD(cellID, 8 , 0, 0 , 0));
+  }
 
-        for (var index=0; index <  SceneService.scene.children.length ; index++){
-            var object = SceneService.scene.children[index];
-            if (object.name == cellID){
-                SceneService.scene.remove(object);
-                index--;
-            }                       
-        }
-    }
+  this.removeCell = function (cellID) {
+
+      for (var index=0; index <  SceneService.scene.children.length ; index++){
+          var object = SceneService.scene.children[index];
+          if (object.name == cellID){
+              SceneService.scene.remove(object);
+              index--;
+          }                       
+      }
+  }
 }]);
 
 app.service("util", ["$window",
@@ -386,12 +323,10 @@ app.service('TileService', ['$http', function($http) {
         for ( var y = 0; y < 2; ++y) {
 
           var chunk_coord = JSON.stringify({ x_task: task_coord.x, y_task: task_coord.y, x_chunk: x , y_chunk: y});
-          console.log('initializing chunk for '+chunk_coord);
 
           tiles[chunk_coord] = {};
           tiles[chunk_coord].texture = new THREE.ImageUtils.loadTexture(empty.channel);
-          var color = 0xffffff;
-          tiles[chunk_coord].material = new THREE.MeshBasicMaterial({ map:tiles[chunk_coord].texture, color:color });
+          tiles[chunk_coord].material = new THREE.MeshBasicMaterial({ map:tiles[chunk_coord].texture});
           tiles[chunk_coord].mesh = new THREE.Mesh(plane , tiles[chunk_coord].material );
 
           tiles[chunk_coord].mesh.position.x =  (task_coord.x + 1) * 224 + 18 + 128 / 2 + 128 * x;
@@ -408,77 +343,73 @@ app.service('TileService', ['$http', function($http) {
     }
   }
 
-var getChannel = function ( task_coord , channel_id ) {
-  var str_coord = JSON.stringify(task_coord);
-  volumes[str_coord].channel = {};
-
-  for ( var x = 0; x < 2; ++x ) {
-    for ( var y = 0; y < 2; ++y) { 
-      for ( var z = 0; z < 2; ++z) {
-        
-        (function (x, y, z ) {
-          var req = {
-            responseType: 'json',
-            method: 'GET',
-            url: 'http://data.eyewire.org/volume/'+channel_id+'/chunk/0/'+x+'/'+y+'/'+z+'/tile/xy/0:128',
-          };
-
-          var chann_coord = JSON.stringify({x:x, y:y, z:z});
-
-          console.log( ' http requested');
-
-          $http(req).
-          success(function(data, status, headers, config) {
-            volumes[str_coord].channel[chann_coord] = data;
-            updateTexture(task_coord);
-          }).
-          error(function(data, status, headers, config) {
-            console.error(headers);
-          });
-
-        })(x,y,z);
-      }
-    }
-  }
-
-};
-
-  var updateTexture = function(task_coord) {
-    console.log('updating texture');
-
+  var getChannel = function ( task_coord , channel_id ) {
     var str_coord = JSON.stringify(task_coord);
-    var z = zpos < 128  ? 0 : 1;
+    volumes[str_coord].channel = {};
 
-    for ( var x_chunk = 0; x_chunk < 2; ++x_chunk ) {
-      for ( var y_chunk = 0; y_chunk < 2; ++y_chunk) {
-        var chann_coord = JSON.stringify({x:x_chunk, y:y_chunk, z:z});
-        var src;
-        try {
-            src = volumes[str_coord].channel[chann_coord][zpos - 128 * z].data;
-        } catch (e) {
-            src = empty.channel;
+    for ( var x = 0; x < 2; ++x ) {
+      for ( var y = 0; y < 2; ++y) { 
+        for ( var z = 0; z < 2; ++z) {
+          
+          (function (x, y, z ) {
+            var req = {
+              responseType: 'json',
+              method: 'GET',
+              url: 'http://data.eyewire.org/volume/'+channel_id+'/chunk/0/'+x+'/'+y+'/'+z+'/tile/xy/0:128',
+            };
+
+            var chann_coord = JSON.stringify({x:x, y:y, z:z});
+
+            $http(req).
+            success(function(data, status, headers, config) {
+              volumes[str_coord].channel[chann_coord] = data;
+              updateTexture(task_coord);
+            }).
+            error(function(data, status, headers, config) {
+              console.error(headers);
+            });
+
+          })(x,y,z);
         }
-        var image = new Image();
-        image.src = src;
-
-        var chunk_coord = JSON.stringify({ x_task: task_coord.x, y_task: task_coord.y, x_chunk: x_chunk , y_chunk: y_chunk});
-        tiles[chunk_coord].texture.image = image;
-        tiles[chunk_coord].texture.needsUpdate = true;
       }
     }
-  } 
+  };
+
+    var updateTexture = function(task_coord) {
+
+      var str_coord = JSON.stringify(task_coord);
+      var z = zpos < 128  ? 0 : 1;
+
+      for ( var x_chunk = 0; x_chunk < 2; ++x_chunk ) {
+        for ( var y_chunk = 0; y_chunk < 2; ++y_chunk) {
+          var chann_coord = JSON.stringify({x:x_chunk, y:y_chunk, z:z});
+          var src;
+          try {
+              src = volumes[str_coord].channel[chann_coord][zpos - 128 * z].data;
+          } catch (e) {
+              src = empty.channel;
+          }
+          var image = new Image();
+          image.src = src;
+
+          var chunk_coord = JSON.stringify({ x_task: task_coord.x, y_task: task_coord.y, x_chunk: x_chunk , y_chunk: y_chunk});
+          tiles[chunk_coord].texture.image = image;
+          tiles[chunk_coord].texture.needsUpdate = true;
+        }
+      }
+    } 
 
 
-  this.volume = function( coord , callback){
-    var url = 'https://eyewire.org/2.0/volumes/atcoord/'+coord.x+'/'+coord.y+'/'+coord.z;
-    $http.get(url).
-    success(function(data, status, headers, config) {
-      callback(data);
-   }).
-    error(function(data, status, headers, config) {
-      console.error(headers);
-    });
-  }
+    this.volume = function( coord , callback){
+      var url = 'https://eyewire.org/2.0/volumes/atcoord/'+coord.x+'/'+coord.y+'/'+coord.z;
+      $http.get(url).
+      success(function(data, status, headers, config) {
+        callback(data);
+     }).
+      error(function(data, status, headers, config) {
+        console.error(headers);
+      });
+    }
 }]);
 
 app.service('TwoDCameraController', ['TileService' , function (TileService) {
@@ -531,13 +462,6 @@ app.service('TwoDCameraController', ['TileService' , function (TileService) {
         zoomStart.set( event.clientX, event.clientY );
         break;
     }
-    console.log(
-                { 
-                  x:((_camera.position.x - _viewPort.x/2) - 18)/224 - 1,
-                  y:((Math.abs(_camera.position.y) - _viewPort.y/2) - 50)/224 - 1,
-                  z:(_camera.position.z + 14)/224 - 1
-                }
-              );
     
     document.addEventListener( 'mousemove', onMouseMove, false );
     document.addEventListener( 'mouseup', onMouseUp, false );

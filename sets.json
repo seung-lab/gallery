@@ -1,6 +1,6 @@
 [{
   "name": "Amacrine Cells",
-  "cells": ["11","878","879"],
+  "cells": ["900","878","879"],
   "_id": "a",
   "_acl": {
     "creator": "demo@cellpane.com"
@@ -21,7 +21,7 @@
   }
 }, {
   "name": "Ganglion Cells",
-  "cells": ["11", "879"],
+  "cells": ["900", "879"],
   "_id": "c",
   "_acl": {
     "creator": "demo@cellpane.com"

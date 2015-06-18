@@ -523,19 +523,20 @@ app.factory("setOperations", function(){
 });
 
 app.factory("modal", ["$rootScope", "$location", "$routeParams", "transitioner", "$timeout",
-  function(a, b, c, d, e) {
+  function($rootScope, $location, $routeParams, transitioner, $timeout) {
     function f(a) {
-      b.search("modal", a || null)
+      $location.search("modal", a || null)
     }
     var g = function(b) {
-      return a.modalClass ? (a.modalClass = "", d.apply("modal", function() {
-        f(), b != c.modal && e(function() {
+      return $rootScope.modalClass ? ($rootScope.modalClass = "", transitioner.apply("modal", function() {
+        f(), b != $routeParams.modal && $timeout(function() {
           f(b)
         })
       })) : b && f(b), !0
     };
+
     return g.isOn = function(b) {
-      return b ? a.modalClass === b : a.modalClass
+      return b ? $rootScope.modalClass === b : $rootScope.modalClass
     }, g
   }
 ]);
@@ -1006,3 +1007,130 @@ app.factory("keyboard", ["$document", "$timeout",
   return keyboard
   }
 ]);
+
+app.factory("OctLODFactory", ['SceneService3D', '$http',
+  function (SceneService, $http) {
+
+  var OctLOD = function (cellID, mip , x, y, z) {
+    
+    THREE.Object3D.call( this );
+
+    this.mip = mip;
+    this.name = cellID; 
+    this.x = x;
+    this.y = y;
+    this.z = z;
+
+    this.position.set(x,y,z).multiplyScalar(128 * Math.pow(2, mip));
+    this.scale.set(0.5, 0.5, 0.5);
+    SceneService.scene.add(this);
+
+    this.updateMatrix();
+    this.matrixAutoUpdate = false;
+    this.loaded = false;
+
+    var scope = this;
+    this.getMesh(cellID, mip , x, y, z, function(mesh) {
+      if(!mesh) {
+        console.log(mesh);
+        console.log('removing object because there are no mesh');
+        delete this;
+        return;} //posibly destroy object if there is no mesh
+
+      scope.mesh = mesh;
+      scope.add(scope.mesh);
+      scope.loaded = true;
+    });
+
+    //Mip level 1 will be visible when the distance to the camera is between 256 and 512
+    this.levels = [256,512,1024,2048,4096,8192,16384,327268];
+    this.oct = [];
+  };
+  OctLOD.prototype.constructor = OctLOD;
+
+  OctLOD.prototype = Object.create( THREE.Object3D.prototype );
+
+
+  OctLOD.prototype.update = function () {
+
+    var v1 = new THREE.Vector3();
+    var v2 = new THREE.Vector3();
+
+    return function ( camera ) {
+
+      if (!this.loaded)
+      return;
+
+      v1.setFromMatrixPosition( camera.matrixWorld );
+      v2.setFromMatrixPosition( this.matrixWorld );
+
+      var distance = v1.distanceTo( v2 );
+
+      if ( this.mip < this.levels.length - 1 && distance > this.levels[this.mip] ) {
+        // console.log('load something farther');
+        this.mesh.visible = false;
+      
+      } else if ( this.mip > 1 && distance < this.levels[this.mip-1]) {
+        this.mesh.visible = false;
+        if ( this.oct.length == 0 ){
+          for ( var x = 0; x < 2 ; x++) {
+            for ( var y = 0; y < 2; y++) {
+                for ( var z=0; z < 2; z++) {
+
+                  var oct_x = this.x * 2 + x;
+                  var oct_y = this.y * 2 + y;
+                  var oct_z = this.z * 2 + z;
+                  this.oct.push(new OctLOD(this.name , this.mip-1, oct_x, oct_y, oct_z));
+                  console.log('creating children x='+ oct_x+ ' y='+oct_y+' z='+oct_z);
+                }
+            }
+          }
+        }
+        this.oct.forEach(function(children){
+          children.update(camera);
+        });
+      
+      } else {
+
+        this.oct.forEach(function(children){
+          
+          if (children.mesh.visible == true){
+            return;
+          }
+        });
+        this.mesh.visible = true;
+      }
+    };
+  }();
+  
+  OctLOD.prototype.getMesh  = function (cellID, mip , x, y, z, callback) {
+
+    var cell_id = cellID * 10  + 1;
+    var req = {
+        responseType: 'arraybuffer',
+        method: 'GET',
+        url: 'http://data.eyewire.org/cell/'+cell_id+'/chunk/'+mip+'/'+x+'/'+y+'/'+z+'/mesh'
+    };
+
+    $http(req).
+    success(function(data, status, headers, config) {
+      if (data.length == 0){
+        return;
+      }
+
+      var vertices = new Float32Array(data);
+      var color = '#'+Math.floor(Math.random()*16777215).toString(16);
+
+      var material = new THREE.MeshLambertMaterial( { color: color, wireframe:false } );
+      var mesh = new THREE.Segment( vertices, material );
+
+      callback(mesh);
+    }).
+    error(function(data, status, headers, config) {
+      console.error(headers);
+    });
+  }
+
+  return OctLOD;
+
+}]);
