@@ -329,7 +329,6 @@ app.directive('threeViewport', ['SceneService3D', 'CameraService3D','CellService
 
         CellService.cells.forEach(function(cell){
           cell.update( CameraService.perspectiveCam );
-
         });
         
         renderer.render(SceneService.scene, CameraService.perspectiveCam);
