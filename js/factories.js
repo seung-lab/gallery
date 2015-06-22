@@ -1021,8 +1021,8 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
     this.y = y;
     this.z = z;
 
-    this.position.set(x,y,z).multiplyScalar(128 * Math.pow(2, mip));
-    this.scale.set(0.5, 0.5, 0.5);
+    this.position.set(x,y,z * 1.4).multiplyScalar(128 * Math.pow(2, mip));
+    this.scale.set(0.5, 0.5, 0.7);
     SceneService.scene.add(this);
 
     this.updateMatrix();
@@ -1030,18 +1030,18 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
     this.loaded = false;
 
     //Mip level 1 will be visible when the distance to the camera is between 256 and 512
-    this.levels = [128,256,512,1024,2048,4096,8192,16384];
+    this.levels = [256,512,1024,2048,4096,8192,16384,32768];
     this.colors = [0xffffff,0xffffff,0xbf00ff,0x4b0082,0x0000ff,0x00ff00,0xff00000,0xff7f00,0xff0000]
     this.oct = [];
     this.octLoaded = false;
 
-    var geometry = new THREE.SphereGeometry( 500, 5, 5 );
-    var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-    var sphere = new THREE.Mesh( geometry, material );
-    sphere.position.set(x,y,z).multiplyScalar(128 * Math.pow(2, mip));
-    sphere.scale.set(0.5, 0.5, 0.5);
-    SceneService.scene.add( sphere );
-    this.centerSphere = sphere;
+    // var geometry = new THREE.SphereGeometry( 500, 5, 5 );
+    // var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    // var sphere = new THREE.Mesh( geometry, material );
+    // sphere.position.set(x,y,z).multiplyScalar(128 * Math.pow(2, mip));
+    // sphere.scale.set(0.5, 0.5, 0.5);
+    // SceneService.scene.add( sphere );
+    // this.centerSphere = sphere;
 
     var scope = this;
     this.getMesh(cellID, mip , x, y, z, function(mesh) {
@@ -1054,6 +1054,27 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
       scope.mesh = mesh;
       scope.add(scope.mesh);
       scope.loaded = true;
+
+      window.bbox = mesh.boundingBox;
+
+      var size = new THREE.Vector3();
+      size.subVectors( mesh.boundingBox.max ,  mesh.boundingBox.min);
+
+      var boxCenter = new THREE.Vector3();
+      boxCenter.addVectors( mesh.boundingBox.max , mesh.boundingBox.min);
+      boxCenter.divideScalar(4);
+
+      var geometry = new THREE.BoxGeometry( size.x, size.y, size.z );
+      var material = new THREE.MeshBasicMaterial( {color: scope.colors[scope.mip-1] , transparent: true, opacity:0.2} );
+      var cube = new THREE.Mesh( geometry, material );
+      cube.scale.set(0.5, 0.5, 0.7);
+
+      cube.position.set(boxCenter.x, boxCenter.y, boxCenter.z*1.4);
+      cube.position.add(scope.position)
+      scope.bbox = cube;
+      scope.center = cube.position;
+
+      SceneService.scene.add( cube );
     });
 
     
@@ -1082,10 +1103,11 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
       v1.setFromMatrixPosition( camera.matrixWorld );
       v2.setFromMatrixPosition( this.matrixWorld );
 
-      var distance = v1.distanceTo( v2 );
+      var distance = v1.distanceTo( this.center );
 
       this.setVisibility(false);
       this.mesh.visible = true;
+      this.bbox.visible = true;
 
 
       if ( this.mip > 0 && distance < this.levels[this.mip-1]) {
@@ -1102,6 +1124,8 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
 
 
           this.mesh.visible = false;
+          this.bbox.visible = false;
+
           this.oct.forEach(function(children){
             children.update(camera);
           });
@@ -1131,6 +1155,7 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
     }
     
     this.mesh.visible = false;
+    this.bbox.visible = false;
     this.oct.forEach(function(children){
       children.setVisibility(visible);
     });  
@@ -1155,6 +1180,7 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
       var vertices = new Float32Array(data);
       var material = new THREE.MeshLambertMaterial( { color:color, wireframe:false } );
       var mesh = new THREE.Segment( vertices, material );
+      mesh.computeBoundingBox();
 
       callback(mesh);
     }).
