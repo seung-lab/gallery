@@ -1021,7 +1021,7 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
     this.y = y;
     this.z = z;
 
-    this.position.set(x,y,z * 1.4).multiplyScalar(128 * Math.pow(2, mip));
+    this.position.set(x,y,z * 1.4).multiplyScalar(128 * Math.pow(2, mip-1));
     this.scale.set(0.5, 0.5, 0.7);
     SceneService.scene.add(this);
 
@@ -1035,13 +1035,6 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
     this.oct = [];
     this.octLoaded = false;
 
-    // var geometry = new THREE.SphereGeometry( 500, 5, 5 );
-    // var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-    // var sphere = new THREE.Mesh( geometry, material );
-    // sphere.position.set(x,y,z).multiplyScalar(128 * Math.pow(2, mip));
-    // sphere.scale.set(0.5, 0.5, 0.5);
-    // SceneService.scene.add( sphere );
-    // this.centerSphere = sphere;
 
     var scope = this;
     this.getMesh(cellID, mip , x, y, z, function(mesh) {
@@ -1075,6 +1068,14 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
       scope.center = cube.position;
 
       SceneService.scene.add( cube );
+
+
+      var geometry = new THREE.SphereGeometry( 500, 5, 5 );
+      var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+      var sphere = new THREE.Mesh( geometry, material );
+      sphere.position.set(cube.position.x,cube.position.y,cube.position.z);
+      sphere.scale.set(0.5, 0.5, 0.7);
+      SceneService.scene.add( sphere );
     });
 
     
@@ -1109,7 +1110,7 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
       this.mesh.visible = true;
       this.bbox.visible = true;
 
-
+      //Every chunk will at least have one children, for the 8 possibles ones.
       if ( this.mip > 0 && distance < this.levels[this.mip-1]) {
           
         if ( this.oct.length > 0 ) {
@@ -1130,19 +1131,20 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
             children.update(camera);
           });
           return;
-        }
+        } 
+        else {
 
-        for ( var x = 0; x < 2 ; x++) {
-          for ( var y = 0; y < 2; y++) {
-            for ( var z=0; z < 2; z++) {
+          for ( var x = 0; x < 2 ; x++) {
+            for ( var y = 0; y < 2; y++) {
+              for ( var z = 0; z < 2; z++) {
 
-              var oct_x = this.x * 2 + x;
-              var oct_y = this.y * 2 + y;
-              var oct_z = this.z * 2 + z;
-              this.oct.push(new OctLOD(this.name , this.mip-1, oct_x, oct_y, oct_z));
-              console.log('creating children x='+ oct_x+ ' y='+oct_y+' z='+oct_z+ ' with mip='+(this.mip-1));
+                var oct_x = this.x * 2 + x;
+                var oct_y = this.y * 2 + y;
+                var oct_z = this.z * 2 + z;
+                this.oct.push(new OctLOD(this.name , this.mip-1, oct_x, oct_y, oct_z));
+              }
             }
-          }
+          }        
         }
       }
     }
@@ -1170,6 +1172,9 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
         url: 'http://data.eyewire.org/cell/'+cell_id+'/chunk/'+mip+'/'+x+'/'+y+'/'+z+'/mesh'
     };
     var color =  this.colors[this.mip-1];
+    
+    console.log('getting mesh for children x='+ x+ ' y='+ y+' z='+z+ ' with mip='+(mip));
+
 
     $http(req).
     success(function(data, status, headers, config) {

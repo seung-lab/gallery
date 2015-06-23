@@ -304,7 +304,9 @@ app.directive('threeViewport', ['SceneService3D', 'CameraService3D','CellService
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor( "#5Caadb", 1.0 );
-        renderer.sortObjects = false;
+
+        //Necesary for the transparent spheres
+        renderer.sortObjects = true;
 
 
         // set up the controls with the camera and renderer
