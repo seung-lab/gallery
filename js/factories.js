@@ -1021,7 +1021,7 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
     this.y = y;
     this.z = z;
 
-    this.position.set(x,y,z * 1.4).multiplyScalar(128 * Math.pow(2, mip-1));
+    this.position.set(x,y,z * 1.4).multiplyScalar(128 * Math.pow(2, mip));
     this.scale.set(0.5, 0.5, 0.7);
     SceneService.scene.add(this);
 
@@ -1034,48 +1034,25 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
     this.colors = [0xffffff,0xffffff,0xbf00ff,0x4b0082,0x0000ff,0x00ff00,0xff00000,0xff7f00,0xff0000]
     this.oct = [];
     this.octLoaded = false;
-
+    this.empty = false;
 
     var scope = this;
     this.getMesh(cellID, mip , x, y, z, function(mesh) {
       if(!mesh) {
-        console.log(mesh);
-        console.log('removing object because there are no mesh');
-        delete scope;
+        scope.empty = true;
         return;} //posibly destroy object if there is no mesh
 
       scope.mesh = mesh;
-      scope.add(scope.mesh);
+      scope.add(mesh);
       scope.loaded = true;
 
-      window.bbox = mesh.boundingBox;
 
-      var size = new THREE.Vector3();
-      size.subVectors( mesh.boundingBox.max ,  mesh.boundingBox.min);
+      scope.center = new THREE.Vector3();
+      scope.center.addVectors( mesh.boundingBox.max , mesh.boundingBox.min);
+      scope.center.divideScalar(4);
+      scope.center.z = scope.center.z * 1.4;
 
-      var boxCenter = new THREE.Vector3();
-      boxCenter.addVectors( mesh.boundingBox.max , mesh.boundingBox.min);
-      boxCenter.divideScalar(4);
-
-      var geometry = new THREE.BoxGeometry( size.x, size.y, size.z );
-      var material = new THREE.MeshBasicMaterial( {color: scope.colors[scope.mip-1] , transparent: true, opacity:0.2} );
-      var cube = new THREE.Mesh( geometry, material );
-      cube.scale.set(0.5, 0.5, 0.7);
-
-      cube.position.set(boxCenter.x, boxCenter.y, boxCenter.z*1.4);
-      cube.position.add(scope.position)
-      scope.bbox = cube;
-      scope.center = cube.position;
-
-      SceneService.scene.add( cube );
-
-
-      var geometry = new THREE.SphereGeometry( 500, 5, 5 );
-      var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-      var sphere = new THREE.Mesh( geometry, material );
-      sphere.position.set(cube.position.x,cube.position.y,cube.position.z);
-      sphere.scale.set(0.5, 0.5, 0.7);
-      SceneService.scene.add( sphere );
+      scope.center.add(scope.position);
     });
 
     
@@ -1097,7 +1074,6 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
     return function ( camera ) {
 
       if (!this.loaded){
-        //console.log('mesh is not visibile x='+ this.x+ ' y='+this.y+' z='+this.z+ ' with mip='+this.mip);
         return;
       }
 
@@ -1108,7 +1084,6 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
 
       this.setVisibility(false);
       this.mesh.visible = true;
-      this.bbox.visible = true;
 
       //Every chunk will at least have one children, for the 8 possibles ones.
       if ( this.mip > 0 && distance < this.levels[this.mip-1]) {
@@ -1116,7 +1091,7 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
         if ( this.oct.length > 0 ) {
           if (!this.octLoaded){
             this.oct.forEach(function(children){
-              if (children.loaded == false){
+              if (children.loaded == false && children.empty == false){
                 return;
               }
             });
@@ -1125,7 +1100,6 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
 
 
           this.mesh.visible = false;
-          this.bbox.visible = false;
 
           this.oct.forEach(function(children){
             children.update(camera);
@@ -1157,7 +1131,6 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
     }
     
     this.mesh.visible = false;
-    this.bbox.visible = false;
     this.oct.forEach(function(children){
       children.setVisibility(visible);
     });  
@@ -1171,14 +1144,12 @@ app.factory("OctLODFactory", ['SceneService3D', '$http',
         method: 'GET',
         url: 'http://data.eyewire.org/cell/'+cell_id+'/chunk/'+mip+'/'+x+'/'+y+'/'+z+'/mesh'
     };
-    var color =  this.colors[this.mip-1];
-    
-    console.log('getting mesh for children x='+ x+ ' y='+ y+' z='+z+ ' with mip='+(mip));
-
+    var color =  this.colors[this.mip];
 
     $http(req).
     success(function(data, status, headers, config) {
-      if (data.length == 0){
+      if (data.byteLength == 0){
+        callback(false);
         return;
       }
 
