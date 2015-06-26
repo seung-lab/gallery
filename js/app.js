@@ -15,7 +15,6 @@ app.config(function ($httpProvider) {
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 });
     
-//transitioner and platform not used
 app.run(["$rootScope", "collection", "util",  "keyboard", "modal", "notifier", "$window", "locale", 
     function($rootScope, collection, util,  keyboard, modal, notifier, $window, locale) {
 
