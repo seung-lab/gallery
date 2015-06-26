@@ -1,4 +1,4 @@
- <div class="icon-cellpane" ng-controller="uiController">
+ <div class="icon-cellpane" ng-controller="UIController">
 <!--     Menu on the right with cell details -->    
     <div id="cell-view" ng-class="{cr:cr,ic:r.cellId,fs:fs}">
         <aside>
@@ -13,15 +13,6 @@
                             <a sp-if=iscellOwner() sp-tap="modal('views/confirm.html')" class="btn danger icon-bin flex"></a>
                         </div>
                     </li>
-                    <!-- <li>
-                        <q>{{_.key}}</q>
-                        <span class=select-wrap sp-if=canChangeKey()>
-                            <select ng-change="updateKey(k)+clean('k')" ng-model=k ng-options="k for k in getKeys()"></select>
-                            <span class="select btn">{{k}}</span>
-                        </span>
-                        <span sp-if=!canChangeKey()>{{k}}</span>
-                        &nbsp;({{cells[r.cellId].key}})</li>
-                    </li> -->
                     <li>
                         <q>{{_.description}}</q>
                         {{cells[cells.getIndex(r.cellId)].description}}

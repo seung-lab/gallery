@@ -1,4 +1,4 @@
-app.directive("spSlide", ["util", "transitioner", function(util, transitioner) {
+app.directive("spSlide", ["UtilService", "transitioner", function(util, transitioner) {
   return {
     transclude: "element",
     priority: 1e3,
@@ -33,7 +33,7 @@ app.directive("spSlide", ["util", "transitioner", function(util, transitioner) {
   }
 }]);
 
-app.directive("spSortable", ["touch", "$timeout", "util",
+app.directive("spSortable", ["touch", "$timeout", "UtilService",
   function(a, b, c) {
     function d(a) {
       var b = 0;
@@ -69,7 +69,7 @@ app.directive("spSortable", ["touch", "$timeout", "util",
 }
 ]);
 
-app.directive("spTap", ["touch", "keyboard",
+app.directive("spTap", ["touch", "KeyboardFactory",
   function(touch, keyboard) {
     return function(c, d, e) {
       touch.tap(d, function() {
@@ -83,7 +83,7 @@ app.directive("spTap", ["touch", "keyboard",
   }
   ]);
 
-app.directive("spFocus", ["$timeout", "util",
+app.directive("spFocus", ["$timeout", "UtilService",
   function(a) {
     function b(a) {
       if (a && 0 !== a.length) {
@@ -124,7 +124,7 @@ app.directive("spIf", function() {
   }
 });
 
-app.directive("spNotifier", ["util", "notifier", "transitioner", "$compile", "touch", "$timeout",
+app.directive("spNotifier", ["UtilService", "notifier", "transitioner", "$compile", "touch", "$timeout",
   function(a, b, c, d, e, f) {
     return {
       link: function(g, h) {
@@ -145,7 +145,7 @@ app.directive("spNotifier", ["util", "notifier", "transitioner", "$compile", "to
     }
   }
   ]);
-app.directive("spParse", ["touch", "util",
+app.directive("spParse", ["touch", "UtilService",
   function() {
     return function(a, b, c) {
       var d = a.$eval(c.spParse),
@@ -160,7 +160,7 @@ app.directive("spParse", ["touch", "util",
   }
   ]);
 
-app.directive("editor", ["$window", "util", "parse",
+app.directive("editor", ["$window", "UtilService", "parse",
   function(a, b, c) {
     var d = a.document,
     e = a.setTimeout,
@@ -207,146 +207,8 @@ app.directive("editor", ["$window", "util", "parse",
   ]);
 
 
-//THREEJS
-// Creates the directive (reusable chunk of html and javascript) for three.js.
-// Note that right now the SceneService and CameraService are injected into the directive.  These
-// services are used to manipulate the scene else where.
-// Currently the Renderer and controls are part of the directive but could just as easily be 
-// moved into their own services if functionality they provide need to be manipulated by a UI control.
-app.directive('threeViewport', ['SceneService3D', 'CameraService3D','CellService', 'CoordinatesService3D' , 'settings', 'setOperations', 'OctLODFactory', 
-  function (SceneService, CameraService, CellService, CoordinatesService, settings, setOperations, OctLOD) {
 
-    function toggleViewBasedOnSettings (scope) {
-
-      scope.$watch('s.toggleGround', function(show) {
-        show ? CoordinatesService.drawGround({size:10000}) : CoordinatesService.removeGround();
-      });
-
-      scope.$watch('s.toggleAxes', function(show) {
-        show ? CoordinatesService.drawAllAxes({axisLength:1000,axisRadius:50,axisTess:50}) : CoordinatesService.removeAxes();
-      });
-
-      scope.$watch('s.toggleYZGrid', function(show) {
-        show ? CoordinatesService.drawGrid({size:10000,scale:0.001, orientation:"x"}) : CoordinatesService.removeGrid('x');
-      });
-
-      scope.$watch('s.toggleXZGrid', function(show) {
-        show ? CoordinatesService.drawGrid({size:10000,scale:0.001, orientation:"y"}) : CoordinatesService.removeGrid('y');
-      });
-
-      scope.$watch('s.toggleXYGrid', function(show) {
-        show ? CoordinatesService.drawGrid({size:10000,scale:0.001, orientation:"z"}) : CoordinatesService.removeGrid('z');
-      });
-
-    }
-    
-    function updateVisibleCells (scope) {
-      var activeCells = new Set();
-      scope.$watch('r.setId', function(setId){
-        if(!setId){
-          return;
-        }
-        var setIndex = scope.sets.getIndex(setId);
-        var updatedCells = new Set(scope.sets[setIndex].cells);
-
-        var toAdd = setOperations.complement(updatedCells,activeCells);
-        toAdd.forEach(function(cellID){
-            activeCells.add(cellID);
-            CellService.addCell(cellID);
-        });
-        var toRemove = setOperations.complement(activeCells,updatedCells);
-        toRemove.forEach(function(cellID){
-            activeCells.delete(cellID);
-            CellService.removeCell(cellID);
-        });
-      });
-
-      scope.$watch("r.cellId", function(cellId){
-        if (scope.viewSlide.model == "catalog" && cellId != ""){
-          var updatedCells = new Set([cellId,]);
-          var toAdd = setOperations.complement(updatedCells,activeCells);
-          toAdd.forEach(function(cellID){
-            activeCells.add(cellID);
-            CellService.addCell(cellID);
-          });
-          var toRemove = setOperations.complement(activeCells,updatedCells);
-          toRemove.forEach(function(cellID){
-            activeCells.delete(cellID);
-            CellService.removeCell(cellID);
-          });
-
-        }
-
-      });
-    }
-
-    return {
-      restrict: "AE",
-
-      link: function (scope, element, attribute) {
-
-
-        var renderer;
-        var controls;
-        var clock = new THREE.Clock();
-
-        init();
-        animate();
-
-      function init() {
-
-        window.scope = scope;
-        // Add the camera
-        CameraService.perspectiveCam.position.set(1000, 20000, 1500);
-        SceneService.scene.add(CameraService.perspectiveCam);
-
-        // create the renderer
-        renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor( "#5Caadb", 1.0 );
-
-        //Necesary for the transparent spheres
-        renderer.sortObjects = true;
-
-
-        // set up the controls with the camera and renderer
-        controls = new THREE.OrbitControls(CameraService.perspectiveCam, renderer.domElement);
-        //controls = new THREE.TrackballControls( camera, renderer.domElement );
-        // add renderer to DOM
-        element[0].appendChild(renderer.domElement);
-
-        // handles resizing the renderer when the window is resized
-        window.addEventListener('resize', onWindowResize, false);  
-
-        toggleViewBasedOnSettings(scope);
-        updateVisibleCells (scope);
-      
-      }
-
-      function animate() {
-        requestAnimationFrame(animate);
-
-        controls.update(clock.getDelta() );
-        SceneService.scene.updateMatrixWorld();
-
-        CellService.cells.forEach(function(cell){
-          cell.update( CameraService.perspectiveCam );
-        });
-        
-        renderer.render(SceneService.scene, CameraService.perspectiveCam);
-      }
-
-      function onWindowResize() {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        CameraService.perspectiveCam.aspect = window.innerWidth / window.innerHeight;
-        CameraService.perspectiveCam.updateProjectionMatrix();
-      }
-    }
-  }
-}
-]);
-
-app.directive('twoViewport', ['TileService','TwoDCameraController',
+app.directive('twoViewport', ['TileService','Camera2DController',
   function(TileService, cameraController) {
     var viewSize = 256;
     var scene = new THREE.Scene();

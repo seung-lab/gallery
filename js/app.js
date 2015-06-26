@@ -15,7 +15,7 @@ app.config(function ($httpProvider) {
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 });
     
-app.run(["$rootScope", "collection", "util",  "keyboard", "modal", "notifier", "$window", "locale", 
+app.run(["$rootScope", "collection", "UtilService",  "KeyboardFactory", "modal", "notifier", "$window", "locale", 
     function($rootScope, collection, util,  keyboard, modal, notifier, $window, locale) {
 
       $window.collection = collection;
