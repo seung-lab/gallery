@@ -10,7 +10,7 @@
     <meta name=viewport content="initial-scale=1.0, user-scalable=no">
 </head>
 
-<body sp-tap=resetState() ng-class="slow&&'slow'||''" class=icon-cellpane>
+<body sp-tap="resetState()" ng-class="slow&&'slow'||''" class=icon-cellpane>
 
     <div id="ui" ng-include="ready&&'partials/ui.html'" ng-class="{on:modalClass, run:ready}"></div>
     <div ng-view=""></div>
