@@ -15,7 +15,7 @@ app.config(function ($httpProvider) {
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 });
     
-app.run(["$rootScope", "collection", "UtilService",  "KeyboardFactory", "modal", "notifier", "$window", "locale", 
+app.run(["$rootScope", "CollectionFactory", "UtilService",  "KeyboardFactory", "ModalFactory", "NotifierFactory", "$window", "LocaleFactory", 
     function($rootScope, collection, util,  keyboard, modal, notifier, $window, locale) {
 
       $window.collection = collection;
@@ -76,14 +76,14 @@ app.run(["$rootScope", "collection", "UtilService",  "KeyboardFactory", "modal",
       };
 
       //This slow down all animations
-      //But there has to be another event after this changed is update
+      //But there has to be another event after this changed is updated
       keyboard.on("ctrl+shift", function() {
           $rootScope.slow = !$rootScope.slow;
       });
 
       //Displays some of the key bindings
       keyboard.on(["h", "?"], function() {
-          modal("views/keyboard.html");
+          modal("partials/keyboard.html");
           $rootScope.$apply();
           return false;
       });

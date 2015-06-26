@@ -1,4 +1,4 @@
-<form novalidate id="new-cell" name="newcell" method=post ng-controller="newController">
+<form novalidate id="new-cell" name="newcell" method=post ng-controller="NewController">
   <header>
     <button type=button class="btn x" sp-tap="modal();q('edit',null)" sp-kbd="'esc'"></button>
     <input class="btn action" type=submit ng-disabled=newcell.$invalid ng-click="savecell(cell,v==_.priv||0)&&modal()&&q('edit',null)" value={{_.save}}>

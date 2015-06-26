@@ -1,5 +1,5 @@
 ( function () {
-app.controller("UIController", ["$scope", "$rootScope", "$routeParams", "$location", "settings", "UtilService", "KeyboardFactory", "transitioner", "locale", "$timeout", "modal",
+app.controller("UIController", ["$scope", "$rootScope", "$routeParams", "$location", "SettingsFactory", "UtilService", "KeyboardFactory", "TransitionerFactory", "LocaleFactory", "$timeout", "ModalFactory",
   function($scope, $rootScope, $routeParams, $location, settings, util, keyboard, transitioner, locale, $timepout, modal) {
       function m(a, b, c) {
           var d, e, g, i, j, k, l, m, n, o = [];
@@ -90,7 +90,7 @@ app.controller("UIController", ["$scope", "$rootScope", "$routeParams", "$locati
           return $routeParams.cellId && cells.isOwner(cells[$routeParams.cellId])
       };
       $scope.editcell = function(a) {
-          $location.search("edit", a ? "clone" : void 0), modal("views/new.html")
+          $location.search("edit", a ? "clone" : void 0), modal("partials/new.html")
       };
       $scope.canChangeKey = function() {
           var id = $routeParams.setId;

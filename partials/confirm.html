@@ -1,0 +1,9 @@
+<ul class="list w" ng-controller="ConfirmController">
+    <li>
+        <h2>{{_.confirm}}</h2></li>
+    <li>{{_.explainDelcell}}</li>
+    <li class=group>
+      <span class="btn flex" sp-tap="modal()">{{_.cancel}}</span>
+      <span class="btn danger flex" sp-tap="trashcell()&&modal()">{{_.del}}</span>
+    </li>
+</ul>

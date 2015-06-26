@@ -1,4 +1,4 @@
-<form novalidate name=renameSetForm method=post ng-controller=renameController>
+<form novalidate name=renameSetForm method=post ng-controller="RenameController">
     <header>
         <button type=button class="btn x" sp-tap=modal() sp-kbd="'esc'"></button>
         <input class="btn action" type=submit ng-disabled=renameSetForm.$invalid ng-click="renameSet(r.setId, newname)&&modal()" value={{_.save}}>
