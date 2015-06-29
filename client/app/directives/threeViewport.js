@@ -4,7 +4,10 @@
 // services are used to manipulate the scene else where.
 // Currently the Renderer and controls are part of the directive but could just as easily be 
 // moved into their own services if functionality they provide need to be manipulated by a UI control.
-(function() { app.directive('threeViewport', ['Scene3DService', 'Camera3DService','CellService', 'Coordinates3DService' , 'SettingsFactory', 'SetFactory', 'OctLODFactory', 
+(function(app) { 
+
+
+  app.directive('threeViewport', ['Scene3DService', 'Camera3DService','CellService', 'Coordinates3DService' , 'SettingsFactory', 'SetFactory', 'OctLODFactory', 
   function (SceneService, CameraService, CellService, CoordinatesService, settings, setOperations, OctLOD) {
 
     function toggleViewBasedOnSettings (scope) {
@@ -94,7 +97,7 @@
         // create the renderer
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor( "#5Caadb", 1.0 );
+        renderer.setClearColor( '#5Caadb', 1.0 );
 
         //Necesary for the transparent spheres
         renderer.sortObjects = true;
@@ -120,10 +123,8 @@
         controls.update(clock.getDelta() );
         SceneService.scene.updateMatrixWorld();
 
-        CellService.cells.forEach(function(cell){
-          cell.update( CameraService.perspectiveCam );
-        });
-        
+        CellService.updateCells();
+       
         renderer.render(SceneService.scene, CameraService.perspectiveCam);
       }
 
@@ -137,4 +138,4 @@
 }
 ])
 
-})();
+})(app);

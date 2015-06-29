@@ -122,7 +122,7 @@ app.factory("OctLODFactory", ['Scene3DService', '$http',
       return;
     }
     
-    this.mesh.visible = false;
+    this.mesh.visible = visible;
     this.oct.forEach(function(children){
       children.setVisibility(visible);
     });  
