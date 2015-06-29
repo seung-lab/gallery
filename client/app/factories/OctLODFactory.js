@@ -31,44 +31,6 @@ app.factory("OctLODFactory", ['Scene3DService', '$http',
 
     var scope = this;
 
-    if ( this.mip == 0){
-      // Offsets are 18 , 50 and - 14 
-      console.log('loading individual segments for task ');
-      
-      var chunk = {cellID:cellID,  
-                  x: Math.floor((x*128*Math.pow(2,this.mip)-18)/224), 
-                  y: Math.floor((y*128*Math.pow(2,this.mip)-50)/224), 
-                  z: Math.floor((z*128*Math.pow(2,this.mip)+14)/224)
-      };
-      if ( chunk.x == 7 && chunk.y == 36 && chunk.z == 26 ) {
-       var consensus = [1136,
-                        1370,
-                        1702,
-                        2088,
-                        2128,
-                        2145,
-                        2175,
-                        2192,
-                        2245,
-                        2286,
-                        2289,
-                        2380,
-                        2381,
-                        2445,
-                        2489,
-                        2490,
-                        2521,
-                        2586,
-                        2606,
-                        2661,
-                        2712,
-                        2758,
-                        2877,
-                        2896,
-                        2978,
-                        3395];
-      }
-    }
     this.getOverviewMesh(cellID, mip , x, y, z, function(mesh) {
       if(!mesh) {
         scope.empty = true;
@@ -173,35 +135,6 @@ app.factory("OctLODFactory", ['Scene3DService', '$http',
         responseType: 'arraybuffer',
         method: 'GET',
         url: 'http://data.eyewire.org/cell/'+cell_id+'/chunk/'+mip+'/'+x+'/'+y+'/'+z+'/mesh'
-    };
-    var color =  this.colors[this.mip];
-
-    $http(req).
-    success(function(data, status, headers, config) {
-      if (data.byteLength == 0){
-        callback(false);
-        return;
-      }
-
-      var vertices = new Float32Array(data);
-      var material = new THREE.MeshLambertMaterial( { color:color, wireframe:false } );
-      var mesh = new THREE.Segment( vertices, material );
-      mesh.computeBoundingBox();
-
-      callback(mesh);
-    }).
-    error(function(data, status, headers, config) {
-      console.error(headers);
-    });
-  }
-
-  OctLOD.prototype.getSegmentMesh  = function (segmentation_volume, mip , chunk_x, chunk_y, chunk_z, segment_id, callback) {
-
-    var cell_id = cellID * 10  + 1;
-    var req = {
-        responseType: 'arraybuffer',
-        method: 'GET',
-        url: 'http://data.eyewire.org/volume/'+segmentation_volume+'/chunk/0/'+chunk_x+'/'+chunk_y+'/'+chunk_z+'/mesh/'+segment_id
     };
     var color =  this.colors[this.mip];
 
