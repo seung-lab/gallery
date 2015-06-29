@@ -1,6 +1,7 @@
 'use strict';
 
-(function () {
+(function (app) {
+
 app.factory("CollectionFactory", ["$http", "UtilService",
   function($http, util) {
 
@@ -14,7 +15,7 @@ app.factory("CollectionFactory", ["$http", "UtilService",
 
       $http.get(url).success(function(jsonArray) {
         jsonArray.forEach(function(element) {
-          this[element._id] ? this.saveLocal(element) : c.add(element, null)
+          c[element._id] ? c.saveLocal(element) : c.add(element, null)
         });
       }).success(callback).error(callback)
 
@@ -146,4 +147,5 @@ app.factory("CollectionFactory", ["$http", "UtilService",
       return dstObject;
     }
 }]);
-})();
+
+})(app);
