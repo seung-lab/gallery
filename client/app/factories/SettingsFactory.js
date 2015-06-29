@@ -1,3 +1,5 @@
+'use strict';
+
 //This factory is consume by the settings controller
 ( function() {
 app.factory("SettingsFactory", function() {

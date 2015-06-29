@@ -1,4 +1,7 @@
-(function () {
+'use strict';
+
+(function (app, THREE) {
+
 app.directive('twoViewport', ['TileService','Camera2DController',
   function(TileService, cameraController) {
     var viewSize = 256;
@@ -24,7 +27,7 @@ app.directive('twoViewport', ['TileService','Camera2DController',
         
         var renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(canvasHeight, canvasWidth);
-        renderer.setClearColor( "#5Caadb", 1.0 );
+        renderer.setClearColor( '#5Caadb', 1.0 );
 
         element[0].appendChild(renderer.domElement);
 
@@ -48,4 +51,4 @@ app.directive('twoViewport', ['TileService','Camera2DController',
       }
   };   
 }]);
-})();
+})(app, THREE);

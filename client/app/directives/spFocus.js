@@ -1,3 +1,5 @@
+'use strict';
+
 app.directive("spFocus", ["$timeout", "UtilService",
   function(a) {
     function b(a) {

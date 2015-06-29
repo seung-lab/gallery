@@ -1,19 +1,41 @@
+'use strict';
+
 (function (){
 app.factory("ModalFactory", ["$rootScope", "$location", "$routeParams", "TransitionerFactory", "$timeout",
   function($rootScope, $location, $routeParams, transitioner, $timeout) {
-    function f(a) {
-      $location.search("ModalFactory", a || null)
+    function search(path) {
+      $location.search("modal", path || null)
     }
-    var g = function(b) {
-      return $rootScope.modalClass ? ($rootScope.modalClass = "", transitioner.apply("ModalFactory", function() {
-        f(), b != $routeParams.modal && $timeout(function() {
-          f(b)
-        })
-      })) : b && f(b), !0
+
+    var modal = function(path) {
+
+      if ($rootScope.modalClass) {
+
+        $rootScope.modalClass = "";
+
+        transitioner.apply("modal", function() {
+          search();
+          
+          if( path != $routeParams.modal ){
+            $timeout(function() {
+                search(path);
+            });
+          }
+         
+        });
+        return
+      }
+      else {
+        search(path);
+        return true;
+      }
     };
 
-    return g.isOn = function(b) {
+    modal.isOn = function(b) {
       return b ? $rootScope.modalClass === b : $rootScope.modalClass
-    }, g
+    }
+
+    return modal;
   }
+]);
 })();

@@ -1,3 +1,5 @@
+'use strict';
+
 ( function () {
 app.factory("LocaleFactory", function() {
   var locale = {};
@@ -108,7 +110,7 @@ app.factory("LocaleFactory", function() {
     addToSet: "Add to Set",
     renameSet: "Rename Set",
     shareSet: "Share Set",
-    settings: "SettingsFactory",
+    settings: "Settings",
     noConnection: "Could not connect to the server!",
     outOfSync: "cellPane is out of sync. Please make sure you have an active internet connection.",
     quotaExceeded: "The local storage limit has been reached or local storage is disabled.",

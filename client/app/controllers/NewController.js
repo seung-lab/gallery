@@ -1,4 +1,7 @@
-(function() { 
+'use strict';
+
+( function (app) {
+
 app.controller("NewController", ["$scope", "$rootScope", "transposer", "cellMode", "$routeParams", "UtilService", "LocaleFactory", "NotifierFactory",
   function($scope, $rootScope, transposer, cellMode, $routeParams, util, locale, notifier) {
       var i = $rootScope.cells,
@@ -15,4 +18,4 @@ app.controller("NewController", ["$scope", "$rootScope", "transposer", "cellMode
       }, $scope.keys = transposer.getAllKeys()
   }
 ]);
-})();
+})(app);

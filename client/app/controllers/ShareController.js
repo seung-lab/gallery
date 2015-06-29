@@ -1,4 +1,6 @@
-( function() {
+'use strict';
+
+( function (app) {
 app.controller("ShareController", ["$scope", "$routeParams", "$rootScope", "MD5Factory", "UtilService",
   function($scope, $routeParams, $rootScope, md5, UtilService) {
 
@@ -27,4 +29,5 @@ app.controller("ShareController", ["$scope", "$routeParams", "$rootScope", "MD5F
       }
   }
 ]);
-})();
+
+})(app);

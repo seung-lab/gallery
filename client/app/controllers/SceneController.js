@@ -1,5 +1,6 @@
+'use strict';
 // Manages the 3D Scene for the cells
-(function () {
+( function () {
 app.controller('SceneController', ['$scope', 'CellService', 'CameraService',
   function ($scope, CellService, CameraService) {
       $scope.camera = { x:10000 , y:10000, z:10000};

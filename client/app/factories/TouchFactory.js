@@ -1,4 +1,7 @@
-( function (){
+'use strict';
+
+( function () {
+  
 app.factory("TouchFactory", ["$window", "$timeout",
   function($window, $timeout) {
     function c(a) {
@@ -39,13 +42,13 @@ app.factory("TouchFactory", ["$window", "$timeout",
   
     var touch = {};
     
-    var hold, move, release, n, o, p, q, 
+    var hold, move, release, n, o, p, q, s = "ontouchstart" in $window,
     u = [],
     v = [],
     pow = Math.pow,
     sqrt = Math.sqrt;
     
-    "ontouchstart" in $window ? (hold = "touchstart", move = "touchmove", release = "touchend") : (hold = "mousedown", move = "mousemove", release = "mouseup");
+    s ? (hold = "touchstart", move = "touchmove", release = "touchend") : (hold = "mousedown", move = "mousemove", release = "mouseup");
 
     $window.document.addEventListener(hold, processHold, true);
     $window.document.addEventListener(move, processMove, true);
@@ -60,4 +63,5 @@ app.factory("TouchFactory", ["$window", "$timeout",
     return  touch;
   }
 ]);
+
 })();

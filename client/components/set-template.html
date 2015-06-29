@@ -1,7 +1,7 @@
 <div ng-init="i=sets.getIndex(r.setId);set=sets[i]">
     <ul class="toolbar" id="em">
-        <li sp-tap="modal('partials/share.html')" class="btn icon-share flex"></li>
-        <li sp-if=sets.isWriter(set) sp-tap="modal('partials/rename.html')" class="btn icon-pencil flex"></li>
+        <li sp-tap="modal('components/share.html')" class="btn icon-share flex"></li>
+        <li sp-if=sets.isWriter(set) sp-tap="modal('components/rename.html')" class="btn icon-pencil flex"></li>
         <li sp-tap=duplicateSet() class="btn icon-copy flex"></li>
         <li sp-if=sets.isWriter(set) sp-tap=trashSet() class="btn icon-bin flex"></li>
     </ul>

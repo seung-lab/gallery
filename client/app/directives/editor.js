@@ -1,3 +1,5 @@
+'use strict';
+
 app.directive("editor", ["$window", "UtilService", "ParseFactory",
   function(a, b, c) {
     var d = a.document,

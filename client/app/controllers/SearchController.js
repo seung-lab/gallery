@@ -1,4 +1,7 @@
-(function () { 
+'use strict';
+
+(function (app) { 
+
 app.controller("SearchController", ["$scope", "$rootScope", "LocaleFactory",
   function($scope, $rootScope, locale) {
       $scope._ = locale._;
@@ -6,4 +9,5 @@ app.controller("SearchController", ["$scope", "$rootScope", "LocaleFactory",
       $scope.search = function() {}
   }
 ]);
-})();
+
+})(app);

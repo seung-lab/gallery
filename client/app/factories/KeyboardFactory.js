@@ -1,3 +1,5 @@
+'use strict';
+
 (function (){
 app.factory("KeyboardFactory", ["$document", "$timeout",
   function($document, $timeout) {

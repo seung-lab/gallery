@@ -1,3 +1,5 @@
+'use strict';
+
 (function (){
 app.factory("NotifierFactory", function() {
     var a, b = {

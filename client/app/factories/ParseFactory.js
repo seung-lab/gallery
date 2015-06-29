@@ -1,3 +1,5 @@
+'use strict';
+
 ( function(){
 app.factory("ParseFactory", ["$window",
   function() {

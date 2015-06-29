@@ -22,11 +22,12 @@ app.service('UtilService', ['$window',
       };
       util.unlist = function(a, b) {
           var c = a.indexOf(b);
-          ~ c && a.splice(c, 1);
-          return, a.length;
+          a.splice(c, 1);
+          return a.length;
       };
       util.move = function(a, b, c) {
-          return a.splice(c, 0, a.splice(b, 1)[0]), a
+          a.splice(c, 0, a.splice(b, 1)[0]);
+          return a;
       };
       util.pad = function(a, b) {
           return Array(a + 1).join(b || ' ')
@@ -38,12 +39,12 @@ app.service('UtilService', ['$window',
               c = util.toJson(c);
               f.push(encodeURIComponent(e) + '=' + encodeURIComponent(c));
           })
-          return url + (-1 == url.indexOf('?') ? '?' : '&') + f.join('&');
+          return url + (-1 === url.indexOf('?') ? '?' : '&') + f.join('&');
       };
       util.element = function(b) {
 
         if ( angular.isString(b) ){
-          b = $window.document.getElementById(b)
+          b = $window.document.getElementById(b);
         }
 
         return angular.element(b);
@@ -71,7 +72,7 @@ app.service('UtilService', ['$window',
       util.keys = Object.keys;
       util.toJson = $window.JSON.stringify;
       ['copy', 'extend', 'forEach', 'identity', 'fromJson', 'isObject', 'isString', 'isArray', 'lowercase', 'noop'].forEach(function(b) {
-          util[b] = angular[b]
+          util[b] = angular[b];
       });
   }
 ]);

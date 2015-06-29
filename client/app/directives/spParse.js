@@ -1,3 +1,5 @@
+'use strict';
+
 app.directive("spParse", ["TouchFactory", "UtilService",
   function() {
     return function(a, b, c) {

@@ -1,4 +1,6 @@
-( function () {
+'use strict';
+
+( function (app) {
 app.controller("UIController", ["$scope", "$rootScope", "$routeParams", "$location", "SettingsFactory", "UtilService", "KeyboardFactory", "TransitionerFactory", "LocaleFactory", "$timeout", "ModalFactory",
   function($scope, $rootScope, $routeParams, $location, settings, util, keyboard, transitioner, locale, $timepout, modal) {
       function m(a, b, c) {
@@ -90,7 +92,7 @@ app.controller("UIController", ["$scope", "$rootScope", "$routeParams", "$locati
           return $routeParams.cellId && cells.isOwner(cells[$routeParams.cellId])
       };
       $scope.editcell = function(a) {
-          $location.search("edit", a ? "clone" : void 0), modal("partials/new.html")
+          $location.search("edit", a ? "clone" : void 0), modal("components/new.html")
       };
       $scope.canChangeKey = function() {
           var id = $routeParams.setId;
@@ -204,4 +206,5 @@ app.controller("UIController", ["$scope", "$rootScope", "$routeParams", "$locati
           params: $routeParams
       })
 }]);
-})();
+
+})(app);

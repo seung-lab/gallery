@@ -1,5 +1,8 @@
+'use strict';
+
 ( function() {
-app.factory("SetFactory", function(){
+
+  app.factory("SetFactory", function() {
   
   var so = {};
 
@@ -94,5 +97,5 @@ app.factory("SetFactory", function(){
 
   return so;
 });
-]);
+
 })();

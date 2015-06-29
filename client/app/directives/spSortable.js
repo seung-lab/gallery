@@ -1,3 +1,5 @@
+'use strict';
+
 app.directive("spSortable", ["TouchFactory", "$timeout", "UtilService",
   function(a, b, c) {
     function d(a) {

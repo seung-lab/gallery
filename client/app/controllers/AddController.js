@@ -1,4 +1,7 @@
-(function () {
+'use strict';
+
+(function (app) {
+
 app.controller("AddController", ["$scope", "$routeParams", "$rootScope",
   function($scope, $routeParams, $rootScope) {
       {
@@ -27,4 +30,4 @@ app.controller("AddController", ["$scope", "$routeParams", "$rootScope",
       }
   }
 ]);
-})();
+})(app);

@@ -1,3 +1,4 @@
+'use strict';
 /**
  * @author Eberhard Graether / http://egraether.com/
  * @author Mark Lundin  / http://mark-lundin.com

@@ -1,3 +1,5 @@
+'use strict';
+
 app.directive("spNotifier", ["UtilService", "NotifierFactory", "TransitionerFactory", "$compile", "TouchFactory", "$timeout",
   function(a, b, c, d, e, f) {
     return {

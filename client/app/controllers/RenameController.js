@@ -1,4 +1,7 @@
-(function() {
+'use strict';
+
+( function (app) {
+
 app.controller("RenameController", ["$scope", "$rootScope",
   function($scope, $rootScope) {
       var sets = $rootScope.sets;
@@ -8,4 +11,5 @@ app.controller("RenameController", ["$scope", "$rootScope",
       }
   }
 ]);
-})();
+
+})(app);

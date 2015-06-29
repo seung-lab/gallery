@@ -22,18 +22,17 @@
       <!-- endinjector -->
     <!-- endbuild -->
   </head>
-  <body sp-tap="resetState()" ng-class="slow&&'slow'||''" class=icon-cellpane>
+  <body sp-tap="resetState()" ng-class="slow&&'slow'||''" class="icon-cellpane">
 
      <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div id="ui" ng-include="ready&&'partials/ui.html'" ng-class="{on:modalClass, run:ready}"></div>
+    <div id="ui" ng-include="ready&&'components/ui.html'" ng-class="{on:modalClass, run:ready}"></div>
     <div ng-view=""></div>
-    <div ng-include="r.modal&&'partials/modal.html'" onload="modalClass='on'"></div>
-    <div id="NotifierFactory" sp-notifier=""></div>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.1.3/angular.js"></script>
+    <div ng-include="r.modal&&'components/modal.html'" onload="modalClass='on'"></div>
+    <div id="NotifierFactory" sp-notifier=""></div> 
  
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -54,18 +53,23 @@
     <!-- build:js({client,node_modules}) app/vendor.js -->
       <!-- bower:js -->
       <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+      <script src="bower_components/threejs/build/three.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,client}) app/app.js -->
         <script src="app/app.js"></script>
           <!-- injector:js -->
-          <script src="app/account/account.js"></script>
-          <script src="app/account/login/login.controller.js"></script>
-          <script src="app/account/settings/settings.controller.js"></script>
-          <script src="app/account/signup/signup.controller.js"></script>
-          <script src="app/admin/admin.controller.js"></script>
-          <script src="app/admin/admin.js"></script>
+          <script src="app/angular.js"></script>
+          <script src="app/controllers/AddController.js"></script>
+          <script src="app/controllers/ConfirmController.js"></script>
+          <script src="app/controllers/NewController.js"></script>
+          <script src="app/controllers/RenameController.js"></script>
+          <script src="app/controllers/SceneController.js"></script>
+          <script src="app/controllers/SearchController.js"></script>
+          <script src="app/controllers/SettingsController.js"></script>
+          <script src="app/controllers/ShareController.js"></script>
+          <script src="app/controllers/UIController.js"></script>
           <script src="app/directives/editor.js"></script>
           <script src="app/directives/spFocus.js"></script>
           <script src="app/directives/spIf.js"></script>
@@ -88,13 +92,6 @@
           <script src="app/factories/SettingsFactory.js"></script>
           <script src="app/factories/TouchFactory.js"></script>
           <script src="app/factories/TransitionerFactory.js"></script>
-          <script src="app/lib/Detector.js"></script>
-          <script src="app/lib/OrbitControls.js"></script>
-          <script src="app/lib/Segment.js"></script>
-          <script src="app/lib/Three.js"></script>
-          <script src="app/lib/TrackballControls.js"></script>
-          <script src="app/main/main.controller.js"></script>
-          <script src="app/main/main.js"></script>
           <script src="app/services/Camera2DService.js"></script>
           <script src="app/services/Camera3DService.js"></script>
           <script src="app/services/CellService.js"></script>
@@ -102,10 +99,10 @@
           <script src="app/services/Scene3DService.js"></script>
           <script src="app/services/TileService.js"></script>
           <script src="app/services/UtilService.js"></script>
-          <script src="components/auth/auth.service.js"></script>
-          <script src="components/auth/user.service.js"></script>
-          <script src="components/mongoose-error/mongoose-error.directive.js"></script>
-          <script src="components/navbar/navbar.controller.js"></script>
+          <script src="components/Detector.js"></script>
+          <script src="components/OrbitControls.js"></script>
+          <script src="components/Segment.js"></script>
+          <script src="components/TrackballControls.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->
 </body>

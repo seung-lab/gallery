@@ -1,3 +1,5 @@
+'use strict';
+
 (function (){
 app.factory("OctLODFactory", ['Scene3DService', '$http',
   function (SceneService, $http) {

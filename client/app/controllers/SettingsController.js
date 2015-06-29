@@ -1,5 +1,7 @@
-// Used in partials/settings.html
-( function (){
+'use strict';
+
+// Used in components/settings.html
+( function (app) {
 app.controller("SettingsController", ["$scope", "SettingsFactory",
   function($scope, settings) {
       window.settings = settings.settings;
@@ -12,4 +14,5 @@ app.controller("SettingsController", ["$scope", "SettingsFactory",
       }
   }
 ]);
-})();
+
+})(app);

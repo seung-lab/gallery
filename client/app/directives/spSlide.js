@@ -1,3 +1,5 @@
+'use strict';
+
 app.directive("spSlide", ["UtilService", "TransitionerFactory", function(util, transitioner) {
   return {
     transclude: "element",

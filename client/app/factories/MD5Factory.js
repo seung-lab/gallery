@@ -1,3 +1,5 @@
+'use strict';
+
 (function (){
 app.factory("MD5Factory", function() {
   function a(a, b) {

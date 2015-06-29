@@ -57,9 +57,9 @@ module.exports = function (grunt) {
     watch: {
       injectJS: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.js',
-          '!<%= yeoman.client %>/{app,components}/**/*.spec.js',
-          '!<%= yeoman.client %>/{app,components}/**/*.mock.js',
+          '<%= yeoman.client %>/{components,app}/**/*.js',
+          '!<%= yeoman.client %>/{components,app}/**/*.spec.js',
+          '!<%= yeoman.client %>/{app,{components,app}/**/*.mock.js',
           '!<%= yeoman.client %>/app/app.js'],
         tasks: ['injector:scripts']
       },
@@ -310,7 +310,7 @@ module.exports = function (grunt) {
     ngtemplates: {
       options: {
         // This should be the name of your apps angular module
-        module: 'galleryApp',
+        module: 'cellPane',
         htmlmin: {
           collapseBooleanAttributes: true,
           collapseWhitespace: true,

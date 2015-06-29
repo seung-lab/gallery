@@ -1,3 +1,5 @@
+'use strict';
+
 (function () {
 app.factory("CollectionFactory", ["$http", "UtilService",
   function($http, util) {

@@ -1,4 +1,6 @@
-(function(){
+'use strict';
+
+(function (app) {
   
 app.controller("ConfirmController", ["$scope", "$routeParams", "$rootScope", "UtilService", "$location",
   function($scope, $routeParams, $rootScope, UtilService, $location) {
@@ -16,4 +18,4 @@ app.controller("ConfirmController", ["$scope", "$routeParams", "$rootScope", "Ut
       }
   }
 ]);
-})();
+})(app);

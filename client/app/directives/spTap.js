@@ -1,3 +1,5 @@
+'use strict';
+
 app.directive("spTap", ["TouchFactory", "KeyboardFactory",
   function(touch, keyboard) {
     return function(c, d, e) {

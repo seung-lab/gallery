@@ -1,3 +1,5 @@
+'use strict';
+
 ( function (){
 app.factory("TransitionerFactory", ["$rootScope", "$document", "UtilService",
   function(a, b, c) {
