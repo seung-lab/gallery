@@ -2,20 +2,28 @@
 
 ( function (app) {
 
-app.controller("NewController", ["$scope", "$rootScope", "transposer", "cellMode", "$routeParams", "UtilService", "LocaleFactory", "NotifierFactory",
+app.controller("NewController", ["$scope", "$rootScope", "cellMode", "$routeParams", "UtilService", "LocaleFactory", "NotifierFactory",
   function($scope, $rootScope, transposer, cellMode, $routeParams, util, locale, notifier) {
-      var i = $rootScope.cells,
-      j = $routeParams.edit,
-      k = locale._;
-      $scope.cellMode = cellMode, $scope.langs = locale.langs, j && ($scope.cell = util.extend({}, i[$routeParams.cellId]), "clone" == j && delete $scope.cell.id, $scope.cell.tempo = $scope.cell.tempo - 0), $scope.savecell = function(a, b) {
-          var d = "(" + transposer.getScale(a.key).join("|") + ")";
-          return~ a.body.search("^(?:\\[[1-9BCPIO]\\]\\n(?:(?: *" + d + "[1-9adgijmsu,\\(\\)]*(?:\\/" + d + ")?)*\\n[^\\[\\n].+\\S(?:\\n|$))+)+$") ? (a._acl = {}, b && (a._acl = {
-              gr: !1
-          }), i.save(a)) : void notifier.notify({
-              message: k.checkBody,
-              icon: "alert"
-          })
-      }, $scope.keys = transposer.getAllKeys()
-  }
-]);
+
+      $scope.cellMode = cellMode;
+      $scope.langs = locale.langs;
+      if ($routeParams.edit){
+        $scope.cell = util.extend({}, i[$routeParams.cellId]);
+      } 
+
+      if ("clone" == $routeParams.edit) {
+        delete $scope.cell.id;
+      } 
+
+      $scope.savecell = function(a, b) {
+          
+        $rootScope.cells.save(a); 
+
+        notifier.notify({
+            message: locale._.checkBody,
+            icon: "alert"
+        });
+      }
+}]);
+
 })(app);

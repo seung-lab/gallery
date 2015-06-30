@@ -105,6 +105,7 @@ app.factory("LocaleFactory", function() {
     "native": "Українська"
   }];
   return locale._ = {
+    id:"Cell Id",
     editCell: "Edit Cell",
     newCell: "New Cell",
     addToSet: "Add to Set",

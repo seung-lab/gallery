@@ -10,10 +10,8 @@
                 <ul class="list">
                     <li>
                         <div class="group">
-                            <a class="btn icon-add flex" sp-tap="modal('components/add.html')" id="add_to_set"></a>
                             <a sp-tap="editcell(true)" class="btn icon-copy flex"></a>
-                            <a sp-if=iscellOwner() sp-tap="modal('components/twoD.html')" class="btn icon-pencil flex"></a>
-                            <a sp-if=iscellOwner() sp-tap="modal('components/confirm.html')" class="btn danger icon-bin flex"></a>
+                            <a sp-tap="modal('components/confirm.html')" class="btn danger icon-bin flex"></a>
                         </div>
                     </li>
                     <li>

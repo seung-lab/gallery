@@ -14,9 +14,11 @@ app.factory("CollectionFactory", ["$http", "UtilService",
       var url = util.buildUrl(this.url, this.params);
 
       $http.get(url).success(function(jsonArray) {
+
         jsonArray.forEach(function(element) {
           c[element.id] ? c.saveLocal(element) : c.add(element, null)
         });
+      
       }).success(callback).error(callback)
 
       return this;
@@ -28,12 +30,8 @@ app.factory("CollectionFactory", ["$http", "UtilService",
     };
 
     var add = function(element, b) {
-      if (this.isNeeded(element)){
-        this.push(element);
-      } 
-      else {
-        this.aux.push(element);
-      }
+
+      this.push(element);
 
       if(b){
         b.call(this, element);
@@ -66,10 +64,6 @@ app.factory("CollectionFactory", ["$http", "UtilService",
       return -1;
     }
 
-    //This is overwrite for cells and sets
-    var isNeeded = function() {
-          return true;
-    }
     return function(argObject) {
       var srcObject = {
         url: "",
@@ -81,7 +75,6 @@ app.factory("CollectionFactory", ["$http", "UtilService",
         saveLocal: saveLocal,
         removeLocal: removeLocal,
         getIndex: getIndex,
-        isNeeded: isNeeded
       };
 
       //Extends the destination object dst by copying own enumerable properties from the src and arg object(s) to dst. 

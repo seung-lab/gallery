@@ -28,9 +28,6 @@ app.run(['$rootScope', 'CollectionFactory', 'UtilService',  'KeyboardFactory', '
 
       $rootScope.sets = collection({
           cells: [],
-          isNeeded: function(set) {
-              return true;
-          },
           getcell: function(setID, cellID) {
             var cells = this[setID].children;
             for (var i = 0; i < cells.length; i++) {
