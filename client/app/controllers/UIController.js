@@ -88,9 +88,6 @@ app.controller("UIController", ["$scope", "$rootScope", "$routeParams", "$locati
           var d = sets[$routeParams.setId];
           util.move(d.children, a, b), sets.save(d)
       };
-      $scope.iscellOwner = function() {
-          return $routeParams.cellId && cells.isOwner(cells[$routeParams.cellId])
-      };
       $scope.editcell = function(a) {
           $location.search("edit", a ? "clone" : void 0), modal("components/new.html")
       };

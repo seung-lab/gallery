@@ -3,38 +3,42 @@
 // creates a tube that follows a collection of 3d points.
 ( function (app) { 
 
-app.service('CellService', ['Scene3DService', 'OctLODFactory','Camera3DService',
- function (Scene, OctLOD, Camera) {
+app.service('CellService', ['$rootScope','Scene3DService', 'OctLODFactory','Camera3DService',
+ function ($rootScope, Scene, OctLOD, Camera) {
 
-  this.ActiveCells = {};
-  this.InactiveCells = {};
+  $rootScope.visible = {};
+  $rootScope.invisible = {};
 
   this.addCell = function (cellID) {
 
-    if (cellID in this.ActiveCells){
+    if (cellID in $rootScope.visible){
       return;
     } 
-    else if ( cellID in this.InactiveCells ){
-      this.InactiveCells[cellID].setVisibility(true);
-      this.ActiveCells[cellID] = this.InactiveCells[cellID];
-      delete this.InactiveCells[cellID];
+    else if ( cellID in $rootScope.invisible ){
+      $rootScope.invisible[cellID].setVisibility(true);
+      $rootScope.visible[cellID] = $rootScope.invisible[cellID];
+      delete $rootScope.invisible[cellID];
     } 
     else {
-      this.ActiveCells[cellID] = new OctLOD(cellID, 8 , 0, 0 , 0);
+      $rootScope.visible[cellID] = new OctLOD(cellID, 8 , 0, 0 , 0);
     }
+
+    $rootScope.$broadcast('visible');
   }
 
   this.removeCell = function (cellID) {
 
-    this.ActiveCells[cellID].setVisibility(false);
-    this.InactiveCells[cellID] = this.ActiveCells[cellID];
-    delete this.ActiveCells[cellID];
+    $rootScope.visible[cellID].setVisibility(false);
+    $rootScope.invisible[cellID] = $rootScope.visible[cellID];
+    delete $rootScope.visible[cellID];
+
+    $rootScope.$broadcast('visible');
 
   }
 
   this.updateCells = function() {
-    for( var cellID in this.ActiveCells) {
-      this.ActiveCells[cellID].update( Camera.perspectiveCam );
+    for( var cellID in $rootScope.visible) {
+      $rootScope.visible[cellID].update( Camera.perspectiveCam );
     }
   }
 }]);

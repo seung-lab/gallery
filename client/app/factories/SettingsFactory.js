@@ -6,10 +6,10 @@ app.factory("SettingsFactory", function() {
 
   var instance = {
     settings: {
-      toggleGround: true,
-      toggleAxes: true,
-      toggleXZGrid: true,
-      toggleXYGrid: true
+      toggleGround: false,
+      toggleAxes:   false,
+      toggleXZGrid: false,
+      toggleXYGrid: false
     },
     set: function(property, value) {
       this.settings[property] = value;

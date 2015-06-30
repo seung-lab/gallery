@@ -26,6 +26,7 @@ app.directive('chart', function () {
         //Update when charts data changes
         scope.$watch(function() { return scope.chartObject; }, function(value) {
           if (!value) return;
+          
           var chartType = options.type;
           chart[chartType](scope.chartObject.data, scope.chartObject.options);
           if (scope.chartInstance) scope.chartInstance.destroy();

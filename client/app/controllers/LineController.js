@@ -1,4 +1,5 @@
-app.controller('LineController', function($scope){
+app.controller('stratificationController', ['$rootScope','$scope',
+  function($rootScope, $scope){
 
     var data = {
       labels : [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0],
@@ -20,5 +21,11 @@ app.controller('LineController', function($scope){
       ]
     }
 
-    $scope.myChart = {"data": data, "options": {} };
- });
+    $scope.$on('visible', function(event, args) {
+      console.log('visible changed');
+      console.log($rootScope.visible);
+    });
+
+
+    $scope.stratification = {"data": data, "options": {} };
+ }]);

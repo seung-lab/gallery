@@ -4,8 +4,8 @@
         <aside>
             <article id="info">
                 <h1>{{cells[cells.getIndex(r.cellId)].name}}</h1>
-                <div ng-controller="LineController" style="margin: 10px">
-                    <chart value="myChart" width="450" height="400" ></chart>
+                <div ng-controller="stratificationController" style="margin: 10px">
+                    <chart value="stratification" width="450" height="400" ></chart>
                 </div>
                 <ul class="list">
                     <li>
@@ -28,18 +28,20 @@
             </article>
         </aside>
         <section id="sheet">
-            <div id=space sp-tap="nextcell()" sp-kbd="['space', 'right', 'j', 'down', 'pagedown']" ng-class=spaceClass>
+            <div id="space" sp-tap="nextcell()" sp-kbd="['space', 'right', 'j', 'down', 'pagedown']" ng-class="spaceClass">
                     <!--A directive is the reusable package created with AngularJS-->
                     <!--This directive wraps Three JS-->
-                    <div three-viewport></div>
+                    <div ng-controller="3DController">
+                        <three-viewport></three-viewport>
+                    </div>
             </div>
-            <button class=overlaybutton sp-tap="p(r.setId&&'set/'+r.setId + '/'||r.view+'/')" id="back-button">
+            <button class="overlaybutton" sp-tap="p(r.setId&&'set/'+r.setId + '/'||r.view+'/')" id="back-button">
                 <span class="overlaybutton-inner icon-back"></span>
             </button>
-            <button class=overlaybutton sp-tap="fs=!fs" sp-kbd="'f'" id="fullscreen-button">
-                <span class=overlaybutton-inner ng-class="fs&&'icon-min'||'icon-max'"></span>
+            <button class="overlaybutton" sp-tap="fs=!fs" sp-kbd="'f'" id="fullscreen-button">
+                <span class="overlaybutton-inner" ng-class="fs&&'icon-min'||'icon-max'"></span>
             </button>
-            <button class=overlaybutton sp-tap="cr=!cr" sp-kbd="'i'" id="aside-button">
+            <button class="overlaybutton" sp-tap="cr=!cr" sp-kbd="'i'" id="aside-button">
                 <span class="overlaybutton-inner icon-info"></span>
             </button>
         </section>

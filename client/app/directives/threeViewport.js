@@ -10,29 +10,6 @@
   app.directive('threeViewport', ['Scene3DService', 'Camera3DService','CellService', 'Coordinates3DService' , 'SettingsFactory', 'SetFactory', 'OctLODFactory', 
   function (SceneService, CameraService, CellService, CoordinatesService, settings, setOperations, OctLOD) {
 
-    function toggleViewBasedOnSettings (scope) {
-
-      scope.$watch('s.toggleGround', function(show) {
-        show ? CoordinatesService.drawGround({size:10000}) : CoordinatesService.removeGround();
-      });
-
-      scope.$watch('s.toggleAxes', function(show) {
-        show ? CoordinatesService.drawAllAxes({axisLength:1000,axisRadius:50,axisTess:50}) : CoordinatesService.removeAxes();
-      });
-
-      scope.$watch('s.toggleYZGrid', function(show) {
-        show ? CoordinatesService.drawGrid({size:10000,scale:0.001, orientation:"x"}) : CoordinatesService.removeGrid('x');
-      });
-
-      scope.$watch('s.toggleXZGrid', function(show) {
-        show ? CoordinatesService.drawGrid({size:10000,scale:0.001, orientation:"y"}) : CoordinatesService.removeGrid('y');
-      });
-
-      scope.$watch('s.toggleXYGrid', function(show) {
-        show ? CoordinatesService.drawGrid({size:10000,scale:0.001, orientation:"z"}) : CoordinatesService.removeGrid('z');
-      });
-
-    }
     
     function updateVisibleCells (scope) {
       var activeCells = new Set();
@@ -112,7 +89,6 @@
         // handles resizing the renderer when the window is resized
         window.addEventListener('resize', onWindowResize, false);  
 
-        toggleViewBasedOnSettings(scope);
         updateVisibleCells (scope);
       
       }
