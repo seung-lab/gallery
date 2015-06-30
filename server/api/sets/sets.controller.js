@@ -12,11 +12,11 @@
 var _ = require('lodash');
 var sets = require('./sets.model');
 
-// Get list of setss
+// Get list of sets
 exports.index = function(req, res) {
-  sets.find(function (err, setss) {
+  sets.find(function (err, sets) {
     if(err) { return handleError(res, err); }
-    return res.json(200, setss);
+    return res.json(200, sets);
   });
 };
 

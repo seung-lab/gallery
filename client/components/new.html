@@ -2,7 +2,7 @@
   <header>
     <button type=button class="btn x" sp-tap="modal();q('edit',null)" sp-kbd="'esc'"></button>
     <input class="btn action" type=submit ng-disabled=newcell.$invalid ng-click="savecell(cell,v==_.priv||0)&&modal()&&q('edit',null)" value={{_.save}}>
-    <h2>{{cell._id&&_.editCell||_.newCell}}</h2>
+    <h2>{{cell.id&&_.editCell||_.newCell}}</h2>
   </header>
   <fieldset>
     <input class=input ng-model=cell.name name=cell-name sp-focus="" autocomplete=off required placeholder={{_.cellname}}>

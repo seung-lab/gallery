@@ -1,8 +1,6 @@
 'use strict';
 
 app.directive('chart', function () {
-    var baseWidth = 600;
-    var baseHeight = 400;
 
     return {
       restrict: 'E',
@@ -17,19 +15,13 @@ app.directive('chart', function () {
 
         var options = {
           type:   attrs.type   || "Line",
-          width:  attrs.width  || baseWidth,
-          height: attrs.height || baseHeight
+          width:  attrs.width  ,
+          height: attrs.height ,
+          responsive: true
         };
-        //canvas.width = options.width;
+        canvas.width = options.width;
         canvas.height = options.height;
         chart = new Chart(context);
-
-        scope.$watch(function(){ return element.attr('type'); }, function(value){
-          if (!value) return;
-          options.type = value;
-          var chartType = options.type;
-          chart[chartType](scope.chartObject.data, scope.chartObject.options);
-        });
 
         //Update when charts data changes
         scope.$watch(function() { return scope.chartObject; }, function(value) {

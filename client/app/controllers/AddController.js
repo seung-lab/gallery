@@ -24,7 +24,7 @@ app.controller("AddController", ["$scope", "$routeParams", "$rootScope",
           var cellId = $routeParams.cellId,
           set = sets[a];
 
-          return set.cells[cellId] ? true : (set.cells.push(set.cells[cellId] = {
+          return set.children[cellId] ? true : (set.children.push(set.children[cellId] = {
               _id: cellId
           }), sets.save(set))
       }

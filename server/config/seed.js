@@ -6,32 +6,38 @@
 'use strict';
 
 var sets = require('../api/sets/sets.model');
-var User = require('../api/user/user.model');
+var user = require('../api/user/user.model');
+var cells =require('../api/cells/cells.model');
 
 sets.find({}).remove(function() {
-  sets.create({
-    name : 'Development Tools',
-    info : 'Integration with popular tools such as Bower, Grunt, Karma, Mocha, JSHint, Node Inspector, Livereload, Protractor, Jade, Stylus, Sass, CoffeeScript, and Less.'
-  }, {
-    name : 'Server and Client integration',
-    info : 'Built with a powerful and fun stack: MongoDB, Express, AngularJS, and Node.'
-  }, {
-    name : 'Smart Build System',
-    info : 'Build system ignores `spec` files, allowing you to keep tests alongside code. Automatic injection of scripts and styles into your index.html'
-  },  {
-    name : 'Modular Structure',
-    info : 'Best practice client and server structures allow for more code reusability and maximum scalability'
-  },  {
-    name : 'Optimized Build',
-    info : 'Build process packs up your templates as a single JavaScript payload, minifies your scripts/css/images, and rewrites asset names for caching.'
-  },{
-    name : 'Deployment Ready',
-    info : 'Easily deploy your app to Heroku or Openshift with the heroku and openshift subgenerators'
-  });
+  sets.create(
+    {
+      name: "Amacrine Cells",
+      id: "a",
+      children_are_cells: true,
+      children: [900,903,915]
+    }, {
+      name: "Bipolar Cells",
+      id: "b",
+      children_are_cells: true,
+      children: ["903","915"]
+    }, {
+      name: "Ganglion Cells",
+      id: "c",
+      children_are_cells: true,
+      children: ["900", "915"],
+      
+    }, {
+      name: "Horizontal Cells",
+      id: "d",
+      children_are_cells: true,
+      children: ["903", "915"],     
+    });
 });
 
-User.find({}).remove(function() {
-  User.create({
+user.find({}).remove(function() {
+  user.create(
+  {
     provider: 'local',
     name: 'Test User',
     email: 'test@test.com',
@@ -47,3 +53,34 @@ User.find({}).remove(function() {
     }
   );
 });
+
+
+cells.find({}).remove(function() {
+  cells.create(
+    {
+      name: "Cell #43a",
+      id: 900,
+      description: "Some very long description; Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu vulputate felis. Maecenas aliquam tellus vel neque porta semper. Nullam lacinia erat in consequat convallis. Fusce sed est ligula. Pellentesque imperdiet pellentesque lobortis. Duis faucibus quam vitae nisl sodales facilisis. ",
+      copyright: "something",
+      stratification: [65,59,10,81,56,55,40,3,1,90],
+      color: '#00c5ff'
+    }, {
+      name: "Cell #903",
+      id: 903,
+      description: "Some very long description; Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu vulputate felis. Maecenas aliquam tellus vel neque porta semper. Nullam lacinia erat in consequat convallis. Fusce sed est ligula. Pellentesque imperdiet pellentesque lobortis. Duis faucibus quam vitae nisl sodales facilisis. ",
+      copyright: "something",
+      stratification: [65,59,90,12,15,20,40,65,59,90],
+      color: '#4879ff'
+    }, {
+      name: "Cell #915",
+      id: 915,
+      description: "Some very long description; Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu vulputate felis. Maecenas aliquam tellus vel neque porta semper. Nullam lacinia erat in consequat convallis. Fusce sed est ligula. Pellentesque imperdiet pellentesque lobortis. Duis faucibus quam vitae nisl sodales facilisis. ",
+      copyright: "something",
+      stratification: [28,48,40,10,90,27,50,90,14,5],
+      color: '#ffab41'
+    }, function() {
+      console.log('finished populating cells');
+    }
+  );
+});
+

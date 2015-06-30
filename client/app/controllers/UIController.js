@@ -42,16 +42,16 @@ app.controller("UIController", ["$scope", "$rootScope", "$routeParams", "$locati
       $scope.nextcell = function() {
           var a, b, e = $routeParams.setId,
           f = $routeParams.cellId;
-          e && f && (a = sets[e].cells, a.forEach(function(a, c) {
-              a._id == f && (b = c)
-          }), b < a.length - 1 ? b++ : b = 0, $location.path("/set/" + e + "/" + a[b]._id))
+          e && f && (a = sets[e].children, a.forEach(function(a, c) {
+              a.id == f && (b = c)
+          }), b < a.length - 1 ? b++ : b = 0, $location.path("/set/" + e + "/" + a[b].id))
       };
       $scope.prevcell = function() {
           var a, b, e = $routeParams.setId,
           f = $routeParams.cellId;
-          e && f && (a = sets[e].cells, a.forEach(function(a, c) {
-              a._id == f && (b = c)
-          }), b > 0 ? b-- : b = a.length - 1, $location.path("/set/" + e + "/" + a[b]._id))
+          e && f && (a = sets[e].children, a.forEach(function(a, c) {
+              a.id == f && (b = c)
+          }), b > 0 ? b-- : b = a.length - 1, $location.path("/set/" + e + "/" + a[b].id))
       };
       $scope.trashSet = function() {
           $location.path("/"), sets.remove($routeParams.setId)
@@ -60,13 +60,13 @@ app.controller("UIController", ["$scope", "$rootScope", "$routeParams", "$locati
           var a = sets[$routeParams.setId];
           $location.path("set/" + sets.save({
               name: a.name + " (" + locale._.copy + ")",
-              cells: a.cells.slice(0)
+              cells: a.children.slice(0)
           }) + "/")
       };
       $scope.rmcell = function(b) {
           var e = $routeParams.setId,
           f = sets[e],
-          g = f.cells;
+          g = f.children;
           $location.path("set/" + e + "/"), g.splice(b, 1), g.length ? sets.save(f) : $scope.trashSet()
       };
       $scope.curKey = function() {
@@ -86,7 +86,7 @@ app.controller("UIController", ["$scope", "$rootScope", "$routeParams", "$locati
       };
       $scope.sortcell = function(a, b) {
           var d = sets[$routeParams.setId];
-          util.move(d.cells, a, b), sets.save(d)
+          util.move(d.children, a, b), sets.save(d)
       };
       $scope.iscellOwner = function() {
           return $routeParams.cellId && cells.isOwner(cells[$routeParams.cellId])

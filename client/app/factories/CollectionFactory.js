@@ -15,7 +15,7 @@ app.factory("CollectionFactory", ["$http", "UtilService",
 
       $http.get(url).success(function(jsonArray) {
         jsonArray.forEach(function(element) {
-          c[element._id] ? c.saveLocal(element) : c.add(element, null)
+          c[element.id] ? c.saveLocal(element) : c.add(element, null)
         });
       }).success(callback).error(callback)
 
@@ -23,7 +23,7 @@ app.factory("CollectionFactory", ["$http", "UtilService",
     };
     var saveLocal = function(a) {
       var b = this,
-      id = a._id;
+      id = a.id;
       "trash" == a.status ? b.removeLocal(id) : util.extend(b[id], a)
     };
 
@@ -52,11 +52,11 @@ app.factory("CollectionFactory", ["$http", "UtilService",
     };
     var save = function(a, b) {
       var c = this,
-      e = a._id;
-      if (e || (e = a._id = util.generateId(), a._acl || (a._acl = {}), a._acl.creator = "demo@cellpane.com", !c.onNew || c.onNew(a))) return c[e] ? util.extend(c[e], a) : c.push(c[e] = a), b && b(), e
+      e = a.id;
+      if (e || (e = a.id = util.generateId(), a._acl || (a._acl = {}), a._acl.creator = "demo@cellpane.com", !c.onNew || c.onNew(a))) return c[e] ? util.extend(c[e], a) : c.push(c[e] = a), b && b(), e
     };
     var isOwner = function() {
-      return !0
+      return false;
     };
     var isWriter = function(a) {
       return this.isOwner(a) || a._acl.w && ~a._acl.w.indexOf(auth.id())
@@ -105,7 +105,7 @@ app.factory("CollectionFactory", ["$http", "UtilService",
 
     var getIndex = function(id){
       for (var index = 0; index < this.length; index++) {
-        if (this[index]._id == id){
+        if (this[index].id == id){
           return index;
         }
       }

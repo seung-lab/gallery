@@ -11,7 +11,7 @@
         <li>
             <label for=selectSet>{{_.addToExistingSet}}</label>
             <span class="select-wrap block">
-                <select name=selectSet ng-model=id ng-options="a._id as a.name for a in s"></select>
+                <select name=selectSet ng-model=id ng-options="a.id as a.name for a in s"></select>
                 <span class="select btn block">{{id&&sets[id].name||_.selectSet}}</span>
             </span>
         </li>

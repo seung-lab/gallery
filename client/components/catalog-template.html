@@ -10,7 +10,7 @@
     <i class="btn simple icon-clear" sp-tap="query='';f=f+1" ng-show=query></i>
 </p>
 <menu>
-    <li ng-repeat="cell in cells | filter:query | orderBy:'name'" ng-class="{on:cell._id==r.cellId}">
-      <h3 class=trim sp-tap="p('catalog/'+cell._id)">{{cell.name}}</h3>
+    <li ng-repeat="cell in cells | filter:query | orderBy:'name'" ng-class="{on:cell.id==r.cellId}">
+      <h3 class=trim sp-tap="p('catalog/'+cell.id)">{{cell.name}}</h3>
     </li>
 </menu>

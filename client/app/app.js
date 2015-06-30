@@ -32,17 +32,17 @@ app.run(['$rootScope', 'CollectionFactory', 'UtilService',  'KeyboardFactory', '
               return true;
           },
           getcell: function(setID, cellID) {
-            var cells = this[setID].cells;
+            var cells = this[setID].children;
             for (var i = 0; i < cells.length; i++) {
-              if (cells[i]._id == cellID) {
+              if (cells[i].id == cellID) {
                 return cells[i]
               }
             }
           },
-          url: 'sets.json'
+          url: '/api/sets'
       });
       $rootScope.cells = collection({
-          url: 'cells.json',
+          url: 'api/cells',
           getKey: function(cellID) {
               var index = $rootScope.cells.getIndex(cellID);
               return  $rootScope.cells[index].key;

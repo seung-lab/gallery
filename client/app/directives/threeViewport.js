@@ -41,7 +41,7 @@
           return;
         }
         var setIndex = scope.sets.getIndex(setId);
-        var updatedCells = new Set(scope.sets[setIndex].cells);
+        var updatedCells = new Set(scope.sets[setIndex].children);
 
         var toAdd = setOperations.complement(updatedCells,activeCells);
         toAdd.forEach(function(cellID){

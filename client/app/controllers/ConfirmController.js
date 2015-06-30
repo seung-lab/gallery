@@ -13,7 +13,7 @@ app.controller("ConfirmController", ["$scope", "$routeParams", "$rootScope", "Ut
           $location.path((c ? "set" : $routeParams.view) + "/" + (sets[c] ? c + "/" : ""));
           cells.remove(a);
           return sets.forEach(function(set) {
-              UtilService.unlist(set.cells, a) || sets.remove(set._id)
+              UtilService.unlist(set.children, a) || sets.remove(set.id)
           });
       }
   }

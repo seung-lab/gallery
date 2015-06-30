@@ -11,8 +11,8 @@
         </form>
     </header>
     <menu>
-        <li ng-repeat="cell in results" ng-class="{on:cell._id==r.cellId}">
-            <h3 class=trim sp-tap="p('search/'+cell._id)">{{cell.name}}</h3>
+        <li ng-repeat="cell in results" ng-class="{on:cell.id==r.cellId}">
+            <h3 class=trim sp-tap="p('search/'+cell.id)">{{cell.name}}</h3>
         </li>
     </menu>
 </div>

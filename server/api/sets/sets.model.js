@@ -5,8 +5,9 @@ var mongoose = require('mongoose'),
 
 var SetSchema = new Schema({
   name: String,
-  info: String,
-  active: Boolean
+  id: String,
+  children_are_cells: Boolean,
+  children: []  
 });
 
 module.exports = mongoose.model('Set', SetSchema);
