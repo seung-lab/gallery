@@ -1,6 +1,6 @@
 'use strict';
 // Manages the 3D Scene for the cells
-( function () {
+( function (app) {
 app.controller('3DController', ['$scope', 'CellService', 'Coordinates3DService',
   function ($scope, CellService, CoordinatesService) {
 
@@ -30,4 +30,4 @@ app.controller('3DController', ['$scope', 'CellService', 'Coordinates3DService',
 
 }]);
 
-})();
+})(app);
