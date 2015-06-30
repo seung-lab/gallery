@@ -120,8 +120,6 @@
       function animate() {
         requestAnimationFrame(animate);
 
-        console.log('clock');
-
         controls.update(clock.getDelta() );
         SceneService.scene.updateMatrixWorld();
 

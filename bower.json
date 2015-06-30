@@ -7,7 +7,8 @@
     "font-awesome": ">=4.1.0",
     "lodash": "~2.4.1",
     "threejs": "*",
-    "angular-1.1.13": "*"
+    "angular-1.1.13": "*",
+    "chartjs": "~1.0.2"
   },
   "devDependencies": {}
 }
