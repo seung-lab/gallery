@@ -1,21 +1,21 @@
-<div ng-init="i=sets.getIndex(r.setId);set=sets[i]">
-    <ul class="toolbar" id="em">
-        <li sp-tap="modal('components/share.html')" class="btn icon-share flex"></li>
-        <li sp-if=sets.isWriter(set) sp-tap="modal('components/rename.html')" class="btn icon-pencil flex"></li>
-        <li sp-tap=duplicateSet() class="btn icon-copy flex"></li>
-        <li sp-if=sets.isWriter(set) sp-tap=trashSet() class="btn icon-bin flex"></li>
-    </ul>
-    <div class="view-container" ng-class="{open:em}">
-        <header>
-            <button sp-tap="p('sets/')" class="btn simple icon-left"></button>
-            <button sp-tap="toggleState('em')" class="btn" ng-class="{active:em,'icon-down':!em,'icon-up':em}"></button>
-            <h2 class=trim>{{set.name}}</h2>
-        </header>
-        <menu sp-sortable="sets.isWriter(set)" onsort="sortcell" class="cells">
-            <li ng-repeat="cell in set.children" ng-init="id=cells.getIndex(cell)" ng-class="{on:cell==r.cellId}">
-                <button class="btn danger icon-minus" ng-show="em" sp-tap="rmcell($index)"></button>
-                <h3 class="trim" sp-tap="p('set/'+r.setId+'/'+cell)">{{cells[id].name}}</h3>
-            </li>
-        </menu>
-    </div>
+<div ng-init="set=sets.get(r.setId)">
+  <ul class="toolbar" id="em">
+    <li sp-tap="modal('components/share.html')" class="btn icon-share flex"></li>
+    <li sp-tap="modal('components/rename.html')" class="btn icon-pencil flex"></li>
+    <li sp-tap="duplicateSet()" class="btn icon-copy flex"></li>
+    <li sp-tap="trashSet()" class="btn icon-bin flex"></li>
+  </ul>
+  <div class="view-container" ng-class="{open:em}">
+    <header>
+      <button sp-tap="p('sets/')" class="btn simple icon-left"></button>
+      <button sp-tap="toggleState('em')" class="btn" ng-class="{active:em,'icon-down':!em,'icon-up':em}"></button>
+      <h2 class=trim>{{set.name}}</h2>
+    </header>
+      <menu sp-sortable="sets.isWriter(set)" onsort="sortcell" class="cells">
+        <li ng-repeat="cell in set.children" ng-init="id=cells.getIndex(cell)" ng-class="{on:cell==r.cellId}">
+          <button class="btn danger icon-minus" ng-show="em" sp-tap="rmcell($index)"></button>
+          <h3 class="trim" sp-tap="p('set/'+r.setId+'/'+cell)">{{cells[id].name}}</h3>
+        </li>
+      </menu>
+  </div>
 </div>

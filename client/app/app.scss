@@ -563,11 +563,7 @@ fieldset .group *:last-child select+.select {
     transform: translate3d(0, 4.4rem, 0)
 }
 #cell-view {
-    -ms-transform: translate(101%, 0);
-    -o-transform: translate(101%, 0);
-    -webkit-transform: translate3d(101%, 0, 0);
-    -moz-transform: translate3d(101%, 0, 0);
-    transform: translate3d(101%, 0, 0);
+    @include translate3d(101%, 0 , 0);
     position: relative;
     z-index: 3;
     height: 100%

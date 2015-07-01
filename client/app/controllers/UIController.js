@@ -2,7 +2,7 @@
 
 ( function (app) {
 app.controller("UIController", ["$scope", "$rootScope", "$routeParams", "$location", "SettingsFactory", "UtilService", "KeyboardFactory", "TransitionerFactory", "LocaleFactory", "$timeout", "ModalFactory",
-  function($scope, $rootScope, $routeParams, $location, settings, util, keyboard, transitioner, locale, $timepout, modal) {
+  function($scope, $rootScope, $routeParams, $location, settings, util, keyboard, transitioner, locale, $timeout, modal) {
       function m(a, b, c) {
           var d, e, g, i, j, k, l, m, n, o = [];
       //     a.split("[").forEach(function(a) {
@@ -54,29 +54,30 @@ app.controller("UIController", ["$scope", "$rootScope", "$routeParams", "$locati
           }), b > 0 ? b-- : b = a.length - 1, $location.path("/set/" + e + "/" + a[b].id))
       };
       $scope.trashSet = function() {
-          $location.path("/"), sets.remove($routeParams.setId)
+          $location.path("/");
+          sets.remove($routeParams.setId);
       };
       $scope.duplicateSet = function() {
-          var a = sets[$routeParams.setId];
+          var set = sets.get($routeParams.setId);
           $location.path("set/" + sets.save({
-              name: a.name + " (" + locale._.copy + ")",
-              cells: a.children.slice(0)
+              name: set.name + " (" + locale._.copy + ")",
+              cells: set.children.slice(0)
           }) + "/")
       };
-      $scope.rmcell = function(b) {
-          var e = $routeParams.setId,
-          f = sets[e],
-          g = f.children;
-          $location.path("set/" + e + "/"), g.splice(b, 1), g.length ? sets.save(f) : $scope.trashSet()
-      };
-      $scope.curKey = function() {
-          return cells.getKey($routeParams.cellId);
-      };
-      $scope.updateKey = function(b, d) {
-          var e, f, g = $routeParams.setId,
-          h = $routeParams.cellId,
-          i = cells[h];
-          g && (e = sets[g], f = sets.getcell(g, h), b !== i.key ? f.key = b : delete f.key, !d && sets.save(e)), $scope.k != b && ($rootScope.cellSlide.model = m(i.body, i.key, b), $scope.k = b)
+      $scope.rmcell = function(childIndex) {
+
+          var set = sets.get($routeParams.setId);
+
+          $location.path("set/" + set.id + "/");
+
+          set.children.splice(childIndex, 1);
+          
+          if (set.children.length != 0) {
+            sets.save(set);
+          } 
+          else {
+            $scope.trashSet();
+          } 
       };
       $scope.clean = function(a) {
           delete this[a]
@@ -89,11 +90,14 @@ app.controller("UIController", ["$scope", "$rootScope", "$routeParams", "$locati
           util.move(d.children, a, b), sets.save(d)
       };
       $scope.editcell = function(a) {
-          $location.search("edit", a ? "clone" : void 0), modal("components/new.html")
+          $location.search("edit", a ? "clone" : void 0), modal("components/new.html");
       };
-      $scope.canChangeKey = function() {
-          var id = $routeParams.setId;
-          return id ? sets.isWriter(sets[id]) : true
+
+      $scope.fullscreen = function() {
+      
+        for (var i = 1 ; i < 100 ; ++i) 
+          $timeout(function(){$rootScope.$broadcast('fullscreen');},i*10);
+  
       };
 
       //This changes the views when the location changes
@@ -135,7 +139,7 @@ app.controller("UIController", ["$scope", "$rootScope", "$routeParams", "$locati
                   return;
                 }   
                 
-                if(to.params.setId != fromSetId) {
+                if (to.params.setId != fromSetId) {
                   $rootScope.viewSlide.force = true;
                   $rootScope.viewSlide.to = "left";
                   $rootScope.viewSlide.model = "set";
@@ -146,7 +150,6 @@ app.controller("UIController", ["$scope", "$rootScope", "$routeParams", "$locati
               if (cells[cellIndex]){
 
                 var body = m(cells[cellIndex].body);
-                $scope.k = $scope.curKey();
 
                 if (to.params.cellId !== fromCellId) {
                   if (fromSetId === to.params.setId 

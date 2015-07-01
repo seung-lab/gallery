@@ -1,9 +1,10 @@
+"use strict";
+
 /**
  * author @ Mark Richardson
  **/
 
 THREE.Segment = function (interleavedData, material) {
-	"use strict";
 
 	var _this = this; 
 	var _interleavedData, _webglPositionNormalBuffer;

@@ -2,10 +2,10 @@
 
 app.directive("spParse", ["TouchFactory", "UtilService",
   function() {
-    return function(a, b, c) {
-      var d = a.$eval(c.spParse),
-      e = b.find("div"),
-      f = b.find("textarea"),
+    return function(scope, element, attribute) {
+      var d = scope.$eval(attribute.spParse),
+      e = element.find("div"),
+      f = element.find("textarea"),
       g = function() {
         var a = f.val();
         e.html(d(a) || "")

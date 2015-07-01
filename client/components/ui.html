@@ -1,67 +1,62 @@
- <div class="icon-cellpane" ng-controller="UIController">
+<div class="icon-cellpane" ng-controller="UIController">
 <!--     Menu on the right with cell details -->    
-    <div id="cell-view" ng-class="{cr:cr,ic:r.cellId,fs:fs}">
-        <aside>
-            <article id="info">
-                <h1>{{cells[cells.getIndex(r.cellId)].name}}</h1>
-                <div ng-controller="stratificationController" style="margin: 10px">
-                    <chart value="stratification" width="450" height="400" ></chart>
-                </div>
-                <ul class="list">
-                    <li>
-                        <div class="group">
-                            <a sp-tap="editcell(true)" class="btn icon-copy flex"></a>
-                            <a sp-tap="modal('components/confirm.html')" class="btn danger icon-bin flex"></a>
-                        </div>
-                    </li>
-                    <li>
-                        <q>{{_.description}}</q>
-                        {{cells[cells.getIndex(r.cellId)].description}}
-                    </li>
-                    <li class=drop sp-tap="c=!c" ng-class="{'active':c}">
-                        <q>{{_.copyright}}</q>
-                        <p ng-show=c>{{cells[cells.getIndex(r.cellId)].copyright}}</p>
-                    </li>
-                </ul>
-            </article>
-        </aside>
-        <section id="sheet">
-            <div id="space" sp-tap="nextcell()" sp-kbd="['space', 'right', 'j', 'down', 'pagedown']" ng-class="spaceClass">
-                    <!--A directive is the reusable package created with AngularJS-->
-                    <!--This directive wraps Three JS-->
-                    <div ng-controller="3DController">
-                        <three-viewport></three-viewport>
-                    </div>
-            </div>
-            <button class="overlaybutton" sp-tap="p(r.setId&&'set/'+r.setId + '/'||r.view+'/')" id="back-button">
-                <span class="overlaybutton-inner icon-back"></span>
-            </button>
-            <button class="overlaybutton" sp-tap="fs=!fs" sp-kbd="'f'" id="fullscreen-button">
-                <span class="overlaybutton-inner" ng-class="fs&&'icon-min'||'icon-max'"></span>
-            </button>
-            <button class="overlaybutton" sp-tap="cr=!cr" sp-kbd="'i'" id="aside-button">
-                <span class="overlaybutton-inner icon-info"></span>
-            </button>
-        </section>
-    </div>
-    <aside id=menu>
-        <!-- Dark menu on the left -->
-        <ul> 
-            <li sp-tap="p('catalog/')" sp-kbd="'b'" ng-class="{open: r.view == 'catalog'}"><i class=icon-book></i><span>{{_.catalog}}</span></li>
-            <li sp-tap="p('sets/')" ng-class="{open: r.view == 'sets'}"><i class=icon-sets></i><span>{{_.sets}}</span></li>
-            <li sp-tap="p('search/')" sp-kbd="'/'" ng-class="{open: r.view == 'search'}"><i class=icon-search></i><span>{{_.search}}</span></li>
-            <li sp-tap="modal('components/settings.html')" sp-kbd="[',', 'command+,', 'control+,']"><i class=icon-cog></i><span>{{_.settings}}</span></li>
-        </ul>
+  <div id="cell-view" ng-class="{cr:cr,ic:r.cellId,fs:fs}">
+    <aside>
+      <article id="info">
+          <h1>{{cells[cells.getIndex(r.cellId)].name}}</h1>
+          <div ng-controller="stratificationController" style="margin: 10px">
+              <chart value="stratification" width="450" height="400" ></chart>
+          </div>
+          <ul class="list">
+              <li>
+                  <div class="group">
+                      <a sp-tap="editcell(true)" class="btn icon-copy flex"></a>
+                      <a sp-tap="modal('components/confirm.html')" class="btn danger icon-bin flex"></a>
+                  </div>
+              </li>
+              <li>
+                  <q>{{_.description}}</q>
+                  {{cells[cells.getIndex(r.cellId)].description}}
+              </li>
+              <li class="drop" sp-tap="c=!c" ng-class="{'active':c}">
+                  <q>{{_.copyright}}</q>
+                  <p ng-show="c">{{cells[cells.getIndex(r.cellId)].copyright}}</p>
+              </li>
+          </ul>
+      </article>
     </aside>
-    <section id=nav class="fill w" ng-class={open:menu}>
-        <header>
-            <div class=b sp-tap="toggleState('menu')" sp-kbd="'m'" ng-class={on:menu}><i class=icon-more></i></div>
-            <div class=b sp-tap="modal('components/new.html')" sp-kbd="'n'" ng-class="{on:modal.isOn('new')}"><i class=icon-plus></i></div>
-            <h1 sp-tap="p('sets/')" sp-kbd="'s'">
-            <b>Cell</b>Gallery</h1>
-            </header>
-        <div id="view" ng-class="navClass">
-                <article sp-slide=viewSlide id={{model}} ng-include="'components/'+model + '-template.html'"></article>
-            </div>
-        </section>
-    </div>
+    <section id="sheet">
+      <div id="space" sp-kbd="['space', 'right', 'j', 'down', 'pagedown']" ng-class="spaceClass" ng-controller="3DController">
+        <three-viewport></three-viewport>
+      </div>
+      <button class="overlaybutton" sp-tap="p(r.setId&&'set/'+r.setId + '/'||r.view+'/')" id="back-button">
+          <span class="overlaybutton-inner icon-back"></span>
+      </button>
+      <button class="overlaybutton" sp-tap="fs=!fs;fullscreen()" sp-kbd="'f'" id="fullscreen-button">
+          <span class="overlaybutton-inner" ng-class="fs&&'icon-min'||'icon-max'"></span>
+      </button>
+      <button class="overlaybutton" sp-tap="cr=!cr" sp-kbd="'i'" id="aside-button">
+          <span class="overlaybutton-inner icon-info"></span>
+      </button>
+    </section>
+  </div>
+  <aside id="menu">
+      <ul> 
+          <li sp-tap="p('catalog/')" sp-kbd="'b'" ng-class="{open: r.view == 'catalog'}"><i class=icon-book></i><span>{{_.catalog}}</span></li>
+          <li sp-tap="p('sets/')" ng-class="{open: r.view == 'sets'}"><i class=icon-sets></i><span>{{_.sets}}</span></li>
+          <li sp-tap="p('search/')" sp-kbd="'/'" ng-class="{open: r.view == 'search'}"><i class=icon-search></i><span>{{_.search}}</span></li>
+          <li sp-tap="modal('components/settings.html')" sp-kbd="[',', 'command+,', 'control+,']"><i class=icon-cog></i><span>{{_.settings}}</span></li>
+      </ul>
+  </aside>
+  <section id="nav" class="fill w" ng-class={open:menu}>
+      <header>
+          <div class=b sp-tap="toggleState('menu')" sp-kbd="'m'" ng-class={on:menu}><i class=icon-more></i></div>
+          <div class=b sp-tap="modal('components/new.html')" sp-kbd="'n'" ng-class="{on:modal.isOn('new')}"><i class="icon-plus"></i></div>
+          <h1 sp-tap="p('sets/')" sp-kbd="'s'">
+          <b>Cell</b>Gallery</h1>
+          </header>
+      <div id="view" ng-class="navClass">
+              <article sp-slide=viewSlide id="{{model}}" ng-include="'components/'+model + '-template.html'"></article>
+          </div>
+  </section>
+</div>

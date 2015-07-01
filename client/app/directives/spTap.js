@@ -1,15 +1,22 @@
 'use strict';
 
+( function (app) {
+
 app.directive("spTap", ["TouchFactory", "KeyboardFactory",
   function(touch, keyboard) {
-    return function(c, d, e) {
-      touch.tap(d, function() {
-        return c.$apply(e.spTap)
+    return function(scope, element, attribute) {
+
+      touch.tap(element, function() {
+        return scope.$apply(attribute.spTap)
       });
 
-      e.spKbd && keyboard.on(c.$eval(e.spKbd), function() {
-        return c.$apply(e.spTap)
-      })
+      if (attribute.spKbd) {
+        keyboard.on(scope.$eval(attribute.spKbd), function() {
+          return scope.$apply(attribute.spTap);
+        });
+      }
     }
   }
 ]);
+
+})(app);

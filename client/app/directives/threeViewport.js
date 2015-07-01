@@ -69,11 +69,13 @@
         window.scope = scope;
         // Add the camera
         CameraService.perspectiveCam.position.set(1000, 20000, 1500);
+
         SceneService.scene.add(CameraService.perspectiveCam);
 
         // create the renderer
         renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        onResize();
+
         renderer.setClearColor( '#5Caadb', 1.0 );
 
         //Necesary for the transparent spheres
@@ -81,13 +83,18 @@
 
 
         // set up the controls with the camera and renderer
-        controls = new THREE.OrbitControls(CameraService.perspectiveCam, renderer.domElement);
-        //controls = new THREE.TrackballControls( camera, renderer.domElement );
+        // controls = new THREE.OrbitControls(CameraService.perspectiveCam, renderer.domElement);
+        controls = new THREE.OrbitControls(CameraService.perspectiveCam, renderer.domElement );
         // add renderer to DOM
         element[0].appendChild(renderer.domElement);
 
         // handles resizing the renderer when the window is resized
-        window.addEventListener('resize', onWindowResize, false);  
+        window.addEventListener('resize', onResize);
+        scope.$watch
+        scope.$on('fullscreen', function(){
+          onResize();
+        });
+        
 
         updateVisibleCells (scope);
       
@@ -104,9 +111,12 @@
         renderer.render(SceneService.scene, CameraService.perspectiveCam);
       }
 
-      function onWindowResize() {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        CameraService.perspectiveCam.aspect = window.innerWidth / window.innerHeight;
+      //TODO this is not call when resizing the window.
+      //because the right part is just hidden when not in fullscreen mode , the center of the visible part doesn't correspond
+      //to the center of rotation, making it very hard to use.  
+      function onResize() {
+        renderer.setSize(element[0].offsetWidth , element[0].offsetHeight);
+        CameraService.perspectiveCam.aspect = element[0].offsetWidth  / element[0].offsetHeight;
         CameraService.perspectiveCam.updateProjectionMatrix();
       }
     }

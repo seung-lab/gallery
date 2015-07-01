@@ -9,6 +9,7 @@ app.factory("CollectionFactory", ["$http", "UtilService",
       this.syncDown(callback || util.noop);
       return  this;
     };
+
     var syncDown = function(callback) {
       var c = this;
       var url = util.buildUrl(this.url, this.params);
@@ -23,35 +24,59 @@ app.factory("CollectionFactory", ["$http", "UtilService",
 
       return this;
     };
+
     var saveLocal = function(a) {
       var b = this,
       id = a.id;
       "trash" == a.status ? b.removeLocal(id) : util.extend(b[id], a)
     };
 
-    var add = function(element, b) {
+    var add = function(element, callback) {
 
       this.push(element);
 
-      if(b){
-        b.call(this, element);
+      if(callback){
+        callback.call(this, element);
       }
 
     };
-    var removeLocal = function(a) {
-      var b = this;
-      util.unlist(b, b[a]), delete b[a]
+
+    var removeLocal = function(index) {
+
+      util.unlist(this, this[index]);
+      delete this[index];
     };
-    var remove = function(a) {
-      var b = this;
-      return b[a].status = "trash", util.unlist(b, b[a]), b.save(b[a], function() {
-        b.removeLocal(a)
-      })
+
+    var remove = function(id) {
+      var index = this.getIndex(id);
+
+      this[index].status = "trash";
+
+      util.unlist(this, this[index]);
+
+      // this.save(this[index], function() {
+      //   this.removeLocal(index);
+      // });
     };
-    var save = function(a, b) {
-      var c = this,
-      e = a.id;
-      if (e || (e = a.id = util.generateId(), a._acl || (a._acl = {}), a._acl.creator = "demo@cellpane.com", !c.onNew || c.onNew(a))) return c[e] ? util.extend(c[e], a) : c.push(c[e] = a), b && b(), e
+
+    var save = function(element, callback) {
+
+      if ( !element.id ){
+        element.id = util.generateId();
+      }
+
+        // !this.onNew || this.onNew(element) 
+      
+      if (this[element.id])  {
+        util.extend(this[element.id], element);
+      } 
+      else {
+        this[element.id] = element;
+        this.push(element);
+      }
+     
+      if( callback ) { callback.call(this, element); }
+       
     };
    
 
@@ -62,6 +87,13 @@ app.factory("CollectionFactory", ["$http", "UtilService",
         }
       }
       return -1;
+    }
+
+    var get = function(id) {
+
+      var index = this.getIndex(id);
+      
+      return this[index];
     }
 
     return function(argObject) {
@@ -75,6 +107,7 @@ app.factory("CollectionFactory", ["$http", "UtilService",
         saveLocal: saveLocal,
         removeLocal: removeLocal,
         getIndex: getIndex,
+        get: get
       };
 
       //Extends the destination object dst by copying own enumerable properties from the src and arg object(s) to dst. 
