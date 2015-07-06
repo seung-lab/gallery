@@ -14,6 +14,7 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
+      <link rel="stylesheet" href="bower_components/c3/c3.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
@@ -54,8 +55,12 @@
       <!-- bower:js -->
       <script src="bower_components/lodash/dist/lodash.compat.js"></script>
       <script src="bower_components/threejs/build/three.js"></script>
-      <script src="bower_components/angular-1.1.13/angular.js"></script>
       <script src="bower_components/chartjs/Chart.js"></script>
+      <script src="bower_components/d3/d3.js"></script>
+      <script src="bower_components/c3/c3.js"></script>
+      <script src="bower_components/angular/angular.js"></script>
+      <script src="bower_components/c3-angular/c3js-directive.js"></script>
+      <script src="bower_components/angular-route/angular-route.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
 
@@ -65,12 +70,12 @@
           <script src="app/controllers/3DController.js"></script>
           <script src="app/controllers/AddController.js"></script>
           <script src="app/controllers/ConfirmController.js"></script>
-          <script src="app/controllers/LineController.js"></script>
           <script src="app/controllers/NewController.js"></script>
           <script src="app/controllers/RenameController.js"></script>
           <script src="app/controllers/SearchController.js"></script>
           <script src="app/controllers/SettingsController.js"></script>
           <script src="app/controllers/ShareController.js"></script>
+          <script src="app/controllers/StratificationController.js"></script>
           <script src="app/controllers/UIController.js"></script>
           <script src="app/directives/chart.js"></script>
           <script src="app/directives/spFocus.js"></script>

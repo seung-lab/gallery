@@ -2,19 +2,21 @@
 
 app.directive("spSlide", ["UtilService", "TransitionerFactory", function(util, transitioner) {
   return {
-    transclude: "element",
+    transclude: "element", //TODO check error Multiple directives [spSlide, ngInclude] asking for transclusion on: 
     priority: 1e3,
     terminal: true,
-    compile: function(a, c, d) {
+    compile: function(element, attributes, transclude) {
+
       return function(a, e) {
+
         var f, g, h;
-        var i = c.spSlide;
+        var i = attributes.spSlide;
         var j = e.parent();
         j.addClass("t3d");
         a.$watch(function(a) {
           var c;
           var k = a.$eval(i);
-          !k.model && h && (g.remove(), f.$destroy(), g = f = h = null), k.model && (k.model != h || k.force) && (k.force = !1, c = a.$new(), c.model = k.model , d(c, function(a) {
+          !k.model && h && (g.remove(), f.$destroy(), g = f = h = null), k.model && (k.model != h || k.force) && (k.force = !1, c = a.$new(), c.model = k.model , transclude(c, function(a) {
             if (e.after(a), g) {
               var d = g,
               i = f;

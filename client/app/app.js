@@ -1,12 +1,12 @@
-var app = angular.module('cellPane', []);
+var app = angular.module('cellPane', ['gridshore.c3js.chart','ngRoute']);
 
 //The actual routing is done in the uiController
 app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.caseInsensitiveMatch = true;
-    $routeProvider.when('/');
-    $routeProvider.when('/set/:setId/:cellId');
-    $routeProvider.when('/:view/:cellId');
-    $routeProvider.otherwise('/');
+    $routeProvider.when('/',{});
+    $routeProvider.when('/sets/:setId/:cellId',{});
+    $routeProvider.when('/:view/:cellId',{});
+    $routeProvider.otherwise('/',{});
 }]);
 
 

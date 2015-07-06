@@ -1,3 +1,7 @@
+'use strict';
+
+(function (app, THREE){
+
 app.service('Scene3DService', function () {
     var scene = new THREE.Scene();
     //scene.fog = new THREE.Fog( 0x808080, 3000, 6000 );
@@ -13,7 +17,7 @@ app.service('Scene3DService', function () {
     scene.add(light);
     scene.add(light2);
 
-    return {
-        scene: scene
-    }
+    return { scene: scene };
 });
+
+})(app, THREE);
