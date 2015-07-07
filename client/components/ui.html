@@ -5,9 +5,8 @@
       <article id="info">
           <h1>{{cells[cells.getIndex(r.cellId)].name}}</h1>
           
-          <div ng-controller="StratificationController" style="margin: 10px">
-            <c3chart bindto-id="chart" chart-data="datapoints" chart-columns="datacolumns"></c3chart>
-            <!-- <chart value="stratification" width="450" height="400" ></chart> -->
+          <div ng-controller="StratificationController" style="margin-right: 5px">
+            <chart bindto-id="chart-stratification"  chart="chart"></chart>
           </div> 
 
           <ul class="list">

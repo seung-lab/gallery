@@ -1,60 +1,57 @@
 'use strict';
-(function (app, THREE) {
+(function (app) {
 
-app.controller('StratificationController', ['$rootScope','$scope',
-  function($rootScope, $scope){
+app.controller('StratificationController', ['$rootScope','$scope','$timeout',
+  function($rootScope, $scope, $timeout) {
 
-    // var labels = [];
-    // for (var i = 0 ; i < 100; ++i){
-    //   labels.push(i / 100.0);
-    // }
+    function loadCell( cellId ) {
+
+      if (!$scope.chart) {
+        $timeout( function(){  loadCell( cellId ); } , 100);
+        return;
+      }
 
 
-    // $scope.$on('visible', function(event, args) {
+      var cell = $scope.cells.get(cellId);
+      var column =  cell.stratification.slice();
+      column.unshift( cell.id.toString() );
 
-    //   var datasets = [];
-    //   for (var id in $scope.visible) {
-    //     var index = $scope.cells.getIndex(id);
-    //     var cell  = $scope.cells[index];
+      var data = {
 
-    //     var color = new THREE.Color(cell.color);
-    //     datasets.push({
-    //       fillColor: 'rgba('+color.r*255+','+color.g*255+','+color.b*255+',0.1)',
-    //       pointColor: cell.color,
-    //       strokeColor: cell.color,
-    //       pointStrokeColor : "#fff",    
-    //       data: cell.stratification
-    //     });
-    //   }
+        columns : [column],
 
-    //   var data = {
-    //     labels : labels,         
-    //     datasets : datasets
-    //   };
+        type: 'spline',
+
+        color: cell.color 
+
+      }
+      $scope.chart.load(data);
+
+    }
+
+    $scope.$on('cell-load', function(event, cellId) {
+
+      if (!cellId){
+        return;
+      }
+
+      loadCell(cellId);
+    });
       
-    //   var options = {
-    //     scaleOverride: true,
-    //     scaleSteps: 10,
-    //     scaleStepWidth: 0.1,
-    //     scaleStartValue: 0.0,
-    //     reponsive: true,
-    //     showTooltips: false,
-    //     showXLabels: 10
-    //   };
+    $scope.$on('cell-unload', function(event, cellId) {
+      if (!cellId){
+        return;
+      }
 
-    //   $scope.stratification = {"data": data, options: options};
-    //   console.log()
-    // });
-
-    // $scope.datapoints=[{"x":10,"top-1":10,"top-2":15},
-    //                    {"x":20,"top-1":100,"top-2":35},
-    //                    {"x":30,"top-1":15,"top-2":75},
-    //                    {"x":40,"top-1":50,"top-2":45}];
-    // $scope.datacolumns=[{"id":"top-1","type":"line"},
-    //                     {"id":"top-2","type":"spline"}];
-    // $scope.datax={"id":"x"};
+      if (!$scope.chart) {
+        return;
+      }
+       
+      $scope.chart.unload({'ids': [cellId.toString()]});
+      
+    });
 
  }]);
 
-})(app, THREE);
+})(app);
 

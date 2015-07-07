@@ -33,7 +33,7 @@
       });
 
       scope.$watch("r.cellId", function(cellId){
-        if (scope.viewSlide.model == "catalog" && cellId != ""){
+        if (scope.viewSlide.model == "catalog" && cellId != undefined){
           var updatedCells = new Set([cellId,]);
           var toAdd = setOperations.complement(updatedCells,activeCells);
           toAdd.forEach(function(cellID){

@@ -7,10 +7,8 @@
     "font-awesome": ">=4.1.0",
     "lodash": "~2.4.1",
     "threejs": "*",
-    "chartjs": "~1.0.2",
     "c3": "~0.4.10",
-    "c3-angular": "~0.5.2",
-    "angular": "~1.4.2",
+  "angular": "~1.4.2",
     "angular-route": "~1.4.2"
   },
   "devDependencies": {},

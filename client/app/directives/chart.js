@@ -1,37 +1,39 @@
 'use strict';
 
-app.directive('chart', function () {
+app.directive('chart', ['$timeout', function ($timeout) {
+        var chartLinker = function (scope, element, attrs) {
 
-    return {
-      restrict: 'E',
-      template: '<canvas></canvas>',
-      scope: {
-        chartObject: "=value"
-      },
-      link: function (scope, element, attrs) {
-        var canvas  = element.find('canvas')[0];
-        var context = canvas.getContext('2d');
-        var chart;
-
-        var options = {
-          type:   attrs.type   || "Line",
-          width:  attrs.width  ,
-          height: attrs.height ,
-          responsive: true
+            // Trick to wait for all rendering of the DOM to be finished.
+            $timeout(function () {
+                var config = {};
+                config.bindto = "#" + scope.bindto;
+                config.data = {};
+                config.data.columns = {};
+                config.data.types = {};
+                config.data.axes = {};
+      
+                scope.chart = c3.generate(config);
+           
+                scope.$on('$destroy', function () {
+                    $timeout(function(){
+                        if (angular.isDefined(scope.chart)) {
+                            scope.chart = scope.chart.destroy();
+                        }
+                    }, 10000)
+                });
+            });
         };
-        canvas.width = options.width;
-        canvas.height = options.height;
-        chart = new Chart(context);
 
-        //Update when charts data changes
-        scope.$watch(function() { return scope.chartObject; }, function(value) {
-          if (!value) return;
-          
-          var chartType = options.type;
-          chart[chartType](scope.chartObject.data, scope.chartObject.options);
-          if (scope.chartInstance) scope.chartInstance.destroy();
-          scope.chartInstance = chart[chartType](scope.chartObject.data, scope.chartObject.options);
-        }, true);
-      }
-    }
-  });
+        return {
+            "restrict": "E",
+            "scope": {
+                "bindto": "@bindtoId",
+                "chart" : "="
+            },
+            "template": "<div><div id='{{bindto}}'></div><div ng-transclude></div></div>",
+            "replace": true,
+            "transclude": true,
+            "link": chartLinker
+        };
+    }])
+   

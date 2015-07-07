@@ -1,4 +1,4 @@
-var app = angular.module('cellPane', ['gridshore.c3js.chart','ngRoute']);
+var app = angular.module('cellPane', ['ngRoute']);
 
 //The actual routing is done in the uiController
 app.config(['$routeProvider', function($routeProvider) {

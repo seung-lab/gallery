@@ -24,6 +24,8 @@ app.service('CellService', ['$rootScope','Scene3DService', 'OctLODFactory','Came
     }
 
     $rootScope.$broadcast('visible');
+    $rootScope.$broadcast('cell-load', cellID);
+
   }
 
   this.removeCell = function (cellID) {
@@ -33,7 +35,7 @@ app.service('CellService', ['$rootScope','Scene3DService', 'OctLODFactory','Came
     delete $rootScope.visible[cellID];
 
     $rootScope.$broadcast('visible');
-
+    $rootScope.$broadcast('cell-unload', cellID);
   }
 
   this.updateCells = function() {
