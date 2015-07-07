@@ -3,24 +3,10 @@
 ( function (app) {
 app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$location', 'SettingsFactory', 'UtilService', 'KeyboardFactory', 'TransitionerFactory', 'LocaleFactory', '$timeout', 'ModalFactory', '$route',
   function($scope, $rootScope, $routeParams, $location, settings, util, keyboard, transitioner, locale, $timeout, modal, $route) {
-      function m(a, b, c) {
-          var d, e, g, i, j, k, l, m, n, o = [];
-      //     a.split('[').forEach(function(a) {
-      //         if (' !== a) {
-      //             for (d = a.split(']'), k = ', g = d[1].replace(/[\r\t\v\f\0\x0B]|^\n+|\s+$/g, ').split('\n'), i = 0, j = g.length; j > i; i += 2) {
-      //                 for (e = g[i + 1], e.length < g[i].length && (e += util.pad(g[i].length - e.length, ' ')), n = 0, l = /\S+/g; m = l.exec(g[i]);) k += e.substring(n, m.index) + '<span class='c'><span>' + (b !== c ? transposer.transpose(m[0], b, c) : m[0]) + '</span></span>', n = m.index;
-      //                     k += g[i + 1].substr(n) + '\n'
-      //             }
-      //             o.push({
-      //                 type: d[0].toLowerCase(),
-      //                 text: k
-      //             })
-      //         }
-      //     })
-           return o;
-      }
+
       var sets = $rootScope.sets;
       var cells = $rootScope.cells;
+
       $rootScope.cellSlide = {
           to: 'left'
       };
@@ -95,100 +81,134 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
 
       $scope.fullscreen = function() {
       
-        for (var i = 1 ; i < 100 ; ++i) 
-          $timeout(function(){$rootScope.$broadcast('fullscreen');},i*10);
+        for (var i = 1 ; i < 100 ; ++i) {
+          $timeout( 
+            function () { $rootScope.$broadcast('fullscreen'); } 
+            ,i*10);
+        }
   
+      };
+
+      function loadFrontpage () {
+
+        $location.path(sets.length ? 'sets/' : 'search/');
+
+      };
+
+
+      function loadView(current, previousSetId , previousView) {
+
+        if (['sets', 'catalog', 'search'].indexOf(current.params.view) == -1) {
+          loadFrontpage();
+          return;
+
+        }
+
+        if (previousSetId) {
+
+          $rootScope.viewSlide.to = 'left';
+          $rootScope.viewSlide.model = current.params.view;
+          return;
+
+        }
+        
+        if (current.params.view != previousView) {
+
+          $rootScope.viewSlide.to = 'right';
+          $rootScope.viewSlide.model = current.params.view;
+          return;
+
+        }
+
+
+      };
+
+      function loadSet(current, previousSetId) {
+
+        if (sets.get(current.params.setId) == -1) {
+
+          loadFrontpage();
+          return;
+
+        }
+        
+        if (current.params.setId != previousSetId) {
+
+          $rootScope.viewSlide.force = true;
+          $rootScope.viewSlide.to = 'left';
+          $rootScope.viewSlide.model = 'set';
+          return;
+
+        }
+
+
+      };
+
+      function loadCell(current ,previousSetId,  previousCellId) {
+
+        if (cells.get(current.params.cellId) === -1) {
+          $location.path(current.params.view + '/');
+          return;
+        }
+
+
+        if (current.params.cellId === previousCellId) {
+
+           transitioner.apply('cell-view', function() {
+            $rootScope.cellSlide.model = '';
+          }); 
+          return;
+
+        }
+
+        if (previousSetId === current.params.setId) {
+          $rootScope.cellSlide.to = 'left';
+          return;
+        }
+
+      
+        $rootScope.cellSlide.to = 'left'; 
+       
+                         
       };
 
       //This changes the views when the location changes
       $scope.$on('$routeChangeSuccess',
-       function($routeChangeSuccess, to, from) {
-          console.log('changing route to ');
-          console.log($route.current.params);
+        function($routeChangeSuccess, current, previous) {
 
-          if ('/' === $location.path()){
-            $location.path(sets.length ? 'sets/' : 'search/');
-            return;
-          }
-
-          var fromView, fromSetId, fromCellId;
-          if ( Object.keys(from.params).length ){
-            fromView = from.params.view;
-            fromSetId = from.params.setId;
-            fromCellId = from.params.cellId;
-          }
-
-          if (Object.keys(to.params).length) {
-            if (to.params.view) {
-                if (-1 == ['sets', 'catalog', 'search'].indexOf(to.params.view)){
-                  $location.path(sets.length ? 'sets/' : 'search/');
-                  return;
-                }
-
-                if (fromSetId) {
-                  $rootScope.viewSlide.to = 'right';
-                  $rootScope.viewSlide.model = to.params.view;
-                }
-                else if (to.params.view != fromView) {
-                  $rootScope.viewSlide.to = 'left';
-                  $rootScope.viewSlide.model = to.params.view;
-                }
-            }
-            
-            if (to.params.setId) {
-                var setIndex = sets.getIndex(to.params.setId);
-                if (!sets[setIndex]){
-                  $location.path(sets.length ? 'sets/' : 'search/');
-                  return;
-                }   
-                
-                if (to.params.setId != fromSetId) {
-                  $rootScope.viewSlide.force = true;
-                  $rootScope.viewSlide.to = 'left';
-                  $rootScope.viewSlide.model = 'set';
-                }
-            }
-            if (to.params.cellId) {
-              var cellIndex = cells.getIndex(to.params.cellId);
-              if (cells[cellIndex]){
-
-                var body = m(cells[cellIndex].body);
-
-                if (to.params.cellId !== fromCellId) {
-                  if (fromSetId === to.params.setId 
-                    //&& sets[to.params.setId].cells.indexOf(cellId) < sets[to.params.setId].cells.indexOf(fromCellId) 
-                    ) {
-                    $rootScope.cellSlide.to = 'left';
-                    $rootScope.cellSlide.model = body;
-                    return;
-                  }
-                  else {
-                    $rootScope.cellSlide.to = 'left'; 
-                    $rootScope.cellSlide.model = body;
-                    return; 
-                  }
-                } 
-                else {
-                  transitioner.apply('cell-view', function() {
-                    $rootScope.cellSlide.model = ''
-                  });
-                  return;
-                }   
-              }
-                        
-            //If we couldn't find the cell go back to the view
-            $location.path(to.params.view + '/');
-            return;
-          }
+          if (previous) {
+            var previousView = previous.params.view;
+            var previousSetId = previous.params.setId;
+            var previousCellId = previous.params.cellId;
           } 
+
+
+          if ('/' === $location.path() ) {
+            loadFrontpage();
+            return;
+          }
+
+          if (current.params.view) {
+            loadView(current ,previousSetId, previousView);
+          }
+          
+
+          if (current.params.setId) {
+            loadSet(current, previousSetId);
+          }
+
+
+          if (current.params.cellId) {
+            loadCell(current , previousSetId , previousCellId);
+          }
       });
 
-      keyboard.on(['left', 'k', 'up', 'pageup'], function() {
-          return $scope.$apply(function() {
-              $scope.prevcell()
-          }), !1
+      keyboard.on(['left', 'k', 'up', 'pageup'], function() { 
+          $scope.$apply( 
+              function() {  $scope.prevcell(); }
+          );
       });
-
+    
       keyboard.on('c', function() {
           return $scope.$apply(function() {
               settings.toggle('hideChords')

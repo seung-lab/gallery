@@ -4,8 +4,10 @@ var app = angular.module('cellPane', ['gridshore.c3js.chart','ngRoute']);
 app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.caseInsensitiveMatch = true;
     $routeProvider.when('/',{});
-    $routeProvider.when('/sets/:setId/:cellId',{});
+    $routeProvider.when('/set/:setId',{});
+    $routeProvider.when('/set/:setId/:cellId',{});
     $routeProvider.when('/:view/:cellId',{});
+    $routeProvider.when('/:view',{});
     $routeProvider.otherwise('/',{});
 }]);
 
@@ -54,7 +56,7 @@ app.run(['$rootScope', 'CollectionFactory', 'UtilService',  'KeyboardFactory', '
           }
       });
 
-       $rootScope.sets.run(function() {
+      $rootScope.sets.run(function() {
           $rootScope.cells.run(function() {
               $rootScope.$emit('ready')
           });
