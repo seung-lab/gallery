@@ -1,5 +1,6 @@
+'use strict';
 
-(function() { 
+(function(app, THREE) { 
 
 app.service('Coordinates3DService', ['Scene3DService' , function(SceneService){
 
@@ -11,26 +12,26 @@ app.service('Coordinates3DService', ['Scene3DService' , function(SceneService){
     params = params || {};
     var size = params.size !== undefined ? params.size:100;
     var scale = params.scale !== undefined ? params.scale:0.1;
-    var orientation = params.orientation !== undefined ? params.orientation:"x";
+    var orientation = params.orientation !== undefined ? params.orientation:'x';
     var grid = new THREE.Mesh(
         new THREE.PlaneGeometry(size, size, size * scale, size * scale),
         new THREE.MeshBasicMaterial({ color: 0x555555, wireframe: true }) 
         );
     // Yes, these are poorly labeled! It would be a mess to fix.
     // What's really going on here:
-    // "x" means "rotate 90 degrees around x", etc.
-    // So "x" really means "show a grid with a normal of Y"
-    //    "y" means "show a grid with a normal of X"
-    //    "z" means (logically enough) "show a grid with a normal of Z"
-    if (orientation === "x") {
+    // 'x' means 'rotate 90 degrees around x', etc.
+    // So 'x' really means 'show a grid with a normal of Y'
+    //    'y' means 'show a grid with a normal of X'
+    //    'z' means (logically enough) 'show a grid with a normal of Z'
+    if (orientation === 'x') {
         grid.rotation.x = - Math.PI / 2;
         grid.position.x = size/2;
         grid.position.z = size/2;
-    } else if (orientation === "y") {
+    } else if (orientation === 'y') {
         grid.rotation.y = - Math.PI / 2;
         grid.position.y = size/2;
         grid.position.z = size/2;
-    } else if (orientation === "z") {
+    } else if (orientation === 'z') {
         grid.rotation.z = - Math.PI / 2;
         grid.position.x = size/2;
         grid.position.y = size/2;
@@ -146,4 +147,4 @@ app.service('Coordinates3DService', ['Scene3DService' , function(SceneService){
 
 }]);
 
-})();
+})(app, THREE);

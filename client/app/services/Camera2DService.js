@@ -1,4 +1,7 @@
-( function () {
+'use strict';
+
+( function (app, THREE) {
+
 app.service('Camera2DService', ['TileService' , function (TileService) {
   
   var STATES = { NONE: -1, ROTATE: 0, ZOOM: 1, PAN: 2 };
@@ -29,9 +32,9 @@ app.service('Camera2DService', ['TileService' , function (TileService) {
   };
 
   var pan = function ( distance ) {
+
     _camera.position.add( distance );
-    var x = Math.round(_camera.position.x / 128);
-    var y = Math.round(_camera.position.y / 128);
+  
   };
 
   var onMouseDown = function( event ) {
@@ -59,7 +62,7 @@ app.service('Camera2DService', ['TileService' , function (TileService) {
     if ( _state === STATES.ZOOM ) {
       zoomEnd.set( event.clientX, event.clientY );
       zoomDelta.subVectors( zoomEnd, zoomStart );
-      zoomDelta > 0 ? camera.position.z += 1 : camera.position.z -= 1;
+      zoomDelta > 0 ? _camera.position.z += 1 : _camera.position.z -= 1;
       zoomStart.copy( zoomEnd );
 
     } else if ( _state === STATES.PAN ) {
@@ -89,7 +92,7 @@ app.service('Camera2DService', ['TileService' , function (TileService) {
       delta = - event.detail;
     }
 
-    delta > 0 ? camera.position.z += 1 : camera.position.z -= 1;
+    delta > 0 ? _camera.position.z += 1 : _camera.position.z -= 1;
     
     TileService.viewportChanged(_camera.position, _viewPort, _scene);
   };
@@ -116,4 +119,5 @@ app.service('Camera2DService', ['TileService' , function (TileService) {
 
   this.prototype = Object.create( THREE.EventDispatcher.prototype );
 }]);
-})();
+
+})(app, THREE);

@@ -26,7 +26,7 @@ app.service('CellService', ['$rootScope','Scene3DService', 'OctLODFactory','Came
     $rootScope.$broadcast('visible');
     $rootScope.$broadcast('cell-load', cellID);
 
-  }
+  };
 
   this.removeCell = function (cellID) {
 
@@ -36,13 +36,14 @@ app.service('CellService', ['$rootScope','Scene3DService', 'OctLODFactory','Came
 
     $rootScope.$broadcast('visible');
     $rootScope.$broadcast('cell-unload', cellID);
-  }
+  };
 
   this.updateCells = function() {
     for( var cellID in $rootScope.visible) {
       $rootScope.visible[cellID].update( Camera.perspectiveCam );
     }
-  }
+  };
+  
 }]);
 
 })(app);

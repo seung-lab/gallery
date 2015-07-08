@@ -1,16 +1,16 @@
 'use strict';
 
 ( function (){
-app.factory("TransitionerFactory", ["$rootScope", "$document", "UtilService",
+app.factory('TransitionerFactory', ['$rootScope', '$document', 'UtilService',
   function(a, b, c) {
     function d() {
-      var a, c = b[0].createElement("dummy"),
+      var a, c = b[0].createElement('dummy'),
       d = {
-        transition: "transitionend",
-        OTransition: "oTransitionEnd",
-        MSTransition: "msTransitionEnd",
-        MozTransition: "transitionend",
-        WebkitTransition: "webkitTransitionEnd"
+        transition: 'transitionend',
+        OTransition: 'oTransitionEnd',
+        MSTransition: 'msTransitionEnd',
+        MozTransition: 'transitionend',
+        WebkitTransition: 'webkitTransitionEnd'
       };
       for (a in d)
         if (void 0 !== c.style[a]) return d[a]

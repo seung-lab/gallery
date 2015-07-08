@@ -1,36 +1,36 @@
 'use strict';
 
 (function (){
-app.factory("KeyboardFactory", ["$document", "$timeout",
+app.factory('KeyboardFactory', ['$document', '$timeout',
   function($document, $timeout) {
 
   var supraKeys = {
-    "~": "`",
-    "!": "1",
-    "@": "2",
-    "#": "3",
-    "$": "4",
-    "%": "5",
-    "^": "6",
-    "&": "7",
-    "*": "8",
-    "(": "9",
-    ")": "0",
-    "_": "-",
-    "+": "=",
-    ":": ";",
-    '"': "'",
-    "<": ",",
-    ">": ".",
-    "?": "/",
-    "|": "\\"
+    '~': '`',
+    '!': '1',
+    '@': '2',
+    '#': '3',
+    '$': '4',
+    '%': '5',
+    '^': '6',
+    '&': '7',
+    '*': '8',
+    '(': '9',
+    ')': '0',
+    '_': '-',
+    '+': '=',
+    ':': ';',
+    '\'': '\'',
+    '<': ',',
+    '>': '.',
+    '?': '/',
+    '|': '\\'
     };
 
     var ascii = {
     backspace: 8,
     tab: 9,
     enter: 13,
-    "return": 13,
+    'return': 13,
     shift: 16,
     ctrl: 17,
     control: 17,
@@ -51,7 +51,7 @@ app.factory("KeyboardFactory", ["$document", "$timeout",
     ins: 45,
     insert: 45,
     del: 46,
-    "delete": 46,
+    'delete': 46,
     0: 48,
     1: 49,
     2: 50,
@@ -90,10 +90,10 @@ app.factory("KeyboardFactory", ["$document", "$timeout",
     z: 90,
     meta: 91,
     command: 91,
-    "super": 91,
+    'super': 91,
     windows: 91,
-    "*": 106,
-    "+": 107,
+    '*': 106,
+    '+': 107,
     f1: 112,
     f2: 113,
     f3: 114,
@@ -106,22 +106,22 @@ app.factory("KeyboardFactory", ["$document", "$timeout",
     f10: 121,
     f11: 122,
     f12: 123,
-    ";": 186,
-    "=": 187,
-    ",": 188,
-    "-": 189,
-    ".": 190,
-    "/": 191,
-    "`": 192,
-    "[": 219,
-    "\\": 220,
-    "]": 221,
-    "'": 222
+    ';': 186,
+    '=': 187,
+    ',': 188,
+    '-': 189,
+    '.': 190,
+    '/': 191,
+    '`': 192,
+    '[': 219,
+    '\\': 220,
+    ']': 221,
+    '\'': 222
   };
 
 
-  $document.bind("keydown", process);
-  $document.bind("keyup", process);
+  $document.bind('keydown', process);
+  $document.bind('keyup', process);
 
   var f;
   var i = {}
@@ -145,7 +145,7 @@ app.factory("KeyboardFactory", ["$document", "$timeout",
     if (109 == key) {key = 189;}
     if (111 == key) {key = 191;}
 
-    if ("keyup" == eventType){
+    if ('keyup' == eventType){
       e = j.indexOf(key);
       if(1 !== e){
         j.splice(e, 1)
@@ -155,34 +155,34 @@ app.factory("KeyboardFactory", ["$document", "$timeout",
       }
     }
 
-    if ("INPUT" == target.tagName 
-      || "SELECT" == target.tagName 
-      || "TEXTAREA" == target.tagName 
+    if ('INPUT' == target.tagName 
+      || 'SELECT' == target.tagName 
+      || 'TEXTAREA' == target.tagName 
       || target.contentEditable 
-      && "true" == target.contentEditable) {
+      && 'true' == target.contentEditable) {
 
       if (27 != key) return;
       
       target.blur()
     }
 
-    if ("keydown" == eventType) {
+    if ('keydown' == eventType) {
       if (-1 !== j.indexOf(key)) return;
       j.push(key), f && $timeout.cancel(f), f = $timeout(function() {
         j.length = 0
       }, 1e3, !1)
     }
-    d = i[eventType + ":" + j.join("+")], d && d.forEach(function(b) {
+    d = i[eventType + ':' + j.join('+')], d && d.forEach(function(b) {
       b(event) === !1 && (event.preventDefault && event.preventDefault(), event.stopPropagation && event.stopPropagation(), event.returnValue = !1, event.cancelBubble = !0)
     })
   }
 
   function d(a, b) {
     var c = [],
-    d = "+" === a ? ["+"] : a.split("+");
+    d = '+' === a ? ['+'] : a.split('+');
     return d.forEach(function(a) {
       supraKeys[a] && (c.push(16), a = supraKeys[a]), ascii[a] && c.push(ascii[a])
-    }), b + ":" + c.join("+")
+    }), b + ':' + c.join('+')
   }
 
   function e(a, b) {
@@ -198,9 +198,9 @@ app.factory("KeyboardFactory", ["$document", "$timeout",
       b = a[0],
       c = a[2],
       d = {};
-      return "string" == typeof b ? d[b] = a[1] : Array.isArray(b) ? b.forEach(function(b) {
+      return 'string' == typeof b ? d[b] = a[1] : Array.isArray(b) ? b.forEach(function(b) {
         d[b] = a[1]
-      }) : (d = a[0], c = a[1]), e(d, c || "keydown"), this
+      }) : (d = a[0], c = a[1]), e(d, c || 'keydown'), this
     },
     off: function(a, b) {
       var c = d(a, b);
