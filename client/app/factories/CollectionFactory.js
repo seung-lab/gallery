@@ -76,6 +76,8 @@ app.factory("CollectionFactory", ["$http", "UtilService",
       }
      
       if( callback ) { callback.call(this, element); }
+
+      return element.id;
        
     };
    

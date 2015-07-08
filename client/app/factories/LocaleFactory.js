@@ -108,6 +108,7 @@ app.factory('LocaleFactory', function() {
     id:'Cell Id',
     editCell: 'Edit Cell',
     newCell: 'New Cell',
+    newSet: 'New Set',
     addToSet: 'Add to Set',
     renameSet: 'Rename Set',
     shareSet: 'Share Set',

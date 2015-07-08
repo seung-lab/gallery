@@ -12,8 +12,8 @@
           <ul class="list">
               <li>
                   <div class="group">
-                      <a sp-tap="editcell(true)" class="btn icon-copy flex"></a>
-                      <a sp-tap="modal('components/confirm.html')" class="btn danger icon-bin flex"></a>
+                    <a sp-tap="modal('components/add.html')" class="btn icon-copy flex"></a>
+                    <a sp-tap="modal('components/confirm.html')" class="btn danger icon-bin flex"></a>
                   </div>
               </li>
               <li>
@@ -52,8 +52,12 @@
   </aside>
   <section id="nav" class="fill w" ng-class={open:menu}>
       <header>
-          <div class=b sp-tap="toggleState('menu')" sp-kbd="'m'" ng-class={on:menu}><i class=icon-more></i></div>
-          <div class=b sp-tap="modal('components/new.html')" sp-kbd="'n'" ng-class="{on:modal.isOn('new')}"><i class="icon-plus"></i></div>
+          <div class="b" sp-tap="toggleState('menu')" sp-kbd="'m'" ng-class={on:menu}>
+            <i class="icon-more"></i>
+          </div>
+          <div class="b" sp-tap="new()" sp-kbd="'n'" ng-class="{on:modal.isOn('new')}">
+            <i class="icon-plus"></i>
+          </div>
           <h1 sp-tap="p('sets/')" sp-kbd="'s'">
           <b>Cell</b>Gallery</h1>
           </header>

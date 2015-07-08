@@ -25,31 +25,24 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
       $scope.s = settings.settings;
       $scope.pad = util.pad;
 
-      $scope.nextcell = function() {
-          var a, b, e = $routeParams.setId,
-          f = $routeParams.cellId;
-          e && f && (a = sets[e].children, a.forEach(function(a, c) {
-              a.id == f && (b = c)
-          }), b < a.length - 1 ? b++ : b = 0, $location.path('/set/' + e + '/' + a[b].id))
-      };
-      $scope.prevcell = function() {
-          var a, b, e = $routeParams.setId,
-          f = $routeParams.cellId;
-          e && f && (a = sets[e].children, a.forEach(function(a, c) {
-              a.id == f && (b = c)
-          }), b > 0 ? b-- : b = a.length - 1, $location.path('/set/' + e + '/' + a[b].id))
-      };
       $scope.trashSet = function() {
           $location.path('/');
           sets.remove($routeParams.setId);
       };
+
       $scope.duplicateSet = function() {
-          var set = sets.get($routeParams.setId);
-          $location.path('set/' + sets.save({
-              name: set.name + ' (' + locale._.copy + ')',
-              cells: set.children.slice(0)
-          }) + '/')
+
+        var set = sets.get($routeParams.setId);
+
+        var newSetId = sets.save({ name: set.name + ' (' + locale._.copy + ')',
+                    children: set.children.slice(0),
+                    children_are_cells: set.children_are_cells,
+        });
+        
+        $location.path('set/' +  newSetId );
+
       };
+
       $scope.rmcell = function(childIndex) {
 
           var set = sets.get($routeParams.setId);
@@ -88,6 +81,18 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
         }
   
       };
+
+
+      $scope.new = function () {
+
+        if (scope.r.view == "sets"){
+          $scope.modal('components/new-set.html');
+        }
+        else {
+          $scope.modal('components/new-cell.html');
+        }
+      };
+
 
       function loadFrontpage () {
 
@@ -203,17 +208,6 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
           }
       });
 
-      keyboard.on(['left', 'k', 'up', 'pageup'], function() { 
-          $scope.$apply( 
-              function() {  $scope.prevcell(); }
-          );
-      });
-    
-      keyboard.on('c', function() {
-          return $scope.$apply(function() {
-              settings.toggle('hideChords')
-          }), !1
-      });
 
       keyboard.on('=', function() {
           var b = settings.settings.fontSize || 0;

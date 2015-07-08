@@ -13,6 +13,11 @@ app.controller('StratificationController', ['$rootScope','$scope','$timeout',
 
 
       var cell = $scope.cells.get(cellId);
+      if (cell === -1 ){
+        console.log('cell doesn\'t exist');
+        return;
+      }
+
       var column =  cell.stratification.slice();
       column.unshift( cell.id.toString() );
 
