@@ -1,6 +1,7 @@
 'use strict';
 
-( function () {
+( function (app) {
+
 app.service('UtilService', ['$window',
   function($window) {
 
@@ -17,8 +18,8 @@ app.service('UtilService', ['$window',
         
       var length = array.length;
 
-      util.toArray(element).forEach(function(element_to_inset) {
-        array.push(element_to_inset);
+      util.toArray(element).forEach(function(elementToInsert) {
+        array.push(elementToInsert);
       });
 
       return array.length - length;
@@ -39,16 +40,17 @@ app.service('UtilService', ['$window',
     };
 
     util.pad = function(a, b) {
-        return Array(a + 1).join(b || ' ')
+        return new Array(a + 1).join(b || ' ');
     };
 
     util.buildUrl = function(url, params) {
-        if (!params) return url;
+        if (!params) {return url;}
         var f = [];
         angular.forEach(params, function(c, e) { 
             c = util.toJson(c);
             f.push(encodeURIComponent(e) + '=' + encodeURIComponent(c));
-        })
+        });
+
         return url + (-1 === url.indexOf('?') ? '?' : '&') + f.join('&');
     };
 
@@ -63,25 +65,25 @@ app.service('UtilService', ['$window',
 
     util.randomHex = function(a) {
         for (var b = ''; a > 0;) {
-          b += Math.floor(Math.random() * Math.pow(10, 16)).toString(16).substr(0, 8 > a ? a : 8)
+          b += Math.floor(Math.random() * Math.pow(10, 16)).toString(16).substr(0, 8 > a ? a : 8);
           a -= 8;
         }
       return b;
     };
 
     util.generateId = function() {
-        return Math.floor(Date.now() / 1e3).toString(16) + util.randomHex(16)
+        return Math.floor(Date.now() / 1e3).toString(16) + util.randomHex(16);
     };
 
     util.throttle = function(a, b) {
         var c = null;
         return function() {
-            clearTimeout(c)
+            clearTimeout(c);
             c = setTimeout(function() {
-                a.apply(this, arguments);s
+                a.apply(this, arguments);
                 c = null;
-            }, b)
-        }
+            }, b);
+        };
     };
 
     util.keys = Object.keys;
@@ -91,4 +93,4 @@ app.service('UtilService', ['$window',
     });
   }
 ]);
-})();
+})(app);
