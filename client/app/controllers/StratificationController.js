@@ -4,6 +4,7 @@
 app.controller('StratificationController', ['$rootScope','$scope','$timeout',
   function($rootScope, $scope, $timeout) {
 
+
     function loadCell( cellId ) {
 
       if (!$scope.chart) {
@@ -35,6 +36,10 @@ app.controller('StratificationController', ['$rootScope','$scope','$timeout',
     }
 
     $scope.$on('cell-load', function(event, cellId) {
+
+      if (!$scope.sets.get($scope.r.setId).children_are_cells){
+        return;
+      }
 
       if (!cellId){
         return;

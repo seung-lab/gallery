@@ -76,7 +76,7 @@
         renderer = new THREE.WebGLRenderer({ antialias: true });
         onResize();
 
-        renderer.setClearColor( '#5Caadb', 1.0 );
+        renderer.setClearColor( '#252525', 1.0 );
 
         //Necesary for the transparent spheres
         renderer.sortObjects = true;
