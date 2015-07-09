@@ -8,22 +8,28 @@ app.controller("AddController", ["$scope", "$routeParams", "$rootScope",
    
     $scope.addNew = function(name) {
 
-      if (!$routeParams.cellId){
+      if (!$routeParams.cellId) {  //Create empty set
 
-        //Create empty set
-        return sets.save({
+        var id = sets.save({
           name: name
         });
 
+        console.log(sets.get(0).children);
+
+        return id;
       }
 
       var cellId = parseInt($routeParams.cellId);
 
-      return sets.save({
+      var id = sets.save({
         name: name,
         children_are_cells: true,
         children: [ cellId ]
       });
+
+      sets.get(0).children.push(id);
+
+      return id;  
     };
 
     $scope.addExisting = function(setId) {

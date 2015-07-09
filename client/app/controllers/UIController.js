@@ -82,6 +82,48 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
   
       };
 
+      $scope.children = function () {
+
+        function buildChildren( parentSet ) {
+          var children = sets.get(parentSet).children;
+          var setChildren = [];
+          for ( var setIdx = 0 ; setIdx < children.length ; ++setIdx) { 
+
+            var setId = children[setIdx];
+            
+            var set = sets.get(setId);
+            if ( set == -1 ){
+              continue;
+            }
+
+            if (parentSet === 0) {
+              set.path = 'set/'+ setId;
+              $scope.back = 'sets/'; 
+            } else {
+              set.path = 'set/' + parentSet + '/set/' + setId;
+              $scope.back = 'set/' + parentSet;
+            }
+
+
+            setChildren.push(set);
+          }
+
+          return setChildren;
+
+        };
+
+        var currentSetId = scope.r.setId;
+
+        if (currentSetId === undefined) {
+          return buildChildren(0); // Root Set
+        } 
+        else {
+          return buildChildren( currentSetId);
+        }
+
+      }
+
+
 
       $scope.new = function () {
 
@@ -121,6 +163,7 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
 
           $rootScope.viewSlide.to = 'right';
           $rootScope.viewSlide.model = current.params.view;
+          $rootScope.viewSlide.force = true;
           return;
 
         }
@@ -130,8 +173,9 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
 
       function loadSet(current, previousSetId) {
 
-        if (sets.get(current.params.setId) == -1) {
+        var set = sets.get(current.params.setId);
 
+        if (set == -1) {
           loadFrontpage();
           return;
 
@@ -141,9 +185,22 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
 
           $rootScope.viewSlide.force = true;
           $rootScope.viewSlide.to = 'left';
-          $rootScope.viewSlide.model = 'set';
-          return;
 
+        }
+
+        if (set.children_are_cells) {
+          $rootScope.viewSlide.model = 'set';
+        } 
+        else
+        {
+          if ( previousSetId == undefined ){
+            $rootScope.viewSlide.to = 'left';    
+          }
+          else {
+            $rootScope.viewSlide.to = 'right';    
+          }
+
+          $rootScope.viewSlide.model = 'sets';
         }
 
 
@@ -206,6 +263,8 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
           if (current.params.cellId) {
             loadCell(current , previousSetId , previousCellId);
           }
+
+
       });
 
 

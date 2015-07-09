@@ -6,6 +6,8 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/',{});
     $routeProvider.when('/set/:setId',{});
     $routeProvider.when('/set/:setId/:cellId',{});
+    $routeProvider.when('/set/:setId_parent/set/:setId',{});
+    $routeProvider.when('/set/:setId_parent/set/:setId/:cellId',{});
     $routeProvider.when('/:view/:cellId',{});
     $routeProvider.when('/:view',{});
     $routeProvider.otherwise('/',{});

@@ -2,37 +2,74 @@
 
 app.directive("spSlide", ["UtilService", "TransitionerFactory", function(util, transitioner) {
   return {
-    transclude: "element", //TODO check error Multiple directives [spSlide, ngInclude] asking for transclusion on: 
+    transclude: "element",  
     priority: 1e3,
     terminal: true,
     compile: function(element, attributes, transclude) {
 
-      return function(a, e) {
+      return function(telement, tattribute) {
+  
+       function listener ( viewSlide ){
 
-        var f, g, h;
-        var i = attributes.spSlide;
-        var j = e.parent();
-        j.addClass("t3d");
-        a.$watch(function(a) {
-          var c;
-          var k = a.$eval(i);
-          !k.model && h && (g.remove(), f.$destroy(), g = f = h = null), k.model && (k.model != h || k.force) && (k.force = !1, c = a.$new(), c.model = k.model , transclude(c, function(a) {
-            if (e.after(a), g) {
-              var d = g,
-              i = f;
-              "left" == k.to ? (a.addClass("tr"), j.addClass("transition tl")) : (a.addClass("tl"), j.addClass("transition tr")), g.bind("$destroy", function() {
-                j.removeClass("transition tl tr"), a.removeClass("tr tl")
-              });
-              transitioner.apply(j[0].id, function() {
-                d.remove(), i.$destroy()
-              })
-            }
-            g = a;
-            f = c;
-            h = k.model;
-          }))
-        })
-      }
+          if(!viewSlide.model){
+            oldViewElement.remove();
+            oldInheritedScope.$destroy();
+            oldViewElement = oldInheritedScope = oldModel = null;
+            return;
+          }  
+
+          if  ( viewSlide.model != oldModel || viewSlide.force ) {
+
+            viewSlide.force = false;
+
+            var inheritedScope = scope.$new();
+            inheritedScope.model = viewSlide.model;
+
+            transclude(inheritedScope, function(viewElement) {
+              
+              tattribute.after(viewElement);
+              
+              if (oldViewElement) {
+            
+                if ("left" == viewSlide.to ) {
+                  viewElement.addClass("tr");
+                  parent.addClass("transition tl");
+                }
+                else {
+                  viewElement.addClass("tl"); 
+                  parent.addClass("transition tr");
+                }
+
+
+                oldViewElement.bind("$destroy", function() {
+                  parent.removeClass("transition tl tr");
+                  viewElement.removeClass("tr tl");
+                });
+
+                var d = oldViewElement;
+                var i = oldInheritedScope;
+                transitioner.apply(parent[0].id, function() {
+                  d.remove();
+                  i.$destroy();
+                })
+              }
+
+              oldViewElement = viewElement;
+              oldInheritedScope = inheritedScope;
+              oldModel = viewSlide.model;
+            });
+          }        
+        }
+
+
+
+        var oldInheritedScope, oldViewElement, oldModel;
+        var spSlide = attributes.spSlide;
+        var parent = tattribute.parent();
+        parent.addClass("t3d");
+
+        telement.$watch( function(scope){ return scope.viewSlide; } , listener , true);
+      };
     }
   }
 }]);

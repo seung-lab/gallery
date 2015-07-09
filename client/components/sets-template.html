@@ -5,8 +5,14 @@
         <p>{{_.creatingSets}}</p>
     </div>
 </div>
+<header sp-if="r.setId != undefined">
+  <button sp-tap="p('sets/')" class="btn simple icon-left"></button>
+  <h2 class=trim>{{sets.get(r.setId).name}}</h2>
+</header>
 <ul sp-sortable="" onsort="sortSet" class="nav">
-    <li ng-repeat="set in sets" sp-tap="p('set/'+set.id+'/')" class="icon-right set">
-        <h3 class="trim">{{set.name}}</h3>
-    </li>
+   <div ng-init="children = children()">
+      <li ng-repeat="set in children" sp-tap="p(set.path)" class="icon-right set">
+          <h3 class="trim">{{set.name}}</h3>
+      </li>
+    </div>
 </ul>

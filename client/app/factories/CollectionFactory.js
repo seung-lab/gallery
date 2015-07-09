@@ -94,8 +94,13 @@ app.factory("CollectionFactory", ["$http", "UtilService",
     var get = function(id) {
 
       var index = this.getIndex(id);
-      
-      return this[index];
+
+      if (index === -1 ){
+        return -1;
+      }
+      else {
+        return this[index];
+      }
     }
 
     return function(argObject) {

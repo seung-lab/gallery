@@ -14,26 +14,37 @@ var cells_import = require('../../import/cells.json')
 sets.find({}).remove(function() {
   sets.create(
     {
+      name: "root",
+      id: 0,
+      children_are_cells: false,
+      children: [1,2,5]
+    },
+    {
       name: "Amacrine Cells",
-      id: "a",
+      id: 1,
       children_are_cells: true,
       children: [900,903,915]
     }, {
       name: "Bipolar Cells",
-      id: "b",
+      id: 2,
       children_are_cells: true,
       children: [903,915]
     }, {
       name: "Ganglion Cells",
-      id: "c",
+      id: 3,
       children_are_cells: true,
       children: [900, 915],
       
     }, {
       name: "Horizontal Cells",
-      id: "d",
+      id: 4,
       children_are_cells: true,
       children: [903, 915],     
+    }, {
+      name: "Superset",
+      id: 5,
+      children_are_cells: false,
+      children: [2,4],     
     });
 });
 
