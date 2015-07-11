@@ -20,24 +20,25 @@ app.controller('StratificationController', ['$rootScope','$scope','$timeout',
       }
 
       var column =  cell.stratification.slice();
-      column.unshift( cell.id.toString() );
+      var  name = cell.id.toString();
+      column.unshift( name  );
 
       var data = {
-
         columns : [column],
-
         type: 'spline',
-
-        color: cell.color 
-
       }
+
+      data['colors'] = {};
+      data['colors'][name] = cell.color;
+
+
       $scope.chart.load(data);
 
     }
 
     $scope.$on('cell-load', function(event, cellId) {
 
-      if (!$scope.sets.get($scope.r.setId).children_are_cells){
+      if (!$scope.sets.get($scope.r.setId).children_are_cells && $scope.r.view != 'catalog') {
         return;
       }
 

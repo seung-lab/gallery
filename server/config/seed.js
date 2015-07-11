@@ -17,35 +17,49 @@ sets.find({}).remove(function() {
       name: "root",
       id: 0,
       children_are_cells: false,
-      children: [1,2,5]
+      children: [1,2,3,4]
     },
     {
       name: "Amacrine Cells",
       id: 1,
-      children_are_cells: true,
-      children: [900,903,915]
+      children_are_cells: false,
+      children: [6,7]
     }, {
       name: "Bipolar Cells",
       id: 2,
-      children_are_cells: true,
-      children: [903,915]
+      children_are_cells: false,
+      children: [5]
     }, {
       name: "Ganglion Cells",
       id: 3,
       children_are_cells: true,
-      children: [900, 915],
+      children: [1033, 1034, 1003],
       
     }, {
       name: "Horizontal Cells",
       id: 4,
       children_are_cells: true,
-      children: [903, 915],     
+      children: [],     
     }, {
-      name: "Superset",
+      name: "BC2",
       id: 5,
-      children_are_cells: false,
-      children: [2,4],     
-    });
+      children_are_cells: true,
+      children: [487,488,489,490,491,492,493,494],     
+    }, {
+      name: "mfAC",
+      id: 6,
+      children_are_cells: true,
+      children: [785,787],     
+    }, {
+      name: "wfAC",
+      id: 6,
+      children_are_cells: true,
+      children: [902],     
+    },
+     function() {
+      console.log('finished populating sets');
+    }
+  );
 });
 
 user.find({}).remove(function() {

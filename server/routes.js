@@ -9,9 +9,11 @@ var errors = require('./components/errors');
 module.exports = function(app) {
 
   // Insert routes below
+  app.use('/api/cells',require('./api/cells'));
+  app.use('/api/mesh', require('./api/mesh'));
   app.use('/api/sets', require('./api/sets'));
   app.use('/api/user', require('./api/user'));
-  app.use('/api/cells', require('./api/cells'));
+
 
 
   app.use('/auth', require('./auth'));

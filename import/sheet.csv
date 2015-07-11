@@ -609,7 +609,6 @@ segID,cellID in DB,seedID,done by,cell name,soma,class,sublayer,on/off,type,CtN 
 60036,-,-,O,-,INL,BC,-,ON,RBC,-,-,
 60034,-,-,O,-,INL,BC,-,ON,-,-,-,"BC5?, not in matt's list. not in patch"
 60193,-,-,O,-,INL,??,-,OFF,-,-,-,less likely BC. BC5? a little thicker stratification
-99999,969,823709,E,-,-,BV,-,-,-,-,-,blood vessel
 ,,,,,,,,,,,,
 70144,-,-,O,-,-,-,,,-,-,-,"SAC like, no cellbody"
 70143,-,-,O,-,-,-,,,-,-,-,"SAC like, no cellbody"

@@ -22,7 +22,7 @@ exports.index = function(req, res) {
 
 // Get a single cells
 exports.show = function(req, res) {
-  cells.findById(req.params.id, function (err, cells) {
+  cells.findById({id: req.params.id}, function (err, cells) {
     if(err) { return handleError(res, err); }
     if(!cells) { return res.send(404); }
     return res.json(cells);

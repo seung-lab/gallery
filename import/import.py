@@ -4,6 +4,20 @@ import re
 import pprint
 import scipy.io
 import json
+from random import randint
+
+def rgb_to_hex(rgb):
+    return '#%02x%02x%02x' % rgb
+
+def randColor ( ):
+
+	mix = { "red": 255, "blue": 255, "green": 255 }
+
+	red = (randint(0,255) + mix['red']) / 2
+	blue = (randint(0,255) + mix['blue']) / 2
+	green = (randint(0,255) + mix['green']) / 2
+
+	return rgb_to_hex((red,green,blue));
 
 
 def load_mat():
@@ -51,11 +65,13 @@ def load_spreadsheet():
 		
 		cell_ids = re.findall(r"(\d+)", cellID)
 		cell_ids = map(int, cell_ids)
-		if len (cell_ids) == 0 :
+		if segment_id == '' :
 			continue
+		
+		segment_id = int(segment_id)
 
 		if name == '-':
-			name = 'Cell #' + str(cell_ids[0])
+			name = 'Cell # Unkown' 
 		
 		try:
 			stratification = strat_profiles[int(segment_id)]
@@ -65,12 +81,13 @@ def load_spreadsheet():
 
 		cell = {
 			"name": name,
-			"id": cell_ids[0],
+			"segment": segment_id,
+			"id": row_idx,
 			"mesh_id": cell_ids,
 			"description": "cell type "+ cell_type,
 			"stratification": stratification,
 			"copyright": " ",
-      "color": '#00c5ff'
+      "color": randColor()
 		}
 
 		table.append(cell)
@@ -82,3 +99,4 @@ def load_spreadsheet():
 with open('cells.json', 'w') as outfile:
 	table = load_spreadsheet()
 	json.dump(table, outfile,sort_keys = True, indent = 4, ensure_ascii=False)
+

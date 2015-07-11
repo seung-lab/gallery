@@ -3,11 +3,26 @@
 // creates a tube that follows a collection of 3d points.
 ( function (app) { 
 
-app.service('CellService', ['$rootScope','Scene3DService', 'OctLODFactory','Camera3DService',
- function ($rootScope, Scene, OctLOD, Camera) {
+app.service('CellService', ['$rootScope','Scene3DService', 'OctLODFactory', 'ctmFactory' ,'Camera3DService',
+ function ($rootScope, Scene, OctLOD, ctm, Camera) {
 
   $rootScope.visible = {};
   $rootScope.invisible = {};
+  var fromRTM = false;
+
+
+  function createCell ( cellID ) {
+
+
+    if ( fromRTM ){
+      $rootScope.visible[cellID] = new OctLOD(cellID, 8 , 0, 0 , 0);
+
+    }
+    else {
+      $rootScope.visible[cellID] = new ctm(cellID);
+    }
+
+  }
 
   this.addCell = function (cellID) {
 
@@ -20,7 +35,7 @@ app.service('CellService', ['$rootScope','Scene3DService', 'OctLODFactory','Came
       delete $rootScope.invisible[cellID];
     } 
     else {
-      $rootScope.visible[cellID] = new OctLOD(cellID, 8 , 0, 0 , 0);
+      createCell(cellID);
     }
 
     $rootScope.$broadcast('visible');
@@ -39,6 +54,10 @@ app.service('CellService', ['$rootScope','Scene3DService', 'OctLODFactory','Came
   };
 
   this.updateCells = function() {
+    if (!fromRTM) {
+      return;
+    }
+
     for( var cellID in $rootScope.visible) {
       $rootScope.visible[cellID].update( Camera.perspectiveCam );
     }

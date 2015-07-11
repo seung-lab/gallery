@@ -5,8 +5,7 @@ app.factory("OctLODFactory", ['$rootScope','Scene3DService', '$http',
   function ($rootScope ,SceneService, $http) {
 
   var OctLOD = function (cellID, mip , x, y, z) {
-    var index = $rootScope.cells.getIndex(cellID);
-    this.cell = $rootScope.cells[index];
+    this.cell = $rootScope.cells.get(cellID);
 
     THREE.Object3D.call( this );
 
@@ -30,7 +29,7 @@ app.factory("OctLODFactory", ['$rootScope','Scene3DService', '$http',
     this.state = 'loading';
 
     var scope = this;
-    this.getOverviewMesh(cellID, mip , x, y, z, function(mesh) {
+    this.getOverviewMesh(function(mesh) {
       if(!mesh) {
         scope.state = 'null';
         return;} //posibly destroy object if there is no mesh
@@ -130,13 +129,13 @@ app.factory("OctLODFactory", ['$rootScope','Scene3DService', '$http',
     });  
   };
 
-  OctLOD.prototype.getOverviewMesh  = function (cellID, mip , x, y, z, callback) {
+  OctLOD.prototype.getOverviewMesh  = function (callback) {
 
-    var cell_id = cellID * 10  + 1;
+    var cell_id = this.name * 10  + 1;
     var req = {
         responseType: 'arraybuffer',
         method: 'GET',
-        url: 'http://data.eyewire.org/cell/'+cell_id+'/chunk/'+mip+'/'+x+'/'+y+'/'+z+'/mesh'
+        url: 'http://data.eyewire.org/cell/'+cell_id+'/chunk/'+this.mip+'/'+this.x+'/'+this.y+'/'+this.z+'/mesh'
     };
 
     var c = this;

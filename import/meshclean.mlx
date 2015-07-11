@@ -18,4 +18,19 @@
   <Param type="RichBool" value="true" name="AutoClean"/>
   <Param type="RichBool" value="false" name="Selected"/>
  </filter>
+<!--   <filter name="Ambient Occlusion - Per Vertex">
+  <Param type="RichFloat" value="0" name="dirBias"/>
+  <Param type="RichInt" value="256" name="reqViews"/>
+  <Param x="0" y="1" z="0" type="RichPoint3f" name="coneDir"/>
+  <Param type="RichFloat" value="30" name="coneAngle"/>
+  <Param type="RichBool" value="true" name="useGPU"/>
+  <Param type="RichBool" value="true" name="useVBO"/>
+  <Param type="RichInt" value="512" name="depthTexSize"/>
+ </filter>
+ <filter name="Select Faces by Vertex Quality">
+  <Param type="RichDynamicFloat" value="0" min="-inf" name="minQ" max="1.31634e+36"/>
+  <Param type="RichDynamicFloat" value="0.001" min="-inf" name="maxQ" max="1.31634e+36"/>
+  <Param type="RichBool" value="true" name="Inclusive"/>
+ </filter>
+ <filter name="Delete Selected Faces and Vertices"/> -->
 </FilterScript>

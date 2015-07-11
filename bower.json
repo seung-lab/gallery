@@ -8,8 +8,9 @@
     "lodash": "~2.4.1",
     "threejs": "*",
     "c3": "~0.4.10",
-  "angular": "~1.4.2",
-    "angular-route": "~1.4.2"
+    "angular": "~1.4.2",
+    "angular-route": "~1.4.2",
+    "js-openctm": "*"
   },
   "devDependencies": {},
   "resolutions": {
