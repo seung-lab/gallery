@@ -1,5 +1,3 @@
-'use strict';
-
 (function (app, THREE){
 
 app.factory("ctmFactory", ['$rootScope','Scene3DService', '$http', 

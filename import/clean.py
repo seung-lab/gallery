@@ -18,7 +18,7 @@ for filename in  files:
       print 'removing ', seg
       os.remove('./mesh/'+filename)
 
-    else:
-      print 'not removing ', seg
-      convert_to_ctm(seg)
+    # else:
+    #   print 'not removing ', seg
+    #   convert_to_ctm(seg)
 

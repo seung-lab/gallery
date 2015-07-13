@@ -54,7 +54,7 @@ sets.find({}).remove(function() {
       name: "wfAC",
       id: 6,
       children_are_cells: true,
-      children: [902],     
+      children: [902,904],     
     },
      function() {
       console.log('finished populating sets');
