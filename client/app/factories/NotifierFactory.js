@@ -1,25 +1,43 @@
 'use strict';
 
-(function (){
+(function (app) {
+
 app.factory("NotifierFactory", function() {
-    var a, b = {
+    var callback;
+    var b = {
       name: "",
       icon: "info",
       delay: 5e3
-    }, c = [],
-    d = Object.keys;
+    };
+    var c = [],
+
+    keys = Object.keys;
+
     return {
       setCallback: function(b) {
-        return a = b, this
+        
+        callback = b;
+        return this;
+
       },
       notify: function(e) {
-        return d(b).forEach(function(a) {
+
+        keys(b).forEach(function(a) {
           e[a] || (e[a] = b[a])
-        }), c.push(e), a && a(e), this
+        });
+
+        c.push(e); 
+        
+        if (callback) {
+          callback(e);
+        }
+
+        return this;
       },
       get: function() {
         return c
       }
     }
 });
-})();
+
+})(app);

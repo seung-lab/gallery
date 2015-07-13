@@ -17,7 +17,8 @@ app.factory("CollectionFactory", ["$http", "UtilService",
       $http.get(url).success(function(jsonArray) {
 
         jsonArray.forEach(function(element) {
-          c[element.id] ? c.saveLocal(element) : c.add(element, null)
+
+          c[element.id] = element;
         });
       
       }).success(callback).error(callback)
@@ -25,21 +26,6 @@ app.factory("CollectionFactory", ["$http", "UtilService",
       return this;
     };
 
-    var saveLocal = function(a) {
-      var b = this,
-      id = a.id;
-      "trash" == a.status ? b.removeLocal(id) : util.extend(b[id], a)
-    };
-
-    var add = function(element, callback) {
-
-      this.push(element);
-
-      if(callback){
-        callback.call(this, element);
-      }
-
-    };
 
     var removeLocal = function(index) {
 
@@ -54,9 +40,6 @@ app.factory("CollectionFactory", ["$http", "UtilService",
 
       util.unlist(this, this[index]);
 
-      // this.save(this[index], function() {
-      //   this.removeLocal(index);
-      // });
     };
 
     var save = function(element, callback) {
@@ -65,7 +48,6 @@ app.factory("CollectionFactory", ["$http", "UtilService",
         element.id = util.generateId();
       }
 
-        // !this.onNew || this.onNew(element) 
       
       if (this[element.id])  {
         util.extend(this[element.id], element);
@@ -84,7 +66,7 @@ app.factory("CollectionFactory", ["$http", "UtilService",
 
     var getIndex = function(id){
       for (var index = 0; index < this.length; index++) {
-        if (this[index].id == id){
+        if (this[index] && this[index].id == id) {
           return index;
         }
       }
@@ -110,8 +92,6 @@ app.factory("CollectionFactory", ["$http", "UtilService",
         save: save,
         remove: remove,
         syncDown: syncDown,
-        add: add,
-        saveLocal: saveLocal,
         removeLocal: removeLocal,
         getIndex: getIndex,
         get: get
