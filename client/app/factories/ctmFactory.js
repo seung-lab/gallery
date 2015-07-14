@@ -7,7 +7,7 @@ app.factory("ctmFactory", ['$rootScope','Scene3DService', '$http',
     this.cell = $rootScope.cells.get(cellID);
 
 
-    this.loadMesh('api/mesh/'+this.cell.segment);
+    this.loadMesh('/api/mesh/'+this.cell.segment);
 
   }
 
@@ -15,48 +15,27 @@ app.factory("ctmFactory", ['$rootScope','Scene3DService', '$http',
 
   ctm.prototype.loadMesh = function (url) {
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.overrideMimeType("text/plain; charset=x-user-defined");
+   
+  var worker = new Worker( "bower_components/js-openctm/src/CTMWorker.js" );
+
+  var scope = this;
+  worker.onmessage = function( event ) {
+
+    var file = event.data;
     
-    var scope = this;
-    xhr.onload = function (e) { 
+    createModelBuffers( file , function(geometry) {
 
-      if (xhr.readyState === 4) {
-      
-        if (xhr.status === 200) {
+      var material = new THREE.MeshLambertMaterial( { color:scope.cell.color , wireframe:false } );
+      scope.mesh = new THREE.Mesh( geometry, material );
+      scope.mesh.scale.set(0.05,0.05,0.05)
 
-          if (xhr.responseText.length == 0) {
-            console.error("returned empty mesh file");
-            return;
-          }
+      SceneService.scene.add( scope.mesh );
+      console.log('finish loading');
+    });   
 
-          var stream = new CTM.Stream(xhr.responseText);
-          var file = new CTM.File(stream);
+  };
 
-          createModelBuffers( file , function(geometry) {
-            var material = new THREE.MeshLambertMaterial( { color:scope.cell.color , wireframe:false } );
-            scope.mesh = new THREE.Mesh( geometry, material );
-            scope.mesh.scale.set(0.05,0.05,0.05)
-
-            SceneService.scene.add( scope.mesh );
-            console.log('finish loading');
-          });          
-      
-        } 
-        else {
-          console.log('no mesh available');
-        }
-      
-      }
-
-    };
-
-
-    xhr.send();
- 
-  
-
+  worker.postMessage( { "url": url} );
 
   };
 

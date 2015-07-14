@@ -6,7 +6,7 @@ app.service('Scene3DService', function () {
     var scene = new THREE.Scene();
     //scene.fog = new THREE.Fog( 0x808080, 3000, 6000 );
     // LIGHTS
-    var ambientLight = new THREE.AmbientLight( 0x222222 );
+    var ambientLight = new THREE.AmbientLight( 0x444444 );
     var light = new THREE.DirectionalLight( 0xffffff, 1.0 );
     light.position.set( 2, 4, 5 );
     
