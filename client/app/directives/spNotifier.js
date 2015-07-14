@@ -3,19 +3,31 @@
 app.directive("spNotifier", ["UtilService", "NotifierFactory", "TransitionerFactory", "$compile", "TouchFactory", "$timeout",
   function(UtilService, NotifierFactory, TransitionerFactory, $compile, TouchFactory, $timeout) {
     return {
-      link: function(g, h) {
+      link: function(scope, elements) {
         function i(b) {
-          function i() {
+
+
+          function callback() {
             m || (m = !0, k.removeClass("tl"), TransitionerFactory.after(k, function() {
-              k.remove(), n.$destroy(), k = n = null
+              k.remove(), newScope.$destroy(), k = newScope = null
             }))
           }
-          var k, l, m, n = g.$new();
-          UtilService.extend(n, b), k = UtilService.element(h.prepend(j).children()[0]), $compile(k.contents())(n), $timeout(function() {
+          var k, l, m, newScope = scope.$new();
+
+          UtilService.extend(newScope, b);
+
+          var div = '<div class="notification"><article ng-class="\'icon-\'+icon"><h6>{{name}}</h6><p>{{message}}</p></article></div>';
+
+          k = UtilService.element(elements.prepend(div).children()[0]);
+          $compile(k.contents())(newScope);
+
+          $timeout(function() {
             k.addClass("tl")
-          }), TouchFactory.tap(k, i), l = $timeout(i, b.delay || 5e3)
+          });
+
+          TouchFactory.tap(k, callback);
+          l = $timeout(callback, b.delay || 5e3)
         }
-        var j = '<div class="notification"><article ng-class="\'icon-\'+icon"><h6>{{name}}</h6><p>{{message}}</p></article></div>';
         NotifierFactory.setCallback(i).get().forEach(i)
       }
     }

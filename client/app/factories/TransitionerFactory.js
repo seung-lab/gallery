@@ -1,6 +1,7 @@
 'use strict';
 
-( function (){
+( function (app){
+
 app.factory('TransitionerFactory', ['$rootScope', '$document', 'UtilService',
   function(a, b, c) {
     function d() {
@@ -33,4 +34,5 @@ app.factory('TransitionerFactory', ['$rootScope', '$document', 'UtilService',
     }
   }
 ]);
-})();
+
+})(app);

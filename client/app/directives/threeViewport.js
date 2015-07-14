@@ -7,8 +7,8 @@
 (function(app) { 
 
 
-  app.directive('threeViewport', ['Scene3DService', 'Camera3DService','CellService', 'Coordinates3DService' , 'SettingsFactory', 'SetFactory', 'OctLODFactory', 
-  function (SceneService, CameraService, CellService, CoordinatesService, settings, setOperations, OctLOD) {
+  app.directive('threeViewport', ['Scene3DService', 'Camera3DService','CellService', 'Coordinates3DService' , 'SettingsFactory', 'SetFactory',  
+  function (SceneService, CameraService, CellService, CoordinatesService, settings, setOperations) {
 
     
     function updateVisibleCells (scope) {
@@ -78,9 +78,7 @@
 
         renderer.setClearColor( '#252525', 1.0 );
 
-        //Necesary for the transparent spheres
-        renderer.sortObjects = true;
-
+   
 
         // set up the controls with the camera and renderer
         // controls = new THREE.OrbitControls(CameraService.perspectiveCam, renderer.domElement);
@@ -104,9 +102,6 @@
         requestAnimationFrame(animate);
 
         controls.update(clock.getDelta() );
-        SceneService.scene.updateMatrixWorld();
-
-        CellService.updateCells();
        
         renderer.render(SceneService.scene, CameraService.perspectiveCam);
       }

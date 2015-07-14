@@ -139,4 +139,4 @@ def clean_meshes ():
          convert_to_ctm(seg)
 
 
-clean_meshes()
+writeCells()

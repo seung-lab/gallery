@@ -1,24 +1,33 @@
 'use strict';
 
-app.directive("spFocus", ["$timeout", "UtilService",
-  function(a) {
+app.directive("spFocus", ["$timeout",
+  function($timeout) {
     function b(a) {
+
+      console.log(a);
       if (a && 0 !== a.length) {
+
         var b = ("" + a).toLowercase;
         a = !("f" == b || "0" == b || "false" == b || "no" == b || "n" == b || "[]" == b)
-      } else a = !1;
+      } 
+      else {
+        a = false;
+      }
+
       return a
     }
-    return function(c, d, e) {
+
+    return function(scope, element, attribute) {
       function f() {
-        a(function() {
+        $timeout(function() {
           g.focus()
         }, 400)
       }
-      var g = d[0];
-      0 === e.spFocus.length ? f() : c.$watch(e.spFocus, function(a) {
+      var g = element[0];
+      0 === attribute.spFocus.length ? f() : scope.$watch(attribute.spFocus, function(a) {
         b(a) && g.focus()
       })
     }
   }
 ]);
+
