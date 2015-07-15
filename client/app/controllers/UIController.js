@@ -13,6 +13,7 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
       $rootScope.viewSlide = {
           to: 'left'
       };
+      
       $rootScope.r = $routeParams;
 
       $rootScope.p = function(path) {

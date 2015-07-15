@@ -1,66 +1,78 @@
 'use strict';
+
 (function (app) {
 
 app.controller('StratificationController', ['$rootScope','$scope','$timeout',
   function($rootScope, $scope, $timeout) {
 
+    var data = { colors:{}, columns:[], type: 'line', unload: true};
+    window.data = data;
+    
+    function updateChart () {
+      
+       if (!$scope.chart) {
+        $timeout( function(){  updateChart(); } , 500);
+        return;
+      }
+
+      $scope.chart.load(data);
+    };
+
+    var addCell = function( cellId ) {
+
+      var cell = $scope.cells.get(cellId);
+      var column =  cell.stratification.slice();
+      var  name = cell.id;
+
+      column.unshift( cell.id  );
+      data.columns.push(column);
+      data.colors[cell.id] = cell.color;
+    }
+
+    var removeCell = function ( cellId ) {
+      
+      for (var i = 0; i < data.columns.length; ++i) {
+        if (data.columns[i][0] == cellId) {
+          delete data.colors[cellId];
+          data.columns.splice(i,1);
+          return;
+        }
+      }
+    }
+    
+
 
     function loadCell( cellId ) {
 
       if (!$scope.chart) {
-        $timeout( function(){  loadCell( cellId ); } , 100);
+        $timeout( function(){  loadCell( cellId ); } , 500);
         return;
       }
 
-
-      var cell = $scope.cells.get(cellId);
-      if (cell === -1 ){
-        console.log('cell doesn\'t exist');
-        return;
-      }
-
-      var column =  cell.stratification.slice();
-      var  name = cell.id.toString();
-      column.unshift( name  );
-
-      var data = {
-        columns : [column],
-        type: 'spline',
-      }
-
-      data['colors'] = {};
-      data['colors'][name] = cell.color;
-
-
-      $scope.chart.load(data);
-
+      addCell(cellId);
+      updateChart();
     }
 
-    $scope.$on('cell-load', function(event, cellId) {
+    $scope.$on('visible', function(event, changes) {
 
-      if (!$scope.sets.get($scope.r.setId).children_are_cells && $scope.r.view != 'catalog') {
-        return;
+      for (var i = 0; i < changes.added.length ; ++i) {
+        
+        var cell_id = changes.added[i];
+        addCell(cell_id);
+
       }
 
-      if (!cellId){
-        return;
+      for (var i = 0; i < changes.added.length ; ++i) {
+        
+        var cell_id = changes.removed[i];
+        removeCell(cell_id);
+        
       }
 
-      loadCell(cellId);
+      updateChart();
+
     });
       
-    $scope.$on('cell-unload', function(event, cellId) {
-      if (!cellId){
-        return;
-      }
-
-      if (!$scope.chart) {
-        return;
-      }
-       
-      $scope.chart.unload({'ids': [cellId.toString()]});
-      
-    });
 
  }]);
 

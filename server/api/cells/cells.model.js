@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
 
 var CellSchema = new Schema({
   name: String,
-  id: Number,
+  id: String,
   segment: Number,
   description: String,
   copyright: String,

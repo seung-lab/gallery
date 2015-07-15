@@ -5,13 +5,35 @@ app.directive("spIf", function() {
     transclude: "element",
     priority: 1e3,
     terminal: true,
-    compile: function(scope, elements, transclude) {
-        var e, f;
-        scope.$watch(transclude.spIf, function(d) {
-          d ? e || (f = scope.$new(), transclude(f, function(a) {
-            e = a, elements.after(a)
-          })) : e && (e.remove(), f.$destroy(), e = f = void 0)
+    compile: function(tElement, tAttrs, transclude) {
+
+      return function(scope, iElement, iAttrs) {
+        var transclue_content, child_scope;
+
+        scope.$watch(iAttrs.spIf, function(iAttrs) {
+
+          if (iAttrs) {
+            child_scope = scope.$new();
+            
+            transclude(child_scope, function(content) {
+              transclue_content = content;
+              iElement.after(content);
+            });
+
+            return;
+          }
+
+          if ( transclue_content ){
+            transclue_content.remove(); 
+            child_scope.$destroy();
+            transclue_content = undefined;
+            child_scope = undefined;
+          }
+          
+
+
         });
+      };
     }
   }
 });

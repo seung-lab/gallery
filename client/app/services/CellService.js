@@ -3,8 +3,54 @@
 // creates a tube that follows a collection of 3d points.
 ( function (app) { 
 
-app.service('CellService', ['$rootScope','Scene3DService', 'ctmFactory',
- function ($rootScope, Scene, ctm) {
+app.service('CellService', ['$rootScope','Scene3DService', 'ctmFactory','SetFactory',
+ function ($rootScope, Scene, ctm, setOperations) {
+
+
+  function broadcastVisibleSet( old_visible, new_visible) {
+
+    var added = setOperations.complement(new_visible,old_visible);
+    added.forEach(function(cellID){
+        old_visible.add(cellID);
+        addCell(cellID);
+    });
+
+    var removed = setOperations.complement(old_visible,new_visible);
+    removed.forEach(function(cellID){
+        old_visible.delete(cellID);
+        removeCell(cellID);
+    });
+
+    $rootScope.$broadcast('visible', { 'visible': old_visible, 'added':added, 'removed': removed});
+  }
+
+
+  function updateVisibleCells () {
+    var old_visible = new Set();
+
+    $rootScope.$watch('r.setId', function(setId){
+      if(!setId){
+        return;
+      }
+      var set = $rootScope.sets.get(setId);
+      var new_visible = new Set(set.children);
+
+      broadcastVisibleSet( old_visible ,new_visible );
+
+    });
+
+    $rootScope.$watch("r.cellId", function(cellId){
+      if ($rootScope.viewSlide.model == "catalog" && cellId != undefined){
+
+        var new_visible = new Set([cellId,]);
+        broadcastVisibleSet ( old_visible , new_visible );
+
+      }
+
+    });
+  }
+  updateVisibleCells();
+
 
   function createCell ( cellId, callback ) {
 
@@ -24,7 +70,7 @@ app.service('CellService', ['$rootScope','Scene3DService', 'ctmFactory',
 
   };
 
-  this.addCell = function (cellId) {
+  var addCell = function (cellId) {
 
     var cell = $rootScope.cells.get(cellId);
     if (cell.visible === true) {
@@ -42,13 +88,9 @@ app.service('CellService', ['$rootScope','Scene3DService', 'ctmFactory',
     }
 
     cell.visible = true;
-     
-    $rootScope.$broadcast('visible');
-    $rootScope.$broadcast('cell-load', cellId);
-
   };
 
-  this.removeCell = function (cellId) {
+  var removeCell = function (cellId) {
 
     var cell = $rootScope.cells.get(cellId);
 
@@ -61,9 +103,6 @@ app.service('CellService', ['$rootScope','Scene3DService', 'ctmFactory',
     }
 
     cell.visible = false;
-
-    $rootScope.$broadcast('visible');
-    $rootScope.$broadcast('cell-unload', cellId);
   };
 
   

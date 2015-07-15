@@ -7,49 +7,8 @@
 (function(app) { 
 
 
-  app.directive('threeViewport', ['Scene3DService', 'Camera3DService','CellService', 'Coordinates3DService' , 'SettingsFactory', 'SetFactory',  
-  function (SceneService, CameraService, CellService, CoordinatesService, settings, setOperations) {
-
-    
-    function updateVisibleCells (scope) {
-      var activeCells = new Set();
-      scope.$watch('r.setId', function(setId){
-        if(!setId){
-          return;
-        }
-        var setIndex = scope.sets.getIndex(setId);
-        var updatedCells = new Set(scope.sets[setIndex].children);
-
-        var toAdd = setOperations.complement(updatedCells,activeCells);
-        toAdd.forEach(function(cellID){
-            activeCells.add(cellID);
-            CellService.addCell(cellID);
-        });
-        var toRemove = setOperations.complement(activeCells,updatedCells);
-        toRemove.forEach(function(cellID){
-            activeCells.delete(cellID);
-            CellService.removeCell(cellID);
-        });
-      });
-
-      scope.$watch("r.cellId", function(cellId){
-        if (scope.viewSlide.model == "catalog" && cellId != undefined){
-          var updatedCells = new Set([cellId,]);
-          var toAdd = setOperations.complement(updatedCells,activeCells);
-          toAdd.forEach(function(cellID){
-            activeCells.add(cellID);
-            CellService.addCell(cellID);
-          });
-          var toRemove = setOperations.complement(activeCells,updatedCells);
-          toRemove.forEach(function(cellID){
-            activeCells.delete(cellID);
-            CellService.removeCell(cellID);
-          });
-
-        }
-
-      });
-    }
+  app.directive('threeViewport', ['Scene3DService', 'Camera3DService','CellService', 'Coordinates3DService' , 'SettingsFactory',   
+  function (SceneService, CameraService, CellService, CoordinatesService, settings) {
 
     return {
       restrict: "AE",
@@ -94,7 +53,6 @@
         });
         
 
-        updateVisibleCells (scope);
       
       }
 
