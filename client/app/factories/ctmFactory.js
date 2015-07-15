@@ -1,43 +1,32 @@
 (function (app, THREE){
 
-app.factory("ctmFactory", ['$rootScope','Scene3DService', '$http', 
-  function ($rootScope ,SceneService, $http) {
+app.factory("ctmFactory", [function () {
 
-  var ctm = function ( cellID ) {
-    this.cell = $rootScope.cells.get(cellID);
+  var ctm = function ( url , callback) {
 
+    this.callback = callback;
 
-    this.loadMesh('/api/mesh/'+this.cell.segment);
+    var worker = new Worker( "bower_components/js-openctm/src/CTMWorker.js" );
+
+    var scope = this;
+    worker.onmessage = function( event ) {
+
+      var file = event.data;
+      
+      createModelBuffers( file , function(geometry) {
+
+        scope.callback(geometry);
+
+      });   
+
+    };
+
+    worker.postMessage( { "url": url} );
 
   }
-
   ctm.prototype.constructor = ctm;
 
-  ctm.prototype.loadMesh = function (url) {
 
-   
-  var worker = new Worker( "bower_components/js-openctm/src/CTMWorker.js" );
-
-  var scope = this;
-  worker.onmessage = function( event ) {
-
-    var file = event.data;
-    
-    createModelBuffers( file , function(geometry) {
-
-      var material = new THREE.MeshLambertMaterial( { color:scope.cell.color , wireframe:false } );
-      scope.mesh = new THREE.Mesh( geometry, material );
-      scope.mesh.scale.set(0.05,0.05,0.05)
-
-      SceneService.scene.add( scope.mesh );
-      console.log('finish loading');
-    });   
-
-  };
-
-  worker.postMessage( { "url": url} );
-
-  };
 
   var createModelBuffers = function ( file, callback ) {
 
@@ -260,14 +249,6 @@ app.factory("ctmFactory", ['$rootScope','Scene3DService', '$http',
     callback( geometry );
 
   };
-
-  ctm.prototype.setVisibility = function(visible){
-    if (!this.mesh) {
-      return;
-    }
-
-    this.mesh.visible = visible;
-  }  
 
 
   return ctm;

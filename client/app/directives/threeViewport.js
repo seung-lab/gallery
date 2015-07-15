@@ -106,9 +106,7 @@
         renderer.render(SceneService.scene, CameraService.perspectiveCam);
       }
 
-      //TODO this is not call when resizing the window.
-      //because the right part is just hidden when not in fullscreen mode , the center of the visible part doesn't correspond
-      //to the center of rotation, making it very hard to use.  
+  
       function onResize() {
         renderer.setSize(element[0].offsetWidth , element[0].offsetHeight);
         CameraService.perspectiveCam.aspect = element[0].offsetWidth  / element[0].offsetHeight;

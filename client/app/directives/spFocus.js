@@ -4,7 +4,6 @@ app.directive("spFocus", ["$timeout",
   function($timeout) {
     function b(a) {
 
-      console.log(a);
       if (a && 0 !== a.length) {
 
         var b = ("" + a).toLowercase;

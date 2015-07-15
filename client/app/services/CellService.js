@@ -3,45 +3,67 @@
 // creates a tube that follows a collection of 3d points.
 ( function (app) { 
 
-app.service('CellService', ['$rootScope','Scene3DService', 'ctmFactory' ,'Camera3DService',
- function ($rootScope, Scene, ctm, Camera) {
+app.service('CellService', ['$rootScope','Scene3DService', 'ctmFactory',
+ function ($rootScope, Scene, ctm) {
 
-  $rootScope.visible = {};
-  $rootScope.invisible = {};
+  function createCell ( cellId, callback ) {
 
-  function createCell ( cellID ) {
+    var cell = $rootScope.cells.get(cellId);
 
-    $rootScope.visible[cellID] = new ctm(cellID);
+    var url = '/api/mesh/'+cell.segment;
+
+    new ctm(url , function(geometry) {
+
+      var material = new THREE.MeshLambertMaterial( { color:cell.color , wireframe:false } );
+      cell.mesh = new THREE.Mesh( geometry, material );
+      cell.mesh.scale.set(0.05,0.05,0.05)
+      Scene.scene.add( cell.mesh );
+
+      cell.mesh.visible = cell.visible;      
+    });
 
   };
 
-  this.addCell = function (cellID) {
+  this.addCell = function (cellId) {
 
-    if (cellID in $rootScope.visible){
-      return;
-    } 
-    else if ( cellID in $rootScope.invisible ){
-      $rootScope.invisible[cellID].setVisibility(true);
-      $rootScope.visible[cellID] = $rootScope.invisible[cellID];
-      delete $rootScope.invisible[cellID];
-    } 
-    else {
-      createCell(cellID);
+    var cell = $rootScope.cells.get(cellId);
+    if (cell.visible === true) {
+        return;
     }
 
+
+    if ( cell.visible === undefined ) {
+      createCell(cellId);
+    } 
+
+
+    if ( cell.mesh !== undefined ) {
+      cell.mesh.visible = true;
+    }
+
+    cell.visible = true;
+     
     $rootScope.$broadcast('visible');
-    $rootScope.$broadcast('cell-load', cellID);
+    $rootScope.$broadcast('cell-load', cellId);
 
   };
 
-  this.removeCell = function (cellID) {
+  this.removeCell = function (cellId) {
 
-    $rootScope.visible[cellID].setVisibility(false);
-    $rootScope.invisible[cellID] = $rootScope.visible[cellID];
-    delete $rootScope.visible[cellID];
+    var cell = $rootScope.cells.get(cellId);
+
+    if (cell.visible === undefined || cell.visible === false) {
+      return;
+    }
+
+    if ( cell.mesh !== undefined ) {
+      cell.mesh.visible = false;
+    }
+
+    cell.visible = false;
 
     $rootScope.$broadcast('visible');
-    $rootScope.$broadcast('cell-unload', cellID);
+    $rootScope.$broadcast('cell-unload', cellId);
   };
 
   
