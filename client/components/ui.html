@@ -50,9 +50,9 @@
           <li sp-tap="modal('components/settings.html')" sp-kbd="[',', 'command+,', 'control+,']"><i class=icon-cog></i><span>{{_.settings}}</span></li>
       </ul>
   </aside>
-  <section id="nav" class="fill w" ng-class={open:menu}>
+  <section id="nav" class="fill w" ng-class="{open:menu}">
       <header>
-        <div class="b" sp-tap="toggleState('menu')" sp-kbd="'m'" ng-class={on:menu}>
+        <div class="b" sp-tap="toggleState('menu')" sp-kbd="'m'" ng-class="{on:menu}">
           <i class="icon-more"></i>
         </div>
         <div class="b" sp-tap="new()" sp-kbd="'n'" ng-class="{on:modal.isOn('new')}">

@@ -6,28 +6,47 @@
 app.service('CellService', ['$rootScope','Scene3DService', 'ctmFactory','SetFactory',
  function ($rootScope, Scene, ctm, setOperations) {
 
+  var old_visible = new Set();
 
-  function broadcastVisibleSet( old_visible, new_visible) {
+
+  this.toggle = function( cellId ) {
+
+    var cell = $rootScope.cells.get(cellId);
+    
+    if (cell.visible === true) {
+      var new_visible = new Set(old_visible);
+      new_visible.delete( cellId );
+    } 
+    else {
+      var new_visible =  new Set(old_visible);
+      new_visible.add( cellId );
+    }
+    broadcastVisibleSet( new_visible );
+
+  }
+
+  function broadcastVisibleSet( new_visible) {
 
     var added = setOperations.complement(new_visible,old_visible);
     added.forEach(function(cellID){
         old_visible.add(cellID);
-        addCell(cellID);
+        addCellMesh(cellID);
     });
 
     var removed = setOperations.complement(old_visible,new_visible);
     removed.forEach(function(cellID){
         old_visible.delete(cellID);
-        removeCell(cellID);
+        removeCellMesh(cellID);
     });
 
-    $rootScope.$broadcast('visible', { 'visible': old_visible, 'added':added, 'removed': removed});
+    $rootScope.visible = old_visible;
+    $rootScope.added = added;
+    $rootScope.removed = removed;
+    $rootScope.$broadcast('visible');
   }
 
 
   function updateVisibleCells () {
-    var old_visible = new Set();
-
     $rootScope.$watch('r.setId', function(setId){
       if(!setId){
         return;
@@ -35,7 +54,7 @@ app.service('CellService', ['$rootScope','Scene3DService', 'ctmFactory','SetFact
       var set = $rootScope.sets.get(setId);
       var new_visible = new Set(set.children);
 
-      broadcastVisibleSet( old_visible ,new_visible );
+      broadcastVisibleSet( new_visible );
 
     });
 
@@ -43,7 +62,7 @@ app.service('CellService', ['$rootScope','Scene3DService', 'ctmFactory','SetFact
       if ($rootScope.viewSlide.model == "catalog" && cellId != undefined){
 
         var new_visible = new Set([cellId,]);
-        broadcastVisibleSet ( old_visible , new_visible );
+        broadcastVisibleSet ( new_visible );
 
       }
 
@@ -70,7 +89,7 @@ app.service('CellService', ['$rootScope','Scene3DService', 'ctmFactory','SetFact
 
   };
 
-  var addCell = function (cellId) {
+  var addCellMesh = function (cellId) {
 
     var cell = $rootScope.cells.get(cellId);
     if (cell.visible === true) {
@@ -90,7 +109,7 @@ app.service('CellService', ['$rootScope','Scene3DService', 'ctmFactory','SetFact
     cell.visible = true;
   };
 
-  var removeCell = function (cellId) {
+  var removeCellMesh = function (cellId) {
 
     var cell = $rootScope.cells.get(cellId);
 

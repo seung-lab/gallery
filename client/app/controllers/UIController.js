@@ -1,8 +1,8 @@
 'use strict';
 
 ( function (app) {
-app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$location', 'SettingsFactory', 'UtilService', 'KeyboardFactory', 'TransitionerFactory', 'LocaleFactory', '$timeout', 'ModalFactory', '$route',
-  function($scope, $rootScope, $routeParams, $location, settings, util, keyboard, transitioner, locale, $timeout, modal, $route) {
+app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$location', 'SettingsFactory', 'UtilService', 'KeyboardFactory', 'TransitionerFactory', 'LocaleFactory', '$timeout', 'ModalFactory', '$route', 'CellService',
+  function($scope, $rootScope, $routeParams, $location, settings, util, keyboard, transitioner, locale, $timeout, modal, $route, CellService) {
 
       var sets = $rootScope.sets;
       var cells = $rootScope.cells;
@@ -123,6 +123,13 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
         }
 
       }
+
+      $scope.tapCell = function (cell) {
+
+        CellService.toggle( cell );
+
+        $scope.p('set/'+$scope.r.setId+'/'+cell);
+      };
 
 
 

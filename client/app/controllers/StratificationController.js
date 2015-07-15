@@ -53,18 +53,18 @@ app.controller('StratificationController', ['$rootScope','$scope','$timeout',
       updateChart();
     }
 
-    $scope.$on('visible', function(event, changes) {
+    $scope.$on('visible', function(event) {
 
-      for (var i = 0; i < changes.added.length ; ++i) {
+      for (var i = 0; i < $scope.added.length ; ++i) {
         
-        var cell_id = changes.added[i];
+        var cell_id = $scope.added[i];
         addCell(cell_id);
 
       }
 
-      for (var i = 0; i < changes.added.length ; ++i) {
+      for (var i = 0; i < $scope.removed.length ; ++i) {
         
-        var cell_id = changes.removed[i];
+        var cell_id = $scope.removed[i];
         removeCell(cell_id);
         
       }

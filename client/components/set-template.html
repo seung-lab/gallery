@@ -9,12 +9,12 @@
     <header>
       <button sp-tap="p(back)" class="btn simple icon-left"></button>
       <button sp-tap="toggleState('em')" class="btn" ng-class="{active:em,'icon-down':!em,'icon-up':em}"></button>
-      <h2 class=trim>{{set.name}}</h2>
+      <h2 class="trim">{{set.name}}</h2>
     </header>
       <menu sp-sortable="true" onsort="sortcell" class="cells">
-        <li ng-repeat="cell in set.children" ng-init="id=cells.getIndex(cell)" ng-class="{on:cell==r.cellId}">
+        <li ng-repeat="cell in set.children" ng-init="id=cells.getIndex(cell)" ng-class="{on: visible.has(cell) }">
           <button class="btn danger icon-minus" ng-show="em" sp-tap="rmcell($index)"></button>
-          <h3 class="trim" sp-tap="p('set/'+r.setId+'/'+cell)">{{cells[id].name}}</h3>
+          <h3 class="trim" sp-tap="tapCell(cell);">{{cells[id].name}}</h3>
         </li>
       </menu>
   </div>
