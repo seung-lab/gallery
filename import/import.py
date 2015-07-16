@@ -1,4 +1,3 @@
-import csv
 import numpy
 import re
 import pprint
@@ -163,4 +162,4 @@ def get_meshes ():
     omni_export(seg)
     convert_to_ctm(seg)
 
-get_meshes()
+writeCells()

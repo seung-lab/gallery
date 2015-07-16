@@ -1,8 +1,9 @@
 import json
+from matlab_gc import Parser as Matlab
 
 sets = []
 cell_types = {}
-
+matlab = Matlab()
 
 def readCells ( cells_table ):
 
@@ -13,14 +14,13 @@ def readCells ( cells_table ):
     else:
       cell_types[ cell_type ].append(cell['id'])
 
-
 def appendSuperTypes ():
 
   root = {
     'name': "root",
     'id': 0,
     'children_are_cells': False,
-    'children': ["Amacrine Cells","Bipolar Cells","Ganglion Cells","Unkown"]
+    'children': ["Amacrine Cells","Bipolar Cells","Ganglion Cells",matlab.set_name,"Unkown"]
   }
   sets.append(root)
 
@@ -57,8 +57,7 @@ def appendSuperTypes ():
     }
   sets.append(unkown)
 
-
-
+  sets.append(matlab.getSuperSet(len(sets)))
 
 def writeToDisk ():
 
@@ -67,20 +66,21 @@ def writeToDisk ():
   with open('sets.json', 'w') as outfile:
     json.dump(sets, outfile,sort_keys = True, indent = 4, ensure_ascii=False)
 
-
 def process (cells_table):
 
   readCells( cells_table)
   appendSuperTypes()
 
+  #Append sets from matlab parser
+  all_cell_types = dict(cell_types, **matlab.sets);
 
-  for idx, cell_type in enumerate(cell_types):
+  for idx, cell_type in enumerate(all_cell_types):
 
     set_cell = {
       'name' : cell_type,
       'id': str(len(sets)),
       'children_are_cells': True,
-      'children': cell_types[cell_type]
+      'children': all_cell_types[cell_type]
     }
 
     sets.append(set_cell)
@@ -91,12 +91,19 @@ def process (cells_table):
 
 def setId ( set_name ):
 
+  found = False;
+  set_id = None
   for set_ in sets:
 
     if set_['name'] == set_name:
-      return set_['id']
+      if found == False:
+        set_id = set_['id']
+        found = True
+      else :
+        raise Exception('there are two sets with the same name')
 
-  return None
+
+  return set_id
 
 def convertNameToIds ():
 
