@@ -1,7 +1,8 @@
 import csv
 import re
+import numpy
 
-class Cells:
+class Spreadsheet:
 
   def __init__(self):
 
@@ -9,7 +10,15 @@ class Cells:
 
     self.spreadsheet = {}
 
+    self.cell_classes = {}
+    self.cell_types = {}
+
     self.loadSpreadsheet()
+
+
+  def get(self):
+
+    return self.spreadsheet
 
   def loadSpreadsheet(self):
 
@@ -43,7 +52,15 @@ class Cells:
     if r['segment_id'] == '':
       return
 
-    self.cleanRow(r)
+    r = self.cleanRow(r)
+
+    self.processClass(r)
+    self.processType(r)
+
+    self.spreadsheet[r['segment_id']] = r
+    #delete remove redundant information
+    del self.spreadsheet[r['segment_id']]['segment_id']
+
 
   def cleanRow(self, r):
     
@@ -61,14 +78,70 @@ class Cells:
       r['cell_type'] = 'unkown'
 
 
-    self.spreadsheet[r['segment_id']] = r
+    return r
 
-    #delete remove redundant information
-    del self.spreadsheet[r['segment_id']]['segment_id']
+  def processClass(self, r):
 
+    if r['cell_class'] not in self.cell_classes:
+
+      self.cell_classes[ r['cell_class'] ] = []
+
+    if  r['cell_type'] not in self.cell_classes[ r['cell_class'] ]:
+
+      self.cell_classes[ r['cell_class'] ].append( r['cell_type'] )
+
+
+  def processType(self, r):
+
+    if r['cell_type'] not in self.cell_types:
+
+      self.cell_types[ r['cell_type'] ] = []
+
+    if r['segment_id'] not in self.cell_types[ r['cell_type'] ]:
+
+      self.cell_types[ r['cell_type'] ].append( r['segment_id'])
+
+
+
+
+
+import scipy.io
+
+class Stratification:
+
+  def __init__(self):
+
+    self.fname = 'strat.mat'
+
+    self.stratification = {}
+
+    self.loadStratification()
+
+  def loadStratification(self):
+
+    mat = scipy.io.loadmat(self.fname);
+
+    for row_idx in range(mat['strat'].shape[0]):
+      row = mat['strat'][row_idx]
+
+      segId = str(row[0].flatten()[0])
+      values = list(row[1].flatten())
+
+      self.stratification[segId] = values
+
+
+  def get(self):
+
+    return self.stratification
 
 
 if __name__ == '__main__':
 
-  cells = Cells()
-  print cells.spreadsheet
+  spreadsheet = Spreadsheet()
+  # print spreadsheet.spreadsheet
+  print spreadsheet.cell_classes
+
+  # print spreadsheet.cell_types
+
+  # stratification = Stratification()
+  # print stratification.stratification

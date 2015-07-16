@@ -1,15 +1,35 @@
 import re
 
-class Parser:
+class MatlabScript:
 
   def __init__(self):
 
     self.gc = {}
-    self.sets = {}
-    self.fname =  'gc_types_load_cells.m'
-    self.set_name = 'Updated Ganglion Set'
-    self.readMatlab()
+    
+    self.cell_types = {}
+    self.cell_classes = {}
 
+
+    self.fname =  'gc_types_load_cells.m'
+    self.set_name = 'Ganglion Cells'
+
+    self.loadMatlabScript()
+
+
+
+  
+  def loadMatlabScript(self):
+
+    with open(self.fname) as f:
+      for line in f.readlines():
+        
+        self.parseNames(line)
+        
+        self.parseSegments(line)
+
+    self.convertToSets()
+
+    self.cell_classes[self.set_name] = self.cell_types.keys()
 
   def parseNames(self,line):
     name = re.match(r"gc\((\d*)\).name\s*=\s*['|\"](.*)['|\"]", line)
@@ -37,32 +57,9 @@ class Parser:
       name = self.gc[idx]['name']
       segments = self.gc[idx]['segments']
 
-      self.sets[name] = segments
-
-
-  def readMatlab(self):
-
-    with open(self.fname) as f:
-      for line in f.readlines():
-        
-        self.parseNames(line)
-        
-        self.parseSegments(line)
-
-    self.convertToSets()
-
-  def getSuperSet(self, set_id):
-      
-    super_set = {
-      'name': self.set_name,
-      'id': set_id,
-      'children_are_cells': False,
-      'children': self.sets.keys()
-    }
-    return super_set
+      self.cell_types[name] = segments
 
 
 if __name__ == '__main__':
-  matlab = Parser()
-  print matlab.sets
-  print matlab.getSuperSet(1)
+  matlab = MatlabScript()
+  print matlab.cell_types
