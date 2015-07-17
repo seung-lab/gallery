@@ -18,7 +18,7 @@ app.factory("CollectionFactory", ["$http", "UtilService",
 
         jsonArray.forEach(function(element) {
 
-          c[element.id] = element;
+          c.push(element);
         });
       
       }).success(callback).error(callback)
