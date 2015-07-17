@@ -3,8 +3,8 @@
 // creates a tube that follows a collection of 3d points.
 ( function (app) { 
 
-app.service('CellService', ['$rootScope','Scene3DService', 'ctmFactory','SetFactory',
- function ($rootScope, Scene, ctm, setOperations) {
+app.service('CellService', ['$rootScope','Scene3DService', 'SetFactory',
+ function ($rootScope, Scene, setOperations) {
 
   var old_visible = new Set();
 
@@ -77,7 +77,8 @@ app.service('CellService', ['$rootScope','Scene3DService', 'ctmFactory','SetFact
 
     var url = '/api/mesh/'+cell.segment;
 
-    new ctm(url , function(geometry) {
+    var ctm = new THREE.CTMLoader(true);
+    ctm.load( url , function(geometry){
 
       var material = new THREE.MeshLambertMaterial( { color:cell.color , wireframe:false } );
       cell.mesh = new THREE.Mesh( geometry, material );
@@ -85,7 +86,7 @@ app.service('CellService', ['$rootScope','Scene3DService', 'ctmFactory','SetFact
       Scene.scene.add( cell.mesh );
 
       cell.mesh.visible = cell.visible;      
-    });
+    }, { 'useWorker': true} );
 
   };
 
