@@ -1,7 +1,7 @@
 var app = angular.module('cellPane', ['ngRoute']);
 
 //The actual routing is done in the uiController
-app.config(['$routeProvider', function($routeProvider) {
+app.config(['$routeProvider', '$locationProvider' , function($routeProvider,$locationProvider) {
     $routeProvider.caseInsensitiveMatch = true;
     $routeProvider.when('/',{});
     $routeProvider.when('/set/:setId',{});
@@ -11,6 +11,11 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/:view/:cellId',{});
     $routeProvider.when('/:view',{});
     $routeProvider.otherwise('/',{});
+
+    //Remove hashtag from url if windows history is supported.
+    if(window.history && window.history.pushState){
+      $locationProvider.html5Mode(true);
+    } 
 }]);
 
 

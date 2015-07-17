@@ -5,7 +5,8 @@
       "2", 
       "3", 
       "4", 
-      "5"
+      "5", 
+      "6"
     ], 
     "children_are_cells": false, 
     "id": "0", 
@@ -13,127 +14,134 @@
   }, 
   {
     "children": [
-      "7", 
-      "53", 
-      "4", 
-      "19", 
-      "11", 
-      "70", 
+      "56", 
+      "46", 
+      "77", 
+      "23", 
+      "78", 
+      "13", 
+      "32", 
+      "67", 
       "40", 
-      "65", 
-      "35", 
+      "34", 
+      "47", 
       "30", 
-      "28", 
-      "76", 
-      "26", 
-      "6", 
-      "69", 
-      "47"
+      "81", 
+      "24", 
+      "58", 
+      "43", 
+      "39", 
+      "57"
     ], 
     "children_are_cells": false, 
     "id": "1", 
+    "name": "GC monostratified"
+  }, 
+  {
+    "children": [
+      "8", 
+      "54", 
+      "5", 
+      "21", 
+      "12", 
+      "70", 
+      "42", 
+      "65", 
+      "38", 
+      "33", 
+      "31", 
+      "76", 
+      "29", 
+      "7", 
+      "69", 
+      "48"
+    ], 
+    "children_are_cells": false, 
+    "id": "2", 
     "name": "AC"
   }, 
   {
     "children": [
-      "58", 
-      "18", 
-      "44", 
-      "48", 
-      "23", 
-      "73", 
-      "10", 
-      "61", 
-      "84", 
-      "4", 
-      "74", 
-      "45", 
-      "39", 
+      "90", 
+      "5", 
+      "86", 
+      "66", 
       "87", 
-      "14", 
-      "33", 
-      "22", 
-      "32", 
-      "50", 
-      "78", 
-      "13", 
-      "34"
-    ], 
-    "children_are_cells": false, 
-    "id": "2", 
-    "name": "GC"
-  }, 
-  {
-    "children": [
-      "45", 
-      "38", 
-      "12", 
-      "72", 
-      "77", 
-      "80", 
-      "21", 
-      "31", 
-      "27", 
-      "46", 
-      "63", 
-      "29", 
-      "68", 
-      "75", 
-      "36", 
-      "43", 
-      "41", 
-      "67", 
-      "49", 
-      "52", 
-      "54", 
-      "55", 
-      "56", 
-      "57", 
-      "60", 
-      "59", 
-      "20", 
-      "64", 
-      "24", 
-      "71", 
-      "62", 
-      "79", 
-      "51", 
-      "37"
+      "9", 
+      "10", 
+      "44", 
+      "83", 
+      "28", 
+      "19", 
+      "82", 
+      "89", 
+      "18", 
+      "84"
     ], 
     "children_are_cells": false, 
     "id": "3", 
-    "name": "Ganglion Cells"
+    "name": "BC"
   }, 
   {
     "children": [
-      "4", 
-      "13"
+      "52", 
+      "14", 
+      "55", 
+      "22", 
+      "63", 
+      "80", 
+      "60", 
+      "53", 
+      "64", 
+      "27", 
+      "71", 
+      "68", 
+      "50", 
+      "75", 
+      "62", 
+      "72"
     ], 
     "children_are_cells": false, 
     "id": "4", 
+    "name": "GC bistratified"
+  }, 
+  {
+    "children": [
+      "5", 
+      "15"
+    ], 
+    "children_are_cells": false, 
+    "id": "5", 
     "name": "unkown"
   }, 
   {
     "children": [
-      "89", 
-      "4", 
+      "59", 
+      "20", 
+      "45", 
+      "49", 
+      "26", 
+      "73", 
+      "11", 
+      "61", 
       "85", 
-      "66", 
-      "86", 
-      "8", 
-      "9", 
-      "42", 
-      "82", 
-      "25", 
-      "17", 
-      "81", 
+      "5", 
+      "74", 
+      "46", 
+      "41", 
       "88", 
       "16", 
-      "83"
+      "36", 
+      "25", 
+      "35", 
+      "51", 
+      "79", 
+      "15", 
+      "37"
     ], 
     "children_are_cells": false, 
-    "id": "5", 
-    "name": "BC"
+    "id": "6", 
+    "name": "GC"
   }, 
   {
     "children": [
@@ -142,7 +150,7 @@
       "20192"
     ], 
     "children_are_cells": true, 
-    "id": "6", 
+    "id": "7", 
     "name": "wfAC A1"
   }, 
   {
@@ -163,7 +171,7 @@
       "70157"
     ], 
     "children_are_cells": true, 
-    "id": "7", 
+    "id": "8", 
     "name": "nf AC"
   }, 
   {
@@ -209,7 +217,7 @@
       "60621"
     ], 
     "children_are_cells": true, 
-    "id": "8", 
+    "id": "9", 
     "name": "BC5i"
   }, 
   {
@@ -245,7 +253,7 @@
       "60071"
     ], 
     "children_are_cells": true, 
-    "id": "9", 
+    "id": "10", 
     "name": "BC5o"
   }, 
   {
@@ -261,7 +269,7 @@
       "17132"
     ], 
     "children_are_cells": true, 
-    "id": "10", 
+    "id": "11", 
     "name": "biGC4"
   }, 
   {
@@ -281,8 +289,16 @@
       "70005"
     ], 
     "children_are_cells": true, 
-    "id": "11", 
+    "id": "12", 
     "name": "WF"
+  }, 
+  {
+    "children": [
+      "20203"
+    ], 
+    "children_are_cells": true, 
+    "id": "13", 
+    "name": "s1nL"
   }, 
   {
     "children": [
@@ -292,7 +308,7 @@
       "20075"
     ], 
     "children_are_cells": true, 
-    "id": "12", 
+    "id": "14", 
     "name": "OnDSGC (BSGC1rn)"
   }, 
   {
@@ -302,7 +318,7 @@
       "17134"
     ], 
     "children_are_cells": true, 
-    "id": "13", 
+    "id": "15", 
     "name": "orphan"
   }, 
   {
@@ -312,7 +328,7 @@
       "20126"
     ], 
     "children_are_cells": true, 
-    "id": "14", 
+    "id": "16", 
     "name": "less flat"
   }, 
   {
@@ -598,7 +614,7 @@
       "25007"
     ], 
     "children_are_cells": true, 
-    "id": "15", 
+    "id": "17", 
     "name": "unkown"
   }, 
   {
@@ -633,7 +649,7 @@
       "60181"
     ], 
     "children_are_cells": true, 
-    "id": "16", 
+    "id": "18", 
     "name": "BC3a"
   }, 
   {
@@ -675,7 +691,7 @@
       "60228"
     ], 
     "children_are_cells": true, 
-    "id": "17", 
+    "id": "19", 
     "name": "BC3b"
   }, 
   {
@@ -694,7 +710,7 @@
       "30002"
     ], 
     "children_are_cells": true, 
-    "id": "18", 
+    "id": "20", 
     "name": "biGC1"
   }, 
   {
@@ -722,7 +738,7 @@
       "70012"
     ], 
     "children_are_cells": true, 
-    "id": "19", 
+    "id": "21", 
     "name": "AII"
   }, 
   {
@@ -733,7 +749,7 @@
       "20074"
     ], 
     "children_are_cells": true, 
-    "id": "20", 
+    "id": "22", 
     "name": "BSGC2re"
   }, 
   {
@@ -743,8 +759,20 @@
       "10013"
     ], 
     "children_are_cells": true, 
-    "id": "21", 
+    "id": "23", 
     "name": "s1m"
+  }, 
+  {
+    "children": [
+      "20255", 
+      "20113", 
+      "20232", 
+      "20070", 
+      "17055"
+    ], 
+    "children_are_cells": true, 
+    "id": "24", 
+    "name": "s3d"
   }, 
   {
     "children": [
@@ -754,7 +782,7 @@
       "20068"
     ], 
     "children_are_cells": true, 
-    "id": "22", 
+    "id": "25", 
     "name": "mid flat"
   }, 
   {
@@ -778,7 +806,7 @@
       "25003"
     ], 
     "children_are_cells": true, 
-    "id": "23", 
+    "id": "26", 
     "name": "biGC3"
   }, 
   {
@@ -789,7 +817,7 @@
       "20257"
     ], 
     "children_are_cells": true, 
-    "id": "24", 
+    "id": "27", 
     "name": "BSGC3if"
   }, 
   {
@@ -806,7 +834,7 @@
       "60550"
     ], 
     "children_are_cells": true, 
-    "id": "25", 
+    "id": "28", 
     "name": "XBC"
   }, 
   {
@@ -849,7 +877,7 @@
       "25008"
     ], 
     "children_are_cells": true, 
-    "id": "26", 
+    "id": "29", 
     "name": "wfAC"
   }, 
   {
@@ -860,7 +888,7 @@
       "17071"
     ], 
     "children_are_cells": true, 
-    "id": "27", 
+    "id": "30", 
     "name": "s3c"
   }, 
   {
@@ -907,7 +935,7 @@
       "20078"
     ], 
     "children_are_cells": true, 
-    "id": "28", 
+    "id": "31", 
     "name": "mfAC"
   }, 
   {
@@ -916,7 +944,7 @@
       "17077"
     ], 
     "children_are_cells": true, 
-    "id": "29", 
+    "id": "32", 
     "name": "s2a"
   }, 
   {
@@ -924,7 +952,7 @@
       "20094"
     ], 
     "children_are_cells": true, 
-    "id": "30", 
+    "id": "33", 
     "name": "orphan nfAC"
   }, 
   {
@@ -932,10 +960,13 @@
       "25004", 
       "17022", 
       "20170", 
+      "17057", 
+      "17247", 
+      "20174", 
       "17057"
     ], 
     "children_are_cells": true, 
-    "id": "31", 
+    "id": "34", 
     "name": "s3a"
   }, 
   {
@@ -944,7 +975,7 @@
       "20073"
     ], 
     "children_are_cells": true, 
-    "id": "32", 
+    "id": "35", 
     "name": "small flat spiny"
   }, 
   {
@@ -953,7 +984,7 @@
       "17077"
     ], 
     "children_are_cells": true, 
-    "id": "33", 
+    "id": "36", 
     "name": "broad"
   }, 
   {
@@ -961,7 +992,7 @@
       "17238"
     ], 
     "children_are_cells": true, 
-    "id": "34", 
+    "id": "37", 
     "name": "midi-J?"
   }, 
   {
@@ -969,25 +1000,8 @@
       "70001"
     ], 
     "children_are_cells": true, 
-    "id": "35", 
+    "id": "38", 
     "name": "AB-D2/D-BI"
-  }, 
-  {
-    "children": [
-      "20157", 
-      "20164", 
-      "17110", 
-      "17236", 
-      "17182", 
-      "17050", 
-      "17021", 
-      "10007", 
-      "20132", 
-      "20092"
-    ], 
-    "children_are_cells": true, 
-    "id": "36", 
-    "name": "s1o (melanopsin)"
   }, 
   {
     "children": [
@@ -995,7 +1009,7 @@
       "17111"
     ], 
     "children_are_cells": true, 
-    "id": "37", 
+    "id": "39", 
     "name": "s5s"
   }, 
   {
@@ -1005,7 +1019,7 @@
       "20156"
     ], 
     "children_are_cells": true, 
-    "id": "38", 
+    "id": "40", 
     "name": "s2nL"
   }, 
   {
@@ -1025,7 +1039,7 @@
       "17168"
     ], 
     "children_are_cells": true, 
-    "id": "39", 
+    "id": "41", 
     "name": "small flat"
   }, 
   {
@@ -1034,7 +1048,7 @@
       "70003"
     ], 
     "children_are_cells": true, 
-    "id": "40", 
+    "id": "42", 
     "name": "Flag"
   }, 
   {
@@ -1044,7 +1058,7 @@
       "17082"
     ], 
     "children_are_cells": true, 
-    "id": "41", 
+    "id": "43", 
     "name": "s4nL"
   }, 
   {
@@ -1076,20 +1090,8 @@
       "60618"
     ], 
     "children_are_cells": true, 
-    "id": "42", 
+    "id": "44", 
     "name": "BC5t"
-  }, 
-  {
-    "children": [
-      "20255", 
-      "20113", 
-      "20232", 
-      "20070", 
-      "17055"
-    ], 
-    "children_are_cells": true, 
-    "id": "43", 
-    "name": "s4t"
   }, 
   {
     "children": [
@@ -1099,7 +1101,7 @@
       "20075"
     ], 
     "children_are_cells": true, 
-    "id": "44", 
+    "id": "45", 
     "name": "onDSGC"
   }, 
   {
@@ -1113,20 +1115,17 @@
       "17107"
     ], 
     "children_are_cells": true, 
-    "id": "45", 
+    "id": "46", 
     "name": "midi-J"
   }, 
   {
     "children": [
       "20128", 
-      "17247", 
       "20165", 
-      "20174", 
-      "20240", 
-      "17057"
+      "20240"
     ], 
     "children_are_cells": true, 
-    "id": "46", 
+    "id": "47", 
     "name": "s3b"
   }, 
   {
@@ -1135,7 +1134,7 @@
       "20087"
     ], 
     "children_are_cells": true, 
-    "id": "47", 
+    "id": "48", 
     "name": "wfAC bifid"
   }, 
   {
@@ -1152,7 +1151,7 @@
       "17212"
     ], 
     "children_are_cells": true, 
-    "id": "48", 
+    "id": "49", 
     "name": "biGC2"
   }, 
   {
@@ -1161,7 +1160,7 @@
       "20197"
     ], 
     "children_are_cells": true, 
-    "id": "49", 
+    "id": "50", 
     "name": "BSGC4ie"
   }, 
   {
@@ -1171,7 +1170,7 @@
       "20056"
     ], 
     "children_are_cells": true, 
-    "id": "50", 
+    "id": "51", 
     "name": "flat"
   }, 
   {
@@ -1194,7 +1193,7 @@
       "17080"
     ], 
     "children_are_cells": true, 
-    "id": "51", 
+    "id": "52", 
     "name": "ooDSGC (BSGC1re)"
   }, 
   {
@@ -1205,7 +1204,7 @@
       "20161"
     ], 
     "children_are_cells": true, 
-    "id": "52", 
+    "id": "53", 
     "name": "BSGC3rn"
   }, 
   {
@@ -1292,7 +1291,7 @@
       "70014"
     ], 
     "children_are_cells": true, 
-    "id": "53", 
+    "id": "54", 
     "name": "SAC Off"
   }, 
   {
@@ -1311,7 +1310,7 @@
       "30002"
     ], 
     "children_are_cells": true, 
-    "id": "54", 
+    "id": "55", 
     "name": "BSGC1ie"
   }, 
   {
@@ -1333,7 +1332,7 @@
       "20101"
     ], 
     "children_are_cells": true, 
-    "id": "55", 
+    "id": "56", 
     "name": "mini-j"
   }, 
   {
@@ -1344,7 +1343,7 @@
       "20056"
     ], 
     "children_are_cells": true, 
-    "id": "56", 
+    "id": "57", 
     "name": "s5L"
   }, 
   {
@@ -1355,7 +1354,7 @@
       "20068"
     ], 
     "children_are_cells": true, 
-    "id": "57", 
+    "id": "58", 
     "name": "s4ns"
   }, 
   {
@@ -1378,7 +1377,7 @@
       "17080"
     ], 
     "children_are_cells": true, 
-    "id": "58", 
+    "id": "59", 
     "name": "ooDSGC"
   }, 
   {
@@ -1388,16 +1387,8 @@
       "20158"
     ], 
     "children_are_cells": true, 
-    "id": "59", 
-    "name": "BSGC3re"
-  }, 
-  {
-    "children": [
-      "20203"
-    ], 
-    "children_are_cells": true, 
     "id": "60", 
-    "name": "s1oL"
+    "name": "BSGC3re"
   }, 
   {
     "children": [
@@ -1784,11 +1775,27 @@
   }, 
   {
     "children": [
+      "20157", 
+      "20164", 
+      "17110", 
+      "17182", 
+      "17050", 
+      "17021", 
+      "10007", 
+      "20132", 
+      "20092"
+    ], 
+    "children_are_cells": true, 
+    "id": "78", 
+    "name": "s1n (melanopsin)"
+  }, 
+  {
+    "children": [
       "20228", 
       "17111"
     ], 
     "children_are_cells": true, 
-    "id": "78", 
+    "id": "79", 
     "name": "large"
   }, 
   {
@@ -1798,7 +1805,7 @@
       "20150"
     ], 
     "children_are_cells": true, 
-    "id": "79", 
+    "id": "80", 
     "name": "BSGC2ie"
   }, 
   {
@@ -1811,7 +1818,7 @@
       "17168"
     ], 
     "children_are_cells": true, 
-    "id": "80", 
+    "id": "81", 
     "name": "s3n"
   }, 
   {
@@ -1822,7 +1829,7 @@
       "60578"
     ], 
     "children_are_cells": true, 
-    "id": "81", 
+    "id": "82", 
     "name": "BC8"
   }, 
   {
@@ -1835,7 +1842,7 @@
       "60461"
     ], 
     "children_are_cells": true, 
-    "id": "82", 
+    "id": "83", 
     "name": "BC9"
   }, 
   {
@@ -1875,7 +1882,7 @@
       "60222"
     ], 
     "children_are_cells": true, 
-    "id": "83", 
+    "id": "84", 
     "name": "BC4"
   }, 
   {
@@ -1887,7 +1894,7 @@
       "17011"
     ], 
     "children_are_cells": true, 
-    "id": "84", 
+    "id": "85", 
     "name": "biGC"
   }, 
   {
@@ -1926,7 +1933,7 @@
       "60614"
     ], 
     "children_are_cells": true, 
-    "id": "85", 
+    "id": "86", 
     "name": "BC6"
   }, 
   {
@@ -1962,7 +1969,7 @@
       "60016"
     ], 
     "children_are_cells": true, 
-    "id": "86", 
+    "id": "87", 
     "name": "BC7"
   }, 
   {
@@ -1972,7 +1979,7 @@
       "20156"
     ], 
     "children_are_cells": true, 
-    "id": "87", 
+    "id": "88", 
     "name": "large flat"
   }, 
   {
@@ -2020,7 +2027,7 @@
       "60218"
     ], 
     "children_are_cells": true, 
-    "id": "88", 
+    "id": "89", 
     "name": "BC1"
   }, 
   {
@@ -2082,7 +2089,7 @@
       "60226"
     ], 
     "children_are_cells": true, 
-    "id": "89", 
+    "id": "90", 
     "name": "BC2"
   }
 ]

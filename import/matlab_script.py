@@ -7,13 +7,14 @@ class MatlabScript:
     self.gc = {}
     
     self.cell_types = {}
-    self.cell_classes = {}
+    self.cell_classes = { 'GC bistratified':[] , 'GC monostratified':[] }
 
 
     self.fname =  'gc_types_load_cells.m'
-    self.set_name = 'Ganglion Cells'
 
     self.loadMatlabScript()
+
+
 
 
 
@@ -29,7 +30,6 @@ class MatlabScript:
 
     self.convertToSets()
 
-    self.cell_classes[self.set_name] = self.cell_types.keys()
 
   def parseNames(self,line):
     name = re.match(r"gc\((\d*)\).name\s*=\s*['|\"](.*)['|\"]", line)
@@ -38,7 +38,9 @@ class MatlabScript:
       type_id =  name.groups()[0];
       type_name =  name.groups()[1];
 
-      self.gc[type_id] = { 'name':type_name};
+      self.gc[type_id] = { 'name':type_name}
+
+      self.appendtoCellClasses(type_id, type_name)
 
 
   def parseSegments(self,line):
@@ -58,6 +60,18 @@ class MatlabScript:
       segments = self.gc[idx]['segments']
 
       self.cell_types[name] = segments
+
+  def appendtoCellClasses(self, idx, set_name):
+    idx = int(idx)
+
+    if idx < 17:
+      self.cell_classes['GC bistratified'].append(set_name)
+    
+    else:
+
+      self.cell_classes['GC monostratified'].append(set_name)
+
+
 
 
 if __name__ == '__main__':
