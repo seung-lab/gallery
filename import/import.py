@@ -47,7 +47,17 @@ class Importer:
     cells = []
 
     spreadsheet = self.spreadsheet.get()
-    stratification = self.stratification.get()
+
+    full_strat = Stratification()
+    mono_strat = Stratification('strat_150717.mat')
+  
+    for segment_id in full_strat.stratification:
+      if segment_id in  mono_strat.stratification:
+
+        full_strat.stratification[segment_id] = mono_strat.stratification[segment_id]
+    
+
+    stratification = full_strat.stratification
 
     for segment_id in self.spreadsheet.get():
 

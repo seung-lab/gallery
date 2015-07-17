@@ -109,9 +109,9 @@ import scipy.io
 
 class Stratification:
 
-  def __init__(self):
+  def __init__(self, fname = 'strat.mat'):
 
-    self.fname = 'strat.mat'
+    self.fname = fname
 
     self.stratification = {}
 
@@ -119,10 +119,15 @@ class Stratification:
 
   def loadStratification(self):
 
-    mat = scipy.io.loadmat(self.fname);
 
-    for row_idx in range(mat['strat'].shape[0]):
-      row = mat['strat'][row_idx]
+    mat = scipy.io.loadmat(self.fname);
+    
+    dataset_name = self.fname.split('.')[0]
+    mat = mat[dataset_name]
+  
+
+    for row_idx in range(mat.shape[0]):
+      row = mat[row_idx]
 
       segId = str(row[0].flatten()[0])
       values = list(row[1].flatten())
@@ -139,9 +144,14 @@ if __name__ == '__main__':
 
   spreadsheet = Spreadsheet()
   # print spreadsheet.spreadsheet
-  print spreadsheet.cell_classes
+  # print spreadsheet.cell_classes
 
   # print spreadsheet.cell_types
 
-  # stratification = Stratification()
-  # print stratification.stratification
+  full_strat = Stratification()
+  mono_strat = Stratification('strat_150717.mat')
+  
+  for segment_id in full_strat.stratification:
+    if segment_id in  mono_strat.stratification:
+
+      full_strat.stratification[segment_id] = mono_strat.stratification
