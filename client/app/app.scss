@@ -6,6 +6,7 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 $right_aside : 500px;
 $negative_right_aside : -500px;
 
+$left_menu: 20rem; 
 
 @mixin translate3d($x_axis, $y_axis, $z_axis) {
   -ms-transform: translate($x_axis, $y_axis);
@@ -588,7 +589,7 @@ fieldset .group *:last-child select+.select {
 
 
 #cell-view.cr {
-    @include translate3d(400px, 0px , 0px);
+    @include translate3d($negative_right_aside, 0px , 0px);
 }
 #cell-view aside {
     position: absolute;
@@ -780,7 +781,7 @@ q {
 }
 [sp-sortable] li.dragged {
     position: absolute;
-    width: 32rem;
+    width: $left_menu;
     left: 0;
     z-index: 2;
     border-radius: 0;
@@ -803,7 +804,7 @@ li.room:last-child {
     margin: 1.1rem 1.1rem 0;
 }
 .w {
-    width: 32rem
+    width: $left_menu;
 }
 .fr {
     float: right;
@@ -834,7 +835,7 @@ li.room:last-child {
 }
 @media (min-width: 800px) {
     #cell-view {
-        margin-left: 32rem
+        margin-left: $left_menu;
     }
     #back-button {
         display: none
@@ -1612,7 +1613,7 @@ figure>article {
         0,
         0.4),
     0 0 1px #000;
-    min-width:32rem;
+    min-width:$left_menu;;
     max-width:100%;
     min-height:8.8rem;
     max-height:100%
@@ -1623,7 +1624,7 @@ figure>article {
     left:100%
 }
 .notification {
-    width:32rem;
+    width:$left_menu;;
     padding:0 1rem 1rem 1rem;
     position:relative
 }

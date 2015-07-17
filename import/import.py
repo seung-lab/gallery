@@ -55,11 +55,11 @@ class Importer:
 
       cell = {  
 
-        "name": row['name'],
+        "name": '# '+ segment_id,
         "segment": segment_id,
         "id": segment_id,
         "mesh_id": row['database_ids'],
-        "description": 'class: '+ row['cell_class'] + '  type:' + row['cell_type'],
+        "description": 'name: '+ row['name'] + '\n class: '+ row['cell_class'] + '\n  type:' + row['cell_type'], 
         "stratification": stratification[ segment_id ],
         "copyright": " Or another longer description ",
         "color": self.randColor()

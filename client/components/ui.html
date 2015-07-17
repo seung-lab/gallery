@@ -1,6 +1,6 @@
 <div class="icon-cellpane" ng-controller="UIController">
 <!--     Menu on the right with cell details -->    
-  <div id="cell-view" ng-class="{cr:cr,ic:r.cellId,fs:fs}">
+  <div id="cell-view" ng-class="{cr:cr,ic:r.cellId||(r.setId&&sets.get(r.setId).children_are_cells),fs:fs}">
     <aside>
       <article id="info">
           <h1>{{cells[cells.getIndex(r.cellId)].name}}</h1>

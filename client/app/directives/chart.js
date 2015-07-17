@@ -17,6 +17,9 @@ app.directive('chart', ['$timeout', function ($timeout) {
       config.transition = {
         duration: 0 //Disable animation for faster loading
       };
+      config.point= {
+        show: false
+      };
 
       scope.chart = c3.generate(config);
  

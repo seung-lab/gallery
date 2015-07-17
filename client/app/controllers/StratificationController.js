@@ -4,10 +4,9 @@
 
 app.controller('StratificationController', ['$rootScope','$scope','$timeout',
   function($rootScope, $scope, $timeout) {
+      
+    var data;
 
-    var data = { colors:{}, columns:[], type: 'line', unload: true};
-    window.data = data;
-    
     function updateChart () {
       
        if (!$scope.chart) {
@@ -30,14 +29,7 @@ app.controller('StratificationController', ['$rootScope','$scope','$timeout',
     }
 
     var removeCell = function ( cellId ) {
-      
-      for (var i = 0; i < data.columns.length; ++i) {
-        if (data.columns[i][0] == cellId) {
-          delete data.colors[cellId];
-          data.columns.splice(i,1);
-          return;
-        }
-      }
+      data.unload.push( cellId );
     }
     
 
@@ -54,6 +46,8 @@ app.controller('StratificationController', ['$rootScope','$scope','$timeout',
     }
 
     $scope.$on('visible', function(event) {
+
+      data = { colors:{}, columns:[], type: 'line', unload: []}
 
       for (var i = 0; i < $scope.added.length ; ++i) {
         
