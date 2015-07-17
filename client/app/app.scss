@@ -15,6 +15,22 @@ $negative_right_aside : -500px;
   transform: translate3d($x_axis, $y_axis, $z_axis);
 }
 
+@mixin transition($property , $duration) {
+    -webkit-transition: $property $duration;
+    -moz-transition: $property $duration;
+    -o-transition: $property $duration;
+    transition: $property $duration;
+}
+
+@mixin background_image ($first_color, $second_color){
+
+  background-image:-webkit-linear-gradient(top, $first_color, $second_color);
+  background-image:-moz-linear-gradient(top, $first_color, $second_color);
+  background-image:-ms-linear-gradient(top,  $first_color, $second_color);
+  background-image:-o-linear-gradient(top, $first_color, $second_color);
+  background-image:linear-gradient(to bottom, $first_color, $second_color);
+}
+
 /**
  * App-wide Styles
  */
@@ -187,6 +203,7 @@ button {
     -webkit-appearance: none;
     -moz-appearance: none
 }
+
 html {
     height: 100%;
     font-size: 62.5%;
@@ -243,7 +260,7 @@ section,
 .t3d,
 .t3d>*,
 figure.on {
- @include translate3d(0,0,0);
+ @include translate3d(0,0,0)
 }
 .transition,
 #ui.run,
@@ -253,10 +270,7 @@ figure.on {
 section,
 figure,
 .notification {
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    -o-transition: all 0.3s;
-    transition: all 0.3s
+    @include transition(all, 0.3s)
 }
 .slow .transition,
 .slow #ui.run,
@@ -266,10 +280,7 @@ figure,
 .slow section,
 .slow figure,
 .slow .notification {
-    -webkit-transition: all 3s;
-    -moz-transition: all 3s;
-    -o-transition: all 3s;
-    transition: all 3s
+    @include transition(all, 3s)
 }
 .center,
 figure,
@@ -410,6 +421,7 @@ a,
 select {
     cursor: pointer
 }
+
 kbd {
     display: inline-block;
     border-radius: 0.4rem;
@@ -1486,6 +1498,7 @@ header .btn:first-child {
 header h1 {
     text-align:center
 }
+
 article header,
 .nav li {
     padding:0.7rem;
@@ -1494,21 +1507,9 @@ article header,
     border:1px solid #ABABAB;
     border-width:0 0 1px 0;
     background-color:#e4e4e4;
-    background-image:-webkit-linear-gradient(top,
-        #f6f6f6,
-        #e4e4e4);
-    background-image:-moz-linear-gradient(top,
-        #f6f6f6,
-        #e4e4e4);
-    background-image:-ms-linear-gradient(top,
-        #f6f6f6,
-        #e4e4e4);
-    background-image:-o-linear-gradient(top,
-        #f6f6f6,
-        #e4e4e4);
-    background-image:linear-gradient(to bottom,
-        #f6f6f6,
-        #e4e4e4)
+
+    @include background_image( #ffffff , #e4e4e4)
+
 }
 .list>li {
     padding:0.7rem 1.4rem
