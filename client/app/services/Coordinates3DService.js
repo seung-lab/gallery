@@ -2,9 +2,9 @@
 
 (function(app, THREE) { 
 
-app.service('Coordinates3DService', ['Scene3DService' , function(SceneService){
+app.service('Coordinates3DService', ['Scene3DService' , function(Scene){
 
-  var scene = SceneService.scene;
+  var scene = Scene.get();
 
   this.grid = {};
   this.axes = [];

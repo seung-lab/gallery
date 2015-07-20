@@ -10,4 +10,3 @@ run ./install.sh
 * simplify mesh when far (removing noise effect)
 * back button when loading directly from a set
 
-

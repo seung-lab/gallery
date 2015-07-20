@@ -1,29 +1,30 @@
 'use strict';
-// Manages the 3D Scene for the cells
+// Manages the 3D Scene 
 ( function (app) {
+
 app.controller('3DController', ['$scope', 'CellService', 'Coordinates3DService',
   function ($scope, CellService, CoordinatesService) {
 
 
   this.watch = function() {
     $scope.$watch('s.toggleGround', function(show) {
-      show ? CoordinatesService.drawGround({size:10000}) : CoordinatesService.removeGround();
+      show ? CoordinatesService.drawGround({size:100000}) : CoordinatesService.removeGround();
     });
 
     $scope.$watch('s.toggleAxes', function(show) {
-      show ? CoordinatesService.drawAllAxes({axisLength:1000,axisRadius:50,axisTess:50}) : CoordinatesService.removeAxes();
+      show ? CoordinatesService.drawAllAxes({axisLength:10000,axisRadius:500,axisTess:500}) : CoordinatesService.removeAxes();
     });
 
     $scope.$watch('s.toggleYZGrid', function(show) {
-      show ? CoordinatesService.drawGrid({size:10000,scale:0.001, orientation:"x"}) : CoordinatesService.removeGrid('x');
+      show ? CoordinatesService.drawGrid({size:1000000,scale:0.00001, orientation:"x"}) : CoordinatesService.removeGrid('x');
     });
 
     $scope.$watch('s.toggleXZGrid', function(show) {
-      show ? CoordinatesService.drawGrid({size:10000,scale:0.001, orientation:"y"}) : CoordinatesService.removeGrid('y');
+      show ? CoordinatesService.drawGrid({size:1000000,scale:0.00001, orientation:"y"}) : CoordinatesService.removeGrid('y');
     });
 
     $scope.$watch('s.toggleXYGrid', function(show) {
-      show ? CoordinatesService.drawGrid({size:10000,scale:0.001, orientation:"z"}) : CoordinatesService.removeGrid('z');
+      show ? CoordinatesService.drawGrid({size:1000000,scale:0.00001, orientation:"z"}) : CoordinatesService.removeGrid('z');
     });
   };
   this.watch();

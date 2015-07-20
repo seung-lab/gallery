@@ -17,7 +17,10 @@ app.service('Scene3DService', function () {
     scene.add(light);
     scene.add(light2);
 
-    return { scene: scene };
+    var get = function() {
+        return scene;
+    }
+    return { get: get };
 });
 
 })(app, THREE);

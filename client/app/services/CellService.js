@@ -3,8 +3,8 @@
 // creates a tube that follows a collection of 3d points.
 ( function (app) { 
 
-app.service('CellService', ['$rootScope','Scene3DService', 'SetFactory',
- function ($rootScope, Scene, setOperations) {
+app.service('CellService', ['$rootScope','Scene3DService', 'SetFactory','Camera3DService',
+ function ($rootScope, Scene, setOperations, Camera) {
 
   var old_visible = new Set();
 
@@ -77,16 +77,22 @@ app.service('CellService', ['$rootScope','Scene3DService', 'SetFactory',
 
     var url = '/api/mesh/'+cell.segment;
 
-    var ctm = new THREE.CTMLoader(true);
+    var ctm = new THREE.CTMLoader(false);
     ctm.load( url , function(geometry){
+
 
       var material = new THREE.MeshLambertMaterial( { color:cell.color , wireframe:false } );
       cell.mesh = new THREE.Mesh( geometry, material );
-      cell.mesh.scale.set(0.05,0.05,0.05)
-      Scene.scene.add( cell.mesh );
+      cell.mesh.visible = cell.visible; 
+      Scene.get().add( cell.mesh );
 
-      cell.mesh.visible = cell.visible;      
-    }, { 'useWorker': true} );
+
+      geometry.computeBoundingBox();
+      var position  = new THREE.Vector3().addVectors( geometry.boundingBox.max, geometry.boundingBox.min ).multiplyScalar(0.5);
+      Camera.lookAt( position );
+
+
+    }, { 'useWorker': true } );
 
   };
 
@@ -123,6 +129,18 @@ app.service('CellService', ['$rootScope','Scene3DService', 'SetFactory',
     }
 
     cell.visible = false;
+  };
+
+  var showBoundingBox = function ( geometry ){
+
+    var bbox = geometry.boundingBox;
+
+    var box_geometry = new THREE.BoxGeometry( bbox.max.x - bbox.min.x , bbox.max.y - bbox.min.y , bbox.max.z - bbox.min.z );
+    var material = new THREE.MeshBasicMaterial( {color: 0xffffff, wireframe:true} );
+    var cube = new THREE.Mesh( box_geometry, material );
+    cube.position.set( (bbox.max.x + bbox.min.x)/2.0 , (bbox.max.y + bbox.min.y)/2.0 * scale, (bbox.max.z + bbox.min.z)/2.0 * scale);
+    Scene.get().add( cube );
+
   };
 
   

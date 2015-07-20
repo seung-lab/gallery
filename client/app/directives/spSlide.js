@@ -22,7 +22,7 @@ app.directive("spSlide", ["UtilService", "TransitionerFactory", function(util, t
 
             viewSlide.force = false;
 
-            var inheritedScope = scope.$new();
+            var inheritedScope = telement.$new();
             inheritedScope.model = viewSlide.model;
 
             transclude(inheritedScope, function(viewElement) {

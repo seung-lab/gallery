@@ -113,7 +113,7 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
 
         };
 
-        var currentSetId = scope.r.setId;
+        var currentSetId = $scope.r.setId;
 
         if (currentSetId === undefined) {
           return buildChildren(0); // Root Set
