@@ -39,7 +39,8 @@
         var height = element[0].offsetHeight;
 
         renderer.setSize( width , height );
-        Camera.setAspectRatio( width  / height ) ;
+
+        Camera.setViewSize( width , height );
       }
     }
   }

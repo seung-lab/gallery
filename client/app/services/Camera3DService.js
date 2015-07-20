@@ -3,67 +3,99 @@
 ( function(app, THREE) {
 // Returns a single instance of a camera.  Consumed by directive and controls.
 app.service('Camera3DService', ['Scene3DService',function (Scene) {
-    // default values for camera
-    var viewAngle = 45;
-    var aspectRatio = window.innerWidth / window.innerHeight;
-    var near = 0.1;
-    var far = 1500000;
 
-    var controls;
-    var clock = new THREE.Clock();
+    var _this = this;
 
-    var perspectiveCam = new THREE.PerspectiveCamera(viewAngle, aspectRatio, near, far);
-    var _renderer;
+    this.createPerspective = function () { 
 
-    // perspectiveCam.position.set(1000, 20000, 1500);
-    Scene.get().add(perspectiveCam);
+      // default values for camera
+      var viewAngle = 45;
+      var near = 0.1;
+      var far = 1000000;
 
+      this.perspectiveCam = new THREE.PerspectiveCamera(viewAngle, _this.aspectRatio, near, far);
+      Scene.get().add(this.perspectiveCam);
 
-    var get = function () {
-
-    	return perspectiveCam;
     };
 
-    var setAspectRatio = function( ratio ) {
-    	aspectRatio = ratio;
-    	get().aspect = ratio;
-      get().updateProjectionMatrix();
-        // controls.handleResize();
-    };
+    this.createOrthographic = function () {
 
-    var animate = function() {
-      requestAnimationFrame(animate);
-      controls.update();
-    };
+      var left = _this.width / -2;// Camera frustum left plane.
+      var right = _this.width / 2;// Camera frustum right plane.
+      var top  = _this.height / 2; // Camera frustum top plane.
+      var bottom = _this.height / -2;// Camera frustum bottom plane.
+      var near = 0.1// Camera frustum near plane.
+      var far = 1000000;// Camera frustum far plane.
 
-    var render = function() {
-      _renderer.render(Scene.get(), get());
+      this.orthographicCam = new THREE.OrthographicCamera( left, right, top, bottom, near, far );
+
+      Scene.get().add(this.orthographicCam);
+
     };
 
 
-    var initController = function( renderer ) {
+    this.get = function () {
 
-  		_renderer = renderer;
-      controls = new THREE.TrackballControls(get());
-			controls.addEventListener( 'change', render );
-
-      animate();
+    	return _this.orthographicCam;
     };
 
-    var lookAt = function( position ) {
+    this.setViewSize = function( width , height ) {
+      _this.width = width;
+      _this.height = height;
 
-    	controls.position0.set( position.x , 0, 0);
-    	controls.target0 = position;
-    	controls.up0.set( -1 , 0, 0 );
-    	controls.reset();
+      _this.aspectRatio = width / height;
+      _this.get().aspect =  _this.aspectRatio;
+      _this.get().updateProjectionMatrix();
+      _this.controls.handleResize();
+      _this.render();
 
     };
+
+    this.setAspectRatio = function( ratio ) {
+    	_this.aspectRatio = ratio;
+      
+    };
+
+    this.animate = function() {
+      requestAnimationFrame( _this.animate);
+      _this.controls.update();
+    };
+
+    this.render = function() {
+      _this.renderer.render(Scene.get(), _this.get() );
+    };
+
+
+    this.initController = function( renderer ) {
+  		_this.renderer = renderer;
+      _this.controls = new THREE.TrackballControls( _this.get() );
+			_this.controls.addEventListener( 'change', _this.render );
+
+      _this.animate();
+    };
+
+    this.lookAt = function( position ) {
+
+    	_this.controls.position0.set( position.x , 0, 0);
+    	_this.controls.target0 = position;
+    	_this.controls.up0.set( -1 , 0, 0 );
+    	_this.controls.reset();
+
+    };
+
+
+    _this.aspectRatio = window.innerWidth / window.innerHeight;
+    _this.createPerspective();
+
+    _this.createOrthographic();
+
+    window.cam = _this;
 
     return { 
-    	get:get,
-    	setAspectRatio:setAspectRatio,
-    	initController:initController,
-    	lookAt:lookAt 
+    	get: this.get,
+    	setViewSize:this.setViewSize,
+    	initController:this.initController,
+    	lookAt:this.lookAt 
     };
 }]);
 
