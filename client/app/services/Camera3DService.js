@@ -20,10 +20,11 @@ app.service('Camera3DService', ['Scene3DService',function (Scene) {
 
     this.createOrthographic = function () {
 
-      var left = _this.width / -2;// Camera frustum left plane.
-      var right = _this.width / 2;// Camera frustum right plane.
-      var top  = _this.height / 2; // Camera frustum top plane.
-      var bottom = _this.height / -2;// Camera frustum bottom plane.
+      var viewSize = 200000;
+      var left = _this.aspectRatio * viewSize/ -2;// Camera frustum left plane.
+      var right = _this.aspectRatio * viewSize / 2;// Camera frustum right plane.
+      var top  = viewSize / 2; // Camera frustum top plane.
+      var bottom = viewSize / -2;// Camera frustum bottom plane.
       var near = 0.1// Camera frustum near plane.
       var far = 1000000;// Camera frustum far plane.
 
@@ -49,11 +50,6 @@ app.service('Camera3DService', ['Scene3DService',function (Scene) {
       _this.controls.handleResize();
       _this.render();
 
-    };
-
-    this.setAspectRatio = function( ratio ) {
-    	_this.aspectRatio = ratio;
-      
     };
 
     this.animate = function() {
