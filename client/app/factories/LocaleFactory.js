@@ -188,7 +188,7 @@ app.factory('LocaleFactory', function() {
     toggleHelp: 'Toggle help (this screen)',
     toggleSettings: 'Toggle settings',
     esc: 'Cancel actions, close modal windows',
-    checkBody: 'Please check the body of the cell.',
+    checkBody: 'Please check the id of the cell.',
     sharedSet: 'A new set has been shared with you!',
     checkEmail: 'Please check your email.',
     invalidCredentials: 'Invalid credentials!',

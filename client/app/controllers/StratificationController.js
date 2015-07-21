@@ -2,8 +2,8 @@
 
 (function (app) {
 
-app.controller('StratificationController', ['$rootScope','$scope','$timeout',
-  function($rootScope, $scope, $timeout) {
+app.controller('StratificationController', ['$rootScope','$scope','$timeout', 'CellService',
+  function($rootScope, $scope, $timeout, CellService) {
       
     var data;
 
@@ -32,8 +32,6 @@ app.controller('StratificationController', ['$rootScope','$scope','$timeout',
       data.unload.push( cellId );
     }
     
-
-
     function loadCell( cellId ) {
 
       if (!$scope.chart) {
@@ -49,16 +47,16 @@ app.controller('StratificationController', ['$rootScope','$scope','$timeout',
 
       data = { colors:{}, columns:[], type: 'line', unload: []}
 
-      for (var i = 0; i < $scope.added.length ; ++i) {
+      for (var i = 0; i < $scope.visible.added.length ; ++i) {
         
-        var cell_id = $scope.added[i];
+        var cell_id = $scope.visible.added[i];
         addCell(cell_id);
 
       }
 
-      for (var i = 0; i < $scope.removed.length ; ++i) {
+      for (var i = 0; i < $scope.visible.removed.length ; ++i) {
         
-        var cell_id = $scope.removed[i];
+        var cell_id = $scope.visible.removed[i];
         removeCell(cell_id);
         
       }
@@ -67,6 +65,19 @@ app.controller('StratificationController', ['$rootScope','$scope','$timeout',
 
     });
       
+    $scope.onLegendClick = function(cellId) {
+      CellService.toggle( cellId );
+    };
+
+    $scope.onLegendMouseout = function(cellId) {
+      console.log('mouse out ' +cellId);
+    };
+
+    $scope.onLegendMouseover = function(cellId) {
+      console.log('mouse over ' + cellId);
+    };
+
+
 
  }]);
 

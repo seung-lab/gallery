@@ -39,24 +39,17 @@ app.service('CellService', ['$rootScope','Scene3DService', 'SetFactory','Camera3
         removeCellMesh(cellID);
     });
 
-    $rootScope.visible = old_visible;
-    $rootScope.added = added;
-    $rootScope.removed = removed;
+    $rootScope.visible = { visible: old_visible, added:added, removed:removed };
     $rootScope.$broadcast('visible');
   }
 
 
   function updateVisibleCells () {
-    $rootScope.$watch('r.setId', function(setId){
-      if(!setId){
-        return;
-      }
-      var set = $rootScope.sets.get(setId);
-      var new_visible = new Set(set.children);
+    $rootScope.$watch('sets.get(r.setId).children', function(children){
 
-      broadcastVisibleSet( new_visible );
+      broadcastVisibleSet( new Set(children) );
 
-    });
+    },true);
 
     $rootScope.$watch("r.cellId", function(cellId){
       if ($rootScope.viewSlide.model == "catalog" && cellId != undefined){
@@ -110,10 +103,10 @@ app.service('CellService', ['$rootScope','Scene3DService', 'SetFactory','Camera3
 
 
     if ( cell.mesh !== undefined ) {
-      cell.mesh.visible = true;
-    }
+      cell.mesh.visible = true;    }
 
     cell.visible = true;
+    Camera.render();
   };
 
   var removeCellMesh = function (cellId) {
@@ -129,6 +122,7 @@ app.service('CellService', ['$rootScope','Scene3DService', 'SetFactory','Camera3
     }
 
     cell.visible = false;
+    Camera.render();
   };
 
   var showBoundingBox = function ( geometry ){

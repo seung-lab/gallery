@@ -2,11 +2,11 @@
 
 ( function (app) {
 
-app.controller("NewController", ["$scope", "$rootScope", "cellMode", "$routeParams", "UtilService", "LocaleFactory", "NotifierFactory",
-  function($scope, $rootScope, transposer, cellMode, $routeParams, util, locale, notifier) {
+app.controller("NewController", ["$scope", "$rootScope", "$routeParams", "UtilService", "LocaleFactory", "NotifierFactory",
+  function($scope, $rootScope,  $routeParams, util, locale, Notifier) {
 
-      $scope.cellMode = cellMode;
       $scope.langs = locale.langs;
+
       if ($routeParams.edit){
         $scope.cell = util.extend({}, i[$routeParams.cellId]);
       } 
@@ -15,14 +15,17 @@ app.controller("NewController", ["$scope", "$rootScope", "cellMode", "$routePara
         delete $scope.cell.id;
       } 
 
-      $scope.savecell = function(a, b) {
-          
-        $rootScope.cells.save(a); 
+      $scope.savecell = function(cell) {
 
-        notifier.notify({
-            message: locale._.checkBody,
-            icon: "alert"
-        });
+        var set = $rootScope.sets.get($scope.r.setId);
+        
+        if (cell.id in set.children){
+          console.log('already exists')
+          return false;
+        }
+
+        set.children.push(cell.id);
+        return true;
       }
 }]);
 

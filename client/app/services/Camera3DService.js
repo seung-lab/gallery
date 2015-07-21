@@ -122,7 +122,8 @@ app.service('Camera3DService', ['Scene3DService',function (Scene) {
     	setViewSize:this.setViewSize,
     	initController:this.initController,
     	lookAt:this.lookAt,
-      setCurrentCamera:this.setCurrentCamera 
+      setCurrentCamera:this.setCurrentCamera,
+      render: this.render
     };
 }]);
 

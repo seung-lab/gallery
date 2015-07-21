@@ -111,15 +111,3 @@ var f = function() {
     c.android ? (b.name = 'android', b.version = c.android, b.native = !0) : c.ios ? (b.name = 'ios', b.version = c.ios, b.native = !0) : /AppleWebKit/.test(a) && /Mobile\/\w+/.test(a) ? b.name = 'ios' : ~a.toLowerCase().indexOf('firefox') && (b.name = 'ff'), b.name && (document.documentElement.className += ' ' + b.name)
     app.constant('platform', b)
 }(window);
-
-app.value('cellMode', {
-    startState: function() {
-        return {
-            next: 'part'
-        }
-    },
-    token: function(a, b) {
-        var c = null;
-        return 'part' == b.next ? a.match(/^\[[1-9BCPIO]\](?=$|\n)/) ? (c = 'part', b.next = 'chords') : a.skip() : 'chords' == b.next ? a.eat('\n') ? (c = 'chords', b.next = 'chord') : a.skip() : 'chord' == b.next ? a.eat('\n') ? b.next = 'text' : a.eatWhile(' ') ? /^[A-G]$/.test(a.peek()) || a.skip() : a.match(/^[A-G][#b12345679adgijmsu,\(\)]*(?:\/[A-G][#b]?)?(?=($| +|\n))/) ? c = 'chord' : a.skip() : 'text' == b.next ? a.match(/^.+\S/) ? (c = 'text', b.next = 'partOrChords') : a.skip() : 'partOrChords' == b.next ? a.match(/^\n(?=\[)/) ? b.next = 'part' : a.eat('\n') ? (c = 'chords', b.next = 'chord') : a.skip() : a.skip(), c
-    }
-});

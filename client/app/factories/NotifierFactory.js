@@ -9,7 +9,7 @@ app.factory("NotifierFactory", function() {
       icon: "info",
       delay: 5e3
     };
-    var c = [],
+    var messages = [],
 
     keys = Object.keys;
 
@@ -20,22 +20,22 @@ app.factory("NotifierFactory", function() {
         return this;
 
       },
-      notify: function(e) {
+      notify: function(message) {
 
         keys(b).forEach(function(a) {
-          e[a] || (e[a] = b[a])
+          message[a] || (message[a] = b[a])
         });
 
-        c.push(e); 
+        messages.push(message); 
         
         if (callback) {
-          callback(e);
+          callback(message);
         }
 
         return this;
       },
       get: function() {
-        return c
+        return messages;
       }
     }
 });

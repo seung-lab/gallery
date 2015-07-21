@@ -40,6 +40,7 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
                     children_are_cells: set.children_are_cells,
         });
         
+        sets.get(0).children.push(newSetId);
         $location.path('set/' +  newSetId );
 
       };
@@ -47,8 +48,6 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
       $scope.rmcell = function(childIndex) {
 
           var set = sets.get($routeParams.setId);
-
-          $location.path('set/' + set.id + '/');
 
           set.children.splice(childIndex, 1);
           
@@ -128,18 +127,22 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
 
         CellService.toggle( cell );
 
-        $scope.p('set/'+$scope.r.setId+'/'+cell);
+        // $scope.p('set/'+$scope.r.setId+'/'+cell);
       };
 
 
 
       $scope.new = function () {
-
-        if (scope.r.view == "sets"){
+        if ($scope.r.view == "sets"){
           $scope.modal('components/new-set.html');
+          return;
         }
-        else {
+        
+        if ($scope.sets.get($scope.r.setId).children_are_cells == true) { 
           $scope.modal('components/new-cell.html');
+        } 
+        else {
+          $scope.modal('components/new-set.html');
         }
       };
 

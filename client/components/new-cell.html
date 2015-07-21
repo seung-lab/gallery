@@ -1,13 +1,11 @@
-<form novalidate id="new-cell" name="newcell" method=post ng-controller="NewController">
+<form novalidate id="new-cell" name="newcell" method="post" ng-controller="NewController">
   <header>
-    <button type="button" class="btn x" sp-tap="modal();q('edit',null)" sp-kbd="'esc'"></button>
-    <input class="btn action" type="submit" ng-disabled="newcell.$invalid" ng-click="savecell(cell,v==_.priv||0)&&modal()&&q('edit',null)" value={{_.save}}>
-    <h2>{{cell.id&&_.editCell||_.newCell}}</h2>
+    <button type="button" class="btn x" sp-tap="modal();" sp-kbd="'esc'"></button>
+    <input class="btn action" type="submit" ng-disabled="cells.getIndex(cell.id) == -1" 
+           ng-click="savecell(cell)&&modal()" value="{{_.save}}">
+    <h2>{{_.newCell}}</h2>
   </header>
   <fieldset>
-    <input class="input" ng-model="cell.name" name="cell-name" sp-focus="" autocomplete="off" required placeholder={{_.cellname}}>
-    <input class="input" ng-model="cell.id" name="cell-id" sp-focus="" autocomplete="off" required placeholder={{_.id}}>
-    <textarea mode="cellMode" placeholder={{_.cellDescription}} model="cell.body" rows="10"></textarea>
-    <input class="input" ng-model="cell.copyright" name="cell-copyright" required placeholder={{_.copyright}}>
+    <input class="input" ng-model="cell.id" name="cell-id" sp-focus="" autocomplete="true" required placeholder="{{_.id}}">
   </fieldset>
 </form>
