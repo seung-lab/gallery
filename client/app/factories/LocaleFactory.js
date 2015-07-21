@@ -135,7 +135,7 @@ app.factory('LocaleFactory', function() {
     addToNewSet: 'Add the cell to a new set',
     addToExistingSet: 'or an existing set',
     selectSet: 'Select a set',
-    hideChords: 'Hide chords',
+    toggleCamera: 'Perspective Camera',
     toggleXZGrid: 'Show XZ Grid',
     toggleYZGrid: 'Show YZ Grid',
     toggleXYGrid: 'Show XY Grid',

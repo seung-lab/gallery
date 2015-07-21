@@ -258,7 +258,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	    this.object.updateProjectionMatrix();
 
-			orthoZoom = true; //Forces an update
+		orthoZoom = true; //Forces an update
 		}
 	}
 

@@ -2,8 +2,8 @@
 // Manages the 3D Scene 
 ( function (app) {
 
-app.controller('3DController', ['$scope', 'CellService', 'Coordinates3DService',
-  function ($scope, CellService, CoordinatesService) {
+app.controller('3DController', ['$scope', 'Coordinates3DService','Camera3DService',
+  function ($scope, CoordinatesService, Camera) {
 
 
   this.watch = function() {
@@ -25,6 +25,10 @@ app.controller('3DController', ['$scope', 'CellService', 'Coordinates3DService',
 
     $scope.$watch('s.toggleXYGrid', function(show) {
       show ? CoordinatesService.drawGrid({size:1000000,scale:0.00001, orientation:"z"}) : CoordinatesService.removeGrid('z');
+    });
+
+    $scope.$watch('s.toggleCamera', function(perspective) {
+      Camera.setCurrentCamera(perspective);
     });
   };
   this.watch();

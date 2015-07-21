@@ -34,8 +34,29 @@ app.service('Camera3DService', ['Scene3DService',function (Scene) {
 
     };
 
+    this.setCurrentCamera = function(perspective) {
+      _this.usePerspective = perspective;
+
+      if (_this.usePerspective) {
+        _this.controls.object = _this.perspectiveCam;
+
+      }
+      else {
+        _this.controls.object = _this.orthographicCam;
+      }
+
+      //Update the view size for the new camera.
+      //This in need because there might have been a resize while using the other camera.
+      _this.setViewSize( _this.width,_this.height);
+
+      _this.controls.reset();
+    };
 
     this.get = function () {
+
+      if (_this.usePerspective) {
+        return _this.perspectiveCam;
+      }
 
     	return _this.orthographicCam;
     };
@@ -43,6 +64,16 @@ app.service('Camera3DService', ['Scene3DService',function (Scene) {
     this.setViewSize = function( width , height ) {
       _this.width = width;
       _this.height = height;
+
+
+      if ( _this.get() instanceof THREE.OrthographicCamera ) {
+
+        var factor = (width / height ) / _this.aspectRatio;
+
+        _this.get().left *= factor;
+        _this.get().right *= factor;
+
+      }
 
       _this.aspectRatio = width / height;
       _this.get().aspect =  _this.aspectRatio;
@@ -79,10 +110,9 @@ app.service('Camera3DService', ['Scene3DService',function (Scene) {
 
     };
 
-
+    _this.usePerspective = false;
     _this.aspectRatio = window.innerWidth / window.innerHeight;
     _this.createPerspective();
-
     _this.createOrthographic();
 
     window.cam = _this;
@@ -91,7 +121,8 @@ app.service('Camera3DService', ['Scene3DService',function (Scene) {
     	get: this.get,
     	setViewSize:this.setViewSize,
     	initController:this.initController,
-    	lookAt:this.lookAt 
+    	lookAt:this.lookAt,
+      setCurrentCamera:this.setCurrentCamera 
     };
 }]);
 
