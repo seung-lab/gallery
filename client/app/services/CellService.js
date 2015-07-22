@@ -3,66 +3,10 @@
 // creates a tube that follows a collection of 3d points.
 ( function (app) { 
 
-app.service('CellService', ['$rootScope','Scene3DService', 'SetFactory','Camera3DService',
- function ($rootScope, Scene, setOperations, Camera) {
+app.service('CellService', ['$rootScope','Scene3DService', 'Camera3DService',
+ function ($rootScope, Scene, Camera) {
 
   var old_visible = new Set();
-
-
-  this.toggle = function( cellId ) {
-
-    var cell = $rootScope.cells.get(cellId);
-    
-    if (cell.visible === true) {
-      var new_visible = new Set(old_visible);
-      new_visible.delete( cellId );
-    } 
-    else {
-      var new_visible =  new Set(old_visible);
-      new_visible.add( cellId );
-    }
-    broadcastVisibleSet( new_visible );
-
-  }
-
-  function broadcastVisibleSet( new_visible) {
-
-    var added = setOperations.complement(new_visible,old_visible);
-    added.forEach(function(cellID){
-        old_visible.add(cellID);
-        addCellMesh(cellID);
-    });
-
-    var removed = setOperations.complement(old_visible,new_visible);
-    removed.forEach(function(cellID){
-        old_visible.delete(cellID);
-        removeCellMesh(cellID);
-    });
-
-    $rootScope.visible = { visible: old_visible, added:added, removed:removed };
-    $rootScope.$broadcast('visible');
-  }
-
-
-  function updateVisibleCells () {
-    $rootScope.$watch('sets.get(r.setId).children', function(children){
-
-      broadcastVisibleSet( new Set(children) );
-
-    },true);
-
-    $rootScope.$watch("r.cellId", function(cellId){
-      if ($rootScope.viewSlide.model == "catalog" && cellId != undefined){
-
-        var new_visible = new Set([cellId,]);
-        broadcastVisibleSet ( new_visible );
-
-      }
-
-    });
-  }
-  updateVisibleCells();
-
 
   function createCell ( cellId, callback ) {
 
@@ -73,9 +17,8 @@ app.service('CellService', ['$rootScope','Scene3DService', 'SetFactory','Camera3
     var ctm = new THREE.CTMLoader(false);
     ctm.load( url , function(geometry){
 
-
-      var material = new THREE.MeshLambertMaterial( { color:cell.color , wireframe:false } );
-      cell.mesh = new THREE.Mesh( geometry, material );
+      cell.material =  new THREE.MeshLambertMaterial( { color:cell.color , wireframe:false, transparent:true, opacity:1.0 } );
+      cell.mesh = new THREE.Mesh( geometry, cell.material );
       cell.mesh.visible = cell.visible; 
       Scene.get().add( cell.mesh );
 
@@ -113,7 +56,7 @@ app.service('CellService', ['$rootScope','Scene3DService', 'SetFactory','Camera3
 
     var cell = $rootScope.cells.get(cellId);
 
-    if (cell.visible === undefined || cell.visible === false) {
+    if (cell === undefined || cell.visible === false) {
       return;
     }
 
@@ -136,6 +79,76 @@ app.service('CellService', ['$rootScope','Scene3DService', 'SetFactory','Camera3
     Scene.get().add( cube );
 
   };
+
+  function setCellOpacity (cellId, opacity ) {
+
+    var cell = $rootScope.cells.get(cellId);
+
+    if ( cell == undefined || cell.mesh == undefined) {
+      return;
+    }
+
+    if (opacity == 1.0) {
+
+      cell.mesh.material.transparent = false;
+      cell.mesh.material.opacity = 1.0;
+    
+    }
+    else {
+
+      cell.mesh.material.transparent = true;
+      cell.mesh.material.opacity = opacity;
+
+    }
+
+    cell.mesh.material.needsUpdate = true;
+
+  };
+
+  function watch () {
+
+    $rootScope.$watch('active', function(new_active, old_active) {
+
+
+      if (new_active == old_active) { //Happens on first call
+        old_active = [];  
+      }
+
+      var add = _.difference(new_active, old_active);
+      for (var i = add.length - 1; i >= 0; i--) {
+        addCellMesh(add[i])
+      };
+
+      var remove = _.difference(old_active, new_active);
+      for (var i = remove.length - 1; i >= 0; i--) {
+        removeCellMesh(remove[i]);
+      };
+
+      Camera.render();
+    },true);
+
+
+    $rootScope.$watch('visible', function(new_active, old_active) {
+
+      if (new_active == old_active) { //Happens on first call
+        old_active == [];  
+      }
+
+      var add = _.difference(new_active, old_active);
+      for (var i = add.length - 1; i >= 0; i--) {
+        setCellOpacity(add[i], 1.0);
+      };
+
+      var remove = _.difference(old_active, new_active);
+      for (var i = remove.length - 1; i >= 0; i--) {
+        setCellOpacity(remove[i], 0.1);
+      };
+
+      Camera.render();
+    },true);
+
+  }
+  watch();
 
   
 }]);

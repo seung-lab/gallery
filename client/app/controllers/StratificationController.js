@@ -2,10 +2,10 @@
 
 (function (app) {
 
-app.controller('StratificationController', ['$rootScope','$scope','$timeout', 'CellService',
-  function($rootScope, $scope, $timeout, CellService) {
+app.controller('StratificationController', ['$rootScope','$scope','$timeout',
+  function($rootScope, $scope, $timeout) {
       
-    var data;
+    var data = { colors:{}, columns:[], type: 'line', unload: []};
 
     function updateChart () {
       
@@ -32,49 +32,61 @@ app.controller('StratificationController', ['$rootScope','$scope','$timeout', 'C
       data.unload.push( cellId );
     }
     
-    function loadCell( cellId ) {
-
-      if (!$scope.chart) {
-        $timeout( function(){  loadCell( cellId ); } , 500);
-        return;
-      }
-
-      addCell(cellId);
-      updateChart();
-    }
-
-    $scope.$on('visible', function(event) {
-
-      data = { colors:{}, columns:[], type: 'line', unload: []}
-
-      for (var i = 0; i < $scope.visible.added.length ; ++i) {
-        
-        var cell_id = $scope.visible.added[i];
-        addCell(cell_id);
-
-      }
-
-      for (var i = 0; i < $scope.visible.removed.length ; ++i) {
-        
-        var cell_id = $scope.visible.removed[i];
-        removeCell(cell_id);
-        
-      }
-
-      updateChart();
-
-    });
+    function watch () {
       
+      $scope.$watch('active', function(new_active, old_active) {
+
+        if (new_active == old_active) { //Happens on first call
+          old_active = [];  
+        }
+
+        data = { colors:{}, columns:[], type: 'line', unload: []}
+        
+        var add = _.difference(new_active, old_active);
+        for (var i = add.length - 1; i >= 0; i--) {
+          addCell(add[i])
+        };
+
+        var remove = _.difference(old_active, new_active);
+        for (var i = remove.length - 1; i >= 0; i--) {
+          removeCell(remove[i]);
+        };
+
+        updateChart();
+      });
+
+    }
+    watch();
+     
+
+
+    //-------------------------------------------------------------------------------------------
+    // Signals from the chart:
+    // We will update the $RootScope.visible and $RootScope.active 
+    // This will call watch and modify this chart, but also modify other views.
+    //-------------------------------------------------------------------------------------------
+    var old_visible = [];
+
     $scope.onLegendClick = function(cellId) {
-      CellService.toggle( cellId );
+      
+      $rootScope.toggleVisible (cellId);
     };
 
     $scope.onLegendMouseout = function(cellId) {
-      console.log('mouse out ' +cellId);
+      
+      $rootScope.toggleVisible (old_visible);
+      old_visible = [];
+
     };
 
     $scope.onLegendMouseover = function(cellId) {
-      console.log('mouse over ' + cellId);
+      if ($scope.isVisible(cellId) == false) {
+        return;
+      }
+
+      old_visible = _.difference( $rootScope.visible, [cellId]);      
+      $rootScope.toggleVisible (old_visible);
+
     };
 
 

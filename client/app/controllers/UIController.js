@@ -1,9 +1,12 @@
 'use strict';
 
 ( function (app) {
-app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$location', 'SettingsFactory', 'UtilService', 'KeyboardFactory', 'TransitionerFactory', 'LocaleFactory', '$timeout', 'ModalFactory', '$route', 'CellService',
-  function($scope, $rootScope, $routeParams, $location, settings, util, keyboard, transitioner, locale, $timeout, modal, $route, CellService) {
-
+app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$location', 'SettingsFactory', 'UtilService', 'KeyboardFactory', 'TransitionerFactory', 'LocaleFactory', '$timeout', 'ModalFactory', '$route', 
+  function($scope, $rootScope, $routeParams, $location, settings, util, keyboard, transitioner, locale, $timeout, modal, $route) {
+      
+      //-------------------------------------------------------------------------------------------
+      // global variables
+      //-------------------------------------------------------------------------------------------
       var sets = $rootScope.sets;
       var cells = $rootScope.cells;
 
@@ -25,6 +28,11 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
       $rootScope._ = locale._;
       $scope.s = settings.settings;
       $scope.pad = util.pad;
+
+      //-------------------------------------------------------------------------------------------
+      // UI methods
+      //-------------------------------------------------------------------------------------------
+
 
       $scope.trashSet = function() {
           $location.path('/');
@@ -67,9 +75,6 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
       $scope.sortcell = function(a, b) {
           var d = sets[$routeParams.setId];
           util.move(d.children, a, b), sets.save(d)
-      };
-      $scope.editcell = function(a) {
-          $location.search('edit', a ? 'clone' : void 0), modal('components/new.html');
       };
 
       $scope.fullscreen = function() {
@@ -123,15 +128,6 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
 
       }
 
-      $scope.tapCell = function (cell) {
-
-        CellService.toggle( cell );
-
-        // $scope.p('set/'+$scope.r.setId+'/'+cell);
-      };
-
-
-
       $scope.new = function () {
         if ($scope.r.view == "sets"){
           $scope.modal('components/new-set.html');
@@ -145,6 +141,96 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
           $scope.modal('components/new-set.html');
         }
       };
+
+      //-------------------------------------------------------------------------------------------
+      // Cells active and visible
+      //-------------------------------------------------------------------------------------------
+
+      $rootScope.active = [];
+
+      //Visible cells are a subset of the active ones.
+      $rootScope.visible = [];
+
+      $rootScope.isActive = function (cellId) {
+        return $rootScope.active.indexOf(cellId) != -1;
+      };
+
+      $rootScope.isVisible = function (cellId) {
+        return $rootScope.visible.indexOf(cellId) != -1;
+      };
+
+      $rootScope.toggleActive = function(cellIds) {
+
+        for (var i = cellIds.length - 1; i >= 0; i--) {
+          var cellId = cellIds[i];
+        
+          if ($rootScope.isActive(cellId)) {
+
+            var index = $rootScope.active.indexOf(cellId);
+            $rootScope.active.splice(index,1);
+
+            if ($rootScope.isVisible(cellId)) {
+              $rootScope.toggleVisible(cellId);
+            }
+
+          }
+          else {
+
+            $rootScope.active.push(cellId);
+
+          }
+
+        }
+
+        if(!$scope.$$phase) {
+          $rootScope.$digest();
+        }      
+
+      };
+
+      $rootScope.toggleVisible = function(cellIds) {
+
+        cellIds = util.toArray(cellIds);
+
+        for (var i = cellIds.length - 1; i >= 0; i--) {
+          var cellId = cellIds[i];
+
+
+          if ($rootScope.isVisible(cellId)) {
+
+            var index = $rootScope.visible.indexOf(cellId);
+            $rootScope.visible.splice(index,1);
+          
+          }
+          else {
+
+            $rootScope.visible.push(cellId);
+
+            if ( $rootScope.isActive(cellId)  == false) {
+              $rootScope.toggleActive(cellId);
+            }
+
+          }
+
+        };
+
+        if(!$scope.$$phase) {
+          $rootScope.$digest();
+        }
+      };
+
+      $rootScope.resetActive = function () {
+        $rootScope.visible = [];
+        $rootScope.active = [];
+
+        if(!$scope.$$phase) {
+          $rootScope.$digest();
+        }
+      }
+
+      //-------------------------------------------------------------------------------------------
+      // Routing
+      //-------------------------------------------------------------------------------------------
 
 
       function loadFrontpage () {
@@ -201,6 +287,9 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
 
         if (set.children_are_cells) {
           $rootScope.viewSlide.model = 'set';
+          $rootScope.resetActive();
+          $rootScope.toggleActive( set.children);
+          $rootScope.toggleVisible( set.children);
         } 
         else
         {
@@ -215,13 +304,16 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
         }
 
 
+
+   
+
+
       };
 
       function loadCell(current ,previousSetId,  previousCellId) {
 
         if (cells.get(current.params.cellId) === -1) {
           $location.path(current.params.view + '/');
-          return;
         }
 
 
@@ -230,18 +322,21 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
            transitioner.apply('cell-view', function() {
             $rootScope.cellSlide.model = '';
           }); 
-          return;
 
         }
 
         if (previousSetId === current.params.setId) {
           $rootScope.cellSlide.to = 'left';
-          return;
+          ;
         }
 
       
         $rootScope.cellSlide.to = 'left'; 
-       
+        
+        $rootScope.resetActive();
+        $rootScope.toggleActive([current.params.cellId]);
+        $rootScope.toggleVisible([current.params.cellId]);
+
                          
       };
 
@@ -278,7 +373,14 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
 
       });
 
+      $scope.$emit('$routeChangeSuccess', {
+          params: $routeParams
+      });
 
+
+      //-------------------------------------------------------------------------------------------
+      // Keyboard
+      //-------------------------------------------------------------------------------------------
       keyboard.on('=', function() {
           var b = settings.settings.fontSize || 0;
           2 > b && (settings.set('fontSize', b + 1), $scope.$apply())
@@ -289,9 +391,8 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
           b && (settings.set('fontSize', b - 1), $scope.$apply())
       });
 
-      $scope.$emit('$routeChangeSuccess', {
-          params: $routeParams
-      });
+
+
 }]);
 
 })(app);

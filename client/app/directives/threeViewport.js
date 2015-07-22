@@ -20,6 +20,7 @@
         // create the renderer
         var renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setClearColor( '#252525', 1.0 );
+        renderer.sortObjects = true;
         Camera.initController(renderer);
         onResize();
 

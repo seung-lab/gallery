@@ -12,7 +12,7 @@
       <h2 class="trim">{{set.name}}</h2>
     </header>
       <menu sp-sortable="true" onsort="sortcell" class="cells">
-        <li ng-repeat="cell in set.children" ng-init="id=cells.getIndex(cell)" ng-class="{on: visible.visible.has(cell) }">
+        <li ng-repeat="cell in set.children" ng-init="id=cells.getIndex(cell)" ng-class="{on: isVisible(cell) }">
           <button class="btn danger icon-minus" ng-show="em" sp-tap="rmcell($index)"></button>
           <h3 class="trim" sp-tap="tapCell(cell);">{{cells[id].name}}</h3>
         </li>

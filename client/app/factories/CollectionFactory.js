@@ -78,7 +78,7 @@ app.factory("CollectionFactory", ["$http", "UtilService",
       var index = this.getIndex(id);
 
       if (index === -1 ){
-        return -1;
+        return undefined;
       }
       else {
         return this[index];

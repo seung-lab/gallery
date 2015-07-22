@@ -6,7 +6,7 @@ app.directive('chart', ['$timeout', function ($timeout) {
         
   var chartLinker = function (scope, element, attrs) {
 
-      // Trick to wait for all rendering of the DOM to be finished.
+    // Trick to wait for all rendering of the DOM to be finished.
     $timeout(function () {
       var config = {
         bindto: "#" + scope.bindto,
@@ -55,7 +55,7 @@ app.directive('chart', ['$timeout', function ($timeout) {
               }
           }, 10000)
       });
-  });
+    });
   };
 
   return {
