@@ -49,7 +49,7 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
         });
         
         sets.get(0).children.push(newSetId);
-        $location.path('set/' +  newSetId );
+        $location.path('/' +  newSetId );
 
       };
 
@@ -105,7 +105,7 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
               set.path = 'set/'+ setId;
               $scope.back = 'sets/'; 
             } else {
-              set.path = 'set/' + parentSet + '/set/' + setId;
+              set.path = 'set/' + parentSet + '/' + setId;
               $scope.back = 'set/' + parentSet;
             }
 
@@ -268,40 +268,44 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
 
       };
 
-      function loadSet(current, previousSetId) {
+      function loadSet(setIds, previousSetId) {
 
-        var set = sets.get(current.params.setId);
+        var setIds = $routeParams.setIds.match( /\d+/g );
 
-        if (set == -1) {
-          loadFrontpage();
-          return;
+        console.log(setIds);
 
-        }
+        // var set = sets.get(current.params.setId);
+
+        // if (set == -1) {
+        //   loadFrontpage();
+        //   return;
+
+        // }
         
-        if (current.params.setId != previousSetId) {
+        // if (current.params.setId != previousSetId) {
 
-          $rootScope.viewSlide.force = true;
-          $rootScope.viewSlide.to = 'left';
+        //   $rootScope.viewSlide.force = true;
+        //   $rootScope.viewSlide.to = 'left';
 
-        }
+        // }
 
-        if (set.children_are_cells) {
-          $rootScope.viewSlide.model = 'set';
-          $rootScope.resetActive();
-          $rootScope.toggleActive( set.children);
-          $rootScope.toggleVisible( set.children);
-        } 
-        else
-        {
-          if ( previousSetId == undefined ){
-            $rootScope.viewSlide.to = 'left';    
-          }
-          else {
-            $rootScope.viewSlide.to = 'right';    
-          }
+        // if (set.children_are_cells) {
+        //   $rootScope.viewSlide.model = 'set';
+        //   $rootScope.resetActive();
+        //   $rootScope.toggleActive( set.children);
+        //   $rootScope.toggleVisible( set.children);
+        // } 
+        // else
+        // {
+        //   if ( previousSetId == undefined ){
+        //     $rootScope.viewSlide.to = 'left';    
+        //   }
+        //   else {
+        //     $rootScope.viewSlide.to = 'right';    
+        //   }
 
-          $rootScope.viewSlide.model = 'sets';
-        }
+        //   $rootScope.viewSlide.model = 'sets';
+        // }
 
 
 
@@ -312,8 +316,9 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
 
       function loadCell(current ,previousSetId,  previousCellId) {
 
-        if (cells.get(current.params.cellId) === -1) {
+        if (cells.get(current.params.cellId) === undefined) {
           $location.path(current.params.view + '/');
+          return;
         }
 
 
@@ -344,9 +349,11 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
       $scope.$on('$routeChangeSuccess',
         function($routeChangeSuccess, current, previous) {
 
+          console.log( current.params );
+
           if (previous) {
             var previousView = previous.params.view;
-            var previousSetId = previous.params.setId;
+            var previousSetId = previous.params.setIds;
             var previousCellId = previous.params.cellId;
           } 
 
@@ -357,11 +364,11 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
           }
 
           if (current.params.view) {
-            loadView(current ,previousSetId, previousView);
+            loadView(current.params.setIds ,previousSetId);
           }
           
 
-          if (current.params.setId) {
+          if ($routeParams.setIds) {
             loadSet(current, previousSetId);
           }
 

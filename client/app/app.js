@@ -4,12 +4,8 @@ var app = angular.module('cellPane', ['ngRoute']);
 app.config(['$routeProvider', '$locationProvider' , function($routeProvider,$locationProvider) {
     $routeProvider.caseInsensitiveMatch = true;
     $routeProvider.when('/',{});
-    $routeProvider.when('/set/:setId',{});
-    $routeProvider.when('/set/:setId/:cellId',{});
-    $routeProvider.when('/set/:setId_parent/set/:setId',{});
-    $routeProvider.when('/set/:setId_parent/set/:setId/:cellId',{});
-    $routeProvider.when('/:view/:cellId',{});
-    $routeProvider.when('/:view',{});
+    $routeProvider.when('/set/:setIds*?',{});
+    $routeProvider.when('/:view/:cellId?',{});
     $routeProvider.otherwise('/',{});
 
     //Remove hashtag from url if windows history is supported.
