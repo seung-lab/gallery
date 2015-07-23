@@ -23,6 +23,7 @@ app.config(function ($httpProvider) {
 app.run(['$rootScope', 'CollectionFactory', 'UtilService',  'KeyboardFactory', 'ModalFactory', 'NotifierFactory', '$window', 'LocaleFactory', 
     function($rootScope, collection, util,  keyboard, modal, notifier, $window, locale) {
 
+      window.scope = $rootScope;
       $window.collection = collection;
       $window.notify = notifier.notify;
       $rootScope._ =  ($window.navigator, locale._);
