@@ -33,7 +33,9 @@ app.controller('StratificationController', ['$rootScope','$scope','$timeout',
     }
     
     function watch () {
-      
+
+      $scope.$on('chart-resize', function(){  $scope.chart.resize();  });
+
       $scope.$watch('active', function(new_active, old_active) {
 
         if (new_active == old_active) { //Happens on first call
@@ -54,6 +56,7 @@ app.controller('StratificationController', ['$rootScope','$scope','$timeout',
 
         updateChart();
       });
+
 
     }
     watch();

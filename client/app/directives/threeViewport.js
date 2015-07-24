@@ -29,18 +29,26 @@
         element[0].appendChild(renderer.domElement);
 
         // handles resizing the renderer when the window is resized
-        window.addEventListener('resize', onResize);
+        window.addEventListener('resize', function (event){
 
-        scope.$on('fullscreen', function(){
           onResize();
         });
+
+        scope.$on('fullscreen', function() {
+          
+          var width = window.innerWidth;
+          var height = window.innerHeight;
+
+          onResize( width, height);
+
+        });
   
-      function onResize() {
-        var width = element[0].offsetWidth;
-        var height = element[0].offsetHeight;
+      function onResize( width , height ) {
+
+        width  = width ? width : element[0].offsetWidth;
+        height = height ? height : element[0].offsetHeight;
 
         renderer.setSize( width , height );
-
         Camera.setViewSize( width , height );
       }
     }

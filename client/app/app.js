@@ -1,4 +1,4 @@
-var app = angular.module('cellPane', ['ngRoute']);
+var app = angular.module('cellPane', ['ngRoute','angularResizable']);
 
 //The actual routing is done in the uiController
 app.config(['$routeProvider', '$locationProvider' , function($routeProvider,$locationProvider) {
@@ -94,8 +94,6 @@ app.run(['$rootScope', 'CollectionFactory', 'UtilService',  'KeyboardFactory', '
           return true;
       });
 }]);
-
-
 
 
 var f = function() {

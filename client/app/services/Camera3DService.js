@@ -95,7 +95,7 @@ app.service('Camera3DService', ['Scene3DService',function (Scene) {
 
     this.initController = function( renderer ) {
   		_this.renderer = renderer;
-      _this.controls = new THREE.TrackballControls( _this.get() );
+      _this.controls = new THREE.TrackballControls( _this.get() , renderer.domElement );
 			_this.controls.addEventListener( 'change', _this.render );
 
       _this.animate();

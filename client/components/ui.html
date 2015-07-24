@@ -1,7 +1,27 @@
 <div class="icon-cellpane" ng-controller="UIController">
-<!--     Menu on the right with cell details -->    
+    
   <div id="cell-view" ng-class="{cr:cr, ic: r.cellId||(set&&set.children_are_cells) ,fs:fs}">
-    <aside>
+
+    <section id="sheet">
+    
+      <div id="space" sp-kbd="['space', 'right', 'j', 'down', 'pagedown']" ng-class="spaceClass" ng-controller="3DController">
+        <three-viewport></three-viewport>
+      </div>
+    
+      <button class="overlaybutton" sp-tap="p(r.setId&&'set/'+r.setId + '/'||r.view+'/')" id="back-button">
+        <span class="overlaybutton-inner icon-back"></span>
+      </button>
+      
+      <button class="overlaybutton" sp-tap="fs=!fs;fullscreen()" sp-kbd="'f'" id="fullscreen-button">
+          <span class="overlaybutton-inner" ng-class="fs&&'icon-min'||'icon-max'"></span>
+      </button>
+      
+      <button class="overlaybutton" sp-tap="cr=!cr" sp-kbd="'i'" id="aside-button">
+          <span class="overlaybutton-inner icon-info"></span>
+      </button>
+    </section>
+  
+    <aside resizable r-directions="['left']" r-min-width="500" >
       <article id="info">
           <h1>{{cells[cells.getIndex(r.cellId)].name}}</h1>
           
@@ -30,25 +50,6 @@
           </ul>
       </article>
     </aside>
-    <section id="sheet">
-    
-      <div id="space" sp-kbd="['space', 'right', 'j', 'down', 'pagedown']" ng-class="spaceClass" ng-controller="3DController">
-        <three-viewport></three-viewport>
-      </div>
-    
-      <button class="overlaybutton" sp-tap="p(r.setId&&'set/'+r.setId + '/'||r.view+'/')" id="back-button">
-        <span class="overlaybutton-inner icon-back"></span>
-      </button>
-      
-      <button class="overlaybutton" sp-tap="fs=!fs;fullscreen()" sp-kbd="'f'" id="fullscreen-button">
-          <span class="overlaybutton-inner" ng-class="fs&&'icon-min'||'icon-max'"></span>
-      </button>
-      
-      <button class="overlaybutton" sp-tap="cr=!cr" sp-kbd="'i'" id="aside-button">
-          <span class="overlaybutton-inner icon-info"></span>
-      </button>
-    
-    </section>
   </div>
   
   <aside id="menu">
@@ -75,10 +76,9 @@
       </li>
   
     </ul>
-  
   </aside>
   
-  <section id="nav" class="fill w" ng-class="{open:menu}">
+  <section id="nav" class="fill w" ng-class="{open:menu}" >
       <header>
         <div class="b" sp-tap="toggleState('menu')" sp-kbd="'m'" ng-class="{on:menu}">
           <i class="icon-more"></i>
@@ -88,10 +88,12 @@
         </div>
         <h1 sp-tap="p('sets/')" sp-kbd="'s'"><b>Cell</b>Gallery</h1>
       </header>
-      <div id="view" ng-class="navClass">
+
+      <div id="view" ng-class="navClass" >
         <article sp-slide="viewSlide" id="{{model}}" >
           <div ng-include="'components/'+model + '-template.html'"></div>
         </article>
+      
       </div>
   </section>
 </div>

@@ -2,7 +2,8 @@
 
 (function(app){
   
-app.directive('chart', ['$timeout', function ($timeout) {
+app.directive('chart', ['$timeout',
+ function ($timeout) {
         
   var chartLinker = function (scope, element, attrs) {
 
@@ -56,6 +57,7 @@ app.directive('chart', ['$timeout', function ($timeout) {
           }, 10000)
       });
     });
+
   };
 
   return {

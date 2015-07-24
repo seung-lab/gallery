@@ -78,13 +78,7 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
       };
 
       $scope.fullscreen = function() {
-      
-        for (var i = 1 ; i < 100 ; ++i) {
-          $timeout( 
-            function () { $rootScope.$broadcast('fullscreen'); } 
-            ,i*10);
-        }
-  
+        $rootScope.$broadcast('fullscreen');        
       };
 
       $scope.new = function () {
@@ -116,6 +110,10 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
         $location.path( 'set/'+ $rootScope.setIds.concat(childId).join('/') );
 
       };
+
+      $scope.$on("angular-resizable.resizeEnd", function(event){ 
+        $scope.$broadcast('chart-resize');
+      });
 
       //-------------------------------------------------------------------------------------------
       // Cells active and visible
@@ -326,7 +324,6 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
             return;
           }
 
-          console.log ( $routeParams );
           if ($routeParams.view) {
             loadView(current.params.setIds ,previousSetId, previousView);
           }
