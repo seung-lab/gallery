@@ -9,8 +9,8 @@ class Importer:
 
   def __init__(self):
     
-    self.cells_fname = 'cells.json'
-    self.sets_fname = 'sets.json'
+    self.cells_fname = '../server/config/cells.json'
+    self.sets_fname =  '../server/config/sets.json'
 
     self.mix_color = { "red": 255, "blue": 255, "green": 255 }
 

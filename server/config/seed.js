@@ -9,8 +9,8 @@ var sets = require('../api/sets/sets.model');
 var user = require('../api/user/user.model');
 var cells =require('../api/cells/cells.model');
 
-var cells_import = require('../../import/cells.json')
-var sets_import = require('../../import/sets.json')
+var cells_import = require('./cells.json')
+var sets_import = require('./sets.json')
 
 
 
