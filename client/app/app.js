@@ -1,4 +1,4 @@
-var app = angular.module('cellPane', ['ngRoute','angularResizable']);
+var app = angular.module('cellPane', ['ngRoute','ngResource','ngCookies','angularResizable']);
 
 //The actual routing is done in the uiController
 app.config(['$routeProvider', '$locationProvider' , function($routeProvider,$locationProvider) {

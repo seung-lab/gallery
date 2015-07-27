@@ -62,12 +62,16 @@
       <script src="bower_components/js-openctm/src/ctm.js"></script>
       <script src="bower_components/js-openctm/src/lzma.js"></script>
       <script src="bower_components/js-openctm/src/CTMLoader.js"></script>
+      <script src="bower_components/angular-resource/angular-resource.js"></script>
+      <script src="bower_components/angular-cookies/angular-cookies.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,client}) app/app.js -->
         <script src="app/app.js"></script>
           <!-- injector:js -->
+          <script src="app/auth/auth.service.js"></script>
+          <script src="app/auth/user.service.js"></script>
           <script src="app/controllers/3DController.js"></script>
           <script src="app/controllers/AddController.js"></script>
           <script src="app/controllers/ConfirmController.js"></script>
@@ -78,6 +82,7 @@
           <script src="app/controllers/ShareController.js"></script>
           <script src="app/controllers/StratificationController.js"></script>
           <script src="app/controllers/UIController.js"></script>
+          <script src="app/controllers/loginController.js"></script>
           <script src="app/directives/chart.js"></script>
           <script src="app/directives/spFocus.js"></script>
           <script src="app/directives/spIf.js"></script>

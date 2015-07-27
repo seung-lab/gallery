@@ -1,8 +1,7 @@
 'use strict';
 
-angular.module('galleryApp')
-  .factory('User', function ($resource) {
-    return $resource('/api/users/:id/:controller', {
+app.factory('User', function ($resource) {
+    return $resource('/api/user/:id/:controller', {
       id: '@_id'
     },
     {

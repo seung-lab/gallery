@@ -8,9 +8,9 @@
 module.exports = {
   DOMAIN:           'http://localhost:9000',
   SESSION_SECRET:   'gallery-secret',
-
-  GOOGLE_ID:        'app-id',
-  GOOGLE_SECRET:    'secret',
+  
+  EYEWIRE_ID: 'app-id',
+  EYEWIRE_SECRET: 'secret',
 
   // Control debug level for modules using visionmedia/debug
   DEBUG: ''

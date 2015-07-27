@@ -81,12 +81,12 @@ $left_menu: 20rem;
     outline: 0
 }
 ::-moz-selection {
-    background: #2ea2ef;
+    background: #2582BF;
     color: #fff;
     text-shadow: none
 }
 ::selection {
-    background: #2ea2ef;
+    background: #2582BF;
     color: #fff;
     text-shadow: none
 }
@@ -273,7 +273,7 @@ body {
     perspective: 800px
 }
 body.icon-cellpane:before {
-    color: #2ea2ef;
+    color: #2582BF;
     text-shadow: 0 1px #2b2e30
 }
 h1,
@@ -376,20 +376,20 @@ fieldset .group *:last-child select+.select {
     right: 0
 }
 .b:before {
-    background-color: #2ea2ef;
-    background-image: -webkit-linear-gradient(top, #64bcf7, #2a8bcb, #2ea2ef);
-    background-image: -moz-linear-gradient(top, #64bcf7, #2a8bcb, #2ea2ef);
-    background-image: -ms-linear-gradient(top, #64bcf7, #2a8bcb, #2ea2ef);
-    background-image: -o-linear-gradient(top, #64bcf7, #2a8bcb, #2ea2ef);
-    background-image: linear-gradient(to bottom, #64bcf7, #2a8bcb, #2ea2ef)
+    background-color: #2582BF;
+    background-image: -webkit-linear-gradient(top, #64bcf7, #2a8bcb, #2582BF);
+    background-image: -moz-linear-gradient(top, #64bcf7, #2a8bcb, #2582BF);
+    background-image: -ms-linear-gradient(top, #64bcf7, #2a8bcb, #2582BF);
+    background-image: -o-linear-gradient(top, #64bcf7, #2a8bcb, #2582BF);
+    background-image: linear-gradient(to bottom, #64bcf7, #2a8bcb, #2582BF)
 }
 .b:after {
-    background-color: #2ea2ef;
-    background-image: -webkit-linear-gradient(top, #64bcf7, #8bcdf9, #2ea2ef);
-    background-image: -moz-linear-gradient(top, #64bcf7, #8bcdf9, #2ea2ef);
-    background-image: -ms-linear-gradient(top, #64bcf7, #8bcdf9, #2ea2ef);
-    background-image: -o-linear-gradient(top, #64bcf7, #8bcdf9, #2ea2ef);
-    background-image: linear-gradient(to bottom, #64bcf7, #8bcdf9, #2ea2ef)
+    background-color: #2582BF;
+    background-image: -webkit-linear-gradient(top, #64bcf7, #8bcdf9, #2582BF);
+    background-image: -moz-linear-gradient(top, #64bcf7, #8bcdf9, #2582BF);
+    background-image: -ms-linear-gradient(top, #64bcf7, #8bcdf9, #2582BF);
+    background-image: -o-linear-gradient(top, #64bcf7, #8bcdf9, #2582BF);
+    background-image: linear-gradient(to bottom, #64bcf7, #8bcdf9, #2582BF)
 }
 #modal-new {
     width: 640px
@@ -504,7 +504,7 @@ fieldset .group *:last-child select+.select {
     min-width: 100%
 }
 .part {
-    color: #2ea2ef
+    color: #2582BF
 }
 .chord {
     color: #ff5e29
@@ -627,7 +627,7 @@ q {
     box-shadow: none
 }
 #login form {
-    background: #2ea2ef;
+    background: #2582BF;
     padding: 2.8rem;
     border-radius: 0.4rem;
     box-shadow: inset 0 1px #64bcf7, 0 1px 4px rgba(0, 0, 0, 0.4)
@@ -882,7 +882,7 @@ select:active+.select.input {
         255,
         255,
         0.6);
-    border-color:#2ea2ef
+    border-color:#2582BF
 }
 .search {
     border-radius:4.4rem;
@@ -1031,22 +1031,22 @@ select:focus+.select.btn {
         0.6);
     color:#064a77;
     text-shadow:0 0.1rem #8acdf9;
-    background-color:#2ea2ef;
+    background-color:#2582BF;
     background-image:-webkit-linear-gradient(top,
         #55b9fc,
-        #2ea2ef);
+        #2582BF);
     background-image:-moz-linear-gradient(top,
         #55b9fc,
-        #2ea2ef);
+        #2582BF);
     background-image:-ms-linear-gradient(top,
         #55b9fc,
-        #2ea2ef);
+        #2582BF);
     background-image:-o-linear-gradient(top,
         #55b9fc,
-        #2ea2ef);
+        #2582BF);
     background-image:linear-gradient(to bottom,
         #55b9fc,
-        #2ea2ef)
+        #2582BF)
 }
 .action:active,
 .active.action,
@@ -1364,22 +1364,22 @@ section>header {
         0,
         0,
         0.2);
-    background-color:#2ea2ef;
+    background-color:#2582BF;
     background-image:-webkit-linear-gradient(top,
         #64bcf7,
-        #2ea2ef);
+        #2582BF);
     background-image:-moz-linear-gradient(top,
         #64bcf7,
-        #2ea2ef);
+        #2582BF);
     background-image:-ms-linear-gradient(top,
         #64bcf7,
-        #2ea2ef);
+        #2582BF);
     background-image:-o-linear-gradient(top,
         #64bcf7,
-        #2ea2ef);
+        #2582BF);
     background-image:linear-gradient(to bottom,
         #64bcf7,
-        #2ea2ef)
+        #2582BF)
 }
 header .btn {
     float:right
@@ -1451,9 +1451,9 @@ menu li {
 menu li.on {
     z-index:1;
     text-shadow:0 1px #2a8bcb;
-    background:#2ea2ef;
+    background:#2582BF;
     color:#FFF;
-    border-color:#3495d5 #3495d5 #2a8bcb #3495d5
+    border-color:#2175AC #2175AC #2a8bcb #2175AC
 }
 menu li h3 {
     padding:0.7rem
