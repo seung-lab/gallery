@@ -1,8 +1,8 @@
 'use strict';
 
 ( function (app) {
-app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$location', 'SettingsFactory', 'UtilService', 'KeyboardFactory', 'TransitionerFactory', 'LocaleFactory', '$timeout', 'ModalFactory', '$route', 
-  function($scope, $rootScope, $routeParams, $location, settings, util, keyboard, transitioner, locale, $timeout, modal, $route) {
+app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$location', 'SettingsFactory', 'UtilService', 'KeyboardFactory', 'TransitionerFactory', 'LocaleFactory', '$timeout', 'ModalFactory', '$route', 'Auth',
+  function($scope, $rootScope, $routeParams, $location, settings, util, keyboard, transitioner, locale, $timeout, modal, $route, Auth) {
       
       //-------------------------------------------------------------------------------------------
       // global variables
@@ -28,6 +28,8 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
       $rootScope._ = locale._;
       $scope.s = settings.settings;
       $scope.pad = util.pad;
+
+      $rootScope.auth = Auth;
 
       //-------------------------------------------------------------------------------------------
       // UI methods

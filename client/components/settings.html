@@ -44,12 +44,13 @@
   </li>
 
   <div ng-controller="LoginController">
-    <div ng-if='!logged'>
+    <div ng-if='!auth.isLoggedIn()'>
     <button sp-tap="loginOauth('eyewire')" class="btm block"> Login with Eyewire </button>
+    </div>
 
-    <div ng-if="logged">
+    <div ng-if="auth.isLoggedIn()">
       <span>{{_.disconnectAccount}}</span>
-        <button class="btn danger block" sp-tap="logout()&&modal()">{{_.disconnect}}</button>
+      <button class="btn danger block" sp-tap="logout()&&modal()">{{_.disconnect}}</button>
     </div>
   </div>
 
