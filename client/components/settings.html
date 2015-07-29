@@ -50,7 +50,7 @@
 
     <div ng-if="auth.isLoggedIn()">
       <span>{{_.disconnectAccount}}</span>
-      <button class="btn danger block" sp-tap="logout()&&modal()">{{_.disconnect}}</button>
+      <button class="btn danger block" sp-tap="auth.logout();modal()">{{_.disconnect}}</button>
     </div>
   </div>
 
