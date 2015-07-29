@@ -39,13 +39,13 @@
                     <a sp-if="auth.isAdmin()" sp-tap="modal('components/confirm.html')" class="btn danger icon-bin flex"></a>
                   </div>
               </li>
-              <li>
+              <li sp-if="cells.get(r.cellId).description.length">
                   <q>{{_.description}}</q>
-                  {{cells[cells.getIndex(r.cellId)].description}}
+                  {{cells.get(r.cellId).description}}
               </li>
-              <li class="drop" sp-tap="c=!c" ng-class="{'active':c}">
+              <li class="drop" sp-tap="c=!c" ng-class="{'active':c}" sp-if="cells.get(r.cellId).copyright.length">
                   <q>{{_.copyright}}</q>
-                  <p ng-show="c">{{cells[cells.getIndex(r.cellId)].copyright}}</p>
+                  <p ng-show="c">{{cells.get(r.cellId).copyright}}</p>
               </li>
           </ul>
       </article>

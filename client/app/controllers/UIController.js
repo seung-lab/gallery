@@ -89,7 +89,7 @@ app.controller('UIController', ['$scope', '$rootScope', '$routeParams', '$locati
           return;
         }
         
-        if ($scope.sets.get($scope.r.setId).children_are_cells == true) { 
+        if ($scope.set  && $scope.set.children_are_cells == true) { 
           $scope.modal('components/new-cell.html');
         } 
         else {

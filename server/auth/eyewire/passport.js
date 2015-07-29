@@ -62,7 +62,7 @@ exports.setup = function (User, config) {
       });
     });
 
-  };
+  }
 
 
 
@@ -72,7 +72,7 @@ exports.setup = function (User, config) {
 
     request(url, function (error, response, body) {
     
-      if (!error && response.statusCode == 200) {
+      if (!error && response.statusCode === 200) {
 
         var info = JSON.parse(body);
         callback(info); // Show the HTML for the Modulus homepage.
@@ -84,7 +84,7 @@ exports.setup = function (User, config) {
     
     });
 
-  };
+  }
 
   function getBio( username , callback ) {
 
@@ -92,11 +92,11 @@ exports.setup = function (User, config) {
 
      request(url, function (error, response, body) {
     
-      if (!error && response.statusCode == 200) {
+      if (!error && response.statusCode === 200) {
 
         var info = JSON.parse(body);
 
-        if ( info.roles.indexOf('admin') != -1){
+        if ( info.roles.indexOf('admin') !== -1){
 
           info.role = 'admin';
 
@@ -114,8 +114,10 @@ exports.setup = function (User, config) {
     
     });
 
-  };
+  }
+
 };
+
 
 
 

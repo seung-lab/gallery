@@ -11,10 +11,11 @@ app.controller("AddController", ["$scope", "$routeParams", "$rootScope",
       if (!$routeParams.cellId) {  //Create empty set
 
         var id = sets.save({
-          name: name
+          name: name,
+          children : []
         });
 
-        console.log(sets.get(0).children);
+        $rootScope.set.children.push(id);
 
         return id;
       }
