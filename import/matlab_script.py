@@ -1,4 +1,5 @@
 import re
+import os
 
 class MatlabScript:
 
@@ -10,11 +11,9 @@ class MatlabScript:
     self.cell_classes = { 'GC bistratified':[] , 'GC monostratified':[] }
 
 
-    self.fname =  'gc_types_load_cells.m'
+    self.fname =   os.path.expanduser('gc_types_load_cells.m')
 
     self.loadMatlabScript()
-
-
 
 
 
@@ -64,11 +63,10 @@ class MatlabScript:
   def appendtoCellClasses(self, idx, set_name):
     idx = int(idx)
 
-    if idx < 17:
+    if False:
       self.cell_classes['GC bistratified'].append(set_name)
     
     else:
-
       self.cell_classes['GC monostratified'].append(set_name)
 
 

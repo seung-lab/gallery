@@ -49,7 +49,7 @@ class Importer:
     spreadsheet = self.spreadsheet.get()
 
     full_strat = Stratification()
-    mono_strat = Stratification('strat_150717.mat')
+    mono_strat = Stratification('~/seungmount/research/jinseopk/strat_150729.mat')
   
     for segment_id in full_strat.stratification:
       if segment_id in  mono_strat.stratification:
@@ -63,6 +63,11 @@ class Importer:
 
       row = spreadsheet[segment_id]
 
+      if segment_id in stratification:
+        strat = stratification[ segment_id ]
+      else:
+        strat = []
+
       cell = {  
 
         "name": '# '+ segment_id,
@@ -70,7 +75,7 @@ class Importer:
         "id": segment_id,
         "mesh_id": row['database_ids'],
         "description": 'name: '+ row['name'] + '\n class: '+ row['cell_class'] + '\n  type:' + row['cell_type'], 
-        "stratification": stratification[ segment_id ],
+        "stratification": strat,
         "copyright": " Or another longer description ",
         "color": self.randColor()
       }

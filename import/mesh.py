@@ -6,13 +6,13 @@ class Meshes:
   def __init__(self):
     pass
 
-  def omni_export(segment):
+  def omni_export(self,segment):
     cmd ="/omniData/omni/omni.omnify/omni.export --path /omniData/e2198_reconstruction/mesh.omni --segId "+str(segment)+" --mip 1 --resolution 17,17,24 --obj 2>/dev/null > mesh/"+str(segment)+".obj"
     print cmd
     os.system(cmd)
 
 
-  def convert_to_ctm(segment, clean = True):
+  def convert_to_ctm(self,segment, clean = True):
     if clean:  
       cmd = "meshlabserver -i mesh/"+str(segment)+".obj -s meshclean.mlx -o mesh/"+str(segment)+".ctm"
     else:
@@ -20,7 +20,7 @@ class Meshes:
 
     os.system(cmd)
 
-  def get_meshes ():
+  def get_meshes (self):
 
     files = os.listdir('./mesh')
 
@@ -46,16 +46,19 @@ class Meshes:
           convert_to_ctm(seg)
 
     spreadsheet  = Spreadsheet()
-    for cell in spreadsheet.spreadsheet:
-      seg = cell['segment']
+    # for cell in spreadsheet.spreadsheet:
+    for seg in [20029, 20047,20051, 20024, 200041, 20046, 20021]:
+      # seg = cell['segments']
       ctm = str(seg) + '.ctm'
 
 
       if ctm in files and os.path.getsize('./mesh/'+ctm) > 0:
         continue
 
-      omni_export(seg)
-      convert_to_ctm(seg)
+      self.omni_export(seg)
+      self.convert_to_ctm(seg)
 
 if __name__ == '__main__':
-  get_meshes()
+  
+  m = Meshes()
+  m.get_meshes()
