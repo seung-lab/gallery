@@ -1,3 +1,5 @@
+![Build Status](https://magnum.travis-ci.com/seung-lab/gallery.svg?token=XgJykxTsTUBYXsq64oSK&branch=master "travis")
+
 # gallery
 Repository for the museum.
 
