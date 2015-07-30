@@ -17,9 +17,6 @@ exports.show = function(req, res) {
                   headers: { "Content-Type" : 'text/plain;'}
     }  
 
-  //DEBUG
-  // req.params.id  = 'male02';
-
   res.sendfile(req.params.id + '.ctm' , options , function(err) {
     console.log(err);
     if(err) { return handleError(res, err); }
