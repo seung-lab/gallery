@@ -5,7 +5,6 @@ var passport = require('passport');
 var auth = require('../auth.service');
 
 var router = express.Router();
-console.log(config.eyewire.callbackURL);
 
 router
   .get('/', passport.authenticate('oauth2', {

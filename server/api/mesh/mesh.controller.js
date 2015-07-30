@@ -18,7 +18,6 @@ exports.show = function(req, res) {
     }  
 
   res.sendfile(req.params.id + '.ctm' , options , function(err) {
-    console.log(err);
     if(err) { return handleError(res, err); }
 
   });

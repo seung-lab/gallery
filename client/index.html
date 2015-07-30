@@ -30,7 +30,7 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div id="ui" ng-include="ready&&'components/ui.html'" ng-class="{on:modalClass, run:ready}"></div>
+    <div id="ui" ng-include="ready&&'app/main/main.html'" ng-class="{on:modalClass, run:ready}"></div>
     <div ng-view=""></div>
     <div ng-include="r.modal&&'components/modal.html'" onload="modalClass='on'"></div>
     <div id="NotifierFactory" sp-notifier=""></div> 
@@ -73,7 +73,7 @@
         <script src="app/app.js"></script>
           <!-- injector:js -->
           <script src="app/auth/auth.service.js"></script>
-          <script src="app/auth/loginController.js"></script>
+          <script src="app/auth/login.controller.js"></script>
           <script src="app/auth/user.service.js"></script>
           <script src="app/controllers/3DController.js"></script>
           <script src="app/controllers/AddController.js"></script>
@@ -83,7 +83,6 @@
           <script src="app/controllers/SearchController.js"></script>
           <script src="app/controllers/SettingsController.js"></script>
           <script src="app/controllers/ShareController.js"></script>
-          <script src="app/controllers/UIController.js"></script>
           <script src="app/directives/spFocus.js"></script>
           <script src="app/directives/spIf.js"></script>
           <script src="app/directives/spNotifier.js"></script>
@@ -103,6 +102,7 @@
           <script src="app/factories/SettingsFactory.js"></script>
           <script src="app/factories/TouchFactory.js"></script>
           <script src="app/factories/TransitionerFactory.js"></script>
+          <script src="app/main/main.controller.js"></script>
           <script src="app/services/Camera3DService.js"></script>
           <script src="app/services/CellService.js"></script>
           <script src="app/services/Coordinates3DService.js"></script>

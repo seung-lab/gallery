@@ -35,8 +35,6 @@ exports.setup = function (User, config) {
         if (!user) {
           getBio(account.username, function(bio) {
 
-            console.log(bio);
-
             user = new User({
               role: bio.role,
               username: account.username,
