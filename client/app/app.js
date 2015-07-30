@@ -1,4 +1,4 @@
-var app = angular.module('cellPane', ['ngRoute','ngResource','ngCookies','angularResizable']);
+var app = angular.module('museum', ['ngRoute','ngResource','ngCookies','angularResizable']);
 
 //The actual routing is done in the MainCtrl
 app.config(['$routeProvider', '$locationProvider' ,'$httpProvider', 
@@ -63,39 +63,41 @@ app.run(['$rootScope', 'CollectionFactory', 'UtilService',  'KeyboardFactory', '
           $rootScope.ready = true
       });
 
-      $rootScope.sets = collection({
-          cells: [],
-          getcell: function(setID, cellID) {
-            var cells = this[setID].children;
-            for (var i = 0; i < cells.length; i++) {
-              if (cells[i].id == cellID) {
-                return cells[i]
-              }
-            }
-          },
-          url: '/api/sets'
-      });
-      $rootScope.cells = collection({
-          url: 'api/cells',
-          getKey: function(cellID) {
-              var index = $rootScope.cells.getIndex(cellID);
-              return  $rootScope.cells[index].key;
-          },
-          has: function(cellID) {
-            for ( var i = 0; $rootScope.cells.length ; i++){
-              if ($rootScope.cells[i] == cellID){
-                return true;
-              }
-            }
-            return false;
-          }
-      });
+      // $rootScope.sets = collection({
+      //     cells: [],
+      //     getcell: function(setID, cellID) {
+      //       var cells = this[setID].children;
+      //       for (var i = 0; i < cells.length; i++) {
+      //         if (cells[i].id == cellID) {
+      //           return cells[i]
+      //         }
+      //       }
+      //     },
+      //     url: '/api/sets'
+      // });
+      // $rootScope.cells = collection({
+      //     url: 'api/cells',
+      //     getKey: function(cellID) {
+      //         var index = $rootScope.cells.getIndex(cellID);
+      //         return  $rootScope.cells[index].key;
+      //     },
+      //     has: function(cellID) {
+      //       for ( var i = 0; $rootScope.cells.length ; i++){
+      //         if ($rootScope.cells[i] == cellID){
+      //           return true;
+      //         }
+      //       }
+      //       return false;
+      //     }
+      // });
 
-      $rootScope.sets.run(function() {
-          $rootScope.cells.run(function() {
-              $rootScope.$emit('ready')
-          });
-      });
+      // $rootScope.sets.run(function() {
+      //     $rootScope.cells.run(function() {
+             
+      //     });
+      // });
+
+      $rootScope.$emit('ready')
 
 
       $rootScope.modal = modal;

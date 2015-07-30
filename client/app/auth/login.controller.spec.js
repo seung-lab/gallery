@@ -1,26 +1,38 @@
 'use strict';
 
-describe('Controller: loginController', function() {
+describe('Controller: LoginController', function() {
 
-	beforeEach(module('cellPane'));
+	beforeEach(angular.mock.module('museum'));
 
-  var loginController,
-      scope,
-      $httpBackend;
+  var loginController;
+  var $window;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function (_$httpBackend_, $controller, $rootScope) {
-    $httpBackend = _$httpBackend_;
-    $httpBackend.expectGET('/api/sets')
-      .respond(200);
+  beforeEach(function () {
+ 
+    angular.mock.inject(function ($injector) {
 
-    scope = $rootScope.$new();
-    loginController = $controller('LoginController', {
-      $scope: scope
+      $window = $injector.get('$window');
+      //loginController = $injector.get('LoginController');
+
     });
-  }));
-
-  it('should attach a list of things to the scope', function () {
   });
+
+
+  describe('login', function () {
+
+    beforeEach(function () {
+      
+      //loginController.loginOauth('eyewire');
+
+    });
+
+    it('should change window href', function () {
+
+
+    });
+
+  });
+
 
 });

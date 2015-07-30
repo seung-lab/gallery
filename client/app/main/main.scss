@@ -210,7 +210,7 @@ figure>* {
 .flex:first-child:nth-last-child(4) ~ .flex {
     width: 25%
 }
-body.icon-cellpane:before,
+body.icon-museum:before,
 #ui>div:before {
     position: absolute;
     top: 50%;
@@ -256,7 +256,7 @@ body {
     -moz-perspective: 800px;
     perspective: 800px
 }
-body.icon-cellpane:before {
+body.icon-museum:before {
     color: #2582BF;
     text-shadow: 0 1px #2b2e30
 }
