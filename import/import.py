@@ -14,7 +14,7 @@ class Importer:
 
     self.mix_color = { "red": 255, "blue": 255, "green": 255 }
 
-    self.stratification = Stratification()
+    self.stratification = Stratification('~/seungmount/research/jinseopk/e2198/bin/analysis/strat_150730.mat')
     self.spreadsheet = Spreadsheet()
     self.matlab_script = MatlabScript()
 
@@ -48,16 +48,16 @@ class Importer:
 
     spreadsheet = self.spreadsheet.get()
 
-    full_strat = Stratification()
-    mono_strat = Stratification('~/seungmount/research/jinseopk/strat_150729.mat')
+    full_strat = Stratification('~/seungmount/research/jinseopk/e2198/bin/analysis/strat_150730.mat')
+    # mono_strat = Stratification('~/seungmount/research/jinseopk/strat_150729.mat')
   
-    for segment_id in full_strat.stratification:
-      if segment_id in  mono_strat.stratification:
+    # for segment_id in full_strat.stratification:
+    #   if segment_id in  mono_strat.stratification:
 
-        full_strat.stratification[segment_id] = mono_strat.stratification[segment_id]
+    #     full_strat.stratification[segment_id] = mono_strat.stratification[segment_id]
     
 
-    stratification = full_strat.stratification
+    stratification = self.stratification.stratification
 
     for segment_id in self.spreadsheet.get():
 
@@ -67,6 +67,7 @@ class Importer:
         strat = stratification[ segment_id ]
       else:
         strat = []
+        print 'no stratification for ', segment_id
 
       cell = {  
 
