@@ -25,29 +25,29 @@ class Meshes:
     files = os.listdir('./mesh')
 
 
-    for filename in  files:
+    # for filename in  files:
 
-      if ".obj" in filename:
+    #   if ".obj" in filename:
 
-        seg = filename.split('.obj')[0]
-        ctm = seg + '.ctm'
+    #     seg = filename.split('.obj')[0]
+    #     ctm = seg + '.ctm'
 
 
-        if ctm in files and os.path.getsize('./mesh/'+ctm) > 0:
-          print 'removing ', seg  
-          os.remove('./mesh/'+filename)
+    #     if ctm in files and os.path.getsize('./mesh/'+ctm) > 0:
+    #       print 'removing ', seg  
+    #       os.remove('./mesh/'+filename)
 
-        else:
+    #     else:
 
-          if os.path.getsize('./mesh/'+filename) == 0:
-            omni_export(seg)
+    #       if os.path.getsize('./mesh/'+filename) == 0:
+    #         self.omni_export(seg)
 
-          print 'converting', seg
-          convert_to_ctm(seg)
+    #       print 'converting', seg
+    #       self.convert_to_ctm(seg)
 
     spreadsheet  = Spreadsheet()
     # for cell in spreadsheet.spreadsheet:
-    for seg in [20029, 20047,20051, 20024, 200041, 20046, 20021]:
+    for seg in [20041]:
       # seg = cell['segments']
       ctm = str(seg) + '.ctm'
 

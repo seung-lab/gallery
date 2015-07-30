@@ -1,48 +1,46 @@
-
-gc(1).name='gc_m1a'; % very large sparse
+gc(1).name='gc m1sw'; % very large sparse
 gc(1).cells=[20203 20029];
-gc(2).name='gc_m1b'; % (melanopsin)
+gc(2).name='gc m1sn'; % (melanopsin)
 gc(2).cells=[20157 20164 17110 17182 17050 17021 10007 20132 20092 17236 17051]; 
-gc(3).name='gc_m1c'; % large sparse
+gc(3).name='gc m1t'; % large sparse
 gc(3).cells=[10018 17109];
 
-gc(4).name='gc_m2a'; % (midi-J); % cutoff 
+gc(4).name='gc m2aw'; % (midi-J); % cutoff 
 gc(4).cells=[17075 17060 17028 20103 20201 17205 17107 20047 17144 17061 17238 17200];
-gc(5).name='gc_m2b'; % (mini-j); % outlier 17130. cutoff 10015
+gc(5).name='gc m2an'; % (mini-j); % outlier 17130. cutoff 10015
 gc(5).cells=[17177 20066 20060 17027 15018 17105 15066 10017 10010 17062 50001 20264 20168 20147 17130 20101 20024]; 
-gc(6).name='gc_m2c'; 
+gc(6).name='gc m2'; 
 gc(6).cells=[17216 10005 10013 50004 20082 17013 17092 20051 20234];
 
-gc(7).name='gc_m3a'; 
+gc(7).name='gc m3o'; 
 gc(7).cells=[17135 20121 17024 17076 17037 17192];
-gc(8).name='gc_m3b';
+gc(8).name='gc m3i';
 gc(8).cells=[20107 17077];
 
-gc(9).name='gc_m4a'; % thin small;
+gc(9).name='gc m4sn'; % thin small;
 gc(9).cells=[20230 17064 17034 17167 17151];
-gc(10).name='gc_m4b'; % thin large
+gc(10).name='gc m4sw'; % thin large
 gc(10).cells=[17188 17079 20156];
-gc(11).name='gc_m4c'; % relatively thin
+gc(11).name='gc m4si'; % relatively thin
 gc(11).cells=[25004 17022 20170 17247 20174 17057];
-gc(12).name='gc_m4d';
+gc(12).name='gc m4t';
 gc(12).cells=[20128 20165 20240 20041];
 
-gc(13).name='gc_m5a'; % relatively thin
+gc(13).name='gc m5s'; % relatively thin
 gc(13).cells=[17160 17146 20223 17081 17127 17168 20053 20012];
-gc(14).name='gc_m5b'; 
+gc(14).name='gc m5t'; 
 gc(14).cells=[17040 20135 20183 17071 20070 17055];
 
-gc(15).name='gc_m6a'; % bump
+gc(15).name='gc m6t'; % bump
 gc(15).cells=[20255 20113 20232 20046];
-gc(16).name='gc_m6b'; % thin large
+gc(16).name='gc m6sw'; % thin large
 gc(16).cells=[20222 20217 17083 20068];
-gc(17).name='gc_m6c'; % thin small
+gc(17).name='gc m6sn'; % thin small
 gc(17).cells=[20198 20073 17082];
 
-gc(18).name='gc_m7'; % thin very large
+gc(18).name='gc m7'; % thin very large
 gc(18).cells=[20021];
-
-gc(19).name='gc_m8'; % large
+gc(19).name='gc m8'; % large
 gc(19).cells=[20228 17111];
-gc(20).name='gc_m9'; % small
+gc(20).name='gc m9'; % small
 gc(20).cells=[20126 20112 20076 20056];
