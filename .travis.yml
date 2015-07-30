@@ -7,3 +7,5 @@ before_script:
   - gem install sass
   - bower install
 services: mongodb
+
+after_script: "npm install codecov.io && cat ./coverage/lcov.info | codecov"
