@@ -19,13 +19,8 @@ module.exports = function(config) {
       'client/bower_components/angular-route/angular-route.js',
       'client/bower_components/threejs/build/three.js',
       'client/app/app.js',
-      'client/app/app.coffee',
       'client/app/**/*.js',
-      'client/app/**/*.coffee',
       'client/components/**/*.js',
-      'client/components/**/*.coffee',
-      'client/app/**/*.jade',
-      'client/components/**/*.jade',
       'client/app/**/*.html',
       'client/components/**/*.html'    ],
 
@@ -33,6 +28,7 @@ module.exports = function(config) {
       '**/*.jade': 'ng-jade2js',
       '**/*.html': 'html2js',
       '**/*.coffee': 'coffee',
+      '**/*.js' : 'coverage'
     },
 
     ngHtml2JsPreprocessor: {
@@ -68,6 +64,13 @@ module.exports = function(config) {
     // - IE (only Windows)
     browsers: ['PhantomJS'],
 
+    // Code coverage report
+    reporters: ['progress', 'coverage'],  
+  
+    coverageReporter: {  
+      type: 'html',
+      dir: 'coverage'
+    },
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit

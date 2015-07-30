@@ -10,5 +10,9 @@ run ./install.sh
 
 * improve orbit controller
 * simplify mesh when far (removing noise effect)
-* back button when loading directly from a set
+* make colors more distinguishable for a given set.
 
+# Code coverage
+
+run 'npm test'
+open ./coverage/ 'browser' / index.html
