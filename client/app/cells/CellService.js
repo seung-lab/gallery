@@ -6,7 +6,6 @@
 app.service('CellService', ['$rootScope','Scene3DService', 'Camera3DService',
  function ($rootScope, Scene, Camera) {
 
-  var old_visible = new Set();
 
   function createCell ( cellId, callback ) {
 

@@ -267,6 +267,11 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
         if (set.children_are_cells) {
           $rootScope.viewSlide.model = 'set';
 
+          for (var idx = 0; idx < set.children.length ; ++idx) {
+            cells.get( set.children[idx] ).color = getColor(idx);
+
+          }
+
           $rootScope.resetActive();
           $rootScope.toggleActive( set.children );
           $rootScope.toggleVisible( set.children );
@@ -278,6 +283,16 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
  
 
       };
+
+      function getColor( i ) {
+        //From https://en.wikipedia.org/wiki/Help:Distinguishable_colors
+        var colors = ['#F0A3FF','#0075DC','#993F00','#4C005C','#005C31','#2BCE48'
+                     ,'#FFCC99','#808080','#94FFB5','#8F7C00','#9DCC00','#C20088',
+                     '#003380','#FFA405','#FFA8BB','#FFA8BB','#426600','#FF0010',
+                     ,'#5EF1F2','#00998F','#740AFF','#990000','#FF5005','#FFFF00'];
+
+        return colors [ i % colors.length ]
+      }
 
       function loadCell(current ,previousSetId,  previousCellId) {
 
