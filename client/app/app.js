@@ -51,51 +51,16 @@ app.config(function ($httpProvider) {
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 });
     
-app.run(['$rootScope', 'CollectionFactory', 'UtilService',  'KeyboardFactory', 'ModalFactory', 'NotifierFactory', '$window', 'LocaleFactory', 
-    function($rootScope, collection, util,  keyboard, modal, notifier, $window, locale) {
+app.run(['$rootScope', 'Cells', 'Sets' , 'UtilService',  'KeyboardFactory', 'ModalFactory', 'NotifierFactory', '$window', 'LocaleFactory', 
+    function($rootScope, Cells, Sets, util,  keyboard, modal, notifier, $window, locale) {
 
       window.scope = $rootScope;
-      $window.collection = collection;
       $window.notify = notifier.notify;
       $rootScope._ =  ($window.navigator, locale._);
       $rootScope.change = false;
       $rootScope.$on('ready', function() {
           $rootScope.ready = true
       });
-
-      // $rootScope.sets = collection({
-      //     cells: [],
-      //     getcell: function(setID, cellID) {
-      //       var cells = this[setID].children;
-      //       for (var i = 0; i < cells.length; i++) {
-      //         if (cells[i].id == cellID) {
-      //           return cells[i]
-      //         }
-      //       }
-      //     },
-      //     url: '/api/sets'
-      // });
-      // $rootScope.cells = collection({
-      //     url: 'api/cells',
-      //     getKey: function(cellID) {
-      //         var index = $rootScope.cells.getIndex(cellID);
-      //         return  $rootScope.cells[index].key;
-      //     },
-      //     has: function(cellID) {
-      //       for ( var i = 0; $rootScope.cells.length ; i++){
-      //         if ($rootScope.cells[i] == cellID){
-      //           return true;
-      //         }
-      //       }
-      //       return false;
-      //     }
-      // });
-
-      // $rootScope.sets.run(function() {
-      //     $rootScope.cells.run(function() {
-             
-      //     });
-      // });
 
       $rootScope.$emit('ready')
 

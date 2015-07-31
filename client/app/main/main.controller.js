@@ -1,14 +1,12 @@
 'use strict';
 
 ( function (app) {
-app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location', 'SettingsFactory', 'UtilService', 'KeyboardFactory', 'TransitionerFactory', 'LocaleFactory', '$timeout', 'ModalFactory', '$route', 'Auth',
-  function($scope, $rootScope, $routeParams, $location, settings, util, keyboard, transitioner, locale, $timeout, modal, $route, Auth) {
+app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location', 'SettingsFactory', 'UtilService', 'KeyboardFactory', 'TransitionerFactory', 'LocaleFactory', '$timeout', 'ModalFactory', '$route', 'Auth','Sets',
+  function($scope, $rootScope, $routeParams, $location, settings, util, keyboard, transitioner, locale, $timeout, modal, $route, Auth, Sets) {
       
       //-------------------------------------------------------------------------------------------
       // global variables
       //-------------------------------------------------------------------------------------------
-      var sets = $rootScope.sets;
-      var cells = $rootScope.cells;
 
       $rootScope.cellSlide = {
           to: 'left'
@@ -41,43 +39,43 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
           sets.remove($routeParams.setId);
       };
 
-      $scope.duplicateSet = function() {
+      // $scope.duplicateSet = function() {
 
-        var set = sets.get($routeParams.setId);
+      //   var set = sets.get($routeParams.setId);
 
-        var newSetId = sets.save({ name: set.name + ' (' + locale._.copy + ')',
-                    children: set.children.slice(0),
-                    children_are_cells: set.children_are_cells,
-        });
+      //   var newSetId = sets.save({ name: set.name + ' (' + locale._.copy + ')',
+      //               children: set.children.slice(0),
+      //               children_are_cells: set.children_are_cells,
+      //   });
         
-        sets.get(0).children.push(newSetId);
-        $location.path('/' +  newSetId );
+      //   sets.get(0).children.push(newSetId);
+      //   $location.path('/' +  newSetId );
 
-      };
+      // };
 
-      $scope.rmcell = function(childIndex) {
+      // $scope.rmcell = function(childIndex) {
 
-          var set = sets.get($routeParams.setId);
+      //     var set = sets.get($routeParams.setId);
 
-          set.children.splice(childIndex, 1);
+      //     set.children.splice(childIndex, 1);
           
-          if (set.children.length != 0) {
-            sets.save(set);
-          } 
-          else {
-            $scope.trashSet();
-          } 
-      };
-      $scope.clean = function(a) {
-          delete this[a]
-      };
-      $scope.sortSet = function(a, b) {
-          util.move(sets, a, b)
-      };
-      $scope.sortcell = function(a, b) {
-          var d = sets[$routeParams.setId];
-          util.move(d.children, a, b), sets.save(d)
-      };
+      //     if (set.children.length != 0) {
+      //       sets.save(set);
+      //     } 
+      //     else {
+      //       $scope.trashSet();
+      //     } 
+      // };
+      // $scope.clean = function(a) {
+      //     delete this[a]
+      // };
+      // $scope.sortSet = function(a, b) {
+      //     util.move(sets, a, b)
+      // };
+      // $scope.sortcell = function(a, b) {
+      //     var d = sets[$routeParams.setId];
+      //     util.move(d.children, a, b), sets.save(d)
+      // };
 
       $scope.fullscreen = function() {
         $rootScope.$broadcast('fullscreen');        
@@ -95,22 +93,6 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
         else {
           $scope.modal('components/new-set.html');
         }
-      };
-
-      $scope.parentPath = function() {
-
-        $rootScope.viewSlide.to = 'right';
-        $rootScope.viewSlide.force = true;    
-        $location.path( 'set/' +_.dropRight($rootScope.setIds).join('/') );
-
-      };
-
-      $scope.childPath = function(childId) {
-
-        $rootScope.viewSlide.to = 'left';
-        $rootScope.viewSlide.force = true;    
-        $location.path( 'set/'+ $rootScope.setIds.concat(childId).join('/') );
-
       };
 
       $scope.$on("angular-resizable.resizeEnd", function(event){ 
@@ -210,8 +192,11 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
 
       function loadFrontpage () {
 
-        $location.path(sets.length ? 'sets/' : 'search/');
+        Sets.get( {id : 0 }, function(set) {
 
+          $location.path( set ? 'sets/' : 'search/');
+
+        });
       };
 
 
@@ -237,8 +222,6 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
           return;
 
         }
-
-
       };
 
       function loadSet(setIds, previousSetId) {
@@ -247,36 +230,46 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
         $rootScope.setIds = setIds;
 
         for (var i = 0; i < setIds.length ; ++i ) {
-          if ( sets.get(setIds[i]) == undefined  ) {
-            loadFrontpage();
-            return;
-          }
-        };
+
+          Sets.get( {id : setIds[i] } , function (set) {
+
+            if ( set  == undefined  ) {
+                  loadFrontpage();
+                  return;
+            }
+          });
+    
+        }
         
 
         for (var i = 0; i < setIds.length -1 ; ++i ) {
-          if ( sets.get( setIds[i] ).children.indexOf( setIds[i+1] ) == -1 ) {
-            loadFrontpage();
-            return;
-          }
-        };
 
-        var set = sets.get( _.last(setIds) );
-        $rootScope.set = set;
+          Sets.get( {id : setIds[i] } , function (set) {
 
-        if (set.children_are_cells) {
-          $rootScope.viewSlide.model = 'set';
-
-          $rootScope.resetActive();
-          $rootScope.toggleActive( set.children );
-          $rootScope.toggleVisible( set.children );
-          return;
+            if ( set.children.indexOf( setIds[i+1] ) == -1 ) {
+              loadFrontpage();
+              return
+            }
+          
+          });
 
         }
 
-        $rootScope.viewSlide.model = 'sets';
- 
+        Sets.get( {id : _.last(setIds)} , function(set){
+          $rootScope.set = set;
 
+          if (set.children_are_cells) {
+            $rootScope.viewSlide.model = 'set';
+
+            $rootScope.resetActive();
+            $rootScope.toggleActive( set.children );
+            $rootScope.toggleVisible( set.children );
+            return;
+
+          }
+
+          $rootScope.viewSlide.model = 'sets';
+        });
       };
 
       function loadCell(current ,previousSetId,  previousCellId) {
@@ -305,9 +298,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
         
         $rootScope.resetActive();
         $rootScope.toggleActive([current.params.cellId]);
-        $rootScope.toggleVisible([current.params.cellId]);
-
-                         
+        $rootScope.toggleVisible([current.params.cellId]);                     
       };
 
       //This changes the views when the location changes
@@ -328,24 +319,26 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
 
           if ($routeParams.view) {
             loadView(current.params.setIds ,previousSetId, previousView);
+            return;
           }
           
 
           if ($routeParams.setIds) {
             loadSet( previousSetId);
+            return;
           }
 
 
           if (current.params.cellId) {
             loadCell(current , previousSetId , previousCellId);
+            return;
           }
-
-
       });
 
-      $scope.$emit('$routeChangeSuccess', {
-          params: $routeParams
-      });
+      // $scope.$emit('$routeChangeSuccess', {
+      //     params: $routeParams
+      // });
+      console.log('main controller loaded');
 
 
       //-------------------------------------------------------------------------------------------

@@ -1,16 +1,28 @@
-<div sp-if="!sets.length" class="center">
+<div ng-controller="SetsCtrl">
+  <div sp-if="!set" class="center">
+    
     <div class="placeholder">
     		<i class="icon-sets"></i>
         <h6>{{_.noSets}}</h6>
         <p>{{_.creatingSets}}</p>
     </div>
+
+  </div>
+
+  <header sp-if="set.id != 0">
+
+    <button sp-tap=" parentPath() " class="btn simple icon-left"></button>
+    <h2 class="trim">{{set.name}}</h2>
+
+  </header>
+
+  <ul sp-sortable="" onsort="sortSet" class="nav">
+
+    <li ng-repeat="child in set.children" sp-tap=" childPath( child ) " class="icon-right set">
+       
+       <h3 class="trim">{{ children[child].name }} </h3>
+  
+    </li>
+
+  </ul>
 </div>
-<header sp-if="set.id != 0">
-  <button sp-tap=" parentPath() " class="btn simple icon-left"></button>
-  <h2 class="trim">{{set.name}}</h2>
-</header>
-<ul sp-sortable="" onsort="sortSet" class="nav">
-  <li ng-repeat="child in set.children" sp-tap=" childPath( child ) " class="icon-right set">
-      <h3 class="trim">{{sets.get(child).name}}</h3>
-  </li>
-</ul>

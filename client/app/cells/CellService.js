@@ -6,8 +6,6 @@
 app.service('CellService', ['$rootScope','Scene3DService', 'Camera3DService',
  function ($rootScope, Scene, Camera) {
 
-  var old_visible = new Set();
-
   function createCell ( cellId, callback ) {
 
     var cell = $rootScope.cells.get(cellId);
@@ -29,8 +27,7 @@ app.service('CellService', ['$rootScope','Scene3DService', 'Camera3DService',
 
 
     }, { 'useWorker': true } );
-
-  };
+  }
 
   var addCellMesh = function (cellId) {
 
@@ -50,7 +47,7 @@ app.service('CellService', ['$rootScope','Scene3DService', 'Camera3DService',
 
     cell.visible = true;
     Camera.render();
-  };
+  }
 
   var removeCellMesh = function (cellId) {
 
@@ -66,7 +63,7 @@ app.service('CellService', ['$rootScope','Scene3DService', 'Camera3DService',
 
     cell.visible = false;
     Camera.render();
-  };
+  }
 
   var showBoundingBox = function ( geometry ){
 
@@ -77,8 +74,7 @@ app.service('CellService', ['$rootScope','Scene3DService', 'Camera3DService',
     var cube = new THREE.Mesh( box_geometry, material );
     cube.position.set( (bbox.max.x + bbox.min.x)/2.0 , (bbox.max.y + bbox.min.y)/2.0 * scale, (bbox.max.z + bbox.min.z)/2.0 * scale);
     Scene.get().add( cube );
-
-  };
+  }
 
   function setCellOpacity (cellId, opacity ) {
 

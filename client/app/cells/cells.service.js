@@ -2,7 +2,7 @@
 
 (function(app) {
 
-app.factory('Cell', ['$resource' , function ($resource) {
+app.factory('Cells', ['$resource' , function ($resource) {
 
   return $resource('/api/cells/:id', {
     id: '@_id'
