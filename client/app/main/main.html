@@ -78,22 +78,6 @@
     </ul>
   </aside>
   
-  <section id="nav" class="fill w" ng-class="{open:menu}" >
-      <header>
-        <div class="b" sp-tap="toggleState('menu')" sp-kbd="'m'" ng-class="{on:menu}">
-          <i class="icon-more"></i>
-        </div>
-        <div class="b" sp-tap="new()" sp-kbd="'n'" ng-class="{on:modal.isOn('new')}" sp-if="auth.isAdmin()">
-          <i class="icon-plus"></i>
-        </div>
-        <h1 sp-tap="p('sets/')" sp-kbd="'s'"><b>Cell</b>Museum</h1>
-      </header>
+  <div ng-include="'app/menu/navigation.html'"></div>
 
-      <div id="view" ng-class="navClass" >
-        <article sp-slide="viewSlide" id="{{model}}" >
-          <div ng-include="'components/'+model + '-template.html'"></div>
-        </article>
-      
-      </div>
-  </section>
 </div>

@@ -43,9 +43,9 @@ exports.create = function(req, res) {
 
     req.body.id = count; 
 
-    sets.create(req.body, function(err, sets) {
+    sets.create(req.body, function(err, set) {
       if(err) { return handleError(res, err); }
-      return res.json(201, sets);
+      return res.json(201, set);
     });
 
   });
@@ -63,11 +63,17 @@ exports.update = function(req, res) {
     if(!set) { return res.send(404); }
   
     var updated = _.merge(set, req.body);
-  
-    updated.save(function (err) {
-      if (err) { return handleError(res, err); }
-      return res.json(200, set);
-    });
+    
+    set.update(
+       { $set:  req.body } 
+      , function (err) {
+        if (err) { return handleError(res, err); }
+        return res.json(200, updated);
+      }
+
+    );
+
+
   });
 };
 

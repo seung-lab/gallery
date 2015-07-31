@@ -7,7 +7,7 @@ var SetSchema = new Schema({
   name: String,
   id: String,
   children_are_cells: Boolean,
-  children: []  
+  children: [String]  
 });
 
 module.exports = mongoose.model('Set', SetSchema);

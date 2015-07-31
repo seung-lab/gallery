@@ -1,23 +1,19 @@
 'use strict';
 
-// (function(app) {
-
-// app.factory('Sets', ['$resource' , function ($resource) {
-
-//   return $resource('/api/sets/:id', {
-//     id: '@_id'
-//   });
-
-// }]);
-
-
-// })(app);
 
 
 (function (app) {
 
-app.factory("Sets", ["$http", "UtilService",
-  function($http, util) {
+app.factory("Sets", ["$http", "UtilService", '$resource',
+  function($http, util, $resource) {
+
+    var sets = this;
+
+    var api = $resource('/api/sets/:id', { id: '@id'  } 
+      ,{ 
+        'update': { method:'PUT' }
+      });
+
 
     var run = function(callback) {
       this.syncDown(callback || util.noop);
@@ -58,22 +54,13 @@ app.factory("Sets", ["$http", "UtilService",
 
     var save = function(element, callback) {
 
-      if ( !element.id ){
-        element.id = util.generateId();
-      }
+      var c = this;
+      api.save( element , function(set) {
+        c.push(set);
+        callback(set.id);
+      });
 
-      
-      if (this[element.id])  {
-        util.extend(this[element.id], element);
-      } 
-      else {
-        this[element.id] = element;
-        this.push(element);
-      }
-     
-      if( callback ) { callback.call(this, element); }
 
-      return element.id;
        
     };
    
@@ -98,6 +85,19 @@ app.factory("Sets", ["$http", "UtilService",
         return this[index];
       }
     }
+
+    function addChild (setId , childId) {
+
+      api.get({id :setId}, function(set){
+
+        set.children.push(childId);
+
+        set.$update(function(){
+          return true;
+        });
+
+      })
+    }
     
     return function() {
       var srcObject = {
@@ -108,7 +108,8 @@ app.factory("Sets", ["$http", "UtilService",
         syncDown: syncDown,
         removeLocal: removeLocal,
         getIndex: getIndex,
-        get: get
+        get: get,
+        addChild: addChild
       };
 
       //Extends the destination object dst by copying own enumerable properties from the src and arg object(s) to dst. 

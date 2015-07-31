@@ -1,0 +1,21 @@
+  
+  <header>
+
+    <button type="button" class="btn x" sp-tap="modal()" sp-kbd="'esc'"></button>
+    <input type="submit" class="btn action" ng-disabled="!name&&!id" ng-click="name&&newSet(name, children_are_cells)&&modal()" value="{{_.add}}">
+    <h2>{{_.newSet}}</h2>
+
+  </header>
+
+  <ul class="list">
+
+    <li>
+      <input class="input block" id="set-name" name="set-name" ng-model="name" autocomplete="off" placeholder="{{_.nameSet}}">
+    </li>
+    <li>
+      <input id="cb" class=" btn" type="checkbox"  ng-model="children_are_cells" > <label for="cb"> Will this set contain cells? </label>
+    </li>
+
+  </ul>
+
+</form>
