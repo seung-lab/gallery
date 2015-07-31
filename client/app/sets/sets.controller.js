@@ -1,8 +1,22 @@
 'use strict';
 
+// (function(app) {
+
+// app.factory('Sets', ['$resource' , function ($resource) {
+
+//   return $resource('/api/sets/:id', {
+//     id: '@_id'
+//   });
+
+// }]);
+
+
+// })(app);
+
+
 (function (app) {
 
-app.factory("CollectionFactory", ["$http", "UtilService",
+app.factory("Sets", ["$http", "UtilService",
   function($http, util) {
 
     var run = function(callback) {
@@ -84,10 +98,10 @@ app.factory("CollectionFactory", ["$http", "UtilService",
         return this[index];
       }
     }
-
-    return function(argObject) {
+    
+    return function() {
       var srcObject = {
-        url: "",
+        url: "api/sets",
         run: run,
         save: save,
         remove: remove,
@@ -99,7 +113,7 @@ app.factory("CollectionFactory", ["$http", "UtilService",
 
       //Extends the destination object dst by copying own enumerable properties from the src and arg object(s) to dst. 
       var dstObject = [];
-      util.extend(dstObject, srcObject, argObject);
+      util.extend(dstObject, srcObject);
       return dstObject;
     }
 }]);

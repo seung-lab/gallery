@@ -98,22 +98,32 @@ app.factory("Cells", ["$http", "UtilService",
         return this[index];
       }
     }
+
+    function has (cellID) {
+      for ( var i = 0; this.length ; i++){
+        if (this[i] == cellID){
+          return true;
+        }
+      }
+      return false;
+    }
     
-    return function(argObject) {
+    return function() {
       var srcObject = {
-        url: "",
+        url: "api/cells",
         run: run,
         save: save,
         remove: remove,
         syncDown: syncDown,
         removeLocal: removeLocal,
         getIndex: getIndex,
-        get: get
+        get: get,
+        has: has
       };
 
       //Extends the destination object dst by copying own enumerable properties from the src and arg object(s) to dst. 
       var dstObject = [];
-      util.extend(dstObject, srcObject, argObject);
+      util.extend(dstObject, srcObject);
       return dstObject;
     }
 }]);

@@ -51,11 +51,10 @@ app.config(function ($httpProvider) {
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 });
     
-app.run(['Cells' , '$rootScope', 'CollectionFactory', 'UtilService',  'KeyboardFactory', 'ModalFactory', 'NotifierFactory', '$window', 'LocaleFactory', 
-    function(Cells , $rootScope, collection, util,  keyboard, modal, notifier, $window, locale) {
+app.run(['Cells' , 'Sets', '$rootScope', 'UtilService',  'KeyboardFactory', 'ModalFactory', 'NotifierFactory', '$window', 'LocaleFactory', 
+    function(Cells , Sets , $rootScope, util,  keyboard, modal, notifier, $window, locale) {
 
       window.scope = $rootScope;
-      $window.collection = collection;
       $window.notify = notifier.notify;
       $rootScope._ =  ($window.navigator, locale._);
       $rootScope.change = false;
@@ -63,20 +62,8 @@ app.run(['Cells' , '$rootScope', 'CollectionFactory', 'UtilService',  'KeyboardF
           $rootScope.ready = true
       });
 
-      $rootScope.sets = collection({
-          url: '/api/sets'
-      });
-      $rootScope.cells = Cells({
-          url: 'api/cells',
-          has: function(cellID) {
-            for ( var i = 0; $rootScope.cells.length ; i++){
-              if ($rootScope.cells[i] == cellID){
-                return true;
-              }
-            }
-            return false;
-          }
-      });
+      $rootScope.sets = Sets();
+      $rootScope.cells = Cells();
 
       $rootScope.sets.run(function() {
           $rootScope.cells.run(function() {
