@@ -61,14 +61,12 @@ exports.update = function(req, res) {
   
     if (err) { return handleError(res, err); }
     if(!set) { return res.send(404); }
-  
-    var updated = _.merge(set, req.body);
-    
+      
     set.update(
        { $set:  req.body } 
       , function (err) {
         if (err) { return handleError(res, err); }
-        return res.json(200, updated);
+        return res.json(200, req.body);
       }
 
     );

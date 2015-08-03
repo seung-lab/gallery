@@ -23,7 +23,7 @@
   
     <aside resizable r-directions="['left']" r-min-width="500" >
       <article id="info">
-          <h1>{{cells[cells.getIndex(r.cellId)].name}}</h1>
+          <h1>{{cells.get(r.cellId).name}}</h1>
           
           <div ng-controller="StratificationController" style="margin: 5px">
             <chart bindto-id="chart-stratification"  chart="chart"  
@@ -34,20 +34,24 @@
 
           <ul class="list">
               <li>
-                  <div class="group">
-                    <a sp-if="auth.isAdmin()" sp-tap="modal('components/add.html')" class="btn icon-copy flex"></a>
-                    <a sp-if="auth.isAdmin()" sp-tap="modal('components/confirm.html')" class="btn danger icon-bin flex"></a>
+                  <div class="group" sp-if="r.view == 'catalog' && auth.isAdmin()">
+                    <a  sp-tap="modal('components/confirm.html')" class="btn danger icon-bin flex"></a>
                   </div>
               </li>
-              <li sp-if="cells.get(r.cellId).description.length">
+          
+              <li  sp-if="cells.get(r.cellId).description.length > 0">
                   <q>{{_.description}}</q>
                   {{cells.get(r.cellId).description}}
               </li>
-              <li class="drop" sp-tap="c=!c" ng-class="{'active':c}" sp-if="cells.get(r.cellId).copyright.length">
+          
+              <li class="drop" sp-tap="c=!c" ng-class="{'active':c}" sp-if="cells.get(r.cellId).copyright.length > 0">
                   <q>{{_.copyright}}</q>
                   <p ng-show="c">{{cells.get(r.cellId).copyright}}</p>
               </li>
+          
+
           </ul>
+
       </article>
     </aside>
   </div>

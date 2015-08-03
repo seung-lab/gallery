@@ -1,45 +1,32 @@
 'use strict';
 
-// (function(app) {
-
-// app.factory('Cell', ['$resource' , function ($resource) {
-
-//   return $resource('/api/cells/:id', {
-//     id: '@_id'
-//   });
-
-// }]);
-
-
-// })(app);
-
-
 (function (app) {
 
-app.factory("Cells", ["$http", "UtilService",
-  function($http, util) {
+app.factory("Cells", ["$http", "UtilService", "$resource", 
+  function($http, util, $resource) {
+
+
+    var api = $resource('/api/cells/:id', { id: '@id'  } 
+      ,{ 
+        'update': { method:'PUT' }
+      });
+
 
     var run = function(callback) {
-      this.syncDown(callback || util.noop);
-      return  this;
-    };
 
-    var syncDown = function(callback) {
       var c = this;
-      var url = util.buildUrl(this.url, this.params);
-
-      $http.get(url).success(function(jsonArray) {
-
-        jsonArray.forEach(function(element) {
+      api.query(function(all){
+         
+        all.forEach(function(element) {
 
           c.push(element);
         });
-      
-      }).success(callback).error(callback)
 
-      return this;
+        callback();
+      });
+
+      return  this;
     };
-
 
     var removeLocal = function(index) {
 
@@ -110,11 +97,9 @@ app.factory("Cells", ["$http", "UtilService",
     
     return function() {
       var srcObject = {
-        url: "api/cells",
         run: run,
         save: save,
         remove: remove,
-        syncDown: syncDown,
         removeLocal: removeLocal,
         getIndex: getIndex,
         get: get,

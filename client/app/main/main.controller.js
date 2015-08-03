@@ -36,48 +36,39 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
       //-------------------------------------------------------------------------------------------
 
 
-      $scope.trashSet = function() {
-          $location.path('/');
-          sets.remove($routeParams.setId);
-      };
+      // $scope.trashSet = function() {
+      //     $location.path('/');
+      //     sets.remove($routeParams.setId);
+      // };
 
-      $scope.duplicateSet = function() {
+      // $scope.duplicateSet = function() {
 
-        var set = sets.get($routeParams.setId);
+      //   var set = sets.get($routeParams.setId);
 
-        var newSetId = sets.save({ name: set.name + ' (' + locale._.copy + ')',
-                    children: set.children.slice(0),
-                    children_are_cells: set.children_are_cells,
-        });
+      //   var newSetId = sets.save({ name: set.name + ' (' + locale._.copy + ')',
+      //               children: set.children.slice(0),
+      //               children_are_cells: set.children_are_cells,
+      //   });
         
-        sets.get(0).children.push(newSetId);
-        $location.path('/' +  newSetId );
+      //   sets.get(0).children.push(newSetId);
+      //   $location.path('/' +  newSetId );
 
-      };
+      // };
 
-      $scope.rmcell = function(childIndex) {
+      // $scope.rmcell = function(childIndex) {
 
-          var set = sets.get($routeParams.setId);
+      //     var set = sets.get($routeParams.setId);
 
-          set.children.splice(childIndex, 1);
+      //     set.children.splice(childIndex, 1);
           
-          if (set.children.length != 0) {
-            sets.save(set);
-          } 
-          else {
-            $scope.trashSet();
-          } 
-      };
-      $scope.clean = function(a) {
-          delete this[a]
-      };
-      $scope.sortSet = function(a, b) {
-          util.move(sets, a, b)
-      };
-      $scope.sortcell = function(a, b) {
-          var d = sets[$routeParams.setId];
-          util.move(d.children, a, b), sets.save(d)
-      };
+      //     if (set.children.length != 0) {
+      //       sets.save(set);
+      //     } 
+      //     else {
+      //       $scope.trashSet();
+      //     } 
+      // };
+
 
       $scope.fullscreen = function() {
         $rootScope.$broadcast('fullscreen');        

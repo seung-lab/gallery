@@ -7,35 +7,28 @@
 app.factory("Sets", ["$http", "UtilService", '$resource',
   function($http, util, $resource) {
 
-    var sets = this;
-
     var api = $resource('/api/sets/:id', { id: '@id'  } 
       ,{ 
-        'update': { method:'PUT' }
+        'update': { method:'PUT' },
+        'delete': { method:'DELETE'}
       });
 
 
     var run = function(callback) {
-      this.syncDown(callback || util.noop);
-      return  this;
-    };
 
-    var syncDown = function(callback) {
       var c = this;
-      var url = util.buildUrl(this.url, this.params);
-
-      $http.get(url).success(function(jsonArray) {
-
-        jsonArray.forEach(function(element) {
+      api.query(function(all){
+         
+        all.forEach(function(element) {
 
           c.push(element);
         });
-      
-      }).success(callback).error(callback)
 
-      return this;
+        callback();
+      });
+
+      return  this;
     };
-
 
     var removeLocal = function(index) {
 
@@ -85,31 +78,15 @@ app.factory("Sets", ["$http", "UtilService", '$resource',
         return this[index];
       }
     }
-
-    function addChild (setId , childId) {
-
-      api.get({id :setId}, function(set){
-
-        set.children.push(childId);
-
-        set.$update(function(){
-          return true;
-        });
-
-      })
-    }
-    
+   
     return function() {
       var srcObject = {
-        url: "api/sets",
         run: run,
         save: save,
         remove: remove,
-        syncDown: syncDown,
         removeLocal: removeLocal,
         getIndex: getIndex,
-        get: get,
-        addChild: addChild
+        get: get
       };
 
       //Extends the destination object dst by copying own enumerable properties from the src and arg object(s) to dst. 

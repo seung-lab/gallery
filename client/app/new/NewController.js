@@ -13,7 +13,8 @@ app.controller("NewController", ["$scope",
 
       
       $scope.set.children.push(cell.id);
-      $scope.sets.addChild( $scope.set.id , cell.id);
+      $scope.set.$update();
+
       return true;
     }
 
@@ -28,8 +29,7 @@ app.controller("NewController", ["$scope",
       }, function ( childId ) {
 
         $scope.set.children.push(childId);
-
-        $scope.sets.addChild( $scope.set.id , childId);
+        $scope.set.$update();
       });
 
       return true;

@@ -134,7 +134,7 @@ class Importer:
 
   def createRootSet(self):
 
-    self.appendSet('root', self.cell_classes.keys(), children_are_cells = False)
+    self.appendSet('Sets', self.cell_classes.keys(), children_are_cells = False)
 
   def replaceChildrenNamesWithCorrespodingIds(self):
     
