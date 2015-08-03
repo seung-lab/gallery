@@ -5,17 +5,17 @@
 app.controller("NewController", ["$scope",
   function($scope) {
 
-      $scope.newCell = function(cell) {
-        
-        if (cell.id in $scope.set.children){
-          return false;
-        }
-
-        
-        $scope.set.children.push(cell.id);
-        $scope.sets.addChild( $scope.set.id , cell.id);
-        return true;
+    function newCell(cell) {
+      
+      if (cell.id in $scope.set.children){
+        return false;
       }
+
+      
+      $scope.set.children.push(cell.id);
+      $scope.sets.addChild( $scope.set.id , cell.id);
+      return true;
+    }
 
 
 
@@ -36,6 +36,7 @@ app.controller("NewController", ["$scope",
     }
 
     $scope.newSet = newSet;
+    $scope.newCell = newCell;
 
 }]);
 

@@ -5,12 +5,24 @@
         <p>{{_.creatingSets}}</p>
     </div>
 </div>
-<header sp-if="set.id != 0">
-  <button sp-tap=" parentPath() " class="btn simple icon-left"></button>
-  <h2 class="trim">{{set.name}}</h2>
-</header>
-<ul sp-sortable="" onsort="sortSet" class="nav">
-  <li ng-repeat="child in set.children" sp-tap=" childPath( child ) " class="icon-right set">
-      <h3 class="trim">{{sets.get(child).name}}</h3>
-  </li>
+<ul class="toolbar" id="em">
+  <li sp-tap="modal('components/share.html')" class="btn icon-share flex"></li>
+  <li sp-tap="modal('components/rename.html')" class="btn icon-pencil flex"></li>
+  <li sp-tap="duplicateSet()" class="btn icon-copy flex"></li>
+  <li sp-tap="trashSet()" class="btn icon-bin flex"></li>
 </ul>
+<div class="view-container" ng-class="{open:em}">
+  <header >
+    <button sp-if="set.id != 0" sp-tap=" parentPath() " class="btn simple icon-left"></button>
+    <button sp-tap="toggleState('em')" class="btn" style="float: right" ng-class="{active:em,'icon-down':!em,'icon-up':em}" sp-if="auth.isAdmin()"></button>
+
+    <h2 sp-if="set.id != 0" class="trim">{{set.name}}</h2>
+    <h2 sp-if="set.id == 0" class="trim"> Sets </h2>
+
+  </header>
+  <ul sp-sortable="" onsort="sortSet" class="nav">
+    <li ng-repeat="child in set.children" sp-tap=" childPath( child ) " class="icon-right set">
+        <h3 class="trim">{{sets.get(child).name}}</h3>
+    </li>
+  </ul>
+</div>

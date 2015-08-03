@@ -74,8 +74,8 @@ app.run(['Cells' , 'Sets', '$rootScope', 'UtilService',  'KeyboardFactory', 'Mod
 
 
       $rootScope.modal = modal;
-      $rootScope.toggleState = function(b) {
-          $rootScope[b] = !$rootScope[b];
+      $rootScope.toggleState = function(stateName) {
+          $rootScope[stateName] = !$rootScope[stateName];
           $rootScope.changedState = true;
       };
       $rootScope.resetState = function() {
