@@ -39,9 +39,9 @@ exports.show = function(req, res) {
 // Creates a new sets in the DB.
 exports.create = function(req, res) {
 
-  sets.count({},function(error, count ){
+  sets.findOne().sort('-id').exec(function(error, setWithLargestId ){
 
-    req.body.id = count; 
+    req.body.id = setWithLargestId.id + 1; 
 
     sets.create(req.body, function(err, set) {
       if(err) { return handleError(res, err); }

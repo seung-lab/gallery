@@ -1,11 +1,11 @@
-<form novalidate name=renameSetForm method=post ng-controller="RenameController">
+<form novalidate name="renameSetForm" method="post" ng-controller="RenameCtrl">
     <header>
         <button type=button class="btn x" sp-tap=modal() sp-kbd="'esc'"></button>
-        <input class="btn action" type=submit ng-disabled=renameSetForm.$invalid ng-click="renameSet(r.setId, newname)&&modal()" value={{_.save}}>
+        <input class="btn action" type="submit" ng-disabled="renameSetForm.$invalid" ng-click="renameSet(newname)&&modal()" value="{{_.save}}">
         <h2>{{_.renameSet}}</h2></header>
     <ul class=list>
         <li>
-            <input class="input block" ng-init="newname=sets[r.setId].name" required ng-model=newname sp-focus="">
+            <input class="input block" ng-init="newname=set.name" required ng-model="newname" sp-focus="">
         </li>
     </ul>
 </form>

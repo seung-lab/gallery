@@ -1,8 +1,7 @@
 <div ng-controller="SetCtrl">
   <ul class="toolbar" id="em">
-    <li sp-tap="modal('components/share.html')" class="btn icon-share flex"></li>
     <li sp-tap="modal('components/rename.html')" class="btn icon-pencil flex"></li>
-    <li sp-tap="duplicateSet()" class="btn icon-copy flex"></li>
+    <!-- <li sp-tap="duplicateSet()" class="btn icon-copy flex"></li> -->
     <li sp-tap="trashSet()" class="btn icon-bin flex"></li>
   </ul>
   <div class="view-container" ng-class="{open:em}">
@@ -15,7 +14,7 @@
 
     <menu sp-sortable="true" onsort="sortcell" class="cells">
       <li ng-repeat="child_id in set.children" ng-init="cell=cells.get(child_id)" ng-class="{on: isVisible(cell.id) }">
-        <button class="btn danger icon-minus" ng-show="em" sp-tap="rmcell($index)"></button>
+        <button class="btn danger icon-minus" ng-show="em" sp-tap="removeCell($index)"></button>
         <h3 class="trim">{{ cell.name }}</h3>
       </li>
     </menu>

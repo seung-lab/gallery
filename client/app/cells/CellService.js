@@ -108,7 +108,6 @@ app.service('CellService', ['$rootScope','Scene3DService', 'Camera3DService',
 
     $rootScope.$watch('active', function(new_active, old_active) {
 
-
       if (new_active == old_active) { //Happens on first call
         old_active = [];  
       }
