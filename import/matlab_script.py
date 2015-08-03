@@ -25,49 +25,34 @@ class MatlabScript:
         
         self.parseNames(line)
         
-        self.parseSegments(line)
 
-    self.convertToSets()
 
 
   def parseNames(self,line):
-    name = re.match(r"gc\((\d*)\).name\s*=\s*['|\"](.*)['|\"]", line)
+    name = re.match(r"struct\(.*,\s*'(.*)'\s*,.*,\s*'(.*)'\s*,.*,(.*)\)", line)
     if name != None:
 
-      type_id =  name.groups()[0];
+      type_class = name.groups()[0]
       type_name =  name.groups()[1];
 
-      self.gc[type_id] = { 'name':type_name}
+      self.cell_types[type_name] = self.parseSegments( name.groups()[2] )
 
-      self.appendtoCellClasses(type_id, type_name)
+      self.appendtoCellClasses(type_class, type_name)
 
 
-  def parseSegments(self,line):
+  def parseSegments(self, segments_string ):
 
-    segments = re.match(r"gc\((\d*)\).cells\s*=\[(.*)\]", line)
-    if segments != None:
-      type_id = segments.groups()[0]
+      return re.findall(r"(\d+)", segments_string)
+      
 
-      segment_list = segments.groups()[1]
-      type_segments = re.findall(r"(\d+)", segment_list)
-      self.gc[type_id]['segments'] = type_segments
 
-  def convertToSets(self):
+  def appendtoCellClasses(self, class_name , set_name):
 
-    for idx in self.gc:
-      name = self.gc[idx]['name']
-      segments = self.gc[idx]['segments']
-
-      self.cell_types[name] = segments
-
-  def appendtoCellClasses(self, idx, set_name):
-    idx = int(idx)
-
-    if False:
-      self.cell_classes['GC bistratified'].append(set_name)
+    if class_name in self.cell_classes:
+      self.cell_classes[class_name].append(set_name)
     
     else:
-      self.cell_classes['GC monostratified'].append(set_name)
+      self.cell_classes[class_name] = []
 
 
 
