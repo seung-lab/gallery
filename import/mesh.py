@@ -47,7 +47,7 @@ class Meshes:
 
     spreadsheet  = Spreadsheet()
     # for cell in spreadsheet.spreadsheet:
-    for seg in [20036, 20045, 20036, 20037]:
+    for seg in [20055]:
       # seg = cell['segments']
       ctm = str(seg) + '.ctm'
 

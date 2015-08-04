@@ -7,7 +7,7 @@ app.controller("NewController", ["$scope",
 
     function newCell(cell) {
       
-      if (cell.id in $scope.set.children){
+      if ($scope.set.children.indexOf(cell.id) != -1){
         return false;
       }
 

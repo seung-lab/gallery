@@ -49,7 +49,7 @@ describe('GET /api/sets', function() {
 
   it('should update set', function (done) {
 
-    var update_set = {name: 'new_name' , children_are_cells: false}
+    var update_set = {name: 'new_name' , children_are_cells: false , children: []}
     request(app)
     .put('/api/sets/0')
     .send(update_set)

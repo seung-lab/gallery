@@ -85,19 +85,25 @@ struct('class','GC multistratified','name','gc bw2rf','cells',[20117 17212]);
 struct('class','GC multistratified','name','gc bw2d','cells',[20100 20187 20150 20043]);
 
 % 32: regular bilayer 
-struct('class','GC multistratified','name','gc bw3r','cells',[20118 20167 20158]);
-% 33: regular bilayer on-dsgc style
-struct('class','GC multistratified','name','gc bw3ro','cells',[20251 30001 20081 20161 20020]);
-% 34: irregular bilayer on-dsgc style
+struct('class','GC multistratified','name','gc bw3r','cells',[20118]);
+% 33: regular bilayer even wider
+struct('class','GC multistratified','name','gc bw3rw','cells',[20158]);
+% 34: regular bilayer regular on-dsgc style
+struct('class','GC multistratified','name','gc bw3ro','cells',[20251 30001 20161]);
+% 35: irregular bilayer on-dsgc style
 struct('class','GC multistratified','name','gc bw3do','cells',[20069 20080]);
-% 35: irregular bilayer more at off layer
+% 36: irregular bilayer more at off layer
 struct('class','GC multistratified','name','gc bw3df','cells',[20243 20155 20163 20257]);
-% 36: trimodal
+% 37: trimodal
 struct('class','GC multistratified','name','gc tw3','cells',[20063 20072 20200 17012 17038]);
 
-% 37: regular bilayer
+% 38: regular bilayer
 struct('class','GC multistratified','name','gc bw4r','cells',[20218 25003 20042]);
-% 38: irregular bilayer 
+% 39: regular bilayer irregular on-dsgc style
+struct('class','GC multistratified','name','gc bw4ro','cells',[20081 20020]);
+% 40: regular bilayer 
+struct('class','GC multistratified','name','gc bw4rf','cells',[20167]);
+% 41: irregular bilayer 
 struct('class','GC multistratified','name','gc bw4d','cells',[17009 20197]);
 
 ];

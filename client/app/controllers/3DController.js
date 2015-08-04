@@ -2,8 +2,8 @@
 // Manages the 3D Scene 
 ( function (app) {
 
-app.controller('3DController', ['$scope', 'Coordinates3DService','Camera3DService','CellService',
-  function ($scope, CoordinatesService, Camera, CellService) {
+app.controller('3DController', ['$scope', 'Coordinates3DService','Camera3DService','Mesh',
+  function ($scope, CoordinatesService, Camera, Mesh) {
 
 
   this.watch = function() {

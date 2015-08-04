@@ -3,7 +3,7 @@
 // creates a tube that follows a collection of 3d points.
 ( function (app) { 
 
-app.service('CellService', ['$rootScope','Scene3DService', 'Camera3DService',
+app.service('Mesh', ['$rootScope','Scene3DService', 'Camera3DService',
  function ($rootScope, Scene, Camera) {
 
 

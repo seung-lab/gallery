@@ -42,7 +42,7 @@ class MatlabScript:
 
   def parseSegments(self, segments_string ):
 
-      return re.findall(r"(\d+)", segments_string)
+      return list(set(re.findall(r"(\d+)", segments_string)))
       
 
 
