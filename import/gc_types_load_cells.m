@@ -71,21 +71,21 @@ struct('class','GC multistratified','name','gc bn2','cells',[20105 20104 20186 2
  
 % wide field 
 % 26: ooDSGC. outliers: 20239 (with interlayer stuff) / 20210 (too few on stuff)
-struct('class','GC multistratified','name','gc bw1re','cells',[90002 90001 25005 20254 20245 20239 20233 20220 20213 20210 20179 20137 20125 20096 17161 17080 20016 20014]);
+struct('class','GC multistratified','name','gc bw1r','cells',[90002 90001 25005 20254 20245 20239 20233 20220 20213 20210 20179 20137 20125 20096 17161 17080 20016 20014]);
 % 27: onDSGC (regular/irregular)
 struct('class','GC multistratified','name','gc bw1ro','cells',[17053 20180 17152 20075]);
 % 28: irregular bilayer
-struct('class','GC multistratified','name','gc bw1de','cells',[20181 17140 20208 20178 17097 17114 17084 20140 20129 30003 20071 30002 20019 20011]);
+struct('class','GC multistratified','name','gc bw1d','cells',[20181 17140 20208 20178 17097 17114 17084 20140 20129 30003 20071 30002 20019 20011]);
 
 % 29: regular bilayer
-struct('class','GC multistratified','name','gc bw2re','cells',[20166 20221 17069 20074]);
+struct('class','GC multistratified','name','gc bw2r','cells',[20166 20221 17069 20074]);
 % 30: more at off layer
 struct('class','GC multistratified','name','gc bw2rf','cells',[20117 17212]);
 % 31: irregular bilayer
 struct('class','GC multistratified','name','gc bw2d','cells',[20100 20187 20150 20043]);
 
 % 32: regular bilayer 
-struct('class','GC multistratified','name','gc bw3re','cells',[20118 20167 20158]);
+struct('class','GC multistratified','name','gc bw3r','cells',[20118 20167 20158]);
 % 33: regular bilayer on-dsgc style
 struct('class','GC multistratified','name','gc bw3ro','cells',[20251 30001 20081 20161 20020]);
 % 34: irregular bilayer on-dsgc style
@@ -96,8 +96,8 @@ struct('class','GC multistratified','name','gc bw3df','cells',[20243 20155 20163
 struct('class','GC multistratified','name','gc tw3','cells',[20063 20072 20200 17012 17038]);
 
 % 37: regular bilayer
-struct('class','GC multistratified','name','gc bw4re','cells',[20218 25003 20042]);
+struct('class','GC multistratified','name','gc bw4r','cells',[20218 25003 20042]);
 % 38: irregular bilayer 
-struct('class','GC multistratified','name','gc bw4de','cells',[17009 20197]);
+struct('class','GC multistratified','name','gc bw4d','cells',[17009 20197]);
 
 ];
