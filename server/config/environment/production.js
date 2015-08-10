@@ -21,5 +21,5 @@ module.exports = {
             'mongodb://localhost/gallery'
   },
 
-  seedDB: true
+  seedDB: false
 };
