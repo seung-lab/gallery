@@ -16,3 +16,14 @@ run ./install.sh
 
 run 'npm test'
 open ./coverage/ 'browser' / index.html
+
+
+# To run forever
+grunt serve:dist
+
+#to stop it:
+grunt forever:server:stop
+
+#database backup
+grunt:mongobackup:dump
+grunt:mongobackup:restore

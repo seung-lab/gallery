@@ -17,7 +17,9 @@ module.exports = function (grunt) {
     cdnify: 'grunt-google-cdn',
     protractor: 'grunt-protractor-runner',
     injector: 'grunt-asset-injector',
-    buildcontrol: 'grunt-build-control'
+    buildcontrol: 'grunt-build-control',
+    mongobackup: 'grunt-mongo-backup',
+    forever: 'grunt-forever'
   });
 
   // Time how long tasks take. Can help when optimizing build times
@@ -542,6 +544,28 @@ module.exports = function (grunt) {
         }
       }
     },
+    mongobackup: {
+      options: {
+        host : 'localhost',
+        port: '27017',
+        db : 'gallery', 
+        dump:{
+          out : './dump',
+        },    
+        restore:{
+          path : './dump',          
+          drop : true
+        }
+      }  
+    },
+    forever: {
+      server: {
+        options: { 
+            index: 'dist/server/app.js',
+            logDir: 'logs'
+        }
+      }
+    }     
   });
 
   // Used for delaying livereload until after server has restarted
@@ -562,7 +586,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build', 'env:all', 'env:prod', 'express:prod', 'wait', 'open', 'express-keepalive']);
+      return grunt.task.run(['build', 'env:all', 'env:prod', 'forever:server:start']);
     }
 
     if (target === 'debug') {
