@@ -14,9 +14,10 @@ class Importer:
 
     self.mix_color = { "red": 255, "blue": 255, "green": 255 }
 
-    self.stratification = Stratification('~/seungmount/research/jinseopk/e2198/bin/analysis/strat_150803.mat')
-    self.spreadsheet = Spreadsheet()
+    self.stratification = Stratification()
     self.matlab_script = MatlabScript()
+
+    self.spreadsheet = Spreadsheet()
 
     self.cell_classes = {}
     self.cell_types = {}

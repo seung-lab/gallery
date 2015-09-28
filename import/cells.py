@@ -145,13 +145,13 @@ class Stratification:
 if __name__ == '__main__':
 
   spreadsheet = Spreadsheet()
-  print spreadsheet.spreadsheet['60143']
+  # print spreadsheet.spreadsheet['60143']
   # print spreadsheet.cell_classes
 
   # print spreadsheet.cell_types
 
   # full_strat = Stratification()
-  # mono_strat = Stratification('strat_150717.mat')
+  mono_strat = Stratification()
   
   # for segment_id in full_strat.stratification:
   #   if segment_id in  mono_strat.stratification:

@@ -25,8 +25,8 @@ grunt serve:dist
 grunt forever:server:stop
 
 #database backup
-grunt:mongobackup:dump
-grunt:mongobackup:restore
+grunt mongobackup:dump
+grunt mongobackup:restore
 
 #How to update the classification 
 * Jinseop will provide a matlab file  usually called gc_types_load_cells.m,
