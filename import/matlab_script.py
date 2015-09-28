@@ -8,7 +8,7 @@ class MatlabScript:
     self.gc = {}
     
     self.cell_types = {}
-    self.cell_classes = { 'GC bistratified':[] , 'GC monostratified':[] }
+    self.cell_classes = { 'Retinal GC': [] }
 
 
     self.fname =   os.path.expanduser('gc_types_load_cells.m')
@@ -29,15 +29,14 @@ class MatlabScript:
 
 
   def parseNames(self,line):
-    name = re.match(r"struct\(.*,\s*'(.*)'\s*,.*,\s*'(.*)'\s*,.*,(.*)\)", line)
+    name = re.match(r"struct\(.*,\s*'(.*)'\s*,.*,(.*)\)", line)
     if name != None:
 
-      type_class = name.groups()[0]
-      type_name =  name.groups()[1];
+      type_name =  name.groups()[0];
 
-      self.cell_types[type_name] = self.parseSegments( name.groups()[2] )
+      self.cell_types[type_name] = self.parseSegments( name.groups()[1] )
 
-      self.appendtoCellClasses(type_class, type_name)
+      self.appendtoCellClasses('Retinal GC', type_name)
 
 
   def parseSegments(self, segments_string ):
@@ -59,4 +58,4 @@ class MatlabScript:
 
 if __name__ == '__main__':
   matlab = MatlabScript()
-  print matlab.cell_types
+  print matlab.cell_classes

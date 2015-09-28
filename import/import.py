@@ -47,17 +47,7 @@ class Importer:
     cells = []
 
     spreadsheet = self.spreadsheet.get()
-
-    full_strat = Stratification('~/seungmount/research/jinseopk/e2198/bin/analysis/strat_150730.mat')
-    # mono_strat = Stratification('~/seungmount/research/jinseopk/strat_150729.mat')
-  
-    # for segment_id in full_strat.stratification:
-    #   if segment_id in  mono_strat.stratification:
-
-    #     full_strat.stratification[segment_id] = mono_strat.stratification[segment_id]
-    
-
-    stratification = self.stratification.stratification
+    stratification = self.stratification.get()
 
     for segment_id in self.spreadsheet.get():
 
@@ -111,7 +101,7 @@ class Importer:
 
   def mergeCellTypes(self):
 
-    self.cell_types = self.spreadsheet.cell_types
+    # self.cell_types = self.spreadsheet.cell_types
     for set_name in self.matlab_script.cell_types:
       
       if set_name in self.cell_types:
@@ -123,7 +113,7 @@ class Importer:
 
   def mergeCellClasses(self):
     
-    self.cell_classes = self.spreadsheet.cell_classes
+    # self.cell_classes = self.spreadsheet.cell_classes
     for set_name in self.matlab_script.cell_classes:
 
       if set_name in self.cell_classes:
