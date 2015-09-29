@@ -48,18 +48,28 @@ class Importer:
     cells = []
 
     spreadsheet = self.spreadsheet.get()
+
     stratification = self.stratification.get()
 
+    bc_strat = Stratification('./bc_strat_for_tartavull_150929').get()
+
+    stratification.update(bc_strat)
+      
     for segment_id in self.spreadsheet.get():
 
       row = spreadsheet[segment_id]
 
       if segment_id in stratification:
         strat = stratification[ segment_id ]
+        if float('NaN') == strat[0]:
+          continue
       else:
         strat = []
         print 'no stratification for ', segment_id
+        
 
+      
+        
       cell = {  
 
         "name": '# '+ segment_id,

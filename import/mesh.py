@@ -12,30 +12,33 @@ class Meshes:
     os.system(cmd)
 
 
-  def convert_to_ctm(self,segment, clean = True):
+  def convert_to_ctm(self,path ,segment, clean = True):
     if clean:  
-      cmd = "meshlabserver -i mesh/"+str(segment)+".obj -s meshclean.mlx -o mesh/"+str(segment)+".ctm"
+      cmd = "meshlabserver -i "+path+str(segment)+".obj -s meshclean.mlx -o mesh/"+str(segment)+".ctm"
     else:
-      cmd = "meshlabserver -i mesh/"+str(segment)+".obj -o mesh/"+str(segment)+".ctm"
+      cmd = "meshlabserver -i "+path+str(segment)+".obj -o mesh/"+str(segment)+".ctm"
 
     os.system(cmd)
 
   def get_meshes (self):
 
-    files = os.listdir('./mesh')
+    path = os.path.expanduser('~/seungmount/Omni/e2198_reconstruction/gallery/obj_museum/bc/')
+    files = os.listdir(path)
 
 
-    # for filename in  files:
+    for filename in  files:
+      print filename
+      if ".obj" in filename:
 
-    #   if ".obj" in filename:
+        seg = filename.split('.obj')[0]
+        ctm = seg + '.ctm'
+        
+        if not os.path.isfile('./mesh/'+ctm)  or os.path.getsize('./mesh/'+ctm) ==  0:
+          self.convert_to_ctm(path,seg)
 
-    #     seg = filename.split('.obj')[0]
-    #     ctm = seg + '.ctm'
-
-
-    #     if ctm in files and os.path.getsize('./mesh/'+ctm) > 0:
-    #       print 'removing ', seg  
-    #       os.remove('./mesh/'+filename)
+        # if ctm in files and os.path.getsize('./mesh/'+ctm) > 0:
+        #   print 'removing ', seg  
+        #   os.remove('./mesh/'+filename)
 
     #     else:
 
@@ -45,18 +48,18 @@ class Meshes:
     #       print 'converting', seg
     #       self.convert_to_ctm(seg)
 
-    spreadsheet  = Spreadsheet()
-    # for cell in spreadsheet.spreadsheet:
-    for seg in [20055]:
-      # seg = cell['segments']
-      ctm = str(seg) + '.ctm'
+    # spreadsheet  = Spreadsheet()
+    # # for cell in spreadsheet.spreadsheet:
+    # for seg in [20055]:
+    #   # seg = cell['segments']
+    #   ctm = str(seg) + '.ctm'
 
 
-      if ctm in files and os.path.getsize('./mesh/'+ctm) > 0:
-        continue
+    #   if ctm in files and os.path.getsize('./mesh/'+ctm) > 0:
+    #     continue
 
-      self.omni_export(seg)
-      self.convert_to_ctm(seg)
+    #   self.omni_export(seg)
+    #   self.convert_to_ctm(seg)
 
 if __name__ == '__main__':
   

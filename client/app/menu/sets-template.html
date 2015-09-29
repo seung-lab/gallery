@@ -25,7 +25,7 @@
     </header>
     <ul sp-sortable="" onsort="sortSet" class="nav">
       <li ng-repeat="child in set.children" sp-tap=" childPath( child ) " class="icon-right">
-          <button class="btn danger icon-minus" style="float: right;" ng-show="em" sp-tap="removeSet($index)"></button>
+            <button class="btn danger icon-minus" style="float: right;" ng-show="em" sp-tap="removeSet($index)"></button>
           <h3 class="trim">{{sets.get(child).name}}</h3>
       </li>
     </ul>

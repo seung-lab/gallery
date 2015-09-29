@@ -8,7 +8,7 @@ class MatlabScript:
     self.gc = {}
     
     self.cell_types = {}
-    self.cell_classes = { 'Retinal GC': [] }
+    self.cell_classes = {}
 
 
     self.fname =   os.path.expanduser('gc_types_load_cells.m')
@@ -29,14 +29,14 @@ class MatlabScript:
 
 
   def parseNames(self,line):
-    name = re.match(r"struct\(.*,\s*'(.*)'\s*,.*,(.*)\)", line)
+    name = re.match(r"struct\(.*,\s*'(.*)'\s*,.*,\s*'(.*)'\s*,.*,(.*)\)", line)
     if name != None:
 
-      type_name =  name.groups()[0];
+      type_class =  name.groups()[0];
+      type_name =  name.groups()[1];
+      self.cell_types[type_name] = self.parseSegments( name.groups()[2] )
 
-      self.cell_types[type_name] = self.parseSegments( name.groups()[1] )
-
-      self.appendtoCellClasses('Retinal GC', type_name)
+      self.appendtoCellClasses(type_class, type_name)
 
 
   def parseSegments(self, segments_string ):
@@ -51,7 +51,7 @@ class MatlabScript:
       self.cell_classes[class_name].append(set_name)
     
     else:
-      self.cell_classes[class_name] = []
+      self.cell_classes[class_name] = [set_name]
 
 
 

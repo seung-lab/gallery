@@ -125,7 +125,7 @@ class Stratification:
     filename =  os.path.basename(self.fname)
     dataset_name = filename.split('.')[0]
 
-    mat = mat[dataset_name]
+    mat = mat['strat']
   
 
     for row_idx in range(mat.shape[0]):
