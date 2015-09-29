@@ -105,7 +105,7 @@ app.service('Camera3DService', ['Scene3DService',function (Scene) {
 
     	_this.controls.position0.set( position.x , 0, 0);
     	_this.controls.target0 = position;
-    	_this.controls.up0.set( -1 , 0, 0 );
+    	_this.controls.up0.set( 1 , 0, 0 );
     	_this.controls.reset();
 
     };
