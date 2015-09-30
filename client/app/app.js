@@ -99,6 +99,8 @@ app.run(['Cells' , 'Sets', '$rootScope', 'UtilService',  'KeyboardFactory', 'Mod
       keyboard.on('esc', function() {
           return true;
       });
+
+      modal('app/splash/splash.html');
 }]);
 
 
