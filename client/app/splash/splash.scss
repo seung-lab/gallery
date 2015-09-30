@@ -1,9 +1,9 @@
 #splash {
 
   height: 80vh;
-  width: 80vw;
-  background-color: #2582BF;
+  width: 89vh;
   margin:0;
+  padding: 10px;
 
   h1 {
     font-family: 'NeutraBold', Arial;
@@ -45,8 +45,11 @@
   img {
     display: block;
     position:absolute;
+    height: 100%;
     width: 100%;
     bottom:0px;
     left:0px;
+    max-width:100%;
+    max-height:100%;
   }
 }
