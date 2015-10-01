@@ -1,91 +1,99 @@
-% 1 melanopsin: very large sparse
-struct('class','GC','name','1w (M1-Brn3b+, pupillary reflex)','cells',[20203 20029]);
-% 2 melanopsin m2? 
-struct('class','GC','name','1n (M1-Brn3b-, photoentrainment)','cells',[20157 20164 17110 17182 17050 17021 10007 20132 20092 17236 26019 26024]);
-% 3 large sparse
-struct('class','GC','name','13 (sOFFalpha)','cells',[10018 17109]);
-% cutoff: 17051
-% 4 midi-J
-struct('class','GC','name','2aw (midi-J)','cells',[17075 17060 17028 20103 20201 17205 17107 20047 17144 17061 17200 26018]);
-% cutoff: 17238
-% 5 mini-j. outlier 17130. cutoff 10015
+function gc=gc_types_load_cells_all()
+gc=[
+% 1 cutoff: 17051
+struct('class','GC','name','13 (sOFFalpha)','cells',[10018 17109]); 
+% 2 melanopsin: very large sparse
+struct('class','GC','name','1w (M1)','cells',[20203 20029]);
+% 3 melanopsin?
+struct('class','GC','name','1no','cells',[20157 17110 17050 17021 20092 17236 26024 10007]);
+% 4
+struct('class','GC','name','1ni','cells',[20164 17182 20132 26019]);
+% 5 minor layer at L5
+struct('class','GC','name','25','cells',[20105 20104 20186 20237 20067 25006 17176 17132 20045 20036 26031]);
+% 6 mini-j. outlier: 17130. cutoff: 10015
 struct('class','GC','name','2an (mini-J)','cells',[17177 20066 20060 17027 15018 17105 15066 10017 10010 17062 50001 20264 20168 20147 17130 20101 20024]);
-% 6
-struct('class','GC','name','2 (?)','cells',[17216 10005 10013 50004 20082 17013 17092 20051 20234 26062]);
-% 7 minor layer at L5
-struct('class','GC','name','25 (?)','cells',[20105 20104 20186 20237 20067 25006 17176 17132 20045 20036 26031]);
-% 8
-struct('class','GC','name','3o (?)','cells',[17135 20121 17024 17076 17037 17192 26003 26038]);
+% 7 midi-J. cutoff: 17238
+struct('class','GC','name','2aw (midi-J)','cells',[17075 17060 17028 20103 20201 17205 17107 20047 17144 17061 17200 26018]); 
+% 8 
+struct('class','GC','name','2o','cells',[17216 10005 10013 26062]);
 % 9
+struct('class','GC','name','2i','cells',[50004 17013 17092 20051 20234 20082]);
+% 10
+struct('class','GC','name','3o','cells',[17192 17024 17135 20121 17076 17037 26003 26038]);
+% 11 mini tOffAlpha
 struct('class','GC','name','3i (mini-sOFFalpha)','cells',[20107 17077 26063]);
-% 10 CB2
-struct('class','GC','name','4on (mini-tOFFalpha, CB2)','cells',[20230 17064 17034 17167 17151 20041 26021]);
-% 11 W7a
-struct('class','GC','name','4ow (tOFFalpha, W7a)','cells',[17188 17079 20156 26004]);
 % 12
-struct('class','GC','name','4i (?)','cells',[25004 17022 20170 17247 20174 17057 26006 26008 26050]);
+struct('class','GC','name','4on (mini-tOFFalpha)','cells',[20230 17064 17034 17167 17151 20041 26021]);
 % 13
-struct('class','GC','name','5tow (?)','cells',[20128 20165 20240]);
-% 14 w3 
-struct('class','GC','name','5ton (LED, w3?)','cells',[17090 17181 17138 17011 50002 20114 20102 20216 20191 20184 20226 20262 17093 17121 17159 20089 17190 17078 17059 20127 20055]);
-% 15
-struct('class','GC','name','5ti (?)','cells',[17040 20135 20183 17071 20070 17055 26044]);
-% 16
-struct('class','GC','name','5s (?)','cells',[17160 17146 20223 17081 17127 17168 20053 20012]);
-% 17 w3 similar regular
-struct('class','GC','name','51 (LED, w3?)','cells',[20097 20120 20212 20182 17098 17095 20153 20258 17035 20037]);
-% 18 bump
-struct('class','GC','name','68 (?)','cells',[20255 20113 20232 20046]);
+struct('class','GC','name','4ow (tOFFalpha)','cells',[17188 17079 20156 26004]);
+% 14
+struct('class','GC','name','4i','cells',[25004 17022 20170 17247 20174 17057 26006 26008 26050]);
+% 15 w3 similar regular
+struct('class','GC','name','51 (LED, w3)','cells',[20097 20120 20212 20182 17098 17095 20153 20258 17035 20037]);
+% 16 w3: incomplete 26053 26083 26085 26098 26112 26120 26123 26136 26151 26152 26154
+struct('class','GC','name','5ton (LED, w3)','cells',[17090 17181 17138 17011 50002 20114 20102 20216 20191 20184 20226 20262 17093 17121 17159 20089 17190 17078 17059 20127 20055]);
+% 17
+struct('class','GC','name','5tow','cells',[20128 20165 20240]);
+% 18
+struct('class','GC','name','5ti','cells',[17040 20135 20183 17071 20070 17055 26044]);
 % 19
-struct('class','GC','name','6w (tOnalpha)','cells',[20222 20217 17083 20068 26020]);
+struct('class','GC','name','5s','cells',[17160 17146 20223 17081 17127 17168 20053 20012]);
 % 20
-struct('class','GC','name','6n (mini tONalpha)','cells',[20198 20073 17082 26035 26043]);
-% 21 very wide: m4? 
-struct('class','GC','name','8wi (M2)','cells',[20228]);
-% 22 on alpha sustained
-struct('class','GC','name','8wo (sONalpha, M4)','cells',[17111 26001]);
-% 23 wide
-struct('class','GC','name','8n (?)','cells',[20126]);
-% 24 
-struct('class','GC','name','9 (?)','cells',[20112 20076 20056 20006]);
-% wide field 
-% 25 ooDSGC. outliers: 20239 (with interlayer stuff) / 20210 (too few on stuff)
-struct('class','GC','name','37 (On-Off DS)','cells',[90002 90001 25005 20254 20245 20239 20233 20220 20213 20210 20179 20137 20125 20096 17161 17080 20016 20014 20002]);
-
-struct('class','GC','name','7o (tOn DS)','cells',[17053 20180 20075 26034]);
-% 27 onDSGC. 
+struct('class','GC','name','6n (mini-tONalpha)','cells',[20198 20073 17082 26035 26043]);
+% 21
+struct('class','GC','name','6w (tONalpha)','cells',[20222 20217 17083 20068 26020]);
+% 22 onDSGC. 
 struct('class','GC','name','7i (sON DS)','cells',[17152 20021 26002 26070]);
-% 28 irregular bilayer
-struct('class','GC','name','63 (?)','cells',[20181 17140 20208 20178 17097 17114 17084 20140 20129 30003 20071 30002 20019 20011 20005 26057]);
-% 29 regular bilayer, layers further
-struct('class','GC','name','72w (?)','cells',[20166 20221 17069 20074]);
-% 30 irregular bilayer, layers closer
-struct('class','GC','name','72n (?)','cells',[20100 20187 20150 20043 26059]);
-% 31 more at off layer
-struct('class','GC','name','27 (?)','cells',[20117 17212 26051 26065]);
-% 32 trimodal
-struct('class','GC','name','85 (?)','cells',[20063 20072 20200 17012 17038 26061]);
-% 33 regular bilayer even wider
-struct('class','GC','name','81 (?)','cells',[20158]);
-% 34 irregular bilayer 
-struct('class','GC','name','83 (?)','cells',[17009 20197]);
-% 35 regular bilayer 
-struct('class','GC','name','82w (?)','cells',[20118]);
-% 36 regular bilayer regular on-dsgc style
-struct('class','GC','name','82i (?)','cells',[20251 30001 20161 26058 26067]);
-% 37 irregular bilayer on-dsgc style
-struct('class','GC','name','82o (?)','cells',[20069 20080 26052]);
-% 38 irregular bilayer more at off layer
-struct('class','GC','name','28 (?)','cells',[20243 20155 20163 20257 26005 20167 26033]);
-% 39 regular bilayer
-struct('class','GC','name','91n (?)','cells',[20218 25003 20042]);
-% 40 regular bilayer irregular on-dsgc style
-struct('class','GC','name','91w (?)','cells',[20081 20020]);
-% 41 weirdo
-struct('class','GC','name','weirdos','cells',[17134 20248]);
-];
+% 23 onDSGC. 
+struct('class','GC','name','7o (tON DS)','cells',[17053 20180 20075 26034]);
+% 24 wide
+struct('class','GC','name','8n','cells',[20126]);
+% 25 on alpha sustained
+struct('class','GC','name','8w (sONalpha, M4)','cells',[17111 26001]);
+% 26 very wide 
+struct('class','GC','name','9w (M2)','cells',[20228]);
+% 27
+struct('class','GC','name','9n','cells',[20112 20076 20056 20006]);
 
-function bc=bc_types_load_cells()
+struct('class','GC','name','37 (aON-OFF DS)','cells',[17080 90001 20213 20220 25005]);  %  26103
+% 29 green
+struct('class','GC','name','37 (vON-OFF DS)','cells',[20014 20125 90002]); % 26094 26029 26162
+% 30 purple
+struct('class','GC','name','37 (pON-OFF DS)','cells',[20002 20179 20239 20210 20245 20254]); % 26047 26101 26130 
+% 31 yellow
+struct('class','GC','name','37 (dON-OFF DS)','cells',[20016 20096 20233 17161 20137]); % 26115 26158 
+% unknown
+% 26056 26084 26032 26128 26036 26137 26138 
+% 32 irregular bilayer
+struct('class','GC','name','63','cells',[20181 17140 20208 20178 17097 17114 17084 20140 20129 30003 20071 30002 20019 20011 20005 26057]);
+% 33 hump
+struct('class','GC','name','68','cells',[20255 20113 20232 20046]);
+% 34 irregular bilayer, layers closer
+struct('class','GC','name','72n','cells',[20100 20187 20150 20043 26059]);
+% 35 short bistratified. more at off layer
+struct('class','GC','name','27','cells',[20117 17212 26051 26065]);
+% 36 regular bilayer, layers further
+struct('class','GC','name','72w','cells',[20166 20221 17069 20074]);
+% 37 diffuse bilayer more at off layer
+struct('class','GC','name','28','cells',[20243 20155 20163 20257 26005 20167 26033]);
+% 38 regular bilayer even wider
+struct('class','GC','name','81','cells',[20158]);
+% 39 regular bilayer 
+struct('class','GC','name','82w','cells',[20118]);
+% 40 irregular bilayer on-dsgc style
+struct('class','GC','name','82o','cells',[20069 20080 26052]);
+% 41 regular bilayer regular on-dsgc style
+struct('class','GC','name','82i','cells',[20251 30001 20161 26058 26067]);
+% 42 irregular bilayer 
+struct('class','GC','name','83','cells',[17009 20197]);
+% 43 trimodal
+struct('class','GC','name','85','cells',[20063 20072 20200 17012 17038 26061]);
+% 44 regular bilayer
+struct('class','GC','name','91n','cells',[20218 25003 20042]);
+% 45 regular bilayer irregular on-dsgc style
+struct('class','GC','name','91w','cells',[20081 20020]);
+% 46 weirdo
+struct('class','GC','name','weirdos','cells',[17134 20248]);
 
 bc=[
 
