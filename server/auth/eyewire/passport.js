@@ -8,7 +8,7 @@ exports.setup = function (User, config) {
 
   passport.use(new OAuth2Strategy({
     authorizationURL: 'https://eyewire.org/oauth2/1.0/auth',
-    tokenURL: 'https://eyewire.org/oauth2/1.0/exchange',
+    tokenURL: 'https://tasking.eyewire.org/oauth2/1.0/exchange',
     clientID: config.eyewire.clientID,
     clientSecret: config.eyewire.clientSecret,
     callbackURL: config.eyewire.callbackURL
