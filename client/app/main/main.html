@@ -21,9 +21,10 @@
       </button>
     </section>
   
-    <aside resizable r-directions="['left']" r-min-width="500" >
+    <aside resizable r-directions="['left']" r-min-width="500" style="max-width:100vw;">
       <article id="info">
           <h1>{{cells.get(r.cellId).name}}</h1>
+          <h2 style="text-align: center;">Stratification Data</h2>
           
           <div ng-controller="StratificationController" style="margin: 5px">
             <chart bindto-id="chart-stratification"  chart="chart"  
@@ -51,7 +52,11 @@
           
 
           </ul>
+          <div style="text-align:center;">
+            <h2 style="margin-bottom:10px;"><span style="text-decoration: underline;">Wiki Overview</span> (<a style="text-decoration: underline;" target="_blank" href="http://google.com">see more...</a>)</h2>
 
+            <p style="overflow-x:scroll; max-height:500px;line-height: 150%; width:90%; text-align:justify; margin: 0 auto; padding-bottom:20px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          </div>
       </article>
     </aside>
   </div>

@@ -100,7 +100,8 @@ app.run(['Cells' , 'Sets', '$rootScope', 'UtilService',  'KeyboardFactory', 'Mod
           return true;
       });
 
-      modal('app/splash/splash.html');
+      // Run splash everytime museum app opens
+      // modal('app/splash/splash.html');
 }]);
 
 
