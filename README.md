@@ -3,6 +3,22 @@
 # gallery
 Repository for the museum.
 
+## Getting Started
+
+* run `npm install` (may need to be run with `sudo`)
+* run `bower install`
+* run `grunt --force`
+* Get mongodb up and running:
+	* [Download mongodb](http://www.mongodb.org/downloads)
+	* Unzip into a location of choice. (Note: This is where you will run the daemon)
+	* Open terminal and use the following command to make the directory where mongo will store data: `$ mkdir -p /data/db`
+	* Start the mongodb server in a separate terminal window (if you get an error, you may need to ‘sudo’ this command): `$ ./mongodb-xxxxxxx/bin/mongod`
+* run `grunt serve`
+
+Start server with:
+* First, in another terminal run `mongod` (if you have trouble with this step, see above)
+* Then, run `grunt serve`
+
 ## Dependencies
 run ./install.sh
 
