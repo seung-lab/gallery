@@ -4,7 +4,7 @@
 
 app.controller('StratificationController', ['$rootScope','$scope','$timeout',
   function($rootScope, $scope, $timeout) {
-      
+
     var data = { colors:{}, columns:[], type: 'line', unload: []};
 
     function updateChart () {

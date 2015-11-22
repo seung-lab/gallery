@@ -52,6 +52,14 @@ app.service('Camera3DService', ['Scene3DService',function (Scene) {
       _this.controls.reset();
     };
 
+    this.resetCurrentCamera = function() {
+      //Update the view size for the new camera.
+      //This in need because there might have been a resize while using the other camera.
+      _this.setViewSize( _this.width,_this.height);
+
+      _this.controls.reset();
+    };
+
     this.get = function () {
 
       if (_this.usePerspective) {
@@ -123,6 +131,7 @@ app.service('Camera3DService', ['Scene3DService',function (Scene) {
     	initController:this.initController,
     	lookAt:this.lookAt,
       setCurrentCamera:this.setCurrentCamera,
+      resetCurrentCamera:this.resetCurrentCamera,
       render: this.render
     };
 }]);

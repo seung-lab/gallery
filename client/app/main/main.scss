@@ -525,6 +525,14 @@ fieldset .group *:last-child select+.select {
     top: 0;
     right: 0
 }
+#camera-button {
+    bottom: 0;
+    right: 0
+}
+#bl-button {
+    bottom: 0;
+    left: 0;
+}
 #info {
     margin: 1.4rem;
     border-radius: 0.4rem;
@@ -550,6 +558,22 @@ fieldset .group *:last-child select+.select {
     left: -1.4rem;
     top: 50%;
     margin-top: -0.7rem
+}
+#toolbarSpan {
+    //display: block;
+    //background-color: rgba(44,62,80, 0.3);
+    //border: 3px solid #000;
+    //float: center;
+    position:relative;
+    bottom:-92vh;
+    //height: 60px;
+    //margin: 0 auto -155px;
+    text-align: center;
+    //width: 500px;
+    //border-radius: 5px;
+    //margin-right: 50px;
+    //margin-left: 50px;
+    //margin-top: 5px;
 }
 q {
     color: #636768;
@@ -1155,9 +1179,16 @@ select:focus+.select.btn {
     padding:0.7rem;
     background:none
 }
+.toolbaroverlaybutton {
+    padding:0.2rem;
+    background:none;
+    padding-left:10px;
+    padding-right:10px;
+}
 .overlaybutton-inner {
     display:inline-block;
     height:3rem;
+    font-size:21px;
     min-width:3rem;
     line-height:3rem;
     padding:0 .5rem;

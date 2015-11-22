@@ -28,6 +28,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
       $rootScope._ = locale._;
       $scope.s = settings.settings;
       $scope.pad = util.pad;
+      $scope.menuToggleBtnClass = "overlaybutton-inner fa fa-caret-square-o-left";
 
       $rootScope.auth = Auth;
 
@@ -37,6 +38,17 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
 
       $scope.fullscreen = function() {
         $rootScope.$broadcast('fullscreen');        
+      };
+
+      $scope.toggleMenu = function() {
+        // event.target.css('background-color','#fff');
+        if ($scope.menuToggleBtnClass == "overlaybutton-inner fa fa-caret-square-o-left") {
+          $scope.menuToggleBtnClass = "overlaybutton-inner fa fa-caret-square-o-right";
+        }
+        else {
+          $scope.menuToggleBtnClass = "overlaybutton-inner fa fa-caret-square-o-left";
+        }
+        $rootScope.viewSlide.to = 'right';
       };
 
       $scope.new = function () {
@@ -51,6 +63,11 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
         else {
           $scope.modal('components/new-set.html');
         }
+      };
+
+      $scope.openSettings = function () {
+        $scope.modal('components/settings.html');
+        return;
       };
 
       $scope.parentPath = function() {
@@ -69,9 +86,14 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
 
       };
 
-      $scope.$on("angular-resizable.resizeEnd", function(event){ 
+      $scope.$on("angular-resizable.resizing", function(event){ 
         $scope.$broadcast('chart-resize');
       });
+      
+      // Used to only resize after finished (not dynamic)
+      // $scope.$on("angular-resizable.resizeEnd", function(event){ 
+      //   $scope.$broadcast('chart-resize');
+      // });
 
       //-------------------------------------------------------------------------------------------
       // Cells active and visible

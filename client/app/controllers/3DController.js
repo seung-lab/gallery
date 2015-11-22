@@ -30,6 +30,10 @@ app.controller('3DController', ['$scope', 'Coordinates3DService','Camera3DServic
     $scope.$watch('s.toggleCamera', function(perspective) {
       Camera.setCurrentCamera(perspective);
     });
+
+    $scope.$watch('s.resetCamera', function() {
+      Camera.resetCurrentCamera();
+    });
   };
   this.watch();
 
