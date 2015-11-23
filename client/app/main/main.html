@@ -6,25 +6,33 @@
     
       <div id="space" sp-kbd="['space', 'right', 'j', 'down', 'pagedown']" ng-class="spaceClass" ng-controller="3DController">
         <three-viewport></three-viewport>
-        <span id="toolbarSpan">
-          <h1 style="color:#fff;margin-top:2px;"><span style="margin-top:10px;">Toolbar:</span>
+        <toolbar id="toolbarSpan">
+          <h1 style="color:#fff;margin-top:2px;"><!-- <span style="margin-top:10px;">Toolbar:</span> -->
           <button class="toolbaroverlaybutton" sp-tap="resetCamera()" title="Reset Camera (r)" sp-kbd="'r'">
-              <span class="overlaybutton-inner fa fa-video-camera"></span>
+            <span class="overlaybutton-inner fa fa-video-camera"></span>
           </button>
 
-          <button class="toolbaroverlaybutton" sp-tap="toggle('toggleCamera')" title="Toggle Perspective Camera (p)" sp-kbd="'p'">
-              <span class="overlaybutton-inner fa fa-street-view"></span>
+          <button class="toolbaroverlaybutton" sp-tap="toggle('toggleCamera')" title="Toggle Perspective Camera (c)" sp-kbd="'c'">
+            <span class="overlaybutton-inner fa fa-street-view"></span>
           </button>
 
           <button class="toolbaroverlaybutton" sp-tap="fs=!fs;fullscreen()" title="Toggle Fullscreen Mode (f)" sp-kbd="'f'">
             <span class="overlaybutton-inner" ng-class="fs&&'icon-min'||'icon-max'"></span>
-        </button>
+          </button>
 
-          <button class="toolbaroverlaybutton" sp-tap="openSettings()" title="Settings (s)" sp-kbd="'s'">
-              <span class="overlaybutton-inner fa fa-cog"></span>
+          <button class="toolbaroverlaybutton" sp-tap="help()" title="Help (n)" sp-kbd="'n'">
+            <span class="overlaybutton-inner fa fa-life-ring"></span>
+          </button>
+
+          <button class="toolbaroverlaybutton" sp-tap="openKeyboardShortcuts()" title="Keyboard Shortcuts (h)" sp-kbd="'h'">
+            <span class="overlaybutton-inner fa fa-keyboard-o"></span>
+          </button>
+
+          <button class="toolbaroverlaybutton" sp-tap="openSettings()" title="Settings (p)" sp-kbd="'p'">
+            <span class="overlaybutton-inner fa fa-cog"></span>
           </button>
           </h1>
-        </span>
+        </toolbar>
       </div>
     
       <button class="overlaybutton" sp-tap="p(r.setId&&'set/'+r.setId + '/'||r.view+'/')" id="back-button">
@@ -32,15 +40,19 @@
       </button>
       <!-- fa fa-caret-square-o-left -->
 
-      <button class="overlaybutton" sp-tap="toggleMenu()" title="Toggle Navigation Menu (m)" sp-kbd="'m'" id="fullscreen-button">
+      <button class="overlaybutton" sp-tap="toggleMenu()" title="Toggle Navigation Menu (x)" sp-kbd="'x'" id="fullscreen-button">
           <span ng-class="menuToggleBtnClass"></span>
       </button>
       <!-- <button class="overlaybutton" sp-tap="fs=!fs;fullscreen()" title="Toggle Fullscreen Mode (f)" sp-kbd="'f'" id="fullscreen-button">
           <span class="overlaybutton-inner" ng-class="fs&&'icon-min'||'icon-max'"></span>
       </button> -->
       
-      <button class="overlaybutton" sp-tap="cr=!cr" title="Toggle More Info Screen" sp-kbd="'i'" id="aside-button">
+      <button class="overlaybutton" sp-tap="cr=!cr" title="Toggle More Info (i)" sp-kbd="'i'" id="aside-button">
           <span class="overlaybutton-inner icon-info"></span>
+      </button>
+
+      <button class="overlaybutton" sp-tap="toggleToolbar()" title="Toggle Toolbar (t)" sp-kbd="'t'" id="toolbarToggle-button">
+        <span ng-class="toolbarToggleBtnClass"></span>
       </button>
       <!-- <button class="overlaybutton" sp-tap="resetCamera()" title="Reset Camera" sp-kbd="'r'" id="camera-button">
           <span class="overlaybutton-inner fa fa-video-camera"></span>

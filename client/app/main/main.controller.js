@@ -29,6 +29,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
       $scope.s = settings.settings;
       $scope.pad = util.pad;
       $scope.menuToggleBtnClass = "overlaybutton-inner fa fa-caret-square-o-left";
+      $scope.toolbarToggleBtnClass = "overlaybutton-inner fa fa-caret-square-o-down";
 
       $rootScope.auth = Auth;
 
@@ -44,11 +45,26 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
         // event.target.css('background-color','#fff');
         if ($scope.menuToggleBtnClass == "overlaybutton-inner fa fa-caret-square-o-left") {
           $scope.menuToggleBtnClass = "overlaybutton-inner fa fa-caret-square-o-right";
+          $rootScope.viewSlide.to = 'left';
+          $rootScope.viewSlide.force = true;
         }
         else {
           $scope.menuToggleBtnClass = "overlaybutton-inner fa fa-caret-square-o-left";
+          $rootScope.viewSlide.to = 'right';
+          $rootScope.viewSlide.force = true;
         }
-        $rootScope.viewSlide.to = 'right';
+      };
+
+      $scope.toggleToolbar = function() {
+        // event.target.css('background-color','#fff');
+        if ($scope.toolbarToggleBtnClass == "overlaybutton-inner fa fa-caret-square-o-down") {
+          $scope.toolbarToggleBtnClass = "overlaybutton-inner fa fa-caret-square-o-up";
+          angular.element(document).find("toolbar")[0].style.display = "none";
+        }
+        else {
+          $scope.toolbarToggleBtnClass = "overlaybutton-inner fa fa-caret-square-o-down";
+          angular.element(document).find("toolbar")[0].style.display = "inherit";
+        }
       };
 
       $scope.new = function () {
@@ -70,6 +86,15 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
         return;
       };
 
+      $scope.openKeyboardShortcuts = function () {
+        $scope.modal('components/keyboard.html');
+        return;
+      };
+
+      $scope.help = function () {
+        $scope.modal('app/splash/splash.html');
+      };
+
       $scope.parentPath = function() {
 
         $rootScope.viewSlide.to = 'right';
@@ -89,7 +114,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
       $scope.$on("angular-resizable.resizing", function(event){ 
         $scope.$broadcast('chart-resize');
       });
-      
+
       // Used to only resize after finished (not dynamic)
       // $scope.$on("angular-resizable.resizeEnd", function(event){ 
       //   $scope.$broadcast('chart-resize');
