@@ -101,12 +101,12 @@
           <div style="text-align:center;" sp-if="cells.get(r.cellId).description.length > 0">
             <h2 style="margin-bottom:10px;"><span style="text-decoration: underline;">Wiki Overview</span> (<a style="text-decoration: underline;" target="_blank" href="http://google.com">see more...</a>)</h2>
 
-            <p style="overflow-x:scroll; max-height:500px;line-height: 150%; width:90%; text-align:justify; margin: 0 auto; padding-bottom:20px;">{{cells.get(r.cellId).description}}<br><br><a class="btn btn-info" href="">Help Contribute!</a></p>
+            <p style="overflow-x:scroll; max-height:500px;line-height: 150%; width:90%; text-align:justify; margin: 0 auto; padding-bottom:20px;">{{cells.get(r.cellId).description}}<br><br><a class="btn btn-info" target="_blank" href="http://wiki.eyewire.org:88/index.php?title={{ set.name }}&action=edit">Help Contribute!</a></p>
           </div>
           <div style="text-align:center;" sp-if="!cells.get(r.cellId).description.length">
             <h2 style="margin-bottom:10px;"><span style="text-decoration: underline;">Wiki Overview</span></h2>
 
-            <p style="overflow-x:scroll; max-height:500px;line-height: 150%; width:90%; text-align:center; margin: 0 auto; padding-bottom:20px;">We do not currently have a wiki page for this class yet.<br><br><a class="btn btn-info" href="">Help Contribute!</a></p>
+            <p style="overflow-x:scroll; max-height:500px;line-height: 150%; width:90%; text-align:center; margin: 0 auto; padding-bottom:20px;">We do not currently have a wiki page for this class yet.<br><br><a class="btn btn-info" target="_blank" href="http://wiki.eyewire.org:88/index.php?title={{ set.name }}&action=edit">Help Contribute!</a></p>
 
           </div>
       </article>
