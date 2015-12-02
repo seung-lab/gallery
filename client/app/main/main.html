@@ -1,4 +1,5 @@
 <div class="icon-museum" ng-controller="MainCtrl">
+
     
   <div id="cell-view" ng-class="{cr:cr, ic: r.cellId||(set&&set.children_are_cells) ,fs:fs}">
 
@@ -16,9 +17,9 @@
             <span class="overlaybutton-inner fa fa-street-view"></span>
           </button>
 
-          <button class="toolbaroverlaybutton" sp-tap="fs=!fs;fullscreen()" title="Toggle Fullscreen Mode (f)" sp-kbd="'f'">
+          <!-- <button class="toolbaroverlaybutton" sp-tap="fs=!fs;fullscreen()" title="Toggle Fullscreen Mode (f)" sp-kbd="'f'">
             <span class="overlaybutton-inner" ng-class="fs&&'icon-min'||'icon-max'"></span>
-          </button>
+          </button> -->
 
           <button class="toolbaroverlaybutton" sp-tap="help()" title="Help (n)" sp-kbd="'n'">
             <span class="overlaybutton-inner fa fa-life-ring"></span>
@@ -40,12 +41,12 @@
       </button>
       <!-- fa fa-caret-square-o-left -->
 
-      <button class="overlaybutton" sp-tap="toggleMenu()" title="Toggle Navigation Menu (x)" sp-kbd="'x'" id="fullscreen-button">
+      <!-- <button class="overlaybutton" sp-tap="toggleMenu()" title="Toggle Navigation Menu (x)" sp-kbd="'x'" id="fullscreen-button">
           <span ng-class="menuToggleBtnClass"></span>
-      </button>
-      <!-- <button class="overlaybutton" sp-tap="fs=!fs;fullscreen()" title="Toggle Fullscreen Mode (f)" sp-kbd="'f'" id="fullscreen-button">
-          <span class="overlaybutton-inner" ng-class="fs&&'icon-min'||'icon-max'"></span>
       </button> -->
+      <button class="overlaybutton" sp-tap="fs=!fs;fullscreen()" title="Toggle Fullscreen Mode (f)" sp-kbd="'f'" id="fullscreen-button">
+          <span class="overlaybutton-inner" ng-class="fs&&'icon-min'||'icon-max'"></span>
+      </button>
       
       <button class="overlaybutton" sp-tap="cr=!cr" title="Toggle More Info (i)" sp-kbd="'i'" id="aside-button">
           <span class="overlaybutton-inner icon-info"></span>
@@ -68,7 +69,7 @@
     </section>
   
     <aside resizable r-directions="['left']" r-min-width="500" style="max-width:100vw;">
-      <article id="info">
+      <article class="stratificationView" id="info">
           <h1>{{cells.get(r.cellId).name}}</h1>
           <h2 style="text-align: center;">Stratification Data</h2>
           

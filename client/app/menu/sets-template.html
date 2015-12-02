@@ -20,7 +20,7 @@
       <button sp-if="set.id != 0" sp-tap=" parentPath() " class="btn simple icon-left"></button>
       <button sp-tap="toggleState('em')" class="btn" style="float: right" ng-class="{active:em,'icon-down':!em,'icon-up':em}" sp-if="auth.isAdmin()"></button>
 
-      <h2 class="trim">{{set.name}}</h2>
+      <h2 class="trim menuSubtitle">{{set.name}}</h2>
 
     </header>
     <ul sp-sortable="" onsort="sortSet" class="nav">

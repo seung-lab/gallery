@@ -30,6 +30,12 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
       $scope.pad = util.pad;
       $scope.menuToggleBtnClass = "overlaybutton-inner fa fa-caret-square-o-left";
       $scope.toolbarToggleBtnClass = "overlaybutton-inner fa fa-caret-square-o-down";
+      $scope.menuVisible = "inherit";
+      window.settings = settings.settings;
+      $scope.settings = settings.settings;
+      $scope.toggle = function(property) {
+          settings.toggle(property)
+      };
 
       $rootScope.auth = Auth;
 
@@ -45,8 +51,9 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
         // event.target.css('background-color','#fff');
         if ($scope.menuToggleBtnClass == "overlaybutton-inner fa fa-caret-square-o-left") {
           $scope.menuToggleBtnClass = "overlaybutton-inner fa fa-caret-square-o-right";
-          $rootScope.viewSlide.to = 'left';
-          $rootScope.viewSlide.force = true;
+          // $rootScope.viewSlide.to = 'left';
+          // $rootScope.viewSlide.force = true;
+          document.getElementById("menu").style.display = "none";
         }
         else {
           $scope.menuToggleBtnClass = "overlaybutton-inner fa fa-caret-square-o-left";
