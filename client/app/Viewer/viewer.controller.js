@@ -1,8 +1,8 @@
 'use strict';
 
 ( function (app) {
-app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location', 'SettingsFactory', 'UtilService', 'KeyboardFactory', 'TransitionerFactory', 'LocaleFactory', '$timeout', 'ModalFactory', '$route', 'Auth',
-  function($scope, $rootScope, $routeParams, $location, settings, util, keyboard, transitioner, locale, $timeout, modal, $route, Auth) {
+app.controller('ViewerCtrl', ['$scope', '$rootScope', '$routeParams', '$location', 'SettingsFactory', 'UtilService', 'TransitionerFactory', 'LocaleFactory', '$timeout', 'ModalFactory', '$route', 'Auth',
+  function($scope, $rootScope, $routeParams, $location, settings, util, transitioner, locale, $timeout, modal, $route, Auth) {
       
       //-------------------------------------------------------------------------------------------
       // global variables
@@ -27,7 +27,6 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
       };
       $rootScope._ = locale._;
       $scope.s = settings.settings;
-      $scope.pad = util.pad;
       $scope.menuToggleBtnClass = "overlaybutton-inner fa fa-caret-square-o-left";
       $scope.toolbarToggleBtnClass = "overlaybutton-inner fa fa-caret-square-o-down";
 
@@ -69,20 +68,20 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
 
       $scope.new = function () {
         if ($scope.r.view == "sets"){
-          $scope.modal('components/new-set.html');
+          $scope.modal('app/Viewer/sidemenu/new/new-set.html');
           return;
         }
         
         if ($scope.set  && $scope.set.children_are_cells == true) { 
-          $scope.modal('components/new-cell.html');
+          $scope.modal('app/Viewer/sidemenu/new/new-cell.html');
         } 
         else {
-          $scope.modal('components/new-set.html');
+          $scope.modal('app/Viewer/sidemenu/new/new-set.html');
         }
       };
 
       $scope.openSettings = function () {
-        $scope.modal('components/settings.html');
+        $scope.modal('components/settings/settings.html');
         return;
       };
 
@@ -92,7 +91,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
       };
 
       $scope.help = function () {
-        $scope.modal('app/splash/splash.html');
+        $scope.modal('app/Viewer/splash/splash.html');
       };
 
       $scope.parentPath = function() {
@@ -370,23 +369,6 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
       $scope.$emit('$routeChangeSuccess', {
           params: $routeParams
       });
-
-
-      //-------------------------------------------------------------------------------------------
-      // Keyboard
-      //-------------------------------------------------------------------------------------------
-      keyboard.on('=', function() {
-          var b = settings.settings.fontSize || 0;
-          2 > b && (settings.set('fontSize', b + 1), $scope.$apply())
-      });
-
-      keyboard.on('-', function() {
-          var b = settings.settings.fontSize || 0;
-          b && (settings.set('fontSize', b - 1), $scope.$apply())
-      });
-
-
-
 }]);
 
 })(app);

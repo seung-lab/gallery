@@ -1,0 +1,12 @@
+<md-card  layout class="md-whiteframe-15dp" >
+  <img  ng-src="{{imagePath}}" >
+  <md-card-content>
+    <h2 class="md-title" style="height: 40px;">{{set.name}}</h2>
+    <p style="height: 40px;">{{set.description}}
+    </p>
+  </md-card-content>
+  <div class="md-actions" layout="row" layout-align="center center">
+    <md-button class="md-raised" ng-disabled="!set.wiki" ng-click="showWikiDialog($event, set )" >Wiki</md-button>
+    <a href="{{set.viewLink}}" ><md-button class="md-primary md-raised">View</md-button></a>
+  </div>
+</md-card>

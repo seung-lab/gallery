@@ -1,4 +1,9 @@
-var app = angular.module('museum', ['ngRoute','ngResource','ngCookies','angularResizable']);
+var app = angular.module('museum', 
+     ['ngCookies',
+      'ngResource',
+      'ngRoute',
+      'ui.router',
+     'angularResizable']);
 
 //The actual routing is done in the MainCtrl
 app.config(['$routeProvider', '$locationProvider' ,'$httpProvider', 
@@ -51,11 +56,9 @@ app.config(function ($httpProvider) {
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 });
     
-app.run(['Cells' , 'Sets', '$rootScope', 'UtilService',  'KeyboardFactory', 'ModalFactory', 'NotifierFactory', '$window', 'LocaleFactory', 
-    function(Cells , Sets , $rootScope, util,  keyboard, modal, notifier, $window, locale) {
+app.run(['Cells' , 'Sets', '$rootScope', 'UtilService',  'KeyboardFactory', 'ModalFactory',  '$window', 'LocaleFactory', 
+    function(Cells , Sets , $rootScope, util,  keyboard, modal, $window, locale) {
 
-      window.scope = $rootScope;
-      $window.notify = notifier.notify;
       $rootScope._ =  ($window.navigator, locale._);
       $rootScope.change = false;
       $rootScope.$on('ready', function() {
@@ -70,8 +73,6 @@ app.run(['Cells' , 'Sets', '$rootScope', 'UtilService',  'KeyboardFactory', 'Mod
             $rootScope.$emit('ready');
           });
       });
-
-
 
       $rootScope.modal = modal;
       $rootScope.toggleState = function(stateName) {
@@ -99,9 +100,6 @@ app.run(['Cells' , 'Sets', '$rootScope', 'UtilService',  'KeyboardFactory', 'Mod
       keyboard.on('esc', function() {
           return true;
       });
-
-      // Run splash everytime museum app opens
-      // modal('app/splash/splash.html');
 }]);
 
 

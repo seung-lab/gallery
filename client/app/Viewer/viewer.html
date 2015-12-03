@@ -1,4 +1,4 @@
-<div class="icon-museum" ng-controller="MainCtrl">
+<div class="icon-museum" ng-controller="ViewerCtrl">
     
   <div id="cell-view" ng-class="{cr:cr, ic: r.cellId||(set&&set.children_are_cells) ,fs:fs}">
 
@@ -82,7 +82,7 @@
           <ul class="list">
               <li>
                   <div class="group" sp-if="r.view == 'catalog' && auth.isAdmin()">
-                    <a  sp-tap="modal('components/confirm.html')" class="btn danger icon-bin flex"></a>
+                    <a  sp-tap="modal('app/Viewer/sidemenu/confirm/confirm.html')" class="btn danger icon-bin flex"></a>
                   </div>
               </li>
           
@@ -131,7 +131,7 @@
         <span>{{_.search}}</span>
       </li>
    
-      <li sp-tap="modal('components/settings.html')" sp-kbd="[',', 'command+,', 'control+,']">
+      <li sp-tap="modal('components/settings/settings.html')" sp-kbd="[',', 'command+,', 'control+,']">
         <i class="icon-cog"></i>
         <span>{{_.settings}}</span>
       </li>
@@ -139,6 +139,6 @@
     </ul>
   </aside>
   
-  <div ng-include="'app/menu/navigation.html'"></div>
+  <div ng-include="'app/Viewer/sidemenu/navigation.html'"></div>
 
 </div>

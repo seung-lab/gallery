@@ -14,7 +14,8 @@
     "angular-resource": "~1.4.3",
     "angular-cookies": "~1.4.3",
     "angular-mocks": "~1.4.3",
-    "angular-scenario": "~1.4.3"
+    "angular-scenario": "~1.4.3",
+    "angular-ui-router": "~0.2.15"
   },
   "devDependencies": {},
   "resolutions": {
