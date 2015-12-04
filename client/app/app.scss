@@ -17,9 +17,8 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 
 @import 'font';
 
-@import 'Viewer/viewer.scss';
-@import 'Viewer/stratification/chart.scss';
-@import 'Viewer/splash/splash.scss';
+@import 'viewer/viewer.scss';
+@import 'viewer/stratification/chart.scss';
 
 
 .tooltipdemoBasicUsage md-toolbar .md-toolbar-tools .md-button, .tooltipdemoBasicUsage md-toolbar .md-toolbar-tools .md-button:hover {

@@ -19,7 +19,7 @@
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
-    <!-- <link rel="stylesheet" href="app/app.css"> -->
+    <link rel="stylesheet" href="app/app.css">
       <!-- injector:css -->
       <!-- endinjector -->
     <!-- endbuild -->
@@ -31,7 +31,7 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div ui-view=""></div>
+    <div ui-view=""  layout-fill></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
@@ -59,7 +59,6 @@
       <script src="bower_components/js-openctm/src/ctm.js"></script>
       <script src="bower_components/js-openctm/src/lzma.js"></script>
       <script src="bower_components/js-openctm/src/CTMLoader.js"></script>
-      <script src="bower_components/angular-route/angular-route.js"></script>
       <script src="bower_components/angular-resource/angular-resource.js"></script>
       <script src="bower_components/angular-cookies/angular-cookies.js"></script>
       <script src="bower_components/angular-mocks/angular-mocks.js"></script>
@@ -80,46 +79,23 @@
           <script src="app/Selector/card/card.directive.js"></script>
           <script src="app/Selector/selector.controller.js"></script>
           <script src="app/Selector/selector.js"></script>
-          <script src="app/Viewer/3d/3DController.js"></script>
-          <script src="app/Viewer/3d/Camera3DService.js"></script>
-          <script src="app/Viewer/3d/Coordinates3DService.js"></script>
-          <script src="app/Viewer/3d/Detector.js"></script>
-          <script src="app/Viewer/3d/Scene3DService.js"></script>
-          <script src="app/Viewer/3d/TrackballControls.js"></script>
-          <script src="app/Viewer/3d/threeViewport.js"></script>
-          <script src="app/Viewer/sidemenu/SearchController.js"></script>
-          <script src="app/Viewer/sidemenu/confirm/ConfirmController.js"></script>
-          <script src="app/Viewer/sidemenu/navigation.controller.js"></script>
-          <script src="app/Viewer/sidemenu/new/NewController.js"></script>
-          <script src="app/Viewer/sidemenu/rename/Rename.controller.js"></script>
-          <script src="app/Viewer/sidemenu/set.controller.js"></script>
-          <script src="app/Viewer/sidemenu/sets.controller.js"></script>
-          <script src="app/Viewer/stratification/StratificationController.js"></script>
-          <script src="app/Viewer/stratification/chart.js"></script>
-          <script src="app/Viewer/viewer.controller.js"></script>
-          <script src="app/Viewer/viewer.js"></script>
-          <script src="components/UtilService.js"></script>
-          <script src="components/angular-resizable.js"></script>
+          <script src="app/viewer/3d/3DController.js"></script>
+          <script src="app/viewer/3d/axes.service.js"></script>
+          <script src="app/viewer/3d/camera.service.js"></script>
+          <script src="app/viewer/3d/mesh.service.js"></script>
+          <script src="app/viewer/3d/scene.service.js"></script>
+          <script src="app/viewer/3d/viewport.directive.js"></script>
+          <script src="app/viewer/stratification/chart.controller.js"></script>
+          <script src="app/viewer/stratification/chart.directive.js"></script>
+          <script src="app/viewer/viewer.controller.js"></script>
+          <script src="app/viewer/viewer.js"></script>
+          <script src="components/Detector.js"></script>
+          <script src="components/TrackballControls.js"></script>
           <script src="components/auth/auth.service.js"></script>
           <script src="components/auth/login.controller.js"></script>
           <script src="components/auth/user.service.js"></script>
           <script src="components/cells/cells.service.js"></script>
-          <script src="components/cells/mesh.service.js"></script>
-          <script src="components/directives/spFocus.js"></script>
-          <script src="components/directives/spIf.js"></script>
-          <script src="components/directives/spSlide.js"></script>
-          <script src="components/directives/spSortable.js"></script>
-          <script src="components/directives/spTap.js"></script>
-          <script src="components/factories/KeyboardFactory.js"></script>
-          <script src="components/factories/LocaleFactory.js"></script>
-          <script src="components/factories/ModalFactory.js"></script>
-          <script src="components/factories/ParseFactory.js"></script>
-          <script src="components/factories/SetFactory.js"></script>
-          <script src="components/factories/TouchFactory.js"></script>
-          <script src="components/factories/TransitionerFactory.js"></script>
           <script src="components/sets/sets.service.js"></script>
-          <script src="components/settings/SettingsController.js"></script>
-          <script src="components/settings/SettingsFactory.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->
 </body>

@@ -1,0 +1,56 @@
+<div  layout="column" ng-cloak="" class="viewer" layout-fill>
+
+  <section layout="row" flex="grow">
+
+    <md-content layout="row" flex="grow" ng-controller="3DController">
+      
+      <viewport layout="row" flex="grow"></viewport>
+          <md-button ng-click="toggle()" class="md-primary"  style="position: absolute; bottom: 0px;"  ng-style="{ 'right' : isOpenRight() ? width : 0 }">
+            Toggle right
+          </md-button>
+
+        <div id="dragbar" ng-style="{ 'right' : width-5 }" ng-hide="!isOpenRight()" ng-mousedown="dragSidenav($event)"></div>
+
+
+
+        <md-sidenav layour="column" ng-style="{ 'width' : width }" class="md-sidenav-right md-whiteframe-z2" 
+          md-component-id="right" style="position: fixed !important">
+
+            
+          <md-toolbar class="md-theme-light">
+            <h1 class="md-toolbar-tools">Sidenav Right</h1>
+          </md-toolbar>
+
+          <md-content  flex="grow" >
+            <div ng-controller="chartCtrl" style="margin: 5px; padding-right: 25px">
+              <chart bindto-id="chart-stratification"  chart="chart"  
+              on-legend-click="onLegendClick(cellId)"
+              on-legend-mouseover="onLegendMouseover(cellId)"
+              on-legend-mouseout="onLegendMouseout(cellId)"
+              init="initChart()"></chart>
+            </div> 
+            
+            <div flex="grow" style="text-align:center; margin-top:60px;">
+              <h2 style="margin-bottom:10px;"><span style="text-decoration: underline;">Wiki Overview</span></h2>
+
+              <p style="max-height:500px;line-height: 150%; width:90%;  margin: 0 auto; padding-bottom:20px;">
+                We do not currently have a wiki page for this class yet.
+                <br>
+                <br>
+                <a class="btn btn-info" target="_blank" href="http://wiki.eyewire.org:88/index.php?title={{ set.name }}&action=edit">
+                  Help Contribute!
+                </a>
+              </p>
+            </div>
+
+          </md-content>
+
+        </md-sidenav>
+
+
+    </md-content>
+
+  </section>
+
+</div>
+

@@ -15,10 +15,11 @@
 	function link(scope, element, attrs) {
 	   
 	  scope.imagePath = getImagePath();
-    console.log(attrs);
 
 	  scope.view = function() {
-	  	$state.go('/set/'+scope.set.id);
+
+      $state.go('viewer', {neurons: scope.set.neurons});
+      // ... would change the location to /viewer?neurons=1&neurons=2&neurons=3
 	  };
 
 	  scope.showWikiDialog = function(ev, locals) {

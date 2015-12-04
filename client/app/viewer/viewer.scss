@@ -1,0 +1,21 @@
+
+md-backdrop { display: none }
+
+md-sidenav, 
+md-sidenav.md-locked-open, 
+md-sidenav.md-closed.md-locked-open-add-active {
+    min-width: 0vw !important;
+    max-width: 100vw !important;
+} 
+
+#dragbar{
+   background-color: transparent;
+   height:100%;
+   position: absolute;
+   width: 10px;
+   z-index: 999;
+   cursor: col-resize;
+}
+
+
+
