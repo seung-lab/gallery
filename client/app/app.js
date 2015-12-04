@@ -3,17 +3,19 @@ var app = angular.module('museum',
       'ngResource',
       'ngRoute',
       'ui.router',
-     'angularResizable']);
+      'ngMaterial',
+      'angularResizable']);
 
 //The actual routing is done in the MainCtrl
-app.config(['$routeProvider', '$locationProvider' ,'$httpProvider', 
-  function($routeProvider,$locationProvider,$httpProvider) {
+app.config(function($urlRouterProvider,$locationProvider,$httpProvider) {
 
-    $routeProvider.caseInsensitiveMatch = true;
-    $routeProvider.when('/',{});
-    $routeProvider.when('/set/:setIds*?',{});
-    $routeProvider.when('/:view/:cellId?',{});
-    $routeProvider.otherwise('/',{});
+    $urlRouterProvider.caseInsensitiveMatch = true;
+    $urlRouterProvider.otherwise('/');
+
+    // $urlRouterProvider.when('/','/Viewer/viewer.html');
+    // $urlRouterProvider.when('/set/:setIds*?','/Viewer/viewer.html');
+    // $urlRouterProvider.when('/:view/:cellId?','/Viewer/viewer.html');
+    // $urlRouterProvider.otherwise('/','/Viewer/viewer.html');
 
     //Remove hashtag from url if windows history is supported.
     if(window.history && window.history.pushState){
@@ -22,7 +24,7 @@ app.config(['$routeProvider', '$locationProvider' ,'$httpProvider',
 
     $httpProvider.interceptors.push('authInterceptor');
  
-}]);
+});
 
 app.factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
     return {

@@ -1,11 +1,11 @@
-// 'use strict';
+'use strict';
 
-// describe('Controller: MainCtrl', function () {
+describe('Controller: HomepageCtrl', function () {
 
-//   // load the controller's module
-//   beforeEach(module('Museum'));
+  // load the controller's module
+  beforeEach(module('museum'));
 
-//   var MainCtrl,
-//       scope,
-//       $httpBackend;
-// });
+  var MainCtrl,
+      scope,
+      $httpBackend;
+});

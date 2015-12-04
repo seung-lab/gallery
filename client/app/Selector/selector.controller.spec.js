@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Controller: SelectCtrl', function () {
+describe('Controller: SelectorCtrl', function () {
 
   // load the controller's module
   beforeEach(module('museum'));

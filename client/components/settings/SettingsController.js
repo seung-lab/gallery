@@ -4,7 +4,7 @@
 ( function (app) {
 app.controller("SettingsController", ["$scope", "SettingsFactory",
   function($scope, settings) {
-      window.settings = settings.settings;
+    
       $scope.settings = settings.settings;
       $scope.toggle = function(property) {
           settings.toggle(property)

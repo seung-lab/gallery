@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('SelectCtrl', function ($scope, $timeout, $mdSidenav, $mdDialog, $log, $state) {
+app.controller('SelectorCtrl', function ($scope, $timeout, $mdSidenav, $mdDialog, $log, $state) {
     // ******************************
     // Internal methods
     // ******************************

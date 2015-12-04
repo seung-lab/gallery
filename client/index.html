@@ -15,6 +15,7 @@
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
       <link rel="stylesheet" href="bower_components/c3/c3.css" />
+      <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
@@ -23,17 +24,14 @@
       <!-- endinjector -->
     <!-- endbuild -->
   </head>
-  <body sp-tap="resetState()" ng-class="slow&&'slow'||''" class="icon-museum">
+  <body>
 
      <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div id="ui" ng-include="ready&&'app/Viewer/viewer.html'" ng-class="{on:modalClass, run:ready}"></div>
-    <div ng-view=""></div>
-    <div ng-include="r.modal&&'components/modal.html'" onload="modalClass='on'"></div>
- 
+    <div ui-view=""></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
@@ -52,20 +50,25 @@
     <![endif]-->
     <!-- build:js({client,node_modules}) app/vendor.js -->
       <!-- bower:js -->
+      <script src="bower_components/jquery/dist/jquery.js"></script>
       <script src="bower_components/lodash/lodash.js"></script>
       <script src="bower_components/threejs/build/three.js"></script>
       <script src="bower_components/d3/d3.js"></script>
       <script src="bower_components/c3/c3.js"></script>
       <script src="bower_components/angular/angular.js"></script>
-      <script src="bower_components/angular-route/angular-route.js"></script>
       <script src="bower_components/js-openctm/src/ctm.js"></script>
       <script src="bower_components/js-openctm/src/lzma.js"></script>
       <script src="bower_components/js-openctm/src/CTMLoader.js"></script>
+      <script src="bower_components/angular-route/angular-route.js"></script>
       <script src="bower_components/angular-resource/angular-resource.js"></script>
       <script src="bower_components/angular-cookies/angular-cookies.js"></script>
       <script src="bower_components/angular-mocks/angular-mocks.js"></script>
       <script src="bower_components/angular-scenario/angular-scenario.js"></script>
       <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+      <script src="bower_components/angular-animate/angular-animate.js"></script>
+      <script src="bower_components/angular-aria/angular-aria.js"></script>
+      <script src="bower_components/angular-material/angular-material.js"></script>
+      <script src="bower_components/trianglify/dist/trianglify.min.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
 
@@ -75,8 +78,8 @@
           <script src="app/Homepage/homepage.controller.js"></script>
           <script src="app/Homepage/homepage.js"></script>
           <script src="app/Selector/card/card.directive.js"></script>
-          <script src="app/Selector/select.controller.js"></script>
-          <script src="app/Selector/select.js"></script>
+          <script src="app/Selector/selector.controller.js"></script>
+          <script src="app/Selector/selector.js"></script>
           <script src="app/Viewer/3d/3DController.js"></script>
           <script src="app/Viewer/3d/Camera3DService.js"></script>
           <script src="app/Viewer/3d/Coordinates3DService.js"></script>
@@ -94,6 +97,7 @@
           <script src="app/Viewer/stratification/StratificationController.js"></script>
           <script src="app/Viewer/stratification/chart.js"></script>
           <script src="app/Viewer/viewer.controller.js"></script>
+          <script src="app/Viewer/viewer.js"></script>
           <script src="components/UtilService.js"></script>
           <script src="components/angular-resizable.js"></script>
           <script src="components/auth/auth.service.js"></script>

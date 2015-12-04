@@ -25,7 +25,7 @@
 
       $mdDialog.show({
         controller: DialogController,
-        templateUrl: 'app/wiki-dialog/wiki-dialog.html',
+        templateUrl: 'app/Selector/wiki-dialog/wiki-dialog.html',
         parent: angular.element(document.body),
         targetEvent: ev,
         clickOutsideToClose:true,
@@ -54,7 +54,7 @@
   return {
     restrict: 'E',
     transclude: false,
-    templateUrl: 'app/card/card.html',
+    templateUrl: 'app/Selector/card/card.html',
     scope:{
     	set: '=setData'
     },
