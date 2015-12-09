@@ -1,49 +1,93 @@
 'use strict';
 
-app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $log, $state,  $rootScope, $document, $window, mesh) {
+// include axes for debugging
+app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $log, $state, $document, $window, mesh, camera) {
 
   mesh.display($state.params.neurons)
 
 
-    // Right sidenav , toggle, and resizing
-    var maxWidth = $window.innerWidth * 0.9;
-    var minWidth = $window.innerWidth * 0.15;
-    $scope.width =  $window.innerWidth * 0.2;
-    $scope.dragSidenav = function(e) {
-      e.preventDefault()
+  // Right sidenav , toggle, and resizing
+  var maxWidth = $window.innerWidth * 0.9;
+  var minWidth = $window.innerWidth * 0.15;
+  $scope.width =  $window.innerWidth * 0.2;
+  $scope.dragSidenav = function(e) {
+    e.preventDefault()
 
-      //When a mousedown is detected in the div
-      //a mousemove and mouseup is bind to the window
-      //When a mouseup is detected in the window, mousemove and mouse down is unbind 
-      $document.on("mousemove", function(e) {
+    //When a mousedown is detected in the div
+    //a mousemove and mouseup is bind to the window
+    //When a mouseup is detected in the window, mousemove and mouse down is unbind 
+    $document.on("mousemove", function(e) {
 
-        //The timeout is required such that the view is updated
-        var newWidth = $window.innerWidth - e.pageX;
-        newWidth = Math.max( Math.min(newWidth,maxWidth) ,minWidth);
-        $timeout(function() { $scope.width = newWidth; }, 0); });
+      //The timeout is required such that the view is updated
+      var newWidth = $window.innerWidth - e.pageX;
+      newWidth = Math.max( Math.min(newWidth,maxWidth) ,minWidth);
+      $timeout(function() { $scope.width = newWidth; }, 0); });
 
 
-      $document.on('mouseup', function(e) {
-        $document.off("mousemove");
-        $document.off("mouseup");
-      });
-      
-    }
+    $document.on('mouseup', function(e) {
+      $document.off("mousemove");
+      $document.off("mouseup");
+    });
     
-    $scope.toggle = function () {
-      
-      $mdSidenav('right').toggle()
-        .then(function () {
+  }
+    
+  $scope.toggle = function () {
+    
+    $mdSidenav('right').toggle()
+      .then(function () {
 
-          if ($scope.isOpenRight()) {
-            $scope.$broadcast('resize')
-          }
+        if ($scope.isOpenRight()) {
+          $scope.$broadcast('resize')
+        }
 
-        });
-    };
-    $scope.isOpenRight = function() {
-      return $mdSidenav('right').isOpen();
-    };
+      });
+  };
+  $scope.isOpenRight = function() {
+    return $mdSidenav('right').isOpen();
+  };
+
+  $scope.goBack = function() {
+    $state.go("selector");
+  }
+
+
+
+  $scope.cameras = [
+      { name: "ortographic", icon: "assets/icons/ic_photo_white_36px.svg"},
+      { name: "perspective", icon: "assets/icons/ic_camera_enhance_white_36px.svg"},
+      { name: "stereoscopic",icon: "assets/icons/ic_view_agenda_white_36px.svg"}
+  ];
+
+  $scope.camClick = function(cam) {
+
+    if ( cam.name == "ortographic" ) {
+      camera.useOrtographic();
+    } else {
+      camera.usePerspective();
+    }
+  };
+
+  $scope.views = [ 
+    { name: "top", icon: "assets/icons/ic_ac_unit_white_36px.svg"},
+    { name: "side", icon: "assets/icons/ic_neuron_side_white_36px.svg"},
+    { name: "oblique",icon: "assets/icons/ic_call_received_white_36px.svg"}
+  ];
+
+  $scope.viewClick = function(view) {
+
+    var bbox = mesh.getVisibleBBox();
+
+    if ( view.name == "top") {
+      camera.lookBBoxFromTop(bbox);
+    }
+    else if ( view.name == "side") {
+      camera.lookBBoxFromSide(bbox);
+    } 
+    else {
+      camera.lookBBoxFromOblique(bbox);
+    }
+  };
+
 
 });
 

@@ -3,14 +3,14 @@
 // creates a tube that follows a collection of 3d points.
 ( function (app) { 
 
-app.service('mesh', function (scene, camera, cells, $cacheFactory ) {
+app.service('mesh', function (scene, camera, cells, CacheFactory) {
 
 
-  var cache = $cacheFactory('meshes',{capacity: 50});
+  var cache = CacheFactory('meshes',{capacity: 50});
 
   function get ( cell_id ) {
 
-    var cell = cache.get( cell_id );
+    var cell = cache.get( cell_id.toString() );
     if ( cell !== undefined ) {
       return cell
     }
@@ -18,12 +18,10 @@ app.service('mesh', function (scene, camera, cells, $cacheFactory ) {
     cells.show(cell_id, function(cell) {
 
       createCell(cell, function(cell) {
-        cache.put(cell_id, cell);
+        cache.put(cell_id.toString() , cell);
         return cell;
       });
     });
-
-
   }
 
   function createCell ( cell , callback) {
@@ -39,9 +37,6 @@ app.service('mesh', function (scene, camera, cells, $cacheFactory ) {
       scene.add( cell.mesh );
 
       geometry.computeBoundingBox();
-      var position  = new THREE.Vector3().addVectors( geometry.boundingBox.max, geometry.boundingBox.min ).multiplyScalar(0.5);
-      camera.lookAt( position );
-
       callback(cell);
 
     }, { 'useWorker': true } );
@@ -75,19 +70,44 @@ app.service('mesh', function (scene, camera, cells, $cacheFactory ) {
 
   };
 
-  var showBoundingBox = function ( geometry ){
+  //FIXME the for loop will get all the elements ,making the cache not remove the old elements not in use
+  this.getVisibleBBox = function() {
 
-    var bbox = geometry.boundingBox;
+    var bbox = new THREE.Box3();
+
+    var keys = cache.keys()
+
+    for (var i in  keys) {
+
+      var cell_id = keys[i];
+      var cell = get(cell_id)
+
+      if (cell.mesh.visible) {
+
+        var meshBbox = cell.mesh.geometry.boundingBox;
+        bbox.union(meshBbox)
+      }
+      
+    }
+
+    // showBoundingBox( bbox );
+    return bbox;
+  }
+
+
+  var showBoundingBox = function ( bbox ){
 
     var box_geometry = new THREE.BoxGeometry( bbox.max.x - bbox.min.x , bbox.max.y - bbox.min.y , bbox.max.z - bbox.min.z );
-    var material = new THREE.MeshBasicMaterial( {color: 0xffffff, wireframe:true} );
+    var material = new THREE.MeshBasicMaterial( {color: 0x000, wireframe:true} );
     var cube = new THREE.Mesh( box_geometry, material );
+
+    var scale = 1.0;
     cube.position.set( (bbox.max.x + bbox.min.x)/2.0 , (bbox.max.y + bbox.min.y)/2.0 * scale, (bbox.max.z + bbox.min.z)/2.0 * scale);
     scene.add( cube );
 
   };
 
-   this.setOpacity = function (cell_id, opacity ) {
+  this.setOpacity = function (cell_id, opacity ) {
 
 
     var cell = get(cell_id);
@@ -106,8 +126,6 @@ app.service('mesh', function (scene, camera, cells, $cacheFactory ) {
     cell.mesh.material.opacity = opacity;
     cell.mesh.material.needsUpdate = true;
     camera.render();
-
-
   };
   
 });

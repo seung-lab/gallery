@@ -15,9 +15,9 @@ app.directive('chart', ['$timeout',
         legend:{
           position: 'bottom',
           item: {
-            onclick: function (id) {  scope.onLegendClick({cellId:id}); scope.chart.toggle(id); },
-            onmouseover: function (id) { scope.onLegendMouseover({cellId:id}); },
-            onmouseout:  function (id) { scope.onLegendMouseout({cellId:id}); }
+            onclick: function (id) {  scope.onLegendClick({cell_id:id}); scope.chart.toggle(id); },
+            onmouseover: function (id) { scope.onLegendMouseover({cell_id:id}); },
+            onmouseout:  function (id) { scope.onLegendMouseout({cell_id:id}); }
           }
         },
         tooltip: {

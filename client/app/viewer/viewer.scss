@@ -1,3 +1,4 @@
+.viewer {
 
 md-backdrop { display: none }
 
@@ -18,4 +19,15 @@ md-sidenav.md-closed.md-locked-open-add-active {
 }
 
 
+#back  {
+  position: absolute;
+  left: 10px;
+  top: 10px;
 
+  md-icon {
+    height: 36px;
+    width: 36px;
+  }
+}
+
+}

@@ -11,7 +11,6 @@
   function (Camera, $timeout) {
 
     return {
-      controller : "3DController",
       restrict: "AE",
 
       link: function (scope, element, attribute) {
@@ -20,8 +19,14 @@
 
         // create the renderer
         var renderer = new THREE.WebGLRenderer({ antialias: true});
+
+        //TODO implement stereoscopic
+        // var renderer = new THREE.CSS3DStereoRenderer();
+        // renderer.domElement.style.position = 'absolute';
+
         renderer.setClearColor( '#FAFAF0', 1.0 );
         renderer.sortObjects = true;
+
 
 
         // add renderer to DOM
@@ -31,6 +36,7 @@
         renderer.domElement.removeAttribute("width")
         renderer.domElement.setAttribute("class", "flex-grow");
         Camera.initController(renderer);
+
         $timeout( onResize, 0 , false);
 
         // handles resizing the renderer when the window is resized

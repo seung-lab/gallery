@@ -1,9 +1,4 @@
 
-$fa-font-path: "/bower_components/font-awesome/fonts";
-
-@import 'font-awesome/scss/font-awesome';
-
-
 /**
  * App-wide Styles
  */
@@ -15,10 +10,8 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
     padding: 0.2em 0;
 }
 
-@import 'font';
-
 @import 'viewer/viewer.scss';
-@import 'viewer/stratification/chart.scss';
+@import 'viewer/chart/chart.scss';
 
 
 .tooltipdemoBasicUsage md-toolbar .md-toolbar-tools .md-button, .tooltipdemoBasicUsage md-toolbar .md-toolbar-tools .md-button:hover {
@@ -27,3 +20,4 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
   transform: none;
   -webkit-transform: none; 
 }
+

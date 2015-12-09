@@ -145,6 +145,14 @@ app.service('axes', function(scene) {
       scene.remove(this.grid[orientation]);
   };
 
+  //Debuging code
+  this.drawGround({size:100000}) 
+  this.drawAllAxes({axisLength:10000,axisRadius:500,axisTess:500}) 
+  this.drawGrid({size:100000,scale:0.00001, orientation:"x"});
+  this.drawGrid({size:100000,scale:0.00001, orientation:"y"});
+  this.drawGrid({size:100000,scale:0.00001, orientation:"z"});
+
+
 });
 
 })(app, THREE);

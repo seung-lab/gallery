@@ -2,7 +2,8 @@ var app = angular.module('museum',
      ['ngCookies',
       'ngResource',
       'ui.router',
-      'ngMaterial']);
+      'ngMaterial',
+      'angular-cache']);
 
 //The actual routing is done in the MainCtrl
 app.config(function($urlRouterProvider,$locationProvider,$httpProvider) {

@@ -21,7 +21,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	this.rotateSpeed = 3.0;
 	this.zoomSpeed = 1.2;
-	this.panSpeed = 0.8;
+	this.panSpeed = -1.0;
 
 	this.noRotate = false;
 	this.noZoom = false;
@@ -34,6 +34,12 @@ THREE.TrackballControls = function ( object, domElement ) {
 	this.maxDistance = Infinity;
 
 	this.keys = [ 65 /*A*/, 83 /*S*/, 68 /*D*/ ];
+
+	this.scrollFactor = 1.0;
+
+	//This is updated when we zoom using orthographic camera
+	this.orthoZoom = false;
+
 
 	// internals
 
@@ -57,8 +63,6 @@ THREE.TrackballControls = function ( object, domElement ) {
 	_zoomStart = new THREE.Vector2(),
 	_zoomEnd = new THREE.Vector2(),
 
-	//This is updated when we zoom using orthographic camera
-	orthoZoom = false,
 
 	_touchZoomDistanceStart = 0,
 	_touchZoomDistanceEnd = 0,
@@ -209,21 +213,20 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	this.zoomCamera = function () {
 
-		var factor;
 
 		if ( _state === STATE.TOUCH_ZOOM_PAN ) {
 
-			factor = _touchZoomDistanceStart / _touchZoomDistanceEnd;
+			scrollFactor = _touchZoomDistanceStart / _touchZoomDistanceEnd;
 			_touchZoomDistanceStart = _touchZoomDistanceEnd;
-			_this.zoom( factor );
+			_this.zoom( scrollFactor );
 
 		} else {
 
-			factor = 1.0 + ( _zoomEnd.y - _zoomStart.y ) * _this.zoomSpeed;
+			scrollFactor = 1.0 + ( _zoomEnd.y - _zoomStart.y ) * _this.zoomSpeed;
 
-			if ( factor !== 1.0 && factor > 0.0 ) {
+			if ( scrollFactor !== 1.0 && scrollFactor > 0.0 ) {
 
-				_this.zoom( factor );
+				_this.zoom( scrollFactor );
 
 
 				if ( _this.staticMoving ) {
@@ -258,7 +261,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	    this.object.updateProjectionMatrix();
 
-		orthoZoom = true; //Forces an update
+			this.orthoZoom = true; //Forces an update
 		}
 	}
 
@@ -345,10 +348,10 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 		_this.object.lookAt( _this.target );
 
-		if ( lastPosition.distanceToSquared( _this.object.position ) > EPS || orthoZoom) {
+		if ( lastPosition.distanceToSquared( _this.object.position ) > EPS || this.orthoZoom) {
 
 			//This is updated when we zoom using orthographic camera
-			orthoZoom = false;
+			this.orthoZoom = false;
 
 			_this.dispatchEvent( changeEvent );
 
