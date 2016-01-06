@@ -20,13 +20,13 @@ app.factory('camera', function (scene) {
 
     this.createOrthographic = function () {
 
-      var height = 200000;
+      var height = 200;
       var left = _this.aspectRatio * height/ -2;// Camera frustum left plane.
       var right = _this.aspectRatio * height / 2;// Camera frustum right plane.
       var top  = height / 2; // Camera frustum top plane.
       var bottom = height / -2;// Camera frustum bottom plane.
-      var near = 0// Camera frustum near plane.
-      var far = 1000000000;// Camera frustum far plane.
+      var near = 0.0// Camera frustum near plane.
+      var far = 10000000;// Camera frustum far plane.
 
       this.orthographicCam = new THREE.OrthographicCamera( left, right, top, bottom, near, far );
 
@@ -111,9 +111,9 @@ app.factory('camera', function (scene) {
       // center.x = center.x + bbox.size().x / 2.0;
 
       _this.controls.target0 = center;
-      _this.controls.position0.set( 0.0 , center.y , center.z );
+      _this.controls.position0.set( center.x + 10000 , center.y , center.z );
 
-      _this.controls.up0.set( 0 , 0, 1 );
+      _this.controls.up0.set( 0 , 0, -1 );
 
       var height = bbox.size().z;
       var width = bbox.size().y;
@@ -129,7 +129,7 @@ app.factory('camera', function (scene) {
       // center.z = center.z + bbox.size().z / 2.0;
 
       _this.controls.target0 = center;
-      _this.controls.position0.set( center.x  , center.y, 0.0);
+      _this.controls.position0.set( center.x  , center.y,  1.0 );
 
       _this.controls.up0.set( 1 , 0, 0 );
 

@@ -3,7 +3,12 @@
 // include axes for debugging
 app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $log, $state, $document, $window, mesh, camera) {
 
-  mesh.display($state.params.neurons)
+  mesh.display($state.params.neurons, function() { 
+
+    var bbox = mesh.getVisibleBBox();
+    camera.lookBBoxFromSide(bbox);
+
+  });
 
 
   // Right sidenav , toggle, and resizing

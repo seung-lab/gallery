@@ -21,14 +21,17 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	this.rotateSpeed = 3.0;
 	this.zoomSpeed = 1.2;
-	this.panSpeed = -1.0;
+	this.panSpeed = 100000.0;
 
 	this.noRotate = false;
 	this.noZoom = false;
 	this.noPan = false;
 
-	this.staticMoving = true;
-	this.dynamicDampingFactor = 0.3;
+
+	//When static moving is false, the panning, and rotation and zooming has some sort of intertia.
+	//Which makes the interface look more fluid, the amount of inertia is controlled by dynamicDampingFactor
+	this.staticMoving = false;
+	this.dynamicDampingFactor = 0.2;
 
 	this.minDistance = 0;
 	this.maxDistance = Infinity;
@@ -192,6 +195,8 @@ THREE.TrackballControls = function ( object, domElement ) {
 				_lastAxis.copy( axis );
 				_lastAngle = angle;
 
+				console.log(this.object.position)
+
 			}
 
 			else if ( !_this.staticMoving && _lastAngle ) {
@@ -277,20 +282,39 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 			if ( mouseChange.lengthSq() ) {
 
-				mouseChange.multiplyScalar( _eye.length() * _this.panSpeed );
+				mouseChange.multiplyScalar( _this.panSpeed );
+
+				// console.log('eye');
+				// console.log(_eye);
+				// console.log('camera');
+				// console.log(this.object.position);
+				// console.log('taget');
+				// console.log(this.target)
 
 				pan.copy( _eye ).cross( _this.object.up ).setLength( mouseChange.x );
 				pan.add( objectUp.copy( _this.object.up ).setLength( mouseChange.y ) );
 
-				_this.object.position.add( pan );
-				_this.target.add( pan );
 
+				//For some reason I don't completly understand I get the right directions when doing the opposite for perspective
+				// than for orthographic, mouseChange is same for both cameras, as well as eye and _this.object.up. 
+				if ( this.object instanceof THREE.PerspectiveCamera ) {
+					//When panning target an camera moves, this means the target doesn't change
+					_this.object.position.add( pan );
+					_this.target.add( pan );
+
+				} else {
+					_this.object.position.sub( pan );
+					_this.target.sub( pan );
+				}
+
+				//If static movement is set to false the camera has some sort of inertia
 				if ( _this.staticMoving ) {
 
 					_panStart.copy( _panEnd );
 
 				} else {
 
+					//This restart this event.
 					_panStart.add( mouseChange.subVectors( _panEnd, _panStart ).multiplyScalar( _this.dynamicDampingFactor ) );
 
 				}

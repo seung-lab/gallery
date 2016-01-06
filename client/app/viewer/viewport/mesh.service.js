@@ -8,18 +8,18 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 
   var cache = CacheFactory('meshes',{capacity: 50});
 
-  function get ( cell_id ) {
+  function get ( cell_id , callback) {
 
     var cell = cache.get( cell_id.toString() );
     if ( cell !== undefined ) {
-      return cell
+      callback(cell);
     }
 
     cells.show(cell_id, function(cell) {
 
       createCell(cell, function(cell) {
         cache.put(cell_id.toString() , cell);
-        return cell;
+        callback(cell);
       });
     });
   }
@@ -43,30 +43,44 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 
   }
 
-  this.display = function( neurons ) {
+  this.display = function( neurons , callback) {
     
+    var loaded = 0;
+    var to_load = neurons.length; 
     for (var i in neurons) {
 
         var cell_id = neurons[i];
 
-        get(cell_id);
+        get(cell_id, function() {
+
+          loaded ++;
+
+          //When all the neurons has being loaded , the callback is call
+          //This is used in the viewer to set the camera
+          if ( loaded == to_load ) {
+            callback();
+          }
+        });
     }
   };
 
 
   this.toggleVisibility = function (cell_id) {
 
-    var cell = get(cell_id);
+    get(cell_id, function(cell) { 
 
-    if (cell.mesh.visible == true) {
+      if (cell.mesh.visible == true) {
 
-      cell.mesh.visible = false;
+        cell.mesh.visible = false;
 
-    }
-    else {
-      cell.mesh.visible = true;
-    }
-    camera.render();
+      }
+      else {
+        cell.mesh.visible = true;
+      }
+      camera.render();
+
+    });
+
 
   };
 
@@ -80,13 +94,15 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
     for (var i in  keys) {
 
       var cell_id = keys[i];
-      var cell = get(cell_id)
+      get(cell_id, function(cell) { 
 
-      if (cell.mesh.visible) {
+        if (cell.mesh.visible) {
 
-        var meshBbox = cell.mesh.geometry.boundingBox;
-        bbox.union(meshBbox)
-      }
+          var meshBbox = cell.mesh.geometry.boundingBox;
+          bbox.union(meshBbox)
+        }
+
+      });
       
     }
 
@@ -110,22 +126,24 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
   this.setOpacity = function (cell_id, opacity ) {
 
 
-    var cell = get(cell_id);
+    get(cell_id, function(cell){
 
-    if (opacity == 1.0) {
+      if (opacity == 1.0) {
 
-      cell.mesh.material.transparent = false;
-    
-    }
-    else {
+        cell.mesh.material.transparent = false;
+      
+      }
+      else {
 
-      cell.mesh.material.transparent = true;
+        cell.mesh.material.transparent = true;
 
-    }
+      }
 
-    cell.mesh.material.opacity = opacity;
-    cell.mesh.material.needsUpdate = true;
-    camera.render();
+      cell.mesh.material.opacity = opacity;
+      cell.mesh.material.needsUpdate = true;
+      camera.render();      
+    });
+
   };
   
 });
