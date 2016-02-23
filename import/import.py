@@ -12,12 +12,8 @@ class Importer:
     self.cells_fname = '../server/config/cells.json'
     self.sets_fname =  '../server/config/sets.json'
 
-    self.mix_color = { "red": 255, "blue": 255, "green": 255 }
-
-    self.stratification = Stratification()
+    # self.stratification = Stratification()
     self.matlab_script = MatlabScript()
-
-    self.spreadsheet = Spreadsheet()
 
     self.cell_classes = {}
     self.cell_types = {}
@@ -27,63 +23,37 @@ class Importer:
     self.processCells()
     self.processSets()
 
-
-
-  def rgb_to_hex(self, rgb):
-    return '#%02x%02x%02x' % rgb
-
-  def randColor (self):
-    "it averages a base color, with a random color to generate a palette"
-
-    red = (randint(0,255) + self.mix_color['red']) / 2
-    blue = (randint(0,255) + self.mix_color['blue']) / 2
-    green = (randint(0,255) + self.mix_color['green']) / 2
-
-    return self.rgb_to_hex((red,green,blue));
-
-
-
   def  processCells(self):
 
     cells = []
+    stratification = Stratification('~/seungmount/Omni/e2198_reconstruction/gallery/obj_museum/strat_160212.mat').get()
 
-    spreadsheet = self.spreadsheet.get()
+    all_segments = set()
+    for segments in self.matlab_script.cell_types.values():
+      all_segments = all_segments.union( set(segments) )
 
-    stratification = self.stratification.get()
+    print stratification.keys()
+    for segment_id in all_segments:  
 
-    bc_strat = Stratification('./bc_strat_for_tartavull_150929').get()
-
-    stratification.update(bc_strat)
-      
-    for segment_id in self.spreadsheet.get():
-
-      row = spreadsheet[segment_id]
-
-      if segment_id in stratification:
-        strat = stratification[ segment_id ]
+      if str(segment_id) in stratification:
+        strat = stratification[ str(segment_id) ]
         if float('NaN') == strat[0]:
-          continue
+          strat = numpy.zeros(100)
       else:
-        strat = []
+        strat = numpy.zeros(100)
         print 'no stratification for ', segment_id
         
+      if type(strat) is not list or sum(strat) == 0:
+        strat = numpy.zeros(100)
 
-      
-        
       cell = {  
 
-        "name": '# '+ segment_id,
+        "name": '# '+ str(segment_id),
         "segment": segment_id,
         "id": segment_id,
-        "mesh_id": row['database_ids'],
-        "description": 'name: '+ row['name'] + '\n class: '+ row['cell_class'] + '\n  type:' + row['cell_type'], 
-        "stratification": strat,
-        "copyright": " Or another longer description ",
-        "color": self.randColor()
-      }
+        "stratification": list(strat)      }
 
       cells.append(cell)
-
     self.writeJson(cells, self.cells_fname)
 
 

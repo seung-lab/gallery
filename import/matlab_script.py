@@ -3,46 +3,36 @@ import os
 
 class MatlabScript:
 
-  def __init__(self):
+  def __init__(self, filename='latest_jinseop.m'):
 
     self.gc = {}
     
     self.cell_types = {}
     self.cell_classes = {}
 
-
-    self.fname =   os.path.expanduser('gc_types_load_cells.m')
-
+    self.fname = os.path.expanduser(filename)
     self.loadMatlabScript()
-
-
-
   
   def loadMatlabScript(self):
 
     with open(self.fname) as f:
       for line in f.readlines():
-        
         self.parseNames(line)
         
-
-
-
   def parseNames(self,line):
-    name = re.match(r"struct\(.*,\s*'(.*)'\s*,.*,\s*'(.*)'\s*,.*,(.*)\)", line)
-    if name != None:
+    
+    match = re.match(r'struct(\(.*\))', line)
+    if match:
+      between_parentesis = match.groups()[0]
+      parsed =  eval(re.sub(r'(\d+)\s+(\d+)', r'\1,\2,' , between_parentesis)) #replace all the spaces in the list and convert to python struct
 
-      type_class =  name.groups()[0];
-      type_name =  name.groups()[1];
-      self.cell_types[type_name] = self.parseSegments( name.groups()[2] )
+      #convert consecuent element of the tuples to key, val
+      parsed_dict = {}
+      for i in range(0,len(parsed),2):
+        parsed_dict[parsed[i]] = parsed[i+1]
 
-      self.appendtoCellClasses(type_class, type_name)
-
-
-  def parseSegments(self, segments_string ):
-
-      return list(set(re.findall(r"(\d+)", segments_string)))
-      
+      self.cell_types[parsed_dict['name']] = parsed_dict['cells']
+      self.appendtoCellClasses(parsed_dict['class'], parsed_dict['name'])
 
 
   def appendtoCellClasses(self, class_name , set_name):

@@ -59,7 +59,7 @@ class Spreadsheet:
     self.processType(r)
 
     self.spreadsheet[r['segment_id']] = r
-    #delete remove redundant information
+    #delete removes redundant information
     del self.spreadsheet[r['segment_id']]['segment_id']
 
 
@@ -113,19 +113,15 @@ class Stratification:
   def __init__(self, fname = 'strat.mat'):
 
     self.fname =  os.path.expanduser(fname)
-
     self.stratification = {}
-
     self.loadStratification()
 
   def loadStratification(self):
 
     mat = scipy.io.loadmat(self.fname);
-    
     filename =  os.path.basename(self.fname)
     dataset_name = filename.split('.')[0]
-
-    mat = mat['strat']
+    mat = mat[dataset_name]
   
 
     for row_idx in range(mat.shape[0]):
@@ -140,20 +136,3 @@ class Stratification:
   def get(self):
 
     return self.stratification
-
-
-if __name__ == '__main__':
-
-  spreadsheet = Spreadsheet()
-  # print spreadsheet.spreadsheet['60143']
-  # print spreadsheet.cell_classes
-
-  # print spreadsheet.cell_types
-
-  # full_strat = Stratification()
-  mono_strat = Stratification()
-  
-  # for segment_id in full_strat.stratification:
-  #   if segment_id in  mono_strat.stratification:
-
-  #     full_strat.stratification[segment_id] = mono_strat.stratification
