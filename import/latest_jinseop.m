@@ -1,3 +1,4 @@
+
 struct('class','GC','name','1ws','annotation','M1','cells',[20203 20029]);
 struct('class','GC','name','1wt','annotation','sOFFalpha','cells',[10018 17109 26022]); 
 struct('class','GC','name','1no','annotation','','cells',[20157 17110 17050 17021 20092 17236 26024 10007]);
@@ -18,32 +19,39 @@ struct('class','GC','name','5si','annotation','','cells',[17040 20135 20183 1707
 struct('class','GC','name','6sn','annotation','mini-tONalpha','cells',[20198 20073 17082 26035 26043 26171]);
 struct('class','GC','name','6sw','annotation','tONalpha','cells',[20222 20217 17083 20068 26020]);
 struct('class','GC','name','6t','annotation','','cells',[20255 20113 20232]);
-struct('class','GC','name','7o','annotation','tON DS','cells',[17053 20180 26034 26048 26100 26130]);
-struct('class','GC','name','7i','annotation','sON DS','cells',[17152 20021 26002 26070 26075 26077 26078 26128 20075]);
+struct('class','GC','name','7o','annotation','tON DS','cells',[17053 20180 26034 26048 26100 26130 20239]);
+struct('class','GC','name','7id','annotation','sON DS dorsal','cells',[17152 26077]);
+struct('class','GC','name','7ir','annotation','sON DS rostal','cells',[20021 26002 26128 20075]);
+struct('class','GC','name','7iv','annotation','sON DS ventral','cells',[26070 26075 26078]);
 struct('class','GC','name','8w','annotation','sONalpha, M4','cells',[17111 26001 26071 26079]);
 struct('class','GC','name','8n','annotation','','cells',[20126]);
 struct('class','GC','name','9w','annotation','M2','cells',[20228]);
-struct('class','GC','name','9n','annotation','','cells',[20112 20076 20056 20006 26074 26127 26149 26168]);
-struct('class','GC','name','51','annotation','w3','cells',[20120 20212 20182 17098 17095 20153 20258 17035 20037 26177 26154 26136 26113 26098 26085 26054 26039 26025 26122]);
+struct('class','GC','name','9m','annotation','','cells',[20112 20076 20056]);
+struct('class','GC','name','9n','annotation','','cells',[26149 26168 26127 20006]);
+​struct('class','GC','name','51','annotation','w3','cells',[20120 20212 20182 17098 17095 20153 20258 17035 20037 26177 26154 26136 26113 26098 26085 26054 26039 26025 26122]);
 struct('class','GC','name','25','annotation','','cells',[20105 20104 20186 20237 20067 25006 17176 17132 20045 20036 26031 26134 26167 26042 26040 26037 26060 26066 26099 26117 26145 26175]);
 struct('class','GC','name','58','annotation','','cells',[20063 20072 20200 17012 17038 26061 26045 26092 20046 26119]);
-struct('class','GC','name','37','annotation','ON-OFF DS','cells',[90002 90001 25005 20254 20245 20239 20233 20220 20213 20210 20179 20137 20125 20096 17161 17080 20016 20014 20002 26101 26056 26084 26032 26036 26137 26138 26178 26103 26094 26029 26162 26047 26115 26158 26165]);
-struct('class','GC','name','63','annotation','','cells',[20181 17140 20208 20178 17097 17114 17084 20140 20129 30003 20071 30002 20019 20011 20005 26057 26191 26148 26141 26125 26089 26068 26028 26027 26023]);
-struct('class','GC','name','72n','annotation','','cells',[20100 20187 20150 20043 26059 26073 26132]);
+struct('class','GC','name','37c','annotation','ON-OFF DS','cells',[26047 20002 20179 20210 20254 26101 20245 26137 26036 26056]);
+struct('class','GC','name','37v','annotation','ON-OFF DS','cells',[20014 20125 26029 26162 90002 26094]);
+struct('class','GC','name','37d','annotation','ON-OFF DS','cells',[20016 20096 20233 26158 17161 20137 26115 26138 26178]);
+struct('class','GC','name','37r','annotation','ON-OFF DS','cells',[90001 20213 25005 26103 17080 20220 26084 26165 26032]);  
+​struct('class','GC','name','63','annotation','','cells',[20181 17140 20208 20178 17097 17114 17084 20140 20129 30003 20071 30002 20019 20011 20005 26057 26191 26148 26141 26125 26089 26068 26028 26027 26023]);
+​struct('class','GC','name','72n','annotation','','cells',[20100 20187 20150 20043 26059 26073 26132]);
 struct('class','GC','name','72w','annotation','','cells',[20166 20221 17069 20074 26124]);
 struct('class','GC','name','27','annotation','','cells',[20117 17212 26051 26065]);
-struct('class','GC','name','81','annotation','','cells',[20158 26097]);
-struct('class','GC','name','82w','annotation','','cells',[20118 26091]);
-struct('class','GC','name','82o','annotation','','cells',[20069 20080 26072 26052]);
-struct('class','GC','name','82i','annotation','','cells',[20251 30001 26067 20161 26076 26058 26080 26090]);
+struct('class','GC','name','81i','annotation','','cells',[20158 26097 26090]);
+struct('class','GC','name','81o','annotation','','cells',[20069 26052]);
+struct('class','GC','name','82wo','annotation','','cells',[20118 26091]);
+struct('class','GC','name','82wi','annotation','','cells',[20251 30001 26067]);
+struct('class','GC','name','82n','annotation','','cells',[26076 26080 20161 26058 26072 20080]);
 struct('class','GC','name','83','annotation','','cells',[17009 20197]);
 struct('class','GC','name','28','annotation','','cells',[20243 20155 20163 20257 26005 20167 26033]);
-struct('class','GC','name','91n','annotation','','cells',[20218 25003 20042 26088 26135]);
-struct('class','GC','name','91w','annotation','','cells',[20081 20020]);
-struct('class','GC','name','weirdos','annotation','','cells',[17134 20248 26069 26093]);
-struct('class','GC','name','cutoff','annotation','','cells',[10015 17051 17238 26081 26153 26030 26105 26110 26114 26176 26107 26108]);
+struct('class','GC','name','91n','annotation','','cells',[20218 25003 20042 26088 26074]);
+struct('class','GC','name','91w','annotation','','cells',[20081 20020 26135]);
+​struct('class','GC','name','weirdos','annotation','','cells',[17134 20248 26069 26093]);
+​struct('class','GC','name','cutoff','annotation','','cells',[10015 17051 17238 26081 26153 26030 26105 26110 26114 26176 26107 26108]);
 
-
+#old bcs
 struct('class','BC','name','bc1 (NK3R+ & Syt2-)','cells',[60008 60019 60026 60027 60032 60052 60055 60078 60079 60099 60105 60109 60110 60111 60114 60118 60129 60132 60139 60142 60147 60150 60158 60161 60162 60164 60170 60177 60184 60187 60188 60189 60194 60195 60196 60203 60204 60212 60213 60216 60218]);
 struct('class','BC','name','bc2 (NK3R+ & Syt2+,recoverin,Neto1,Cdh8)','cells',[60080 60001 60002 60003 60004 60006 60009 60010 60011 60012 60013 60021 60022 60023 60025 60029 60037 60038 60039 60040 60041 60042 60043 60044 60046 60097 60101 60102 60103 60104 60112 60120 60124 60130 60133 60135 60138 60140 60141 60149 60157 60159 60167 60169 60182 60208 60209 60210 60214 60217 60219 60221 60223 60224 60226]);
 struct('class','BC','name','bc3a (HCN4)','cells',[60028 60030 60048 60049 60050 60056 60059 60066 60068 60072 60075 60076 60085 60088 60092 60093 60108 60115 60123 60134 60136 60137 60145 60146 60166 60172 60176 60181]);

@@ -26,7 +26,7 @@ class Importer:
   def  processCells(self):
 
     cells = []
-    stratification = Stratification('~/seungmount/Omni/e2198_reconstruction/gallery/obj_museum/strat_160212.mat').get()
+    stratification = Stratification('~/code/gallery/import/strat.mat').get()
 
     all_segments = set()
     for segments in self.matlab_script.cell_types.values():
@@ -35,8 +35,8 @@ class Importer:
     print stratification.keys()
     for segment_id in all_segments:  
 
-      if str(segment_id) in stratification:
-        strat = stratification[ str(segment_id) ]
+      if segment_id in stratification:
+        strat = stratification[ segment_id ]
         if float('NaN') == strat[0]:
           strat = numpy.zeros(100)
       else:

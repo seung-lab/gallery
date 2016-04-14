@@ -122,17 +122,22 @@ class Stratification:
     filename =  os.path.basename(self.fname)
     dataset_name = filename.split('.')[0]
     mat = mat[dataset_name]
-  
-
+    
     for row_idx in range(mat.shape[0]):
-      row = mat[row_idx]
+      row = mat[row_idx][0] 
+      if len(row) > 1: 
+        values = []
+        for t in row:
+          if t[0] >= 0.0 and t[0] <= 100.0:
+            values.append( t[1] )
 
-      segId = str(row[0].flatten()[0])
-      values = list(row[1].flatten())
-
-      self.stratification[segId] = values
+        self.stratification[row_idx] = values
 
 
   def get(self):
 
     return self.stratification
+
+if __name__ == '__main__':
+  s = Stratification()
+  print s.get()
