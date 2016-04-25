@@ -25,7 +25,7 @@ class MatlabScript:
     if match:
       between_parentesis = match.groups()[0]
       parsed =  eval(re.sub(r'(\d+)\s+(\d+)', r'\1,\2,' , between_parentesis)) #replace all the spaces in the list and convert to python struct
-
+      print between_parentesis
       #convert consecuent element of the tuples to key, val
       parsed_dict = {}
       for i in range(0,len(parsed),2):
