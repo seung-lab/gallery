@@ -3,9 +3,8 @@
   "version": "0.0.0",
   "dependencies": {
     "json3": "~3.3.1",
-    "es5-shim": "~3.0.1",
     "font-awesome": ">=4.1.0",
-    "lodash": "3.9.3",
+    "lodash": "*",
     "threejs": "*",
     "c3": "~0.4.10",
     "angular": "~1.4.8",

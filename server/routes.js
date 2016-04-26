@@ -18,8 +18,6 @@ module.exports = function(app) {
   app.route('/api/*')
    .get(errors[404]);
 
-
-
   app.use('/auth', require('./auth'));
 
     // All other routes should redirect to the index.html
