@@ -19,12 +19,6 @@ You'll need nodejs, npm, and mongodb to bootstrap.
 6. Run `gulp`
 7. Run `npm start`
 
-
-## TODO list:
-
-* improve orbit controller
-* simplify mesh when far (removing noise effect)
-
 # Code coverage
 
 run 'npm test'
