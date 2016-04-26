@@ -1,28 +1,15 @@
 <!doctype html>
 <html dir="ltr" lang="en" ng-app="museum">
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <base href="/">
-    <title>Cell Museum | EyeWire</title>
-    <meta name="description" content="">
+    <title>Cell Museum | Eyewire</title>
+    <meta name="description" content="Connectomic reconstructions of neurons from Seung Lab.">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(client) app/vendor.css -->
-      <!-- bower:css -->
-      <link rel="stylesheet" href="bower_components/c3/c3.css" />
-      <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
-      <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css({.tmp,client}) app/app.css -->
-    <!-- <link rel="stylesheet" href="app/app.css"> -->
-      <!-- injector:css -->
-      <!-- endinjector -->
-    <!-- endbuild -->
+
+    <link rel="stylesheet" href="public/css/all.css" />
+    <script src="js/app.js"></script>
   </head>
   <body>
 
@@ -31,73 +18,22 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div ui-view=""></div>
+    <div id="ui" ng-include="ready&&'app/main/main.html'" ng-class="{on:modalClass, run:ready}"></div>
+    <div ng-view=""></div>
+    <div ng-include="r.modal&&'components/modal.html'" onload="modalClass='on'"></div>
+    <div id="NotifierFactory" sp-notifier=""></div> 
+ 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     /* (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
       ga('create', 'UA-28625308-1', 'auto');
-      ga('send', 'pageview');
+      ga('send', 'pageview');*/
     </script>
 
-    <!--[if lt IE 9]>
-    <script src="bower_components/es5-shim/es5-shim.js"></script>
-    <script src="bower_components/json3/lib/json3.min.js"></script>
-    <![endif]-->
-    <!-- build:js({client,node_modules}) app/vendor.js -->
-      <!-- bower:js -->
-      <script src="bower_components/jquery/dist/jquery.js"></script>
-      <script src="bower_components/lodash/lodash.js"></script>
-      <script src="bower_components/threejs/build/three.js"></script>
-      <script src="bower_components/d3/d3.js"></script>
-      <script src="bower_components/c3/c3.js"></script>
-      <script src="bower_components/angular/angular.js"></script>
-      <script src="bower_components/js-openctm/src/ctm.js"></script>
-      <script src="bower_components/js-openctm/src/lzma.js"></script>
-      <script src="bower_components/js-openctm/src/CTMLoader.js"></script>
-      <script src="bower_components/angular-resource/angular-resource.js"></script>
-      <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-      <script src="bower_components/angular-mocks/angular-mocks.js"></script>
-      <script src="bower_components/angular-scenario/angular-scenario.js"></script>
-      <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-      <script src="bower_components/angular-animate/angular-animate.js"></script>
-      <script src="bower_components/angular-aria/angular-aria.js"></script>
-      <script src="bower_components/angular-material/angular-material.js"></script>
-      <script src="bower_components/trianglify/dist/trianglify.min.js"></script>
-      <script src="bower_components/angular-cache/dist/angular-cache.js"></script>
-      <!-- endbower -->
-    <!-- endbuild -->
-
-        <!-- build:js({.tmp,client}) app/app.js -->
-        <script src="app/app.js"></script>
-          <!-- injector:js -->
-          <script src="app/Homepage/homepage.controller.js"></script>
-          <script src="app/Homepage/homepage.js"></script>
-          <script src="app/Selector/card/card.directive.js"></script>
-          <script src="app/Selector/selector.controller.js"></script>
-          <script src="app/Selector/selector.js"></script>
-          <script src="app/viewer/chart/chart.controller.js"></script>
-          <script src="app/viewer/chart/chart.directive.js"></script>
-          <script src="app/viewer/viewer.controller.js"></script>
-          <script src="app/viewer/viewer.js"></script>
-          <script src="app/viewer/viewport/axes.service.js"></script>
-          <script src="app/viewer/viewport/camera.service.js"></script>
-          <script src="app/viewer/viewport/mesh.service.js"></script>
-          <script src="app/viewer/viewport/scene.service.js"></script>
-          <script src="app/viewer/viewport/viewport.directive.js"></script>
-          <script src="components/CSS3DStereoRenderer.js"></script>
-          <script src="components/Detector.js"></script>
-          <script src="components/TrackballControls.js"></script>
-          <script src="components/auth/auth.service.js"></script>
-          <script src="components/auth/login.controller.js"></script>
-          <script src="components/auth/user.service.js"></script>
-          <script src="components/cells/cells.service.js"></script>
-          <script src="components/sets/sets.service.js"></script>
-          <!-- endinjector -->
-        <!-- endbuild -->
 </body>
 </html>

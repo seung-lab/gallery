@@ -17,6 +17,7 @@ var argv = require('yargs').argv,
     buffer = require('vinyl-buffer'),
     babelify = require('babelify'),
     mocha = require('gulp-mocha'),
+    print = require('gulp-print'),
     templateCache = require('gulp-angular-templatecache');
 
 var fs = require('fs');
@@ -24,7 +25,7 @@ var del = require('del');
 var path = require('path');
 var extend = require('node.extend');
 
-var SOURCEMAPDEST = 'dist/public/source-maps/';
+var SOURCEMAPDEST = '../source-maps/';
 
 if (argv.help) {
     console.log("Major tasks: js, css, clean, watch");
@@ -63,13 +64,33 @@ gulp.task('images', function () {
         .pipe(gulp.dest('dist/public/'));
 });
 
+gulp.task('bower', function () {
+    return gulp.src('app/bower_components/**')
+        .pipe(gulp.dest('dist/public/bower_components/'));
+});
+
 
 gulp.task('scripts', function () {
     var glp = gulp.src([
-            '!app/bower_components/**/*.min.js',
-            'app/bower_components/**/*.js',
-            'app/**/*.js',
-            'app/**/*.es6',
+            "app/bower_components/jquery/dist/jquery.js",
+            "app/bower_components/lodash/lodash.js",
+            "app/bower_components/threejs/build/three.js",
+            "app/bower_components/d3/d3.js",
+            "app/bower_components/c3/c3.js",
+            "app/bower_components/angular/angular.js",
+            "app/bower_components/js-openctm/src/CTMLoader.js",
+            "app/bower_components/angular-resource/angular-resource.js",
+            "app/bower_components/angular-cookies/angular-cookies.js",
+            "app/bower_components/angular-mocks/angular-mocks.js",
+            "app/bower_components/angular-scenario/angular-scenario.js",
+            "app/bower_components/angular-ui-router/release/angular-ui-router.js",
+            "app/bower_components/angular-animate/angular-animate.js",
+            "app/bower_components/angular-aria/angular-aria.js",
+            "app/bower_components/angular-material/angular-material.js",
+            "app/bower_components/trianglify/dist/trianglify.min.js",
+            "app/bower_components/angular-cache/dist/angular-cache.js",
+            'app/scripts/**/*.js',
+            'app/scripts/**/*.es6',
         ])
         .pipe(transpileES6())
         .pipe(concat('app.js'));
@@ -147,5 +168,5 @@ gulp.task('clean', function () {
     ]);
 });
 
-gulp.task('default', [ 'scripts', 'templates', 'images', 'styles', 'copy-index' ]);
+gulp.task('default', [ 'scripts', 'bower', 'templates', 'images', 'styles', 'copy-index' ]);
 
