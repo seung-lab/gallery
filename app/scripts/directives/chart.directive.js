@@ -1,6 +1,6 @@
 'use strict';
 
-(function(app){
+(function (app) {
   
 app.directive('chart', ['$timeout',
  function ($timeout) {
