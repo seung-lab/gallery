@@ -6,4 +6,4 @@ app.controller('HomepageCtrl', function ($scope, $timeout, $mdSidenav, $mdDialog
         $state.go('selector')
     };
 
-  });
+});

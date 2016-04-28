@@ -1,24 +1,23 @@
-var app = angular.module('museum', 
-     ['ngCookies',
-      'ngResource',
-      'ui.router',
-      'ngMaterial',
-      'angular-cache']);
+var app = angular.module('museum', [
+  'ngCookies',
+  'ngResource',
+  'ui.router',
+  'ngMaterial',
+  'angular-cache'
+]);
 
-//The actual routing is done in the MainCtrl
-app.config(function($urlRouterProvider,$locationProvider,$httpProvider) {
+// The actual routing is done in the MainCtrl
+app.config(function ($urlRouterProvider, $locationProvider, $httpProvider) {
 
     $urlRouterProvider.caseInsensitiveMatch = true;
     $urlRouterProvider.otherwise('/');
 
-
     //Remove hashtag from url if windows history is supported.
-    if(window.history && window.history.pushState){
+    if (window.history && window.history.pushState) {
       $locationProvider.html5Mode(true);
     }
 
     $httpProvider.interceptors.push('authInterceptor');
- 
 });
 
 app.factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
@@ -31,7 +30,7 @@ app.factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location
         }
         return config;
       },
-
+      
       // Intercept 401s and redirect you to login
       responseError: function(response) {
         if(response.status === 401) {
@@ -46,7 +45,6 @@ app.factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location
       }
     };
 });
-
 
 //This is to allow cross-origin requests
 app.config(function ($httpProvider) {        

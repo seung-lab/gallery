@@ -4,7 +4,7 @@ app.config(function ($stateProvider) {
     $stateProvider
       .state('viewer', {
         url: '/viewer?neurons',
-        templateUrl: 'app/viewer/viewer.html',
+        templateUrl: 'templates/viewer.html',
         controller: 'ViewerCtrl'
       })
   });

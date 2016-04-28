@@ -4,7 +4,7 @@ app.config(function ($stateProvider) {
     $stateProvider
       .state('selector', {
         url: '/selector',
-        templateUrl: 'app/Selector/selector.html',
+        templateUrl: 'templates/selector.html',
         controller: 'SelectorCtrl'
       })
   });

@@ -2,8 +2,7 @@
 
 (function (app) {
   
-app.directive('chart', ['$timeout',
- function ($timeout) {
+app.directive('chart', [ '$timeout', function ($timeout) {
         
   var chartLinker = function (scope, element, attrs) {
 

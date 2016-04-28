@@ -4,11 +4,10 @@
 // services are used to manipulate the scene else where.
 // Currently the Renderer and controls are part of the directive but could just as easily be 
 // moved into their own services if functionality they provide need to be manipulated by a UI control.
-(function(app) { 
+(function (app) { 
 
 
-  app.directive('viewport', ['camera',  '$timeout', 
-  function (Camera, $timeout) {
+  app.directive('viewport', [ 'camera', '$timeout', function (Camera, $timeout) {
 
     return {
       restrict: "AE",
