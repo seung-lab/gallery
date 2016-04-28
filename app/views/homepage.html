@@ -1,47 +1,10 @@
-<script type="text/javascript">
-(function($) {          
-    $(document).ready(function(){                    
-        $(window).scroll(function(){                          
-            if ($(this).scrollTop() > 170) {
-                $('#row1').fadeIn(1500);
-            } else {
-                $('#row1').fadeOut(500);
-            }
-            if ($(this).scrollTop() > 500) {
-                $('#row2').fadeIn(800);
-            } else {
-                $('#row2').fadeOut(500);
-            }
-            if ($(this).scrollTop() > 650) {
-                $('#row3').fadeIn(1500);
-            } else {
-                $('#row3').fadeOut(500);
-            }
-            if ($(this).scrollTop() > 1000) {
-                $('#row4').fadeIn(1500);
-            } else {
-                $('#row4').fadeOut(500);
-            }
-            if ($(this).scrollTop() > 1400) {
-                $('#row5').fadeIn(1500);
-            } else {
-                $('#row5').fadeOut(500);
-            }
-            if ($(this).scrollTop() > 1600) {
-                $('#row6').fadeIn(1500);
-            } else {
-                $('#row6').fadeOut(500);
-            }
-        });
-    });
-})(jQuery);
-</script>
+
 <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/kswedberg/jquery-smooth-scroll/master/jquery.smooth-scroll.js">
 <link href='https://fonts.googleapis.com/css?family=Montserrat+Alternates' rel='stylesheet' type='text/css'>
 <div style="background: url('http://blog.eyewire.org/wp-content/uploads/2012/11/EyeWire-J-Cell-Teaser-lower-res.jpg') center / cover; height: 100vh;">
 <md-toolbar style="position: fixed;background-color:rgba(0,0,0,.8);">
   <div class="md-toolbar-tools">
-    <img src="assets/images/eyewire.png" height="25" style="padding-right:5px;">
+    <img src="images/eyewire.png" height="25" style="padding-right:5px;">
     <h1 style="color: #ebf2f0; font-size: 22px; margin-top:-2px; font-family: 'Montserrat Alternates', sans-serif;">EyeWire Portal </h1>
     <nav style="right: 30px;top: 15px; position:absolute;">
       <a style="font-size:18px;text-decoration:underline;">Portal</a>
@@ -67,13 +30,13 @@
   <div class="container" style="padding-top:40px;padding-right:30px;padding-left:30px;padding-bottom:40px;text-align:center;max-width:100%;margin-top:10vh;">
     <h1 style="color:#353B3B;font-family: 'Montserrat Alternates', sans-serif;">About</h1>
     <div style="-webkit-column-count: 3; /* Chrome, Safari, Opera */ -moz-column-count: 3; /* Firefox */ column-count: 3;">
-    <img src="assets/images/bf1.png" height="180" align="center"><br>
+    <img src="images/bf1.png" height="180" align="center"><br>
     <h2 style="color:#353B3B; padding-bottom:0px;margin-bottom:0px;font-family: 'Montserrat Alternates', sans-serif;">Lorem ipsum</h2><br>
     <p style="color:#353B3B;margin-top:0px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p><br>
-    <img src="assets/images/bf2.png" height="180" align="center"><br>
+    <img src="images/bf2.png" height="180" align="center"><br>
     <h2 style="color:#353B3B; padding-bottom:0px;margin-bottom:0px;font-family: 'Montserrat Alternates', sans-serif;">Lorem ipsum</h2><br>
     <p style="color:#353B3B;margin-top:0px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p><br>
-    <img src="assets/images/bf3.png" height="180" align="center">
+    <img src="images/bf3.png" height="180" align="center">
     <h2 style="color:#353B3B; padding-bottom:0px;margin-bottom:0px;font-family: 'Montserrat Alternates', sans-serif;">Lorem ipsum</h2><br>
     <p style="color:#353B3B;margin-top:0px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p><br>
     </div>
@@ -87,7 +50,7 @@
     <!-- <h1 style="color:#52b4cc">Explore</h1> -->
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 centered">
-          <img src="assets/images/how_it_works2.png" height="30">
+          <img src="images/how_it_works2.png" height="30">
         </div>
         <!-- <div class="col-lg-6 col-md-6 col-sm-12 centered">
           <h1 style="color:#ebf2f0; padding-bottom:0px;margin-bottom:0px;font-family: 'Montserrat Alternates', sans-serif;">How it works</h1>
@@ -97,10 +60,10 @@
     <h1 style="color:#52b4cc;padding-top:40px;padding-bottom:0px;margin-bottom:0px;font-family: 'Montserrat Alternates', sans-serif;">Explore</h1><br>
     <h3 style="color:#ebf2f0;margin-top:0px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h3><br>
     <!-- <iframe height="300" width="400" src="http://museum.eyewire.org/set/0/2/44"></iframe> -->
-    <img src="assets/images/neurons3.png" height="300">
+    <img src="images/neurons3.png" height="300">
     </div>
     <div style="-webkit-column-count: 2; /* Chrome, Safari, Opera */ -moz-column-count: 2; /* Firefox */ column-count: 2;padding-top:40px;padding-bottom:40px;display:none;" id="row4">
-    <img src="assets/images/graph.png" height="300">
+    <img src="images/graph.png" height="300">
     <h1 style="color:#52b4cc;padding-top:40px;padding-bottom:0px;margin-bottom:0px;font-family: 'Montserrat Alternates', sans-serif;">Analyze</h1><br>
     <!-- <h1 style="color:#0f76ba;padding-top:40px;padding-bottom:0px;margin-bottom:0px;font-size:40px;font-family: 'Montserrat Alternates', sans-serif;"><img src="images/w.png" height="40" style="margin-bottom:-5px;">iki</h1><br> -->
     <h3 style="color:#ebf2f0;margin-top:0px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h3><br>
@@ -109,7 +72,7 @@
     <h1 style="color:#52b4cc;padding-top:40px;padding-bottom:0px;margin-bottom:0px;font-family: 'Montserrat Alternates', sans-serif;">Investigate</h1><br>
     <h3 style="color:#ebf2f0;margin-top:0px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h3><br>
     <!-- <iframe height="300" width="400" src="http://museum.eyewire.org/set/0/2/44"></iframe> -->
-    <a href="http://wiki.eyewire.org"><img src="assets/images/wiki.png" height="60" style="padding:40px;"></a>
+    <a href="http://wiki.eyewire.org"><img src="images/wiki.png" height="60" style="padding:40px;"></a>
     </div>
   </div>
 </div>
