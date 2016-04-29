@@ -6,14 +6,20 @@ body, html
 	background white
 	font-family "Roboto", "Helvetica", Arial, sans-serif
 	font-size 16px
+	letter-spacing 0.25px
 
 a
+	color black
 	text-decoration none
-	color #30627A
+
+p a,
+ol li a
+	text-decoration none
+	color black
 	transition color 150ms ease
 	
-a:hover
-	color #56A0C2
+	padding-bottom 2px
+	border-bottom 2px solid black
 
 header > div,
 header > nav
@@ -23,15 +29,28 @@ header > nav
 
 header .left
 	float left
+	
+header .left a 
+	border-bottom none
+	padding-bottom 0px
 
 header .right
 	float right	
+	
+	line-height 2.5em
+	text-transform uppercase
+	letter-spacing 2px
+	font-weight 500
+	
+	font-size 12px
+	
 
 header
 	width 100%
-	height 100px
+	height 75px
 	
-	font-size 24px
+	font-weight 500
+
 	color #404040
 	
 	border-bottom 1px solid $GRAY
@@ -42,8 +61,16 @@ header nav > div
 header.title
 	font-weight 500
 
+main
+	display flex
+	flex-direction column
+	align-items center
+
 #logo
-	width 100px
+	width 50px
+	margin-left 25px
+	margin-right 25px
+	
 	height @width
 	
 .classyimage
@@ -51,40 +78,74 @@ header.title
 	background-size cover
 	background-image url("/images/eyewireBackground.jpg")
 	width 100%
-	height 250px
+	height 500px
 	
 	position relative
 	
-.classyimage .tagline
+.content .tagline
 	position absolute
-	left 100px
-	bottom $vertical_gap
+	left 0px
+	top -150px
 	
-	padding 20px
+	padding-left 100px
+	padding-top 25px
+	padding-bottom 25px
+	padding-right 100px
 	
-	font-size 18px
+	// font-size 24px
 	background-color white
 	
+	// text-transform uppercase
+	// letter-spacing 2px
+	// font-weight 700
+	
+	box-shadow rgba(0, 0, 0, 0.15) 0px -5px 100px
+	
+section
+	width 450px
+
 #links
-	position relative
-	top -3px
 	float left
-	margin-top $vertical_gap
-	
-	color #B9B9B9
-	
+
+	line-height 1.5em
+	color #b9b9b9
 	width 200px
+	border-top 1px solid #000
+
+	position absolute
+	top 158px
+	right 110px
 	
+#links div
+	color black
+	font-size 12px
+	text-transform uppercase
+	font-weight 700
+	letter-spacing 2px
+	
+
 #links ul
-	list-style-type lower-greek
+	list-style-type none
+	font-weight 400
+	font-size 14px
+	
+	padding 0px
+	margin 0px
 
 .content
-	float left
-	margin-left 100px
-	margin-top $vertical_gap
+	line-height 1.75em
+	width 700px
+	position relative
+	top -225px
+	background-color #FFF
+	padding 100px
+	padding-top 60px
 	
-	line-height 32px
-	letter-spacing 0.5px
-	
-	width 6in
+	box-shadow rgba(0, 0, 0, 0.15) 0px -5px 100px
+
+.content section > div
+	margin-bottom 4em
+
+h1
+	margin-bottom 1.5em
 
