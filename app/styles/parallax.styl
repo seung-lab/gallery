@@ -1,0 +1,43 @@
+// Adapted from "Pure CSS Parallax Websites" 
+// http://keithclark.co.uk/articles/pure-css-parallax-websites/
+
+$parallax_perspective = 300px
+
+parallax(tZ)
+	 transform translateZ(tZ) scale(parallax_scale_factor(tZ))
+	
+parallax_scale_factor(tZ)
+	unit(1 + (tZ * -1) / $parallax_perspective, '')
+	
+
+.parallax 
+	perspective $parallax_perspective // Note: perspective sets the camera distance from the viewport
+	perspective-origin-x: 100%;
+	
+	height 100%
+	overflow-x hidden
+	overflow-y hidden
+
+
+.parallax-layer
+	position absolute
+	top 0
+	right 0
+	bottom 0
+	left 0
+	
+	transform-origin-x: 100%;
+
+// Excerpt from "Pure CSS Parallax Websites":
+// The scale factor can be calculated with 1 + (translateZ * -1) / perspective. 
+// For example, if our viewport perspective is set to 1px and we translate an element -2px 
+// along the Z axis the correction scale factor would be 3:
+
+.parallax-group 
+	position relative
+	height 100%
+	transform-style preserve-3d
+
+.parallax.parallax-off .parallax-group
+	transform-style flat
+

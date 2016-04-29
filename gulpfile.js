@@ -59,7 +59,7 @@ gulp.task('images', function () {
         .src('app/images/**')
         .pipe(gulp.dest('dist/public/images/'));
 
-    gulp
+   return gulp
         .src('app/images/favicon*')
         .pipe(gulp.dest('dist/public/'));
 });
@@ -70,7 +70,7 @@ gulp.task('bower', function () {
 });
 
 
-gulp.task('scripts', [ 'templates' ], function () {
+gulp.task('scripts', function () {
     var glp = gulp.src([
             "app/bower_components/jquery/dist/jquery.js",
             "app/bower_components/lodash/lodash.js",
@@ -117,6 +117,7 @@ gulp.task('templates', function () {
 
 gulp.task('styles', function () {
     var stream = gulp.src([
+        'app/styles/normalize.css',
         'app/styles/*.css',
         'app/styles/main.styl'
     ])

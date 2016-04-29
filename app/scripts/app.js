@@ -1,4 +1,4 @@
-var app = angular.module('museum', [
+var app = angular.module('Museum', [
   'ngCookies',
   'ngResource',
   'ui.router',
