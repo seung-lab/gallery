@@ -149,6 +149,10 @@ gulp.task('watch',function (done) {
         '!app/index.html',
         'app/**/*.html'
     ], [ 'templates' ]);
+
+    gulp.watch([
+        'app/index.html'
+    ], [ 'copy-index' ]);
     
     gulp.watch([
         './app/**/*.css',

@@ -1,8 +1,19 @@
 @require 'colors.styl'
 
+$vertical_gap = 50px
+
 body, html
 	background white
 	font-family "Roboto", "Helvetica", Arial, sans-serif
+	font-size 16px
+
+a
+	text-decoration none
+	color #30627A
+	transition color 150ms ease
+	
+a:hover
+	color #56A0C2
 
 header > div,
 header > nav
@@ -47,17 +58,20 @@ header.title
 .classyimage .tagline
 	position absolute
 	left 100px
-	bottom 50px
+	bottom $vertical_gap
 	
 	padding 20px
 	
 	font-size 18px
-	font-weight 500
 	background-color white
 	
 #links
+	position relative
+	top -3px
 	float left
-	margin-top 50px
+	margin-top $vertical_gap
+	
+	color #B9B9B9
 	
 	width 200px
 	
@@ -67,7 +81,10 @@ header.title
 .content
 	float left
 	margin-left 100px
-	margin-top 50px
+	margin-top $vertical_gap
+	
+	line-height 32px
+	letter-spacing 0.5px
 	
 	width 6in
 
