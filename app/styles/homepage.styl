@@ -82,7 +82,8 @@ main
 	
 	position relative
 	
-.content .tagline
+.content .tagline,
+.content .cta
 	position absolute
 	left 0px
 	top -150px
@@ -103,7 +104,26 @@ main
 	// font-weight 700
 	
 	box-shadow rgba(0, 0, 0, 0.15) 0px -5px 100px
+
+.content .cta
+	left 600px
+	width 300px
 	
+	text-align center
+	background-color black
+	color white
+	
+	text-transform uppercase
+	letter-spacing 2px
+	
+	transition color 150ms ease, background-color 150ms ease
+	
+.content .cta:hover
+	background-color white
+	color black
+	font-weight 500
+	cursor pointer
+
 section
 	width 450px
 
