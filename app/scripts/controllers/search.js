@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('SelectorCtrl', function ($scope, $timeout, $mdSidenav, $mdDialog, $log, $state) {
+app.controller('SearchController', function ($scope, $timeout, $mdSidenav, $mdDialog, $log, $state) {
     // ******************************
     // Internal methods
     // ******************************

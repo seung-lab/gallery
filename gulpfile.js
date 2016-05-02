@@ -118,6 +118,7 @@ gulp.task('templates', function () {
 gulp.task('styles', function () {
     var stream = gulp.src([
         'app/styles/normalize.css',
+        'app/bower_components/angular-material/angular-material.css',
         'app/styles/*.css',
         'app/styles/main.styl'
     ])
