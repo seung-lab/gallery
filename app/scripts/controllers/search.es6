@@ -1,9 +1,6 @@
 'use strict';
 
 app.controller('SearchController', function ($scope, $timeout, $mdSidenav, $mdDialog, $log, $state) {
-    // ******************************
-    // Internal methods
-    // ******************************
 
      /**
      * Build `states` list of key/value pairs
@@ -35,6 +32,7 @@ app.controller('SearchController', function ($scope, $timeout, $mdSidenav, $mdDi
         return results;
       }
     }
+
     function searchTextChange(text) {
       $log.info('Text changed to ' + text);
 
@@ -46,12 +44,9 @@ app.controller('SearchController', function ($scope, $timeout, $mdSidenav, $mdDi
       // var placeholder = [];
       var queryText = text.toLowerCase();
       for (var i = 0; i < $scope.cards.length; i++) {
-          // if($scope.cards[i]["name"] == text) {
-          //   ind = i;
-          // }
           var cardName = $scope.cards[i].name.toLowerCase();
           var cardNeurons = $scope.cards[i].neurons;
-          if(cardName.indexOf(queryText) > -1 || cardNeurons.indexOf(queryText) > -1){
+          if (cardName.indexOf(queryText) > -1 || cardNeurons.indexOf(queryText) > -1){
             if(bcIDs.indexOf(',' + $scope.cards[i].id + ',') > -1) {
                 curBCs.push($scope.cards[i]);
             }
@@ -61,6 +56,7 @@ app.controller('SearchController', function ($scope, $timeout, $mdSidenav, $mdDi
             // placeholder.push($scope.cards[i]); 
           }
       }
+
       if (showBCs && showGCs) {
         $scope.cards = curGCs.concat(curBCs);
       }
@@ -252,7 +248,7 @@ app.controller('SearchController', function ($scope, $timeout, $mdSidenav, $mdDi
   ];
   var showGCs = true;
   var showBCs = true;
-    console.log($state.current);
+    
     $scope.goHome = function() {
         window.location = '/';
     };
@@ -282,7 +278,6 @@ app.controller('SearchController', function ($scope, $timeout, $mdSidenav, $mdDi
     };
 
     $scope.gc = function(b) {
-        console.log(b);
         showGCs = !b;
         // function removeFromList(index, list){
         //     list.splice(index, 1);

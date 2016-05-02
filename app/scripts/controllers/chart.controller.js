@@ -2,7 +2,7 @@
 
 (function (app) {
 
-app.controller("chartCtrl", function($scope, $state, cells, mesh) {
+app.controller("chartCtrl", function ($scope, $state, cells, mesh) {
 
     var data = { colors:{}, columns:[], type: 'line', unload: []};
 

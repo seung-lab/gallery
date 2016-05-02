@@ -53,7 +53,7 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 
         get(cell_id, function() {
 
-          loaded ++;
+          loaded++;
 
           //When all the neurons has being loaded , the callback is call
           //This is used in the viewer to set the camera
