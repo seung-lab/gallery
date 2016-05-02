@@ -1,6 +1,6 @@
 @require 'colors.styl'
 
-$vertical_gap = 50px
+$transitiontime = 175ms
 
 body, html
 	background $WHITE
@@ -16,7 +16,7 @@ p a,
 ol li a
 	text-decoration none
 	color $BLACK
-	transition color 150ms ease
+	transition color $transitiontime ease
 	
 	padding-bottom 2px
 	border-bottom 2px solid $BLACK
@@ -116,13 +116,15 @@ main
 	text-transform uppercase
 	letter-spacing 2px
 	
-	transition color 150ms ease, background-color 150ms ease
+	transition color $transitiontime ease, background-color $transitiontime ease, border $transitiontime ease
 	
 .content .cta:hover
 	background-color $WHITE
 	color $BLACK
-	font-weight 500
+	font-weight 700
 	cursor pointer
+	
+	transition color $transitiontime ease, background-color $transitiontime ease, border $transitiontime ease
 
 section
 	width 450px
@@ -162,6 +164,7 @@ section
 	top -225px
 	background-color $WHITE
 	padding 100px
+	padding-bottom 0px
 	
 	box-shadow rgba(0, 0, 0, 0.15) 0px -5px 100px
 
@@ -170,4 +173,43 @@ section
 
 h1
 	margin-bottom 1.5em
+	
+#classification-diagram
+	position relative
+	left -45px
+
+	width 750px
+	
+
+footer 
+	height 250px
+	width 900px
+	background-color $BLACK
+	position relative
+	left -100px
+	
+	display flex
+	align-items center
+	justify-content center
+	
+	box-sizing border-box
+	padding 100px
+
+.content footer .cta
+	position relative
+	top 0px
+	left 0px
+	background-color $WHITE
+	color $BLACK
+	font-weight 700
+	
+	border 1px solid transparent
+
+.content footer .cta:hover
+	color $WHITE
+	background-color $BLACK
+	font-weight 500
+	
+	border 1px solid $WHITE
+	
 
