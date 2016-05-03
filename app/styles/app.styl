@@ -1,19 +1,47 @@
+@require "colors.styl"
 
+.whitepaper
+	line-height 1.75em
+	width 700px
+	position relative
+	
+	background-color $WHITE
+	padding 100px
+	padding-bottom 0px
+	
+	box-shadow rgba(0, 0, 0, 0.15) 0px -5px 100px
+
+.aside 
+	line-height 1.5em
+	color $BLACK
+	width 200px
+	border-top 1px solid #000
+
+	position absolute
+	top 200px
+	right 110px
+	padding 0px
+	
+.aside div
+	color $BLACK
+	font-size 12px
+	text-transform uppercase
+	font-weight 700
+	letter-spacing 2px
+	
 /**
  * App-wide Styles
  */
 
-.browsehappy {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
-}
+.browsehappy 
+	margin 0.2em 0
+	background $WHITE
+	color $BLACK
+	padding 0.2em 0
 
-.tooltipdemoBasicUsage md-toolbar .md-toolbar-tools .md-button, .tooltipdemoBasicUsage md-toolbar .md-toolbar-tools .md-button:hover {
-  box-shadow: none;
-  border: none;
-  transform: none;
-  -webkit-transform: none; 
-}
+.tooltipdemoBasicUsage md-toolbar .md-toolbar-tools .md-button, .tooltipdemoBasicUsage md-toolbar .md-toolbar-tools .md-button:hover 
+	box-shadow none
+	border none
+	transform none
+
 

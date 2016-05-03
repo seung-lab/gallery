@@ -18,6 +18,7 @@ var argv = require('yargs').argv,
     babelify = require('babelify'),
     mocha = require('gulp-mocha'),
     print = require('gulp-print'),
+    mergeStream = require('merge-stream'),
     templateCache = require('gulp-angular-templatecache');
 
 var fs = require('fs');
@@ -118,7 +119,6 @@ gulp.task('templates', function () {
 gulp.task('styles', function () {
     var stream = gulp.src([
         'app/styles/normalize.css',
-        'app/bower_components/angular-material/angular-material.css',
         'app/styles/*.css',
         'app/styles/main.styl'
     ])
@@ -126,13 +126,19 @@ gulp.task('styles', function () {
         .pipe(stylus())
         .pipe(autoprefixer({
             browser: "> 1%, last 2 versions, Firefox ESR"
-        }))
+        }));
+
+    var stream2 = gulp.src([
+        'app/bower_components/angular-material/angular-material.css'
+    ]);
+
+    stream = mergeStream(stream, stream2).pipe(concat('all.css'));
 
     if (argv.production) {
         stream.pipe(cssnano());
     }
     
-    return stream.pipe(gulp.dest('dist/public/css/'))
+    return stream.pipe(gulp.dest('dist/public/css/'));
 });
 
 gulp.task('copy-index', function() {

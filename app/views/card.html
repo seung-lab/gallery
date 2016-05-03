@@ -1,23 +1,19 @@
-<md-card style="margin-bottom:20px;">
-  <img ng-src="{{imagePath}}" class="md-card-image" alt="Washed Out">
-  <md-card-title>
-    <md-card-title-text>
-    <div  style="margin-left:15px; margin-top:20px; min-height:70px;">
-      <span class="md-headline" style="font-size:20px;">{{set.name}}</span>
-      </div>
-    </md-card-title-text>
-  </md-card-title>
-  <md-card-content>
-  <div  style="min-height:35px;">
-    <p>
-      {{set.description}}
-    </p>
-  </div>
-  </md-card-content>
-  <md-card-actions layout="row" layout-align="end center" style="margin-bottom:10px;">
-    <!-- <md-button>Action 1</md-button>
-    <md-button>Action 2</md-button> -->
-    <md-button class="md-raised" ng-disabled="!set.wiki" ng-click="showWikiDialog($event, set )" >Wiki</md-button>
-  <a ng-click="view()"><md-button class="md-primary md-raised">View</md-button></a>
-  </md-card-actions>
+<md-card>
+	<img ng-src="{{imagePath}}" class="md-card-image" alt="Washed Out">
+	<md-card-title>
+		<md-card-title-text>
+			<div>
+				<span class="md-headline">{{set.name}}</span>
+			</div>
+		</md-card-title-text>
+	</md-card-title>
+	<md-card-content>
+		<div>
+			<p>{{set.description}}</p>
+		</div>
+	</md-card-content>
+	<md-card-actions layout="row" layout-align="end center">
+		<md-button class="md-raised" ng-disabled="!set.wiki" ng-click="showWikiDialog($event, set )">Wiki</md-button>
+		<a ng-click="view()"><md-button class="md-primary md-raised">View</md-button></a>
+	</md-card-actions>
 </md-card>

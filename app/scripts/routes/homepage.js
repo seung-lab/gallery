@@ -6,10 +6,5 @@ app.config(function ($stateProvider) {
         url: '/',
         templateUrl: 'templates/homepage.html',
         controller: 'HomepageCtrl'
-      })
-      // .state('main.set', {
-      //   url: 'set/{id:int}',
-        // templateUrl: 'app/main/main.html',
-        // controller: 'MainCtrl'
-      // });
+      });
   });
