@@ -16,11 +16,11 @@
 			</md-autocomplete>
 		  </form>
 		  <div class="switches">
-			<md-switch ng-model="data.bipolar_switch" aria-label="Switch 1" class="md-warn" ng-click="bc(data.bipolar_switch)">
+			<md-switch class="md-primary" ng-model="data.show_bipolars" aria-label="Show Bipolar Switch">
 			  Bipolar Cells 
 			</md-switch>
 			<br>
-			<md-switch ng-model="data.ganglion_switch" aria-label="Switch 2" class="md-warn" ng-click="gc(data.ganglion_switch)">
+			<md-switch class="md-primary" ng-model="data.show_ganglia" aria-label="Show Ganglia Switch">
 			  Ganglion Cells 
 			</md-switch>
 		  </div>
@@ -33,8 +33,14 @@
 		</section>
 
 		<div class="results">
-			<div ng-repeat="set in cards">
-				<card set-data="set"></card>
+			<h3>{{cards.length}} 
+				<span ng-show="cards.length != 1">Matches</span>
+				<span ng-show="cards.length == 1">Match</span>
+			</h3>
+			<div class="results-matches">
+				<div ng-repeat="set in cards">
+					<card set-data="set"></card>
+				</div>
 			</div>
 		</div>
 
