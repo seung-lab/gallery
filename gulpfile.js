@@ -121,6 +121,11 @@ gulp.task('templates', function () {
         .pipe(gulp.dest('dist/public/'))
 });
 
+gulp.task('documents', function () {
+    return gulp.src('app/documents/**')
+        .pipe(gulp.dest('dist/public/documents/'));
+});
+
 gulp.task('styles', function () {
     var stream = gulp.src([
         'app/styles/normalize.css',
@@ -187,5 +192,5 @@ gulp.task('clean', function () {
     ]);
 });
 
-gulp.task('default', [ 'scripts', 'bower', 'templates', 'images', 'styles', 'copy-index' ]);
+gulp.task('default', [ 'scripts', 'bower', 'templates', 'images', 'documents', 'styles', 'copy-index' ]);
 
