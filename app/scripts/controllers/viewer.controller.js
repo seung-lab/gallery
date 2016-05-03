@@ -50,10 +50,8 @@ app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $log, $sta
   };
 
   $scope.goBack = function() {
-    $state.go("selector");
+    $state.go("search");
   }
-
-
 
   $scope.cameras = [
       { name: "ortographic", icon: "icons/ic_photo_white_36px.svg"},

@@ -56,13 +56,18 @@ function transpileES6 () {
 }
 
 gulp.task('images', function () {
-    gulp
+    var s1 = gulp
         .src('app/images/**')
         .pipe(gulp.dest('dist/public/images/'));
 
-   return gulp
+    var s2 = gulp.src('app/icons/**')
+        .pipe(gulp.dest('dist/public/icons'))
+
+   var s3 = gulp
         .src('app/images/favicon*')
         .pipe(gulp.dest('dist/public/'));
+
+    return mergeStream(s1, s2, s3);
 });
 
 gulp.task('bower', function () {
