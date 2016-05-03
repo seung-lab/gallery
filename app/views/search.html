@@ -32,12 +32,10 @@
 			<p>You can search for bipolar retinal cells and ganglion retinal cells by ID number.</p>
 		</section>
 
-		<div class="results" layout="column" layout-align="bottom center">
-		  <div layout="row" layout-padding layout-wrap>
-			<div ng-repeat="set in cards" flex="3" layout-wrap layout-lg>
-			  <card set-data="set"></card>
+		<div class="results">
+			<div ng-repeat="set in cards">
+				<card set-data="set"></card>
 			</div>
-		  </div>
 		</div>
 
 		<footer>

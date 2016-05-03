@@ -19,14 +19,7 @@ app.directive('card', function ($mdDialog, $state) {
 		};
 
 		$scope.showWikiDialog = function (ev, locals) {
-			$mdDialog.show({
-				controller: DialogController,
-				templateUrl: 'app/templates/wiki-dialog.html',
-				parent: angular.element(document.body),
-				targetEvent: ev,
-				clickOutsideToClose: true,
-				locals: locals,
-			});
+			window.location = 'wiki.eyewire.org/index.php?title=' + locals.wiki;
 		};
 
 		function DialogController ($scope, $mdDialog, $sce, name, wiki) {

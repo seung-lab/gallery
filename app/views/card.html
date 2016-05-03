@@ -1,5 +1,5 @@
 <md-card>
-	<img ng-src="{{imagePath}}" class="md-card-image" alt="Washed Out">
+	<!-- <img ng-src="{{imagePath}}" class="md-card-image" alt="Washed Out"> -->
 	<md-card-title>
 		<md-card-title-text>
 			<div>
@@ -8,12 +8,11 @@
 		</md-card-title-text>
 	</md-card-title>
 	<md-card-content>
-		<div>
-			<p>{{set.description}}</p>
-		</div>
+		{{set.description}}
 	</md-card-content>
 	<md-card-actions layout="row" layout-align="end center">
-		<md-button class="md-raised" ng-disabled="!set.wiki" ng-click="showWikiDialog($event, set )">Wiki</md-button>
+		<!-- Only disabling wiki temporarily -->
+		<!-- <md-button class="md-raised" ng-disabled="!set.wiki" ng-click="showWikiDialog($event, set )">Wiki</md-button> -->
 		<a ng-click="view()"><md-button class="md-primary md-raised">View</md-button></a>
 	</md-card-actions>
 </md-card>
