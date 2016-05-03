@@ -3,9 +3,6 @@
 app.controller('SearchController', function ($scope, $timeout, $mdSidenav, $mdDialog, $log, $state) {
 
 	var self = this;
-
-	var _gcIDs = ',29,30,13,14,17,61,9,57,50,32,18,23,48,54,53,16,55,25,28,42,60,33,24,37,22,27,5,10,6,59,8,45,11,51,19,31,26,4,35,40,20,12,15,46,56,3,';
-	var _bcIDs = ',41,43,7,44,52,49,47,36,38,21,39,34,58,';
 	
 	var curGCs = [
 		{id: '3', name: 'weirdos', neurons: '20248, 17134', wiki: '', description: 'Ganglion Cell Type: weirdos', viewLink: '//set/0/1/3'},
@@ -133,12 +130,7 @@ app.controller('SearchController', function ($scope, $timeout, $mdSidenav, $mdDi
 				|| card.neurons.toLowerCase().indexOf(queryText) > -1
 				|| card.description.toLowerCase().indexOf(queryText) > -1){
 
-				if (_bcIDs.indexOf(',' + base_cards[i].id + ',') > -1) {
-					cards.push(base_cards[i]);
-				}
-				else {
-					cards.push(base_cards[i]); 
-				}
+				cards.push(base_cards[i]);
 			}
 		}
 
