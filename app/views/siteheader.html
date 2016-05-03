@@ -1,11 +1,11 @@
 <header>   
-    <div class="left">
+    <div ng-location="/" class="left">
         <a href="/"><img id="logo" src="/images/ew-black.svg"></img></a>
         <a href="/"><div class='title'>Museum</div></a>
     </div>
     <nav class="right">
-    	<div><a href="/">Home</a></div>
-        <div><a href="/search">Search</a></div>
-        <div><a href="http://wiki.eyewire.org/">Wiki</a></div>
+    	<div ng-location="/"><a href="/">Home</a></div>
+        <div ng-location="/search"><a href="/search">Search</a></div>
+        <div ng-location="http://wiki.eyewire.org"><a href="http://wiki.eyewire.org/">Wiki</a></div>
     </nav>
 </header>
