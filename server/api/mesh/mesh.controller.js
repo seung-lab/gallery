@@ -13,17 +13,19 @@ var fs = require('fs');
 // Get a single mesh
 exports.show = function(req, res) {
 
-  var options = { root: path.resolve("./import/mesh/"),
-                  headers: { "Content-Type" : 'text/plain;'}
-    }  
+	var options = { 
+		root: path.resolve("data/meshes/"),
+		headers: { 
+			"Content-Type": 'text/plain;'
+		},
+	};  
 
-  res.sendfile(req.params.id + '.ctm' , options , function(err) {
-    if(err) { return handleError(res, err); }
-
-  });
+	res.sendfile(req.params.id + '.ctm' , options , function(err) {
+		if (err) { return handleError(res, err); }
+	});
 
 };
 
 function handleError(res, err) {
-  return res.send(404, "File doesn't exist");
+	return res.send(404, "File doesn't exist");
 }
