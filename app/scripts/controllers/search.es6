@@ -104,10 +104,12 @@ app.controller('SearchController', function ($scope, $timeout, $mdSidenav, $mdDi
 	 * Populates the autocomplete list shown
 	 */
 	function querySearch (query) {
+		query = query || "";
+		query = query.toLowerCase();
+
 		var results = query 
 			? self.states.filter(function (state) {
-					var lowercaseQuery = angular.lowercase(query);
-					return state.value.indexOf(lowercaseQuery) === 0;
+					return state.value.toLowerCase().indexOf(query) > -1;
 				})
 			: self.states;
 
