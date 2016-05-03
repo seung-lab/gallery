@@ -12,7 +12,7 @@ app.directive('card', function ($mdDialog, $state) {
 	}
 
 	function link ($scope, element, attrs) {
-		$scope.imagePath = getImagePath();
+		// $scope.imagePath = getImagePath();
 
 		$scope.view = function () {
 			$state.go('viewer', { neurons: $scope.set.neurons });
@@ -40,8 +40,8 @@ app.directive('card', function ($mdDialog, $state) {
 		transclude: false,
 		templateUrl: 'templates/card.html',
 		scope: {
-			set: '=setData'
+			set: '=setData',
 		},
-		link: link
+		link: link,
 	};
 });

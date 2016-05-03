@@ -3,11 +3,9 @@
 // include axes for debugging
 app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $log, $state, $document, $window, mesh, camera) {
 
-  mesh.display($state.params.neurons, function() { 
-
+  mesh.display($state.params.neurons, function () { 
     var bbox = mesh.getVisibleBBox();
     camera.lookBBoxFromSide(bbox);
-
   });
 
 
@@ -58,42 +56,41 @@ app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $log, $sta
 
 
   $scope.cameras = [
-      { name: "ortographic", icon: "assets/icons/ic_photo_white_36px.svg"},
-      { name: "perspective", icon: "assets/icons/ic_camera_enhance_white_36px.svg"},
-      { name: "stereoscopic",icon: "assets/icons/ic_view_agenda_white_36px.svg"}
+      { name: "ortographic", icon: "icons/ic_photo_white_36px.svg"},
+      { name: "perspective", icon: "icons/ic_camera_enhance_white_36px.svg"},
+      { name: "stereoscopic",icon: "icons/ic_view_agenda_white_36px.svg"}
   ];
 
   $scope.camClick = function(cam) {
 
     if ( cam.name == "ortographic" ) {
       camera.useOrtographic();
-    } else {
+    } 
+    else {
       camera.usePerspective();
     }
   };
 
   $scope.views = [ 
-    { name: "top", icon: "assets/icons/ic_ac_unit_white_36px.svg"},
-    { name: "side", icon: "assets/icons/ic_neuron_side_white_36px.svg"},
-    { name: "oblique",icon: "assets/icons/ic_call_received_white_36px.svg"}
+    { name: "top", icon: "icons/ic_ac_unit_white_36px.svg"},
+    { name: "side", icon: "icons/ic_neuron_side_white_36px.svg"},
+    { name: "oblique",icon: "icons/ic_call_received_white_36px.svg"}
   ];
 
-  $scope.viewClick = function(view) {
+  $scope.viewClick = function (view) {
 
     var bbox = mesh.getVisibleBBox();
 
-    if ( view.name == "top") {
+    if (view.name == "top") {
       camera.lookBBoxFromTop(bbox);
     }
-    else if ( view.name == "side") {
+    else if (view.name == "side") {
       camera.lookBBoxFromSide(bbox);
     } 
     else {
       camera.lookBBoxFromOblique(bbox);
     }
   };
-
-
 });
 
 

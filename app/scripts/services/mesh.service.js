@@ -4,11 +4,9 @@
 ( function (app) { 
 
 app.service('mesh', function (scene, camera, cells, CacheFactory) {
+  var cache = CacheFactory('meshes', { capacity: 50 });
 
-
-  var cache = CacheFactory('meshes',{capacity: 50});
-
-  function get ( cell_id , callback) {
+  function get (cell_id , callback) {
 
     var cell = cache.get( cell_id.toString() );
     if ( cell !== undefined ) {
@@ -26,7 +24,7 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 
   function createCell ( cell , callback) {
 
-    var url = '/api/mesh/'+cell.segment;
+    var url = '/1.0/mesh/'+cell.segment;
 
     var ctm = new THREE.CTMLoader(false);
     ctm.load( url , function(geometry) { 

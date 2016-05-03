@@ -1,13 +1,11 @@
-<link rel="stylesheet" href="app/app.css">
-<div  layout="column" ng-cloak="" class="viewer" layout-fill>
+<div layout="column" ng-cloak="" class="viewer" layout-fill>
 
   <section layout="row" flex="grow">
     <md-content layout="row" flex="grow">
     
       <md-button class="md-fab md-primary" id="back" aria-label="back" ng-click="goBack()">
-        <md-icon md-svg-icon="assets/icons/ic_arrow_back_white_36px.svg"></md-icon>
+        <md-icon md-svg-icon="icons/ic_arrow_back_white_36px.svg"></md-icon>
       </md-button>
-
 
       <div layout="row" layout-align="center end"  style="position: absolute; bottom: 0px; left:0px; height: 0px;" 
         ng-style="{ 'right' : isOpenRight() ? width : 0 }" flex="none">
@@ -23,7 +21,7 @@
             <md-fab-trigger>
               <md-button aria-label="menu" class="md-primary md-raised">
                 <md-tooltip md-direction="left" md-visible="tooltipVisible">switch camera</md-tooltip>
-                <md-icon md-svg-src="assets/icons/ic_switch_camera_white_36px.svg" aria-label="switch camera"></md-icon>
+                <md-icon md-svg-src="icons/ic_switch_camera_white_36px.svg" aria-label="switch camera"></md-icon>
               </md-button>
             </md-fab-trigger>
 
@@ -53,7 +51,7 @@
             <md-fab-trigger>
               <md-button aria-label="menu" class="md-primary md-raised">
                 <md-tooltip md-direction="right" md-visible="tooltipVisible">set view</md-tooltip>
-                <md-icon md-svg-src="assets/icons/ic_remove_red_eye_white_36px.svg" aria-label="set view"></md-icon>
+                <md-icon md-svg-src="icons/ic_remove_red_eye_white_36px.svg" aria-label="set view"></md-icon>
               </md-button>
             </md-fab-trigger>
 
@@ -76,11 +74,10 @@
         <md-button ng-click="toggle()" class="md-primary md-raised"  
           style="position: absolute; right: 0px; bottom:0px"
           aria-label="toggle menu" >
-          <md-icon ng-hide="isOpenRight()" md-svg-icon="assets/icons/ic_chevron_left_white_36px.svg" ></md-icon>
-          <md-icon ng-hide="!isOpenRight()"  md-svg-icon="assets/icons/ic_chevron_right_white_36px.svg"></md-icon>
+          <md-icon ng-hide="isOpenRight()" md-svg-icon="icons/ic_chevron_left_white_36px.svg" ></md-icon>
+          <md-icon ng-hide="!isOpenRight()"  md-svg-icon="icons/ic_chevron_right_white_36px.svg"></md-icon>
         </md-button>
       </div>
-     
 
       <viewport layout="row" flex="grow"></viewport>
 
@@ -109,7 +106,7 @@
               We do not currently have a wiki page for this class yet.
               <br>
               <br>
-              <a class="btn btn-info" target="_blank" href="http://wiki.eyewire.org:88/index.php?title={{ set.name }}&action=edit">
+              <a class="btn btn-info" target="_blank" href="http://wiki.eyewire.org/index.php?title={{ set.name }}&action=edit">
                 Help Contribute!
               </a>
             </p>

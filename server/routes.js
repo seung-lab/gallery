@@ -20,7 +20,7 @@ module.exports = function(app) {
 
   app.use('/auth', require('./auth'));
 
-  app.route('/')
+  app.route([ '/', '/search', '/viewer' ])
     .get(function(req, res) {
       res.sendfile(app.get('appPath') + '/index.html');
   });
