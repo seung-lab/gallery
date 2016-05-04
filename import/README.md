@@ -6,7 +6,7 @@ The Museum currently supports four kinds of data:
 1. Cell Information: Cell Ids, cell type, coarse & fine depth, et cetera
 	- Located: `rawdata/ganglion_cell_info.m` (Matlab/Octave code file)
 	- `octave generate_cell_json.m`
-	- Outputs: data/cells.json which still needs further processing by Python
+	- Outputs: data/ganglion_cells.json which still needs further processing by Python
 
 2. Stratification: The corrected depth profiles of each cell
 	- Located: rawdata/strat.mat (Matlab/Octave matrix)
