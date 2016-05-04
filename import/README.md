@@ -6,7 +6,7 @@ The Museum currently supports four kinds of data:
 1. Cell Information: Cell Ids, cell type, coarse & fine depth, et cetera
 	- Located: `rawdata/ganglion_cell_info.m` (Matlab/Octave code file)
 	- `octave generate_cell_json.m`
-	- Outputs: data/cells.json which still needs further processing by Python
+	- Outputs: data/ganglion_cells.json which still needs further processing by Python
 
 2. Stratification: The corrected depth profiles of each cell
 	- Located: rawdata/strat.mat (Matlab/Octave matrix)
@@ -24,13 +24,13 @@ The Museum currently supports four kinds of data:
 		ans = 
 			{
 			  [1,1] = n_rois
-			  [2,1] = roi_sums_all
-			  [3,1] = nconds
+			  [2,1] = roi_sums_all % the Ca2+ data, roi_data.roi_sums_all(DATAINDEX, CELL)
+			  [3,1] = nconds % number of experimental conditions?
 			  [4,1] = roi_borders
 			  [5,1] = roi_centers
-			  [6,1] = cell_dict
-			  [7,1] = frames_per_condition
-			  [8,1] = angles
+			  [6,1] = cell_dict % Omni => Eyewire cell IDs
+			  [7,1] = frames_per_condition % data points per experiment per cell?
+			  [8,1] = angles % angles the light was strobed at?
 			}```
 
 
