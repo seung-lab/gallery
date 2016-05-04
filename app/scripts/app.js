@@ -20,6 +20,12 @@ app.config(function ($urlRouterProvider, $locationProvider, $httpProvider) {
     $httpProvider.interceptors.push('authInterceptor');
 });
 
+// Use in production for performance speedup
+// https://medium.com/@hackupstate/improving-angular-performance-with-1-line-of-code-a1fb814a6476#.7gwddf1ni
+app.config(['$compileProvider', function ($compileProvider) {
+  $compileProvider.debugInfoEnabled(false);
+}]);
+
 app.factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
     return {
       // Add authorization token to headers
@@ -46,7 +52,7 @@ app.factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location
     };
 });
 
-//This is to allow cross-origin requests
+// This is to allow cross-origin requests
 app.config(function ($httpProvider) {        
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 });
