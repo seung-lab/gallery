@@ -9,10 +9,13 @@ disp('Importing....');
 
 gcs = ganglion_cell_info();
 savejson('', gcs, 
-	'FileName', './data/cells.json',
+	'FileName', './data/ganglion_cells.json',
 	'Compact', 0,
 	'ParseLogical', 1
 );
 
-disp('Cell data has been saved to ./data/cells.json');
+disp('Cell data has been saved to ./data/ganglion_cells.json');
+
+
+
 
