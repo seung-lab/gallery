@@ -1,0 +1,3 @@
+[submodule "import/jsonlab"]
+	path = import/jsonlab
+	url = git@github.com:fangq/jsonlab.git

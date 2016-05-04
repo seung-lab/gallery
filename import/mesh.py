@@ -7,7 +7,7 @@ class Meshes:
     pass
 
   def omni_export(self,segment):
-    cmd ="/omniData/omni/omni.omnify/omni.export --path /omniData/e2198_reconstruction/mesh.omni --segId "+str(segment)+" --mip 1 --resolution 17,17,24 --obj 2>/dev/null > mesh/"+str(segment)+".obj"
+    cmd = "/omniData/omni/omni.omnify/omni.export --path /omniData/e2198_reconstruction/mesh.omni --segId " + str(segment) + " --mip 1 --resolution 17,17,24 --obj 2>/dev/null > mesh/" + str(segment) + ".obj"
     print cmd
     os.system(cmd)
 

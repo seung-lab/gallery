@@ -7,6 +7,6 @@ module.exports = {
   mongo: {
     uri: 'mongodb://localhost/gallery-dev'
   },
-
+  port: 80,
   seedDB: true
 };

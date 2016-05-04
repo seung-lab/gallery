@@ -16,7 +16,7 @@ var cells = require('./cells.model');
 exports.index = function(req, res) {
 
   cells.find(function (err, cell) {
-    if(err) { return handleError(res, err); }
+    if (err) { return handleError(res, err); }
     return res.json(200, cell);
   });
 
@@ -27,9 +27,9 @@ exports.show = function(req, res) {
 
   cells.findOne({ id: req.params.id }, function (err, cell) {
     
-    if(err) { return handleError(res, err); }
+    if (err) { return handleError(res, err); }
     
-    if(!cell) { return res.send(404); }
+    if (!cell) { return res.send(404); }
   
     return res.json(cell);
   });
@@ -40,7 +40,7 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
 
   cells.create(req.body, function(err, cells) {
-    if(err) { return handleError(res, err); }
+    if (err) { return handleError(res, err); }
     return res.json(201, cells);
   });
 
@@ -50,12 +50,12 @@ exports.create = function(req, res) {
 // Updates an existing cells in the DB.
 exports.update = function(req, res) {
 
-  if(req.body._id) { delete req.body._id; }
+  if (req.body._id) { delete req.body._id; }
   
   cells.findOne({ id: req.params.id }, function (err, cell) {
   
     if (err) { return handleError(res, err); }
-    if(!cell) { return res.send(404); }
+    if (!cell) { return res.send(404); }
   
     var updated = _.merge(cell, req.body);
   
@@ -71,11 +71,11 @@ exports.destroy = function(req, res) {
 
   cells.findOne({ id: req.params.id }, function (err, cell) {
 
-    if(err) { return handleError(res, err); }
-    if(!cell) { return res.send(404); }
+    if (err) { return handleError(res, err); }
+    if (!cell) { return res.send(404); }
 
     cell.remove(function(err) {
-      if(err) { return handleError(res, err); }
+      if (err) { return handleError(res, err); }
       return res.send(204);
     });
 
