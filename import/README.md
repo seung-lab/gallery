@@ -24,7 +24,7 @@ The Museum currently supports four kinds of data:
 		ans = 
 			{
 			  [1,1] = n_rois
-			  [2,1] = roi_sums_all % the Ca2+ data
+			  [2,1] = roi_sums_all % the Ca2+ data, roi_data.roi_sums_all(DATAINDEX, CELL)
 			  [3,1] = nconds % number of experimental conditions?
 			  [4,1] = roi_borders
 			  [5,1] = roi_centers
