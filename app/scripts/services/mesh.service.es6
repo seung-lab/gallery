@@ -1,9 +1,11 @@
 'use strict';
+
 // Adds a new model to the viewer with the provided x, y offset from the UI.This specific model
 // creates a tube that follows a collection of 3d points.
 
 app.service('mesh', function (scene, camera, cells, CacheFactory) {
 	var cache = CacheFactory('meshes', { capacity: 50 });
+
 
 	function get (cell_id, callback) {
 		var cell = cache.get(cell_id.toString());
@@ -36,12 +38,14 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 		}, { 'useWorker': true } );
 	}
 
-	this.display = function( neurons , callback) {
-		
-		var loaded = 0;
-		var to_load = neurons.length; 
-		for (var i in neurons) {
+	this.display = function (neurons, callback) {
+		if (!Array.isArray(neurons)) {
+			neurons = [ neurons ];
+		}
 
+		let loaded = 0;
+		
+		for (let i = 0; i < neurons.length; i++) {
 			var cell_id = neurons[i];
 
 			get(cell_id, function () {
@@ -49,7 +53,7 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 
 				// When all the neurons has being loaded , the callback is call
 				// This is used in the viewer to set the camera
-				if (loaded == to_load) {
+				if (loaded == neurons.length) {
 					callback();
 				}
 			});
@@ -59,7 +63,7 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 
 	this.toggleVisibility = function (cell_id) {
 
-		get(cell_id, function(cell) { 
+		get(cell_id, function (cell) { 
 			if (cell.mesh.visible == true) {
 				cell.mesh.visible = false;
 			}
@@ -73,13 +77,9 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 
 	// FIXME the for loop will get all the elements, making the cache not remove the old elements not in use
 	this.getVisibleBBox = function () {
-
 		var bbox = new THREE.Box3();
 
-		var keys = cache.keys()
-
-		for (var i of keys) {
-			var cell_id = keys[i];
+		for (let cell_id of cache.keys()) {
 			get(cell_id, function (cell) { 
 				if (cell.mesh.visible) {
 					var meshBbox = cell.mesh.geometry.boundingBox;
