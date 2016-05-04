@@ -24,13 +24,13 @@ The Museum currently supports four kinds of data:
 		ans = 
 			{
 			  [1,1] = n_rois
-			  [2,1] = roi_sums_all
-			  [3,1] = nconds
+			  [2,1] = roi_sums_all % the Ca2+ data
+			  [3,1] = nconds % number of experimental conditions?
 			  [4,1] = roi_borders
 			  [5,1] = roi_centers
-			  [6,1] = cell_dict
-			  [7,1] = frames_per_condition
-			  [8,1] = angles
+			  [6,1] = cell_dict % Omni => Eyewire cell IDs
+			  [7,1] = frames_per_condition % data points per experiment per cell?
+			  [8,1] = angles % angles the light was strobed at?
 			}```
 
 
