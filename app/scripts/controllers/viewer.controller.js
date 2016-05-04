@@ -2,14 +2,17 @@
 
 // include axes for debugging
 app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $log, $state, $document, $window, mesh, camera) {
+  
+  $scope.neurons = $state.params.neurons.split(/ ?, ?/).map(function (cid) {
+    return parseInt(cid, 10);
+  });
 
-  mesh.display($state.params.neurons, function () { 
+  mesh.display($scope.neurons, function () { 
     var bbox = mesh.getVisibleBBox();
     camera.lookBBoxFromSide(bbox);
   });
 
-
-  // Right sidenav , toggle, and resizing
+  // Right sidenav, toggle, and resizing
   var maxWidth = $window.innerWidth * 0.9;
   var minWidth = $window.innerWidth * 0.15;
   $scope.width =  $window.innerWidth * 0.2;

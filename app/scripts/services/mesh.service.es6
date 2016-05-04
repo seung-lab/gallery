@@ -45,9 +45,7 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 
 		let loaded = 0;
 		
-		for (let i = 0; i < neurons.length; i++) {
-			var cell_id = neurons[i];
-
+		for (let cell_id of neurons) {
 			get(cell_id, function () {
 				loaded++;
 
