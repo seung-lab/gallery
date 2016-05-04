@@ -9,9 +9,7 @@
  * DELETE  /cells/:id          ->  destroy
  */
 
-
-app.service('cells', [ '$resource',
-    function ($resource) {
+app.service('cells', [ '$resource', function ($resource) {
     // AngularJS will instantiate a singleton by calling "new" on this function
 
       var api = $resource('/1.0/cells/:id', { id: '@_id'  } ,
