@@ -14,9 +14,9 @@ struct('name','1ni','annotation','','cells',[20164 17182 20132 26019 26087]);
 % mini-j. outlier: 17130
 struct('name','2an','annotation','mini-J','cells',[17177 20066 20060 17027 15018 17105 15066 10017 10010 17062 50001 20264 20168 20147 17130 20101 20024 26190 26026 26049 26082 26129 26147 26172 26041]);
 % 
-% midi-J outlier: 17144 17061 suspicious: 26095 17200 26055 20201
+% midi-J: 17144(>>3o?) 17061 0201 26095 17200 26055 26189(>>3x?)
 struct('name','2aw','annotation','midi-J','cells',[17075 17060 17028 20103 20201 17205 17107 20047 17144 17061 17200 26018 26150 26163 26189 26193 26095 26055 17024]); 
-% 
+%
 struct('name','2o','annotation','','cells',[17216 10005 10013 26062 26118]);
 % suspicious: 17192 (26126<>26131)
 struct('name','2i','annotation','','cells',[50004 17013 17092 20051 20234 20082 26109 17192 26157 26126]);
@@ -25,7 +25,7 @@ struct('name','3o','annotation','','cells',[26155 20121 17037 17076]);
 % mini tOffAlpha
 struct('name','3i','annotation','mini-sOFFalpha','cells',[17135 20107 17077 26063 26104 26116 26188]);
 %
-struct('name','3x','annotation','mini-sOFFalpha','cells',[26003 26038 26110 26131]);
+struct('name','3x','annotation','','cells',[26003 26038 26110 26131]);
 % 
 
 
