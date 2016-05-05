@@ -12,16 +12,18 @@ app.directive('viewport', [ 'camera', '$timeout', function (Camera, $timeout) {
       link: function (scope, element, attribute) {
 
         // create the renderer
-        var renderer = new THREE.WebGLRenderer({ antialias: true});
+        var renderer = new THREE.WebGLRenderer({ 
+          antialias: true,
+          alpha: true,
+        });
 
         //TODO implement stereoscopic
         // var renderer = new THREE.CSS3DStereoRenderer();
         // renderer.domElement.style.position = 'absolute';
 
-        renderer.setClearColor('#F2F2F2', 1 );
-        renderer.fillStyle = "rgba(0, 0, 200, 0.5)";
+        renderer.setClearColor(0xff0000, 0);
         renderer.sortObjects = true;
-
+        renderer.clear();
 
         // add renderer to DOM
         element[0].appendChild(renderer.domElement);
