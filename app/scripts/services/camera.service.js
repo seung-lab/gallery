@@ -1,6 +1,5 @@
 'use strict';
 
-( function(app, THREE) {
 // Returns a single instance of a camera.  Consumed by directive and controls.
 app.factory('camera', function (scene) {
 
@@ -98,7 +97,7 @@ app.factory('camera', function (scene) {
 
     this.initController = function( renderer ) {
   		_this.renderer = renderer;
-      _this.controls = new THREE.TrackballControls( _this.orthographicCam , renderer.domElement );
+      _this.controls = new THREE.TrackballControls( _this.perspectiveCam , renderer.domElement );
 			_this.controls.addEventListener( 'change', _this.render );
 
       _this.animate();
@@ -118,8 +117,6 @@ app.factory('camera', function (scene) {
       var height = bbox.size().z;
       var width = bbox.size().y;
       this.zoomOrtographicBBox(height , width);
-
-
     };
 
 
@@ -158,10 +155,11 @@ app.factory('camera', function (scene) {
       height = Math.max( width / _this.aspectRatio, height)
       var zoomFactor = 1.2
 
-      _this.controls.object.left  = 0.0 + _this.aspectRatio * height/ 2  * zoomFactor;// Camera frustum left plane.
-      _this.controls.object.right = 0.0 - _this.aspectRatio * height/ 2 * zoomFactor;// Camera frustum right plane.
-      _this.controls.object.top    = 0.0 - height / 2 * zoomFactor; // Camera frustum top plane.
-      _this.controls.object.bottom = 0.0 + height / 2 * zoomFactor;// Camera frustum bottom plane.
+      // Camera frustums
+      _this.controls.object.left = _this.aspectRatio * height / 2  * zoomFactor; 
+      _this.controls.object.right = -_this.aspectRatio * height / 2 * zoomFactor; 
+      _this.controls.object.top = -height / 2 * zoomFactor; 
+      _this.controls.object.bottom = height / 2 * zoomFactor;
 
       _this.controls.reset();
       _this.controls.orthoZoom = true;
@@ -177,5 +175,3 @@ app.factory('camera', function (scene) {
 
     return this;
 });
-
-})(app, THREE);

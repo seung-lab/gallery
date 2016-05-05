@@ -18,7 +18,8 @@ app.directive('viewport', [ 'camera', '$timeout', function (Camera, $timeout) {
         // var renderer = new THREE.CSS3DStereoRenderer();
         // renderer.domElement.style.position = 'absolute';
 
-        renderer.setClearColor('#F2F2F2', 1.0 );
+        renderer.setClearColor('#F2F2F2', 1 );
+        renderer.fillStyle = "rgba(0, 0, 200, 0.5)";
         renderer.sortObjects = true;
 
 

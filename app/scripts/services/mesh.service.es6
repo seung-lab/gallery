@@ -26,14 +26,21 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 
 		var url = '/1.0/mesh/' + cell.segment;
 
-		var ctm = new THREE.CTMLoader(false);
+		var ctm = new THREE.CTMLoader(false); // showstatus: false
 		ctm.load(url, function (geometry) { 
-			cell.material = new THREE.MeshLambertMaterial({ color:cell.color, wireframe: false, transparent: true, opacity: 1.0 });
+			cell.material = new THREE.MeshLambertMaterial({ 
+				color: cell.color, 
+				wireframe: false, 
+				transparent: false, 
+				opacity: 1.0,
+			});
+
 			cell.mesh = new THREE.Mesh(geometry, cell.material);
 			cell.mesh.visible = true; 
 			scene.add(cell.mesh);
 
 			geometry.computeBoundingBox();
+
 			callback(cell);
 		}, { 'useWorker': true } );
 	}
@@ -109,15 +116,15 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 	this.setOpacity = function (cell_id, opacity ) {
 		
 		get(cell_id, function (cell) {
-			if (opacity == 1.0) {
-				cell.mesh.material.transparent = false;
-			}
-			else {
-				cell.mesh.material.transparent = true;
-			}
+			// if (opacity == 1.0) {
+			// 	cell.mesh.material.transparent = false;
+			// }
+			// else {
+			// 	cell.mesh.material.transparent = true;
+			// }
 
-			cell.mesh.material.opacity = opacity;
-			cell.mesh.material.needsUpdate = true;
+			// cell.mesh.material.opacity = opacity;
+			// cell.mesh.material.needsUpdate = true;
 			camera.render();
 		});
 
