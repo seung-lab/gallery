@@ -64,7 +64,7 @@ THREE.TrackballControls = function (object, domElement) {
 	_lastAngle = 0,
 
 	_zoomAmt = 0,
-	_zoomMin = 2e2,
+	_zoomMin = 4e2,
 	_zoomMax = 1e5,
 
 	_touchZoomDistanceStart = 0,
@@ -226,13 +226,26 @@ THREE.TrackballControls = function (object, domElement) {
     		var len = _eye.length();
     		var newlen = _eye.clone().multiplyScalar(factor).length();
 
+    		if (newlen < _zoomMin) {
+    			factor *= 1.2;
+    		}
+    		else if (newlen > _zoomMax) {
+    			factor *= 0.95;
+    		}
+
+    		if ((factor > 0.9 && factor < 1 && len - _zoomMin < 400)
+    			|| (factor > 1 && factor < 1.05 && len - _zoomMax > -(_zoomMax * 0.05))) {
+
+    			factor = 1
+    		}
+
     		if (len === 0) {
     			_eye.set(0.1, 0.1, 0.1);
     		}
-    		else if (newlen < _zoomMin) {
+    		else if (newlen < _zoomMin / 2) {
     			_zoomAmt = 0;
     		}
-    		else if (newlen > _zoomMax) {
+    		else if (newlen > _zoomMax * 10) {
     			_zoomAmt = 0;
     		}
     		else {
