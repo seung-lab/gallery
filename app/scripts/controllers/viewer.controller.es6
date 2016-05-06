@@ -117,8 +117,9 @@ app.controller('ViewerCtrl', [
 
   angular.element(window).off('keydown.sidebarToggle').on('keydown.sidebarToggle', function (evt) {
     if (evt.keyCode === 32) {
-      $scope.toggle();
-      $scope.$apply();
+      $scope.$apply(function () {
+        $scope.toggle();  
+      });
     }
   });
 
