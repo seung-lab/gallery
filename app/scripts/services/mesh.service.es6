@@ -4,8 +4,9 @@
 // creates a tube that follows a collection of 3d points.
 
 app.service('mesh', function (scene, camera, cells, CacheFactory) {
-	var cache = CacheFactory('meshes', { capacity: 50 });
+	let _cache = CacheFactory('meshes', { capacity: 50 });
 
+	let _displayed = [];
 
 	function get (cell_id, callback) {
 		if (!cell_id) {
@@ -13,7 +14,7 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 			return;
 		}
 
-		var cell = cache.get(cell_id.toString());
+		let cell = _cache.get(cell_id.toString());
 
 		if (cell) {
 			callback(cell);
@@ -21,7 +22,7 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 		else {
 			cells.show(cell_id, function (cell) {
 				createCell(cell, function (cell) {
-					cache.put(cell_id.toString(), cell);
+					_cache.put(cell_id.toString(), cell);
 					callback(cell);
 				});
 			});
@@ -29,9 +30,9 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 	}
 
 	function createCell (cell, callback) {
-		var url = '/1.0/mesh/' + cell.segment;
+		let url = '/1.0/mesh/' + cell.segment;
 
-		var ctm = new THREE.CTMLoader(false); // showstatus: false
+		let ctm = new THREE.CTMLoader(false); // showstatus: false
 		ctm.load(url, function (geometry) { 
 			cell.material = new THREE.MeshLambertMaterial({ 
 				color: cell.color, 
@@ -42,7 +43,9 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 
 			cell.mesh = new THREE.Mesh(geometry, cell.material);
 			cell.mesh.visible = true; 
+
 			scene.add(cell.mesh);
+			_displayed.push(cell.mesh);
 
 			geometry.computeBoundingBox();
 
@@ -65,9 +68,21 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 				// This is used in the viewer to set the camera
 				if (loaded == neurons.length) {
 					callback();
+					
+					camera.render();
 				}
 			});
 		}
+	};
+
+	this.clear = function () {
+		for (let msh of _displayed) {
+			scene.remove(msh);
+		}
+
+		_displayed = [];
+		
+		camera.render();
 	};
 
 	this.toggleVisibility = function (cell_id) {
@@ -86,12 +101,12 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 
 	// FIXME the for loop will get all the elements, making the cache not remove the old elements not in use
 	this.getVisibleBBox = function () {
-		var bbox = new THREE.Box3();
+		let bbox = new THREE.Box3();
 
-		for (let cell_id of cache.keys()) {
+		for (let cell_id of _cache.keys()) {
 			get(cell_id, function (cell) { 
 				if (cell.mesh.visible) {
-					var meshBbox = cell.mesh.geometry.boundingBox;
+					let meshBbox = cell.mesh.geometry.boundingBox;
 					bbox.union(meshBbox)
 				}
 			});
@@ -102,13 +117,13 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 	}
 
 
-	var showBoundingBox = function (bbox) {
+	let showBoundingBox = function (bbox) {
 
-		var box_geometry = new THREE.BoxGeometry( bbox.max.x - bbox.min.x , bbox.max.y - bbox.min.y , bbox.max.z - bbox.min.z );
-		var material = new THREE.MeshBasicMaterial({ color: 0x000, wireframe: true });
-		var cube = new THREE.Mesh( box_geometry, material );
+		let box_geometry = new THREE.BoxGeometry( bbox.max.x - bbox.min.x , bbox.max.y - bbox.min.y , bbox.max.z - bbox.min.z );
+		let material = new THREE.MeshBasicMaterial({ color: 0x000, wireframe: true });
+		let cube = new THREE.Mesh( box_geometry, material );
 
-		var scale = 1.0;
+		let scale = 1.0;
 		cube.position.set(
 			(bbox.max.x + bbox.min.x) / 2.0, 
 			(bbox.max.y + bbox.min.y) / 2.0 * scale, 

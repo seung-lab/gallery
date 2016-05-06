@@ -12,6 +12,8 @@ app.controller('ViewerCtrl', [
     return parseInt(cid, 10);
   });
 
+  mesh.clear();
+
   mesh.display($scope.neurons, function () { 
     var bbox = mesh.getVisibleBBox();
     camera.lookBBoxFromSide(bbox);
