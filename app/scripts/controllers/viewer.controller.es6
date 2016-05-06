@@ -21,11 +21,23 @@ app.controller('ViewerCtrl', [
 
   // Quick Search
 
+  $scope.cells = [];
+  $scope.celltypes = [];
+  $scope.cellname = [];
+
   cells.list()
     .then(function (cellinfos) {
+      $scope.cells = cellinfos.filter(function (cell) {
+        return $scope.neurons.indexOf(parseInt(cell.id, 10)) !== -1;
+      });
+
+      $scope.cellnames = _.uniq($scope.cells.map( (cell) => cell.name ));
+      $scope.celltypes = _.uniq($scope.cells.map( (cell) => cell.type ));
+
       self.states = loadAllAutocompletes(cellinfos);
+
       return cellinfos;
-    })
+    });
 
       /**
    * Populates the autocomplete list shown
@@ -57,10 +69,11 @@ app.controller('ViewerCtrl', [
     if ($scope.selectedItem) {
       $scope.goToResult($scope.selectedItem);
     }
-    
-    let results = $scope.querySearch($scope.txt);
-    if (results.length) {
-      $scope.goToResult(results[0]);
+    else {
+      let results = $scope.querySearch($scope.txt);
+      if (results.length) {
+        $scope.goToResult(results[0]);
+      }
     }
   };
 

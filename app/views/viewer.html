@@ -57,6 +57,16 @@
           init="initChart()" />
       </div> 
 
+      <h1>Cell Types Present</h1>
+      <div ng-repeat="name in cellnames">
+        {{name}}
+      </div>
+
+      <h1>Cell Classes Present</h1>
+      <div ng-repeat="type in celltypes">
+        {{type}}
+      </div>
+
       <h1>Preferred Direction</h1>
 
       <p>The following data is based on a calcium imaging experiment using lights strobed in particular directions.</p>

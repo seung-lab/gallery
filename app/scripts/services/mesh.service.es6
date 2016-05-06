@@ -3,7 +3,7 @@
 // Adds a new model to the viewer with the provided x, y offset from the UI.This specific model
 // creates a tube that follows a collection of 3d points.
 
-app.service('mesh', function (scene, camera, cells, CacheFactory) {
+app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 	let _cache = CacheFactory('meshes', { capacity: 50 });
 
 	let _displayed = [];
@@ -16,20 +16,24 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 
 		let cell = _cache.get(cell_id.toString());
 
-		if (cell) {
-			callback(cell);
-		}
-		else {
-			cells.show(cell_id, function (cell) {
-				createCell(cell, function (cell) {
-					_cache.put(cell_id.toString(), cell);
-					callback(cell);
+		return $q(function (resolve, reject) {
+			if (cell) {
+				resolve(cell);
+				callback(cell);
+			}
+			else {
+				cells.show(cell_id, function (cell) {
+					createModel(cell, function (cell) {
+						_cache.put(cell_id.toString(), cell);
+						resolve(cell);
+						callback(cell);
+					});
 				});
-			});
-		}
+			}
+		});
 	}
 
-	function createCell (cell, callback) {
+	function createModel (cell, callback) {
 		let url = '/1.0/mesh/' + cell.segment;
 
 		let ctm = new THREE.CTMLoader(false); // showstatus: false
@@ -44,9 +48,6 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 			cell.mesh = new THREE.Mesh(geometry, cell.material);
 			cell.mesh.visible = true; 
 
-			scene.add(cell.mesh);
-			_displayed.push(cell.mesh);
-
 			geometry.computeBoundingBox();
 
 			callback(cell);
@@ -58,21 +59,23 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 			neurons = [ neurons ];
 		}
 
-		let loaded = 0;
+		let loaded = [];
 		
 		for (let cell_id of neurons) {
-			get(cell_id, function (cell) {
-				loaded++;
+			let promise = get(cell_id, function (cell) {
+				scene.add(cell.mesh);
+				_displayed.push(cell.mesh);
 
-				// When all the neurons has being loaded , the callback is call
-				// This is used in the viewer to set the camera
-				if (loaded == neurons.length) {
-					callback();
-					
-					camera.render();
-				}
+				camera.render();
 			});
+
+			loaded.push(promise);
 		}
+
+		$q.all(loaded).then(function () {
+			callback();		
+			camera.render();
+		});
 	};
 
 	this.clear = function () {
