@@ -438,8 +438,7 @@ THREE.TrackballControls = function (object, domElement) {
 			_movePrev.copy(_moveCurr);
 		} 
 		else if (_state === STATE.ZOOM && !_this.noZoom) {
-			_zoomStart.copy(getMouseOnScreen(event.pageX, event.pageY));
-			_zoomEnd.copy(_zoomStart);
+		
 		} 
 		else if (_state === STATE.PAN && !_this.noPan) {
 			_panStart.copy(getMouseOnScreen(event.pageX, event.pageY));

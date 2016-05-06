@@ -5,7 +5,7 @@
 // Currently the Renderer and controls are part of the directive but could just as easily be 
 // moved into their own services if functionality they provide need to be manipulated by a UI control.
 
-app.directive('viewport', [ 'camera', '$timeout', function (Camera, $timeout) {
+app.directive('viewport', [ 'camera', '$timeout', function (camera, $timeout) {
     return {
       restrict: "AE",
 
@@ -31,25 +31,25 @@ app.directive('viewport', [ 'camera', '$timeout', function (Camera, $timeout) {
         renderer.domElement.removeAttribute("height");
         renderer.domElement.removeAttribute("width");
         
-        Camera.initController(renderer);
+        camera.initController(renderer);
 
-        $timeout( onResize, 0 , false);
+        $timeout(onResize, 0, false);
 
         // handles resizing the renderer when the window is resized
         window.addEventListener('resize', function (event) {
           onResize();
         });
 
-        scope.$on('resize',function() {
-          $timeout(onResize, 100 , false);
+        scope.$on('resize',function () {
+          $timeout(onResize, 100, false);
         });
 
       function onResize() {
         var width  = element[0].offsetWidth;
         var height = element[0].offsetHeight;
 
-        renderer.setSize( width , height );
-        Camera.setViewSize( width , height );
+        renderer.setSize(width, height);
+        camera.setViewSize(width, height);
       }
     }
   }

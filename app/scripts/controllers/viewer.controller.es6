@@ -49,10 +49,11 @@ app.controller('ViewerCtrl', [
     });
   };
 
-  $scope.keydown = function (evt) {
+  $scope.searchKeydown = function (evt) {
     if (evt.keyCode !== 13) { // enter key
       return;
     }
+
     if ($scope.selectedItem) {
       $scope.goToResult($scope.selectedItem);
     }
@@ -100,6 +101,13 @@ app.controller('ViewerCtrl', [
   // Sidebar
 
   $scope.sidebar_open = false;
+
+  angular.element(window).on('keydown', function (evt) {
+    if (evt.keyCode === 32) {
+      $scope.toggle();
+      $scope.$apply();
+    }
+  });
 
   $scope.toggle = function () {
     $scope.sidebar_open = !$scope.sidebar_open;
