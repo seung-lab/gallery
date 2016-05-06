@@ -82,7 +82,7 @@ app.controller('SearchController', function ($scope, $timeout, $state, cells) {
 			let card = base_cards[i];
 			 	
 			if (card.name.toLowerCase().indexOf(queryText) > -1
-				|| card.neurons.toLowerCase().indexOf(queryText) > -1
+				|| card.neurons.indexOf(queryText) > -1
 				|| card.description.toLowerCase().indexOf(queryText) > -1) {
 
 				cards.push(base_cards[i]);
