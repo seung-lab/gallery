@@ -1,6 +1,4 @@
 'use strict';
-
-(function (app) {
   
 app.directive('chart', [ '$timeout', function ($timeout) {
         
@@ -23,15 +21,15 @@ app.directive('chart', [ '$timeout', function ($timeout) {
           grouped: false
         },
         transition: {
-          duration: 0 //Disable animation for faster loading
+          duration: 0 // Disable animation for faster loading
         },
         point: {
           show: true,
-          r:1,
+          r: 1,
           focus: {
             expand: {
               enabled: true,
-              r:4
+              r: 4
             }
           }
         },
@@ -49,10 +47,8 @@ app.directive('chart', [ '$timeout', function ($timeout) {
         },
       };
 
-
       scope.chart = c3.generate(config);
 
- 
       scope.$on('$destroy', function () {
           $timeout(function(){
               if (angular.isDefined(scope.chart)) {
@@ -67,22 +63,21 @@ app.directive('chart', [ '$timeout', function ($timeout) {
   };
 
   return {
-    "restrict": "E",
-    "scope": {
-        "bindto": "@bindtoId",
-        "chart" : "=",
-        "onLegendClick" : '&',
-        "onLegendMouseover": '&',
-        "onLegendMouseout": '&',
-        "init": "&"
-
+    restrict: "E",
+    scope: {
+        bindto: "@bindtoId",
+        chart: "=",
+        onLegendClick: '&',
+        onLegendMouseover: '&',
+        onLegendMouseout: '&',
+        init: "&",
     },
-    "template": "<div><div id='{{bindto}}'></div><div ng-transclude></div></div>",
-    "replace": false,
-    "transclude": true,
-    "link": chartLinker
+    template: "<div><div id='{{bindto}}'></div><div ng-transclude></div></div>",
+    replace: false,
+    transclude: true,
+    link: chartLinker,
   };
 
 }]);
    
-})(app);
+

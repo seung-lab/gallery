@@ -18,9 +18,9 @@
   <div class="controls">
     <div class="group">
       <div ng-repeat="cam in cameras">
-        <md-button aria-label="{{cam.name}}" class="md-fab md-mini md-raised {{cam.name}}" ng-click="camClick(cam)">
+        <md-button aria-label="{{cam}}" class="md-fab md-mini md-raised {{cam}}" ng-click="camClick(cam)">
           <md-tooltip md-direction="left" md-visible="tooltipVisible" md-autohide="false">
-            {{cam.name}}
+            {{cam}}
           </md-tooltip>
         </md-button>
       </div>
@@ -28,9 +28,9 @@
 
      <div class="group">
       <div ng-repeat="view in views">
-        <md-button aria-label="{{view.name}}" class="md-fab md-mini md-raised {{view.name}}" ng-click="viewClick(view)">
+        <md-button aria-label="{{view}}" class="md-fab md-mini md-raised {{view}}" ng-click="viewClick(view)">
           <md-tooltip md-direction="left" md-visible="tooltipVisible" md-autohide="false">
-            {{view.name}}
+            {{view}}
           </md-tooltip>
         </md-button>
       </div>
@@ -42,44 +42,37 @@
     <md-icon ng-hide="!isOpenRight()"  md-svg-icon="icons/right-chevron-black.svg"></md-icon>
   </md-button>
 
+  <viewport layout="row" flex="grow"></viewport>
+  <md-sidenav layour="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="right" style="position: fixed !important">
 
-   
+    <md-toolbar class="md-theme-light">
+      <h1 class="md-toolbar-tools">Information</h1>
+    </md-toolbar>
 
-      <viewport layout="row" flex="grow"></viewport>
+    <md-content  flex="grow" >
+      <div ng-controller="chartCtrl" style="margin: 5px; padding-right: 25px">
+        <chart bindto-id="chart-stratification"  chart="chart"  
+        on-legend-click="onLegendClick(cell_id)"
+        on-legend-mouseover="onLegendMouseover(cell_id)"
+        on-legend-mouseout="onLegendMouseout(cell_id)"
+        init="initChart()"></chart>
+      </div> 
+      
+      <div flex="grow" style="text-align:center; margin-top:60px;">
+        <h2 style="margin-bottom:10px;"><span style="text-decoration: underline;">Wiki Overview</span></h2>
 
-      <div id="dragbar" ng-style="{ 'right' : width-5 }" ng-hide="!isOpenRight()" ng-mousedown="dragSidenav($event)"></div>
-      <md-sidenav layour="column" ng-style="{ 'width' : width }" class="md-sidenav-right md-whiteframe-z2" 
-        md-component-id="right" style="position: fixed !important">
+        <p>
+          We do not currently have a wiki page for this class yet.
+          <br>
+          <br>
+          <a class="btn btn-info" target="_blank" href="http://wiki.eyewire.org/index.php?title={{ set.name }}&action=edit">
+            Help Contribute!
+          </a>
+        </p>
+      </div>
 
-          
-        <md-toolbar class="md-theme-light">
-          <h1 class="md-toolbar-tools">info</h1>
-        </md-toolbar>
+    </md-content>
 
-        <md-content  flex="grow" >
-          <div ng-controller="chartCtrl" style="margin: 5px; padding-right: 25px">
-            <chart bindto-id="chart-stratification"  chart="chart"  
-            on-legend-click="onLegendClick(cell_id)"
-            on-legend-mouseover="onLegendMouseover(cell_id)"
-            on-legend-mouseout="onLegendMouseout(cell_id)"
-            init="initChart()"></chart>
-          </div> 
-          
-          <div flex="grow" style="text-align:center; margin-top:60px;">
-            <h2 style="margin-bottom:10px;"><span style="text-decoration: underline;">Wiki Overview</span></h2>
-
-            <p style="max-height:500px;line-height: 150%; width:90%;  margin: 0 auto; padding-bottom:20px;">
-              We do not currently have a wiki page for this class yet.
-              <br>
-              <br>
-              <a class="btn btn-info" target="_blank" href="http://wiki.eyewire.org/index.php?title={{ set.name }}&action=edit">
-                Help Contribute!
-              </a>
-            </p>
-          </div>
-
-        </md-content>
-
-      </md-sidenav>
+  </md-sidenav>
 </main>
 

@@ -56,23 +56,11 @@ app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $state, $d
     $state.go("search");
   }
 
-  $scope.cameras = [
-      { 
-        name: "orthographic", 
-        icon: "icons/orthographic-white.svg", 
-        hovericon: "icons/orthographic-black.svg",
-      },
-      { 
-        name: "perspective", 
-        icon: "icons/perspective-white.svg",
-        hovericon: "icons/perspective-black.svg",
-      },
-      // { name: "stereoscopic",icon: "icons/ic_view_agenda_white_36px.svg" }
-  ];
+  $scope.cameras = [ "orthographic", "perspective" ];
 
-  $scope.camClick = function(cam) {
+  $scope.camClick = function (cam) {
 
-    if (cam.name === "ortographic") {
+    if (cam === "ortographic") {
       camera.useOrtographic();
     } 
     else {
@@ -80,19 +68,16 @@ app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $state, $d
     }
   };
 
-  $scope.views = [ 
-    { name: "top", icon: "icons/view-top-white.svg"},
-    { name: "side", icon: "icons/view-side-white.svg"},
-  ];
+  $scope.views = [ "top", "side" ];
 
   $scope.viewClick = function (view) {
 
     var bbox = mesh.getVisibleBBox();
 
-    if (view.name == "top") {
+    if (view == "top") {
       camera.lookBBoxFromTop(bbox);
     }
-    else if (view.name == "side") {
+    else if (view == "side") {
       camera.lookBBoxFromSide(bbox);
     } 
     else {
