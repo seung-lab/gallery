@@ -80,8 +80,6 @@ gulp.task('scripts', function () {
     var glp = gulp.src([
             "app/bower_components/jquery/dist/jquery.js",
             "app/bower_components/threejs/build/three.js",
-            "app/bower_components/d3/d3.js",
-            "app/bower_components/c3/c3.js",
             "app/bower_components/angular/angular.js",
             "app/bower_components/js-openctm/src/CTMLoader.js",
             "app/bower_components/angular-resource/angular-resource.js",

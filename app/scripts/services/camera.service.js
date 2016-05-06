@@ -3,7 +3,8 @@
 // Returns a single instance of a camera.  Consumed by directive and controls.
 app.factory('camera', function (scene) {
 
-    var _this = this;
+    var _this = this,
+      _needsrender = false;
 
     this.createPerspective = function () { 
 
@@ -86,14 +87,22 @@ app.factory('camera', function (scene) {
     };
 
     this.animate = function() {
-      requestAnimationFrame( _this.animate);
+      requestAnimationFrame(_this.animate);
       _this.controls.update();
     };
 
     this.render = function() {
-      _this.renderer.render(scene, _this.controls.object);
+      _needsrender = true;
     };
 
+    requestAnimationFrame(function hardRender () {
+      if (_needsrender) {
+        _this.renderer.render(scene, _this.controls.object);  
+        _needsrender = false;
+      }
+
+      requestAnimationFrame(hardRender);
+    });
 
     this.initController = function( renderer ) {
   		_this.renderer = renderer;

@@ -48,11 +48,13 @@
     <div class="title">Information</div>
     <div class="sidebar-content">
       <div ng-controller="chartCtrl">
-        <chart bindto-id="chart-stratification"  chart="chart"  
-        on-legend-click="onLegendClick(cell_id)"
-        on-legend-mouseover="onLegendMouseover(cell_id)"
-        on-legend-mouseout="onLegendMouseout(cell_id)"
-        init="initChart()"></chart>
+        <chart 
+          bindto-id="chart-stratification"  
+          chart="chart"  
+          on-legend-click="onLegendClick(cell_id)"
+          on-legend-mouseover="onLegendMouseover(cell_id)"
+          on-legend-mouseout="onLegendMouseout(cell_id)"
+          init="initChart()" />
       </div> 
       
       <div flex="grow">

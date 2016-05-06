@@ -9,16 +9,14 @@
  * DELETE	/cells/:id					->	destroy
  */
 
-app.service('cells', [ '$resource', function ($resource) {
-	// AngularJS will instantiate a singleton by calling "new" on this function
-
+app.service('cells', [ '$q', '$resource', function ($q, $resource) {
 	var api = $resource('/1.0/cells/:id', { id: '@_id' }, { 
 		index: { 
 			method: 'GET', 
 			isArray: true, 
 			cache: true, 
 		},
-		create: { method: 'POST' },
+		create: { method: 'POST' }, // isn't this backwards with update?
 		show: { 
 			method: 'GET', 
 			isArray: false, 
@@ -29,8 +27,14 @@ app.service('cells', [ '$resource', function ($resource) {
 	});
 
 	this.show = function (cell_id, callback) {
-		api.show({ id: cell_id }, function (cell) {
-			callback(cell);
+		return $q(function (resolve, reject) {
+			api.show({ id: cell_id }, function (cell) {
+				resolve(cell);
+
+				if (callback) {
+					callback(cell);
+				}
+			});
 		});
 	};
 

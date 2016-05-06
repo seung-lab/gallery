@@ -1,7 +1,8 @@
 @require 'colors.styl'
+@require 'app.styl'
 
 .viewer .sidebar
-	width 550px
+	width 1000px
 	height 100vh
 
 	position absolute
@@ -19,10 +20,11 @@
 	padding 50px
 	background-color $WHITE
 	
-	height 100%
+	height s("calc(100vh - %s)", $HEADER_HEIGHT);
+	box-sizing border-box
 
 .viewer .sidebar .title
-	height 75px
+	height $HEADER_HEIGHT
 	background-color $WHITE
 	
 	display flex
@@ -39,4 +41,3 @@
 
 
 
-	

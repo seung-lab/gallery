@@ -24,7 +24,6 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 	}
 
 	function createCell (cell, callback) {
-
 		var url = '/1.0/mesh/' + cell.segment;
 
 		var ctm = new THREE.CTMLoader(false); // showstatus: false
