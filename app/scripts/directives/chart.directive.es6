@@ -25,27 +25,32 @@ app.directive('chart', [ '$timeout', 'cells', function ($timeout, cells) {
         let ctx = canvas.getContext('2d');
 
         scope.chart = new Chart(ctx, {
-          type: 'line',
+          type: 'scatter',
           data: {
             labels: range(0, cells[0].stratification.length),
             datasets: cells.map(function (cell) {
+              // let data = [];
+              // for (let i = 0; i < cell.stratification.length; i++) {
+              //   data.push([ i, cell.stratification[i] ]);
+              // }
+
               return {
                 label: cell.id,
                 fill: false,
                 lineTension: 0,
-                backgroundColor: "rgba(75,192,192,0.4)",
-                borderColor: "rgba(75,192,192,1)",
+                backgroundColor: cell.color,
+                borderColor: cell.color,
                 borderWidth: 1,
                 borderCapStyle: 'butt',
                 borderDash: [],
                 borderDashOffset: 0.0,
                 borderJoinStyle: 'miter',
-                pointBorderColor: "rgba(75,192,192,1)",
-                pointBackgroundColor: "#fff",
+                pointBorderColor: cell.color,
+                pointBackgroundColor: cell.color,
                 pointBorderWidth: 1,
                 pointHoverRadius: 5,
-                pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHoverBackgroundColor: cell.color,
+                pointHoverBorderColor: cell.color,
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
@@ -55,6 +60,13 @@ app.directive('chart', [ '$timeout', 'cells', function ($timeout, cells) {
           },
           options: {
             showLines: true,
+            // scales: {
+            //   xAxes: [{
+            //     ticks: {
+            //       stepSize: 20,
+            //     },
+            //   }],
+            // },
             legend: {
               onClick: function (evt, obj) {
                 scope.onLegendClick({ 

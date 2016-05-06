@@ -34,7 +34,7 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 		var ctm = new THREE.CTMLoader(false); // showstatus: false
 		ctm.load(url, function (geometry) { 
 			cell.material = new THREE.MeshLambertMaterial({ 
-				color: 0xffffff, 
+				color: cell.color, 
 				wireframe: false, 
 				transparent: false, 
 				opacity: 1.0,
@@ -58,7 +58,7 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 		let loaded = 0;
 		
 		for (let cell_id of neurons) {
-			get(cell_id, function () {
+			get(cell_id, function (cell) {
 				loaded++;
 
 				// When all the neurons has being loaded , the callback is call
@@ -69,7 +69,6 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 			});
 		}
 	};
-
 
 	this.toggleVisibility = function (cell_id) {
 
@@ -136,5 +135,3 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 	};
 
 });
-
-

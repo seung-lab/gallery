@@ -15,17 +15,15 @@ exports.show = function(req, res) {
 
 	var options = { 
 		root: path.resolve("data/meshes/"),
+		dotfiles: 'deny',
 		headers: { 
-			"Content-Type": 'text/plain;'
+			"Content-Type": 'text/plain',
 		},
 	};  
 
-	res.sendfile(req.params.id + '.ctm' , options , function(err) {
-		if (err) { return handleError(res, err); }
+	res.sendfile(req.params.id + '.ctm' , options, function (err) {
+		if (err) { 
+			res.send("File doesn't exist!");
+		}
 	});
-
 };
-
-function handleError(res, err) {
-	return res.send(404, "File doesn't exist");
-}
