@@ -1,7 +1,7 @@
 'use strict';
 
 // include axes for debugging
-app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $state, $document, $window, mesh, camera) {
+app.controller('ViewerCtrl',  function ($scope, $timeout, $state, $document, $window, mesh, camera) {
   
   $scope.neurons = $state.params.neurons.split(/ ?, ?/).map(function (cid) {
     return parseInt(cid, 10);
@@ -11,50 +11,29 @@ app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $state, $d
     var bbox = mesh.getVisibleBBox();
     camera.lookBBoxFromSide(bbox);
   });
-
-  // Right sidenav, toggle, and resizing
-  var maxWidth = $window.innerWidth * 0.9;
-  var minWidth = $window.innerWidth * 0.15;
-  $scope.width =  $window.innerWidth * 0.2;
-
-  $scope.dragSidenav = function(e) {
-    e.preventDefault()
-
-    //When a mousedown is detected in the div
-    //a mousemove and mouseup is bind to the window
-    //When a mouseup is detected in the window, mousemove and mouse down is unbind 
-    $document.on("mousemove", function(e) {
-
-      //The timeout is required such that the view is updated
-      var newWidth = $window.innerWidth - e.pageX;
-      newWidth = Math.max( Math.min(newWidth,maxWidth) ,minWidth);
-      $timeout(function() { $scope.width = newWidth; }, 0); });
-
-
-    $document.on('mouseup', function(e) {
-      $document.off("mousemove");
-      $document.off("mouseup");
-    }); 
-  }
     
+  // Sidebar
+
+  $scope.sidebar_open = false;
+
   $scope.toggle = function () {
-    
-    $mdSidenav('right').toggle()
-      .then(function () {
-
-        if ($scope.isOpenRight()) {
-          $scope.$broadcast('resize')
-        }
-
-      });
-  };
-  $scope.isOpenRight = function () {
-    return $mdSidenav('right').isOpen();
+    $scope.sidebar_open = !$scope.sidebar_open;
   };
 
-  $scope.goBack = function () {
-    $state.go("search");
-  }
+  $scope.$watch( (scope) => scope.sidebar_open, function () {
+    let sidebar = angular.element('#right-sidebar'),
+        fab = angular.element('button.more-info');
+
+    sidebar.removeClass('onscreen');
+    fab.removeClass('sidebar-open');
+    if ($scope.sidebar_open) {
+      sidebar.addClass('onscreen');
+      fab.addClass('sidebar-open');
+    }
+  });
+
+
+  // Cameras
 
   $scope.cameras = [ "orthographic", "perspective" ];
 

@@ -12,7 +12,7 @@ app.config(function ($urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider.caseInsensitiveMatch = true;
     $urlRouterProvider.otherwise('/');
 
-    //Remove hashtag from url if windows history is supported.
+    // Remove hashtag from url if windows history is supported.
     if (window.history && window.history.pushState) {
       $locationProvider.html5Mode(true);
     }

@@ -38,19 +38,16 @@
   </div>
 
   <md-button class="more-info md-fab md-raised" ng-click="toggle()" aria-label="toggle menu" >
-    <md-icon ng-hide="isOpenRight()" md-svg-icon="icons/left-chevron-black.svg" ></md-icon>
-    <md-icon ng-hide="!isOpenRight()"  md-svg-icon="icons/right-chevron-black.svg"></md-icon>
+    <md-icon ng-hide="sidebar_open" md-svg-icon="icons/left-chevron-black.svg" ></md-icon>
+    <md-icon ng-hide="!sidebar_open"  md-svg-icon="icons/right-chevron-black.svg"></md-icon>
   </md-button>
 
   <viewport layout="row" flex="grow"></viewport>
-  <md-sidenav layour="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="right" style="position: fixed !important">
-
-    <md-toolbar class="md-theme-light">
-      <h1 class="md-toolbar-tools">Information</h1>
-    </md-toolbar>
-
-    <md-content  flex="grow" >
-      <div ng-controller="chartCtrl" style="margin: 5px; padding-right: 25px">
+  
+  <div id="right-sidebar" class="sidebar">
+    <div class="title">Information</div>
+    <div class="sidebar-content">
+      <div ng-controller="chartCtrl">
         <chart bindto-id="chart-stratification"  chart="chart"  
         on-legend-click="onLegendClick(cell_id)"
         on-legend-mouseover="onLegendMouseover(cell_id)"
@@ -58,8 +55,8 @@
         init="initChart()"></chart>
       </div> 
       
-      <div flex="grow" style="text-align:center; margin-top:60px;">
-        <h2 style="margin-bottom:10px;"><span style="text-decoration: underline;">Wiki Overview</span></h2>
+      <div flex="grow">
+        <h2>Wiki Overview</h2>
 
         <p>
           We do not currently have a wiki page for this class yet.
@@ -71,8 +68,7 @@
         </p>
       </div>
 
-    </md-content>
-
-  </md-sidenav>
+    </div>
+  </div>
 </main>
 

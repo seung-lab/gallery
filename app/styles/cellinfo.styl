@@ -1,0 +1,42 @@
+@require 'colors.styl'
+
+.viewer .sidebar
+	width 550px
+	height 100vh
+
+	position absolute
+	top 0px
+	right -@width
+	
+	transition right 400ms ease-in-out
+	
+	box-sizing border-box
+
+.viewer .sidebar.onscreen
+	right 0px
+	
+.viewer .sidebar-content
+	padding 50px
+	background-color $WHITE
+	
+	height 100%
+
+.viewer .sidebar .title
+	height 75px
+	background-color $WHITE
+	
+	display flex
+	align-items center
+	
+	box-sizing border-box
+	padding-left 40px
+	border-bottom 2px solid $BLACK
+	
+	font-size 18px
+	font-weight 500
+	
+
+
+
+
+	

@@ -41,24 +41,20 @@ app.controller("chartCtrl", function ($scope, $state, cells, mesh) {
 	};
 
 	$scope.onLegendMouseout = function(chosen_id) {
-
 		for (var id in data.colors) {
-			 
-			 if (id != chosen_id) {
-
-				mesh.setOpacity( id , 1.0)
+			 if (id !== chosen_id) {
+				mesh.setOpacity(id, 1.0)
 			}
 		}
-		
 	};
 
 	$scope.onLegendMouseover = function(chosen_id) {
-		
 		for (var id in data.colors) {
-			
-			if (id != chosen_id) {
-
-				mesh.setOpacity( id , 0.5)
+			if (id !== chosen_id) {
+				mesh.setOpacity(id, 0.25);
+			}
+			else {
+				mesh.setOpacity(id, 1.0);	
 			}
 		}
 

@@ -10,16 +10,17 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 	function get (cell_id, callback) {
 		var cell = cache.get(cell_id.toString());
 
-		if (cell !== undefined) {
+		if (cell) {
 			callback(cell);
 		}
-
-		cells.show(cell_id, function (cell) {
-			createCell(cell, function (cell) {
-				cache.put(cell_id.toString(), cell);
-				callback(cell);
+		else {
+			cells.show(cell_id, function (cell) {
+				createCell(cell, function (cell) {
+					cache.put(cell_id.toString(), cell);
+					callback(cell);
+				});
 			});
-		});
+		}
 	}
 
 	function createCell (cell, callback) {
@@ -29,7 +30,7 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 		var ctm = new THREE.CTMLoader(false); // showstatus: false
 		ctm.load(url, function (geometry) { 
 			cell.material = new THREE.MeshLambertMaterial({ 
-				color: cell.color, 
+				color: 0xffffff, 
 				wireframe: false, 
 				transparent: false, 
 				opacity: 1.0,
@@ -113,18 +114,18 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 		scene.add(cube);
 	};
 
-	this.setOpacity = function (cell_id, opacity ) {
+	this.setOpacity = function (cell_id, opacity) {
 		
 		get(cell_id, function (cell) {
-			// if (opacity == 1.0) {
-			// 	cell.mesh.material.transparent = false;
-			// }
-			// else {
-			// 	cell.mesh.material.transparent = true;
-			// }
+			if (opacity == 1.0) {
+				cell.mesh.material.transparent = false;
+			}
+			else {
+				cell.mesh.material.transparent = true;
+			}
 
-			// cell.mesh.material.opacity = opacity;
-			// cell.mesh.material.needsUpdate = true;
+			cell.mesh.material.opacity = opacity;
+			cell.mesh.material.needsUpdate = true;
 			camera.render();
 		});
 
