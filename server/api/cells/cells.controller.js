@@ -10,36 +10,44 @@
 'use strict';
 
 var _ = require('lodash');
-var cells = require('./cells.model');
+var Cells = require('./cells.model');
 
 // Get list of cells
+// Excludes heavy data like stratification and calcium imaging
+// So that the query isn't megabytes long
 exports.index = function(req, res) {
 
-  cells.find(function (err, cell) {
+  Cells.find(function (err, cells) {
     if (err) { return handleError(res, err); }
-    return res.json(200, cell);
-  });
 
+    return res.json(200, cells.map(function (cell) {
+      return {
+        id: cell.id,
+        name: cell.name,
+        type: cell.type,
+        annotation: cell.annotation,
+        segment: cell.segment,
+      };
+    }));
+  });
 };
 
 // Get a single cells
 exports.show = function(req, res) {
 
-  cells.findOne({ id: req.params.id }, function (err, cell) {
-    
+  Cells.findOne({ id: req.params.id }, function (err, cell) {
     if (err) { return handleError(res, err); }
     
     if (!cell) { return res.send(404); }
   
     return res.json(cell);
   });
-
 };
 
 // Creates a new cells in the DB.
 exports.create = function(req, res) {
 
-  cells.create(req.body, function(err, cells) {
+  Cells.create(req.body, function(err, cells) {
     if (err) { return handleError(res, err); }
     return res.json(201, cells);
   });
@@ -52,7 +60,7 @@ exports.update = function(req, res) {
 
   if (req.body._id) { delete req.body._id; }
   
-  cells.findOne({ id: req.params.id }, function (err, cell) {
+  Cells.findOne({ id: req.params.id }, function (err, cell) {
   
     if (err) { return handleError(res, err); }
     if (!cell) { return res.send(404); }
@@ -69,7 +77,7 @@ exports.update = function(req, res) {
 // Deletes a cells from the DB.
 exports.destroy = function(req, res) {
 
-  cells.findOne({ id: req.params.id }, function (err, cell) {
+  Cells.findOne({ id: req.params.id }, function (err, cell) {
 
     if (err) { return handleError(res, err); }
     if (!cell) { return res.send(404); }
@@ -84,5 +92,5 @@ exports.destroy = function(req, res) {
 };
 
 function handleError(res, err) {
-  return res.send(500, err);
+  return res.status(500).send(err);
 }

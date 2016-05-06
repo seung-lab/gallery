@@ -1,7 +1,9 @@
 'use strict';
 
 // include axes for debugging
-app.controller('ViewerCtrl',  function ($scope, $timeout, $state, $document, $window, mesh, camera) {
+app.controller('ViewerCtrl', [
+  '$scope', '$timeout', '$state', '$document', '$window', 'mesh', 'camera', 'cells',
+  function ($scope, $timeout, $state, $document, $window, mesh, camera, cells) {
   
   $scope.neurons = $state.params.neurons.split(/ ?, ?/).map(function (cid) {
     return parseInt(cid, 10);
@@ -63,4 +65,4 @@ app.controller('ViewerCtrl',  function ($scope, $timeout, $state, $document, $wi
       camera.lookBBoxFromOblique(bbox);
     }
   };
-});
+}]);

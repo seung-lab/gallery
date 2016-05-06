@@ -5,7 +5,7 @@ app.directive('card', function ($mdDialog, $state) {
 	function link ($scope, element, attrs) {
 		$scope.view = function () {
 			$state.go('viewer', { 
-				neurons: $scope.set.neurons.replace(/ /g, ''),
+				neurons: $scope.set.neurons.join(","),
 			});
 		};
 

@@ -2,7 +2,7 @@
  
 /**
  * Using Rails-like standard naming convention for endpoints.
- * GET		 /cells							->	index
+ * GET		 /cells							->	list
  * POST		/cells							->	create
  * GET		 /cells/:id					->	show
  * PUT		 /cells/:id					->	update
@@ -11,7 +11,7 @@
 
 app.service('cells', [ '$q', '$resource', function ($q, $resource) {
 	var api = $resource('/1.0/cells/:id', { id: '@_id' }, { 
-		index: { 
+		list: { 
 			method: 'GET', 
 			isArray: true, 
 			cache: true, 
@@ -40,8 +40,16 @@ app.service('cells', [ '$q', '$resource', function ($q, $resource) {
 		});
 	};
 
-	this.index = function (callback) {
-		api.index(callback);	
+	this.list = function (callback) {
+		return $q(function (resolve, reject) {
+			api.list(function (cellinfos) {
+				resolve(cellinfos);
+
+				if (callback) {
+					callback(cellinfos);
+				}
+			});
+		});
 	};
 
 	this.create = api.create;

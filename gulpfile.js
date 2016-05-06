@@ -81,6 +81,7 @@ gulp.task('scripts', function () {
             "app/bower_components/jquery/dist/jquery.js",
             "app/bower_components/threejs/build/three.js",
             "app/bower_components/angular/angular.js",
+            "app/bower_components/lodash/dist/lodash.js",
             "app/bower_components/js-openctm/src/CTMLoader.js",
             "app/bower_components/angular-resource/angular-resource.js",
             "app/bower_components/angular-cookies/angular-cookies.js",

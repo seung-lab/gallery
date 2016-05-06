@@ -21,7 +21,7 @@ exports.show = function(req, res) {
 		},
 	};  
 
-	res.sendfile(req.params.id + '.ctm' , options, function (err) {
+	res.sendFile(req.params.id + '.ctm' , options, function (err) {
 		if (err) { 
 			res.send("File doesn't exist!");
 		}

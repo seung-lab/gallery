@@ -22,7 +22,7 @@ module.exports = function(app) {
 
   app.route([ '/', '/search', '/viewer' ])
     .get(function(req, res) {
-      res.sendfile(app.get('appPath') + '/index.html');
+      res.sendFile(app.get('appPath') + '/index.html');
   });
 
     // All other routes should redirect to the index.html
