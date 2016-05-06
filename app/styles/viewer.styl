@@ -1,16 +1,179 @@
 @require 'colors.styl'
 
-main.viewer
-  height calc(100% - 76px)
-  background-color $BLACK
-  
-  position relative
+header.viewer
+	position absolute
+	top 0px
+	left 0px
 
-.viewer viewport 
-  width 100%
-  height 100%
-  
-.viewer .goback
+	z-index 10
+	border-bottom none
+
+	display flex
+	align-items center
+	
+	width auto
+
+header.viewer #logo
+	background-color $WHITE
+	margin-top 0px
+	margin-left 10px
+	margin-right 5px
+
+	border-radius 2px
+	box-shadow 0 2px 5px 0 rgba(0, 0, 0, 0.26)
+	
+	background-image url('/images/ew-black.svg')
+	background-position center center
+	background-size 70%
+	background-repeat no-repeat
+
+header.viewer a .title
+	color $WHITE
+
+main.viewer
+	height 100vh
+	background-color $BLACK
+
+	position relative
+
+.viewer viewport
+	width 100%
+	height 100%
+
+.viewer .search a
+	color $WHITE
+	text-transform uppercase
+	font-size 12px
+	font-weight 500
+	letter-spacing 1px
+	position relative
+	top 5px
+
+.viewer .search-action
+	height 35px
+	width 50px
+	position absolute
+	top 21px
+	right 55px
+	vertical-align center
+	display flex
+	align-items center
+	justify-content center
+	border-right 2px solid rgba(0, 0, 0, 0.15)
+	color black
+
+	opacity 0.5
+	
+	cursor pointer
+	transition opacity 150ms ease
+    
+.viewer .search .advanced
+	height 50px
+	width @height
+	
 	position absolute
 	top 15px
-	left 15px
+	right 5px
+	
+	background-image url("/icons/controls.svg")
+	background-repeat no-repeat
+	background-position center center
+	background-size 60%
+	
+	opacity 0.5
+	
+	cursor pointer
+	transition opacity 150ms ease
+
+.viewer .search .search-action:hover,
+.viewer .search .advanced:hover
+	opacity 0.75
+
+
+.viewer md-autocomplete
+	width 375px
+	height 50px
+	
+.viewer md-autocomplete md-autocomplete-wrap
+	height 49px
+	
+.viewer md-autocomplete input,
+.viewer md-autocomplete input:not(.md-input)
+	height 50px
+	
+.viewer .controls
+	position absolute
+	bottom 5px
+	right 20px
+	
+	color $WHITE
+	font-size 12px
+	text-transform uppercase
+	letter-spacing 1px
+	font-weight 500
+
+	width 80px
+	text-align right
+
+.viewer .controls .group .title
+	margin-bottom 5px
+	text-align left
+
+.viewer .controls .md-button,
+.viewer .controls .md-button.md-raised:not([disabled])
+	background-color transparent
+	box-shadow none
+	
+	background-repeat no-repeat
+	background-position center center
+	background-size 65%
+	
+.viewer .controls .md-button:hover
+.viewer .controls .md-button.md-raised:not([disabled]):hover
+	background-color $WHITE
+	box-shadow 0 2px 5px 0 rgba(0, 0, 0, 0.26)
+
+.viewer .controls .group
+	margin-bottom 25px
+	
+.viewer .controls .group:last-child
+	margin-bottom 15px
+	
+
+
+
+.viewer .controls .orthographic
+	background-image url("/icons/orthographic-white.svg")	
+
+.viewer .controls .orthographic:hover
+	background-image url("/icons/orthographic-black.svg")	
+
+.viewer .controls .perspective
+	background-image url("/icons/perspective-white.svg")
+
+.viewer .controls .perspective:hover
+	background-image url("/icons/perspective-black.svg")
+
+
+.viewer .controls .top
+	background-image url("/icons/view-top-white.svg")	
+
+.viewer .controls .top:hover
+	background-image url("/icons/view-top-black.svg")	
+
+.viewer .controls .side
+	background-image url("/icons/view-side-white.svg")
+
+.viewer .controls .side:hover
+	background-image url("/icons/view-side-black.svg")
+
+
+.viewer .more-info
+	position absolute
+	top 15px
+	right 15px
+	
+
+	
+
+

@@ -1,7 +1,7 @@
 'use strict';
 
 // include axes for debugging
-app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $log, $state, $document, $window, mesh, camera) {
+app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $state, $document, $window, mesh, camera) {
   
   $scope.neurons = $state.params.neurons.split(/ ?, ?/).map(function (cid) {
     return parseInt(cid, 10);
@@ -16,6 +16,7 @@ app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $log, $sta
   var maxWidth = $window.innerWidth * 0.9;
   var minWidth = $window.innerWidth * 0.15;
   $scope.width =  $window.innerWidth * 0.2;
+
   $scope.dragSidenav = function(e) {
     e.preventDefault()
 
@@ -33,8 +34,7 @@ app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $log, $sta
     $document.on('mouseup', function(e) {
       $document.off("mousemove");
       $document.off("mouseup");
-    });
-    
+    }); 
   }
     
   $scope.toggle = function () {
@@ -48,23 +48,31 @@ app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $log, $sta
 
       });
   };
-  $scope.isOpenRight = function() {
+  $scope.isOpenRight = function () {
     return $mdSidenav('right').isOpen();
   };
 
-  $scope.goBack = function() {
+  $scope.goBack = function () {
     $state.go("search");
   }
 
   $scope.cameras = [
-      { name: "ortographic", icon: "icons/ic_photo_white_36px.svg"},
-      { name: "perspective", icon: "icons/ic_camera_enhance_white_36px.svg"},
-      { name: "stereoscopic",icon: "icons/ic_view_agenda_white_36px.svg"}
+      { 
+        name: "orthographic", 
+        icon: "icons/orthographic-white.svg", 
+        hovericon: "icons/orthographic-black.svg",
+      },
+      { 
+        name: "perspective", 
+        icon: "icons/perspective-white.svg",
+        hovericon: "icons/perspective-black.svg",
+      },
+      // { name: "stereoscopic",icon: "icons/ic_view_agenda_white_36px.svg" }
   ];
 
   $scope.camClick = function(cam) {
 
-    if ( cam.name == "ortographic" ) {
+    if (cam.name === "ortographic") {
       camera.useOrtographic();
     } 
     else {
@@ -73,9 +81,8 @@ app.controller('ViewerCtrl',  function ($scope, $timeout, $mdSidenav, $log, $sta
   };
 
   $scope.views = [ 
-    { name: "top", icon: "icons/ic_ac_unit_white_36px.svg"},
-    { name: "side", icon: "icons/ic_neuron_side_white_36px.svg"},
-    { name: "oblique",icon: "icons/ic_call_received_white_36px.svg"}
+    { name: "top", icon: "icons/view-top-white.svg"},
+    { name: "side", icon: "icons/view-side-white.svg"},
   ];
 
   $scope.viewClick = function (view) {

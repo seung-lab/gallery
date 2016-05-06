@@ -1,5 +1,5 @@
 
-app.directive('ngLocation', function () {
+app.directive('ngLocation', [ "$location", function ($location) {
   return {
     restrict: "A",
     link: function (scope, element, attrs) {
@@ -8,4 +8,4 @@ app.directive('ngLocation', function () {
     	});
     },
   };
-});
+}]);

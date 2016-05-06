@@ -245,7 +245,7 @@ THREE.TrackballControls = function (object, domElement) {
     		else if (newlen < _zoomMin / 2) {
     			_zoomAmt = 0;
     		}
-    		else if (newlen > _zoomMax * 10) {
+    		else if (newlen > _zoomMax * 5) {
     			_zoomAmt = 0;
     		}
     		else {

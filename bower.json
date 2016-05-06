@@ -4,7 +4,6 @@
   "dependencies": {
     "json3": "~3.3.1",
     "font-awesome": ">=4.1.0",
-    "lodash": "*",
     "threejs": "*",
     "c3": "~0.4.10",
     "angular": "~1.4.8",
@@ -16,7 +15,6 @@
     "angular-ui-router": "~0.2.15",
     "angular-material": "~0.11.4",
     "angular-animate": "~1.4.8",
-    "trianglify": "~0.4.0",
     "jquery": "~2.1.4",
     "angular-cache": "~4.4.2"
   },

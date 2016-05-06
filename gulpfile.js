@@ -79,7 +79,6 @@ gulp.task('bower', function () {
 gulp.task('scripts', function () {
     var glp = gulp.src([
             "app/bower_components/jquery/dist/jquery.js",
-            // "app/bower_components/lodash/lodash.js",
             "app/bower_components/threejs/build/three.js",
             "app/bower_components/d3/d3.js",
             "app/bower_components/c3/c3.js",
@@ -93,7 +92,6 @@ gulp.task('scripts', function () {
             "app/bower_components/angular-animate/angular-animate.js",
             "app/bower_components/angular-aria/angular-aria.js",
             "app/bower_components/angular-material/angular-material.js",
-            "app/bower_components/trianglify/dist/trianglify.min.js",
             "app/bower_components/angular-cache/dist/angular-cache.js",
             'app/scripts/**/*.js',
             'app/scripts/**/*.es6',

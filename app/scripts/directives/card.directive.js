@@ -2,20 +2,11 @@
 app.directive('card', function ($mdDialog, $state) {
 	'use strict';
 
-	function getImagePath () {
-		var pattern = new Trianglify({
-			width: 300,
-			height: 200,
-		});
-
-		return pattern.png();
-	}
-
 	function link ($scope, element, attrs) {
-		// $scope.imagePath = getImagePath();
-
 		$scope.view = function () {
-			$state.go('viewer', { neurons: $scope.set.neurons });
+			$state.go('viewer', { 
+				neurons: $scope.set.neurons.replace(/ /g, ''),
+			});
 		};
 
 		$scope.showWikiDialog = function (ev, locals) {
