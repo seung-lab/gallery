@@ -12,12 +12,12 @@
     "angular-mocks": "~1.4.8",
     "angular-scenario": "~1.4.8",
     "angular-ui-router": "~0.2.15",
-    "angular-material": "~0.11.4",
     "angular-animate": "~1.4.8",
     "jquery": "~2.1.4",
     "angular-cache": "~4.4.2",
     "Chart.js": "^2.1.0",
-    "lodash": "^4.11.2"
+    "lodash": "^4.11.2",
+    "angular-material": "^1.1.0-rc4"
   },
   "devDependencies": {}
 }

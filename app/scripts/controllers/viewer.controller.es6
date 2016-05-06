@@ -55,6 +55,15 @@ app.controller('ViewerCtrl', [
     return results || [];
   };
 
+  $scope.selectedItemChange = function (item) {
+    // fixes angular material bug where a mask is applied that
+    // blocks the main area and doesn't get removed
+
+    $timeout(function () {
+      $scope.goToResult(item);
+    }, 0);
+  };
+
   $scope.goToResult = function (item) {
     $state.go('viewer', {
       neurons: item.value,
