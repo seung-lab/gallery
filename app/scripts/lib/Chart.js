@@ -4262,7 +4262,7 @@ module.exports = function(Chart) {
 			}
 
 			var legendhandled = false;
-			if (this.legend && this.legend.handleEvent) {
+			if (this.legend && this.legend.handleEvent && e.type === 'mousemove') {
 				legendhandled = this.legend.handleEvent(e);
 			}
 

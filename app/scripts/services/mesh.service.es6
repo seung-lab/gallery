@@ -8,6 +8,11 @@ app.service('mesh', function (scene, camera, cells, CacheFactory) {
 
 
 	function get (cell_id, callback) {
+		if (!cell_id) {
+			callback(null);
+			return;
+		}
+
 		var cell = cache.get(cell_id.toString());
 
 		if (cell) {

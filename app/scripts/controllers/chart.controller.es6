@@ -15,11 +15,11 @@ app.controller("chartCtrl", [ '$q', '$scope', '$state', 'cells', 'mesh', functio
 		return $q.all(promises);
 	};
 
-	$scope.onLegendClick = function (args = {}) {
-		mesh.toggleVisibility(args.cell_id);
+	$scope.onLegendClick = function (cell_id) {
+		mesh.toggleVisibility(cell_id);
 	};
 
-	$scope.onLegendMouseout = function (args = {}) {
+	$scope.onLegendMouseout = function () {
 		for (let id of $scope.neurons) {
 			mesh.setOpacity(id, 1.0)
 		}
