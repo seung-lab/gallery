@@ -27,12 +27,12 @@ app.directive('chart', [ '$timeout', 'cells', function ($timeout, cells) {
         scope.chart = new Chart(ctx, {
           type: 'scatter',
           data: {
-            labels: range(0, cells[0].stratification.length),
+            //labels: range(0, cells[0].stratification.length),
             datasets: cells.map(function (cell) {
-              // let data = [];
-              // for (let i = 0; i < cell.stratification.length; i++) {
-              //   data.push([ i, cell.stratification[i] ]);
-              // }
+              let data = [];
+              for (let i = 0; i < cell.stratification.length; i++) {
+                data.push({ x: i, y: cell.stratification[i] });
+              }
 
               return {
                 label: cell.id,
@@ -54,19 +54,12 @@ app.directive('chart', [ '$timeout', 'cells', function ($timeout, cells) {
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
-                data: cell.stratification,
+                data: data,
               };
             }),
           },
           options: {
             showLines: true,
-            // scales: {
-            //   xAxes: [{
-            //     ticks: {
-            //       stepSize: 20,
-            //     },
-            //   }],
-            // },
             legend: {
               onClick: function (evt, obj) {
                 scope.onLegendClick({ 
