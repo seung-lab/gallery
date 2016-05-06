@@ -1,10 +1,15 @@
 
-app.directive('ngLocation', [ "$location", function ($location) {
+app.directive('ngLocation', [ "$state", function ($state) {
   return {
     restrict: "A",
     link: function (scope, element, attrs) {
     	element.on('click', function () {
-    		window.location = attrs.ngLocation;	
+    		try {
+	    		$state.go(attrs.ngLocation);	
+	    	}
+	    	catch (e) {
+	    		window.location = attrs.ngLocation;
+	    	}
     	});
     },
   };
