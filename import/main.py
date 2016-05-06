@@ -3,46 +3,31 @@ import scipy.io
 from collections import defaultdict
 import json
 
-celltypes = dict()
+import subprocess
 
-def parse_matlab_line(line):
-  """
-    Magic function which read the obscure matlab file and
-    extract the useful information
-  """
+allcells = dict()
 
-  line_starts_with_struct = re.match(r'struct(\(.*\))', line)
-  if not line_starts_with_struct:
-    return
+def read_json_into_cells(fname, celltype):
+  """Deserialize the JSON file generated from Jinseop's matlab files."""
 
-  whatever_is_inside_struct_parentesis = line_starts_with_struct.groups()[0]
+  contents = ""
+  with open(fname, 'r') as f:
+    contents = f.read()
 
-  #replace all the spaces in the list matlab array to commas
-  #after doing that trick I can just eval to convert to python tuple
-  formated_string = re.sub(r'(\d+)\s+(\d+)', r'\1,\2,' , whatever_is_inside_struct_parentesis) 
-  python_tuple =  eval(formated_string) #ta daaa
-  
-  #python tuple looks like this
-  #('name', 'orphans', 'annotation', '', 'cells', [20126, 20228])
+  # [0] because for some reason jsonlab puts in an extra wrapper array
+  cells = json.loads(contents)[0]
 
-  python_dict =  convert_tuple_to_dict(python_tuple)
-  #python_dict looks like
-  #{'cells': [20126, 20228], 'name': 'orphans', 'annotation': ''}
-  #So much nicer eh?
+  for cell in cells:
+    for cell_id in cell['cells']:
+      allcells[cell_id] = {
+          "id": cell_id,
+          "name": cell['name'],
+          "type": celltype,
+          "annotation": cell['annotation'],
+      }
 
-  #Save each celltype to a global dictionary
-  #We are going to use this dictionary to create the sets.json
-  celltypes[ python_dict['name'] ] = python_dict['cells']
+  return cells
 
-def convert_tuple_to_dict( t ):
-  """
-    This tuple is a succession of key and value
-    (k,v,k,v ...)
-  """
-  d = dict()
-  for i in xrange(0,len(t),2):
-    d[t[i]] = t[i+1]
-  return d
 
 def do_some_parsing( array ):
   """
@@ -85,10 +70,12 @@ def read_stratification():
 def write_json (object_to_dump , fname):
   
   with open(fname, 'w') as outfile:
-    json.dump(object_to_dump , outfile, 
+    json.dump(object_to_dump, outfile, 
       sort_keys = True, 
       indent = 2, 
       ensure_ascii=False)
+
+    print "Wrote to ", fname
 
 def save_cells_json():
   """
@@ -98,21 +85,21 @@ def save_cells_json():
 
   cells_ready_for_json = []
   strat = read_stratification()
-  #Write all the parseds cell ids
-  #Do chaining of all the list of ids like [20126, 20228]
+  # Write all the parseds cell ids
+  # Do chaining of all the list of ids like [20126, 20228]
   
-  for celltype in celltypes:
-    for cell_id in celltypes[celltype]:
-      #Do we really need to put c everywhere?
-      #I don't remember so let us put it
+  
+  for cell_id, cell in allcells.iteritems():
       cell = {  
-        "name": '# '+ str(cell_id),
-        "type": celltype,
-        "segment": cell_id,
         "id": cell_id,
+        "name": cell['name'],
+        "type": cell['type'],
+        "segment": cell_id,
         "mesh_id": cell_id,
-        "stratification": strat[cell_id]
+        "annotation": cell['annotation'],
+        "stratification": strat[cell_id],
       }
+
       cells_ready_for_json.append(cell)
 
   write_json(cells_ready_for_json, '../server/config/cells.json')
@@ -154,16 +141,23 @@ def save_sets_json():
     sets_ready_for_json.append( json_set )
   write_json(sets_ready_for_json, '../server/config/sets.json')
 
+def generate_jinseop_json():
+  """Generate JSON from matlab files from Jinseop."""
 
+  cmd = "octave generate_cell_json.m"
+
+  print "Executing: ", cmd
+  print subprocess.check_output(cmd, shell=True)
 
 def main():
-  #We first read the matlab script from jinseop
-  with open('rawdata/ganglion_cell_info.m') as f:
-    for line in f.readlines():
-      parse_matlab_line(line)
+  
+  generate_jinseop_json()
+
+  read_json_into_cells('data/ganglion_cells.json', 'ganglion')
+  read_json_into_cells('data/bipolar_cells.json', 'bipolar')
 
   save_cells_json()
-  save_sets_json()
+  # save_sets_json()
 
 if __name__ == '__main__':
   main()

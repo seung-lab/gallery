@@ -4,9 +4,10 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var CellSchema = new Schema({
-  name: String,
   id: String,
+  name: String,
   type: String,
+  annotation: String,
   segment: Number,
   description: String,
   copyright: String,
