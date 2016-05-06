@@ -157,7 +157,7 @@ def main():
   read_json_into_cells('data/bipolar_cells.json', 'bipolar')
 
   save_cells_json()
-  # save_sets_json()
+  save_sets_json()
 
 if __name__ == '__main__':
   main()
