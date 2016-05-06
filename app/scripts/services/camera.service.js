@@ -35,7 +35,7 @@ app.factory('camera', function (scene) {
       // scene.add(helper);
     };
 
-    this.useOrtographic = function () {
+    this.useOrthographic = function () {
       _this.controls.object = _this.orthographicCam;
 
        //Update the view size for the new camera.
@@ -125,7 +125,7 @@ app.factory('camera', function (scene) {
 
       var height = bbox.size().z;
       var width = bbox.size().y;
-      this.zoomOrtographicBBox(height , width);
+      this.zoomorthographicBBox(height , width);
     };
 
 
@@ -141,8 +141,7 @@ app.factory('camera', function (scene) {
 
       var height = bbox.size().x;
       var width = bbox.size().y;
-      this.zoomOrtographicBBox(height, width);
-
+      this.zoomorthographicBBox(height, width);
     }
 
 
@@ -156,10 +155,10 @@ app.factory('camera', function (scene) {
 
       var height = bbox.size().z;
       var width = bbox.size().y;
-      this.zoomOrtographicBBox(height, width);
+      this.zoomorthographicBBox(height, width);
     }
 
-    this.zoomOrtographicBBox = function( height, width ) {
+    this.zoomorthographicBBox = function( height, width ) {
 
       height = Math.max( width / _this.aspectRatio, height)
       var zoomFactor = 1.2

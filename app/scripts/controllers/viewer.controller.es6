@@ -124,7 +124,7 @@ app.controller('ViewerCtrl', [
 
   $scope.camClick = function (cam) {
 
-    if (cam === "ortographic") {
+    if (cam === "orthographic") {
       camera.useOrthographic();
     } 
     else {
