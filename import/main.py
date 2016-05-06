@@ -100,18 +100,21 @@ def save_cells_json():
   strat = read_stratification()
   #Write all the parseds cell ids
   #Do chaining of all the list of ids like [20126, 20228]
-  all_cells = sum(celltypes.values() , []) 
-  for c in all_cells:
-    #Do we really need to put c everywhere?
-    #I don't remember so let us put it
-    cell = {  
-      "name": '# '+ str(c),
-      "segment": c,
-      "id": c,
-      "mesh_id": c,
-      "stratification": strat[c]
-    }
-    cells_ready_for_json.append(cell)
+  
+  for celltype in celltypes:
+    for cell_id in celltypes[celltype]:
+      #Do we really need to put c everywhere?
+      #I don't remember so let us put it
+      cell = {  
+        "name": '# '+ str(cell_id),
+        "type": celltype,
+        "segment": cell_id,
+        "id": cell_id,
+        "mesh_id": cell_id,
+        "stratification": strat[cell_id]
+      }
+      cells_ready_for_json.append(cell)
+
   write_json(cells_ready_for_json, '../server/config/cells.json')
 
 def save_sets_json():
