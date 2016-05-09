@@ -54,12 +54,13 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 		}, { 'useWorker': true } );
 	}
 
-	this.display = function (neurons, callback) {
+	this.display = function (neurons, progresscb) {
 		if (!Array.isArray(neurons)) {
 			neurons = [ neurons ];
 		}
 
-		let loaded = [];
+		let loaded = [],
+			numloaded = 0;
 		
 		for (let cell_id of neurons) {
 			let promise = get(cell_id, function (cell) {
@@ -67,13 +68,23 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 				_displayed.push(cell.mesh);
 
 				camera.render();
+			})
+			.then(function () {
+				numloaded++;
+
+				if (progresscb) {
+					progresscb(numloaded);
+				}
 			});
 
 			loaded.push(promise);
 		}
 
-		$q.all(loaded).then(function () {
-			callback();		
+		return $q.all(loaded).then(function () {
+			if (progresscb) {
+				progresscb(numloaded);
+			}
+			
 			camera.render();
 		});
 	};
