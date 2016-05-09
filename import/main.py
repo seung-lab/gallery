@@ -5,17 +5,20 @@ import json
 
 import subprocess
 
-allcells = dict()
+allcells = defaultdict(dict)
 
-def read_json_into_cells(fname, celltype):
-  """Deserialize the JSON file generated from Jinseop's matlab files."""
-
+def slurp_json (fname):
   contents = ""
   with open(fname, 'r') as f:
     contents = f.read()
 
+  return json.loads(contents)
+
+def read_json_into_cells(fname, celltype):
+  """Deserialize the JSON file generated from Jinseop's matlab files."""
+
   # [0] because for some reason jsonlab puts in an extra wrapper array
-  cells = json.loads(contents)[0]
+  cells = slurp_json(fname)[0]
 
   for cell in cells:
     for cell_id in cell['cells']:
@@ -28,6 +31,33 @@ def read_json_into_cells(fname, celltype):
 
   return cells
 
+def process_calcium_data():
+  angles = slurp_json('data/angles.json')
+  cell_mapping = slurp_json('data/verified_cell_mapping.json')
+  activations = slurp_json('data/calcium_activations.json')
+
+  for calcium_id, omni_id in cell_mapping:
+    calcium_id = calcium_id - 1 # matlab to python mapping
+    
+    on = [ activations[calcium_id][i] for i in range(0, len(activations[calcium_id]), 2) ]
+    off = [ activations[calcium_id][i] for i in range(1, len(activations[calcium_id]), 2) ]
+
+    onmap = {}
+    for angle, activation in zip(angles, on):
+      onmap[angle] = activation
+
+    offmap = {}
+    for angle, activation in zip(angles, off):
+      offmap[angle] = activation
+
+    allcells[omni_id]['calcium'] = {
+      "id": calcium_id,
+      "activations": {
+        # On and off are interleaved
+        "on": onmap,
+        "off": offmap,
+      }
+    }
 
 def do_some_parsing( array ):
   """
@@ -88,19 +118,22 @@ def save_cells_json():
   # Write all the parseds cell ids
   # Do chaining of all the list of ids like [20126, 20228]
   
-  
   for cell_id, cell in allcells.iteritems():
-      cell = {  
-        "id": cell_id,
-        "name": cell['name'],
-        "type": cell['type'],
-        "segment": cell_id,
-        "mesh_id": cell_id,
-        "annotation": cell['annotation'],
-        "stratification": strat[cell_id],
-      }
+    def maybe(info, key):
+     return info[key] if info.has_key(key) else None
 
-      cells_ready_for_json.append(cell)
+    cell = {  
+      "id": cell_id,
+      "name": maybe(cell, 'name'),
+      "type": maybe(cell, 'type'),
+      "segment": cell_id,
+      "mesh_id": cell_id,
+      "annotation": maybe(cell, 'annotation'),
+      "stratification": maybe(strat, cell_id),
+      "calcium": maybe(cell, 'calcium'),
+    }
+
+    cells_ready_for_json.append(cell)
 
   write_json(cells_ready_for_json, '../server/config/cells.json')
 
@@ -141,23 +174,31 @@ def save_sets_json():
     sets_ready_for_json.append( json_set )
   write_json(sets_ready_for_json, '../server/config/sets.json')
 
-def generate_jinseop_json():
-  """Generate JSON from matlab files from Jinseop."""
+def generate_json():
+  """Generate JSON from matlab files from Jinseop and Shang."""
 
   cmd = "octave generate_cell_json.m"
 
   print "Executing: ", cmd
   print subprocess.check_output(cmd, shell=True)
 
+  cmd = "octave generate_calcium_json.m"
+
+  print "Executing: ", cmd
+  print subprocess.check_output(cmd, shell=True)
+
 def main():
   
-  generate_jinseop_json()
+  generate_json()
 
   read_json_into_cells('data/ganglion_cells.json', 'ganglion')
   read_json_into_cells('data/bipolar_cells.json', 'bipolar')
 
+  process_calcium_data()
+
+
   save_cells_json()
-  save_sets_json()
+  # save_sets_json()
 
 if __name__ == '__main__':
   main()

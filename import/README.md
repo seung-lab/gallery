@@ -17,20 +17,20 @@ The Museum currently supports four kinds of data:
 	- mesh.py
 
 4. Activity Maps: Maps of the preferred direction of each neuron.
-	- Located: `rawdata/roi_data.mat` (Matlab/Octave matrix)
-	- Contains the following fields:
-		```octave:2> x = load('roi_data.mat')
-		octave:3> fieldnames(x)
-		ans = 
-			{
-			  [1,1] = n_rois
-			  [2,1] = roi_sums_all % the Ca2+ data, roi_data.roi_sums_all(DATAINDEX, CELL)
-			  [3,1] = nconds % number of experimental conditions?
-			  [4,1] = roi_borders
-			  [5,1] = roi_centers
-			  [6,1] = cell_dict % Omni => Eyewire cell IDs
-			  [7,1] = frames_per_condition % data points per experiment per cell?
-			  [8,1] = angles % angles the light was strobed at?
-			}```
-
+	- `rawdata/roi_data.mat` (Matlab/Octave matrix)
+		- roi.angles has order of angles for coeffs
+	- `rawdata/coeffs16.20151125.mat`  
+		- coeffs.coeffs16{1,2}(:,3:18) is rows of 8 ON and 8 OFF angles interlaced like ON OFF ON OFF 
+		- coeffs is something like this:
+			coeffs{x,y}
+				- x:
+					1. Modeled with single exponential
+					2. ????
+					3. Modeled with difference of two exponentials
+				- y: 
+					1. Time before each peak is fixed
+					2. Time before each peak is floating
+	- `rawdata/cell_dict_j.m`
+		- Extracted from https://github.com/seung-lab/e2198_Ca_imaging/blob/master/code/cell_mapping_verified.m
+		- newest map of coeffs row ids to omni ids (roi has an older one)
 
