@@ -73,7 +73,7 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 				numloaded++;
 
 				if (progresscb) {
-					progresscb(numloaded);
+					progresscb(numloaded / loaded.length);
 				}
 			});
 
@@ -82,7 +82,7 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 
 		return $q.all(loaded).then(function () {
 			if (progresscb) {
-				progresscb(numloaded);
+				progresscb(numloaded / loaded.length);
 			}
 			
 			camera.render();

@@ -14,9 +14,22 @@ app.controller('ViewerCtrl', [
 
   mesh.clear();
 
-  mesh.display($scope.neurons).then(function () { 
+  $scope.loading = {
+    show: true,
+    value: 0,
+  };
+
+  mesh.display($scope.neurons, function (fraction) {
+    $scope.loading.value = Math.round(fraction * 100);
+    $timeout( () => $scope.$apply(), 0);
+  })
+  .then(function () { 
     var bbox = mesh.getVisibleBBox();
     camera.lookBBoxFromSide(bbox);
+
+    $scope.loading.show = false;
+    $scope.loading.value = 100;
+    // $scope.$apply();
   });
 
   // Quick Search
