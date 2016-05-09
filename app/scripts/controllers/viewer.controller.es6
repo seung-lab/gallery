@@ -21,7 +21,6 @@ app.controller('ViewerCtrl', [
 
   mesh.display($scope.neurons, function (fraction) {
     $scope.loading.value = Math.round(fraction * 100);
-    $timeout( () => $scope.$apply(), 0);
   })
   .then(function () { 
     var bbox = mesh.getVisibleBBox();
@@ -29,7 +28,6 @@ app.controller('ViewerCtrl', [
 
     $scope.loading.show = false;
     $scope.loading.value = 100;
-    // $scope.$apply();
   });
 
   // Quick Search
