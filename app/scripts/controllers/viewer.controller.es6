@@ -12,12 +12,12 @@ app.controller('ViewerCtrl', [
     return parseInt(cid, 10);
   });
 
-  mesh.clear();
-
   $scope.loading = {
     show: true,
     value: 0,
   };
+
+  mesh.clear();
 
   mesh.display($scope.neurons, function (fraction) {
     $scope.loading.value = Math.round(fraction * 100);
@@ -143,7 +143,13 @@ app.controller('ViewerCtrl', [
     }
   });
 
-  $scope.toggle = function () {
+  $scope.toggle = function (evt) {
+
+    // Solves bug where once button is clicked it gains focus
+    // and space bar generates a click and a keydown event that 
+    // cancel each other.
+    angular.element('.more-info').blur();
+
     $scope.sidebar_open = !$scope.sidebar_open;
   };
 

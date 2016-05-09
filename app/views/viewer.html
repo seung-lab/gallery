@@ -37,7 +37,7 @@
     </div>
   </div>
 
-  <md-button class="more-info md-fab md-raised" ng-click="toggle()" aria-label="toggle menu" >
+  <md-button class="more-info md-fab md-raised" ng-click="toggle($event)" aria-label="toggle menu" >
     <md-icon ng-hide="sidebar_open" md-svg-icon="icons/left-chevron-black.svg" ></md-icon>
     <md-icon ng-hide="!sidebar_open"  md-svg-icon="icons/right-chevron-black.svg"></md-icon>
   </md-button>
