@@ -12,7 +12,8 @@ var CellSchema = new Schema({
   description: String,
   copyright: String,
   stratification: [],
-  color: String 
+  calcium: {},
+  color: String,
 });
 
 module.exports = mongoose.model('Cell', CellSchema);

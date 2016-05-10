@@ -47,8 +47,8 @@
   <div id="right-sidebar" class="sidebar">
     <div class="sidebar-content">
       <h1>Stratification of Inner Plexiform Layer</h1>
-      <div ng-controller="chartCtrl">
-        <chart 
+      <div ng-controller="stratificationController">
+        <stratification 
           bindto-id="chart-stratification"  
           chart="chart"  
           on-legend-click="onLegendClick(cell_id)"
@@ -71,12 +71,31 @@
 
       <p>The following data is based on a calcium imaging experiment using lights strobed in particular directions.</p>
 
-      <div>
-        
+      <h2>ON</h2>
 
+      <div ng-controller="calciumController">
+        <calcium 
+          bindto-id="chart-calcium-on"
+          activation="on"
+          on-legend-click="onLegendClick(cell_id)"
+          on-legend-mouseover="onLegendMouseover(cell_id)"
+          on-legend-mouseout="onLegendMouseout(cell_id)"
+          init="initChart()" />
+      </div>
+
+      <h2>OFF</h2>
+
+      <div ng-controller="calciumController">
+        <calcium 
+          bindto-id="chart-calcium-off"
+          activation="off"
+          on-legend-click="onLegendClick(cell_id)"
+          on-legend-mouseover="onLegendMouseover(cell_id)"
+          on-legend-mouseout="onLegendMouseout(cell_id)"
+          init="initChart()" />
       </div>
       
-      <div flex="grow">
+     <!--  <div flex="grow">
         <h2>Wiki Overview</h2>
 
         <p>
@@ -87,7 +106,7 @@
             Help Contribute!
           </a>
         </p>
-      </div>
+      </div> -->
 
     </div>
   </div>

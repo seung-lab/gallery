@@ -48,7 +48,7 @@ The cell museum is being developed by Seung Lab.
 - Nico Kemnitz suggested using OpenCTM as a mesh encoding, which greatly improved mesh loading.
 - Jinseop Kim provided classification, stratification profiles and meshes for the neurons being displayed.
 - Sebastian Seung provided code for creating sets of highly differentiable colors, and usability feedback.
-- Jack Hudson was the driving force of the second version and implemented the homepage, and the selector page. 
+- Jack Hudson was the driving force of the second version and implemented prototypes of the homepage and the selector page. 
 - Ignacio Tartavull and later William Silversmith provided general maintenance.
 
 

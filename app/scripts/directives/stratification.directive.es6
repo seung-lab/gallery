@@ -1,16 +1,7 @@
 'use strict';
   
-app.directive('chart', [ '$timeout', 'cells', function ($timeout, cells) {
+app.directive('stratification', [ '$timeout', 'cells', function ($timeout, cells) {
 
-  function range (a, b, step = 1) {
-    let rng = [];
-    for (let i = a; i < b; i += step) {
-      rng.push(i);
-    }
-
-    return rng;
-  }
-        
   var chartLinker = function (scope, element, attrs) {
       scope.$on('$destroy', function () {
           $timeout(function () {
@@ -27,7 +18,6 @@ app.directive('chart', [ '$timeout', 'cells', function ($timeout, cells) {
         scope.chart = new Chart(ctx, {
           type: 'scatter',
           data: {
-            //labels: range(0, cells[0].stratification.length),
             datasets: cells.map(function (cell) {
               let data = [];
               for (let i = 0; i < cell.stratification.length; i++) {

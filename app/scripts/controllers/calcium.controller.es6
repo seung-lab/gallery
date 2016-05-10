@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller("chartCtrl", [ '$q', '$scope', '$state', 'cells', 'mesh', function ($q, $scope, $state, cells, mesh) {
+app.controller("calciumController", [ '$q', '$scope', '$state', 'cells', 'mesh', function ($q, $scope, $state, cells, mesh) {
 
 	$scope.initChart = function () {
 		$scope.neurons = $state.params.neurons.split(/ ?, ?/)
