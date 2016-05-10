@@ -8,7 +8,9 @@ app.controller('ViewerCtrl', [
   let self = this;
   self.states = [];
 
-  $scope.neurons = $state.params.neurons.split(/ ?, ?/).map(function (cid) {
+  let neuronparam = $state.params.neurons || "";
+
+  $scope.neurons = neuronparam.split(/ ?, ?/).filter( (x) => x ).map(function (cid) {
     return parseInt(cid, 10);
   });
 
@@ -108,7 +110,7 @@ app.controller('ViewerCtrl', [
       }
 
       cells[cell[attr]] = cells[cell[attr]] || {
-        display: cell[attr],
+        display: cell[attr] || "null",
         value: [],
       };
 

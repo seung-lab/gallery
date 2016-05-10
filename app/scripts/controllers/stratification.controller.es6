@@ -3,8 +3,12 @@
 app.controller("stratificationController", [ '$q', '$scope', '$state', 'cells', 'mesh', function ($q, $scope, $state, cells, mesh) {
 
 	$scope.initChart = function () {
-		$scope.neurons = $state.params.neurons.split(/ ?, ?/)
-			.map( (cellid) => parseInt(cellid, 10) );
+		$scope.neurons = [];
+		if ($state.params.neurons) {
+			$scope.neurons = $state.params.neurons.split(/ ?, ?/)
+				.map( (cellid) => parseInt(cellid, 10) );
+		}
+
 		
 		let promises = [];
 

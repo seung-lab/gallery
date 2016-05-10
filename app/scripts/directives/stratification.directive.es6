@@ -15,6 +15,8 @@ app.directive('stratification', [ '$timeout', 'cells', function ($timeout, cells
         let canvas = angular.element(element).find('canvas')[0];
         let ctx = canvas.getContext('2d');
 
+        cells = cells.filter( (cell) => cell.stratification );
+
         scope.chart = new Chart(ctx, {
           type: 'scatter',
           data: {

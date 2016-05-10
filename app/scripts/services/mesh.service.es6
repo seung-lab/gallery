@@ -55,7 +55,14 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 	}
 
 	this.display = function (neurons, progresscb) {
-		if (!Array.isArray(neurons)) {
+		if (!neurons 
+			|| (Array.isArray(neurons) && neurons.length === 0)) {
+
+			let defer = $q.defer();
+			defer.resolve([]);
+			return defer.promise;
+		}
+		else if (!Array.isArray(neurons)) {
 			neurons = [ neurons ];
 		}
 

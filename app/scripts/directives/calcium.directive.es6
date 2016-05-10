@@ -9,8 +9,12 @@ app.directive('calcium', [ '$timeout', 'cells', function ($timeout, cells) {
 
         cells = cells.filter( (cell) => cell.calcium );
 
-        let angles = Object.keys(cells[0].calcium.activations[scope.activation]).map( (angle) => parseInt(angle, 10));
-        angles.sort();
+        let angles = [ 360, 45, 90, 135, 180, 225, 270, 315 ];
+
+        if (cells.length) {
+          angles = Object.keys(cells[0].calcium.activations[scope.activation]).map( (angle) => parseInt(angle, 10));
+          angles.sort();
+        }
 
         scope.chart = new Chart(ctx, {
           type: 'radar',

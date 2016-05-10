@@ -19,11 +19,13 @@ exports.show = function(req, res) {
 		headers: { 
 			"Content-Type": 'text/plain',
 		},
-	};  
+	};
 
-	res.sendFile(req.params.id + '.ctm' , options, function (err) {
+	var filename = req.params.id + '.ctm';
+
+	res.sendFile(filename, options, function (err) {
 		if (err) { 
-			res.send("File doesn't exist!");
+			console.log(filename, " -- file doesn't exist!");
 		}
 	});
 };
