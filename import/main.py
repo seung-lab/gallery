@@ -2,6 +2,7 @@ import re
 import scipy.io
 from collections import defaultdict
 import json
+import math
 
 import subprocess
 
@@ -81,18 +82,27 @@ def read_stratification():
   """
   s = defaultdict(list)
   mat = scipy.io.loadmat('rawdata/strat.mat')['strat']
-  #You might be wondering why ['start'] ?
-  #I have no f* clue, but seems like many mat files
-  #have its filenames as a dictionary key 
-  #and the value of that dictionary is the actual data being stored
+
+  nanproblems = []
+
+  # You might be wondering why ['start'] ?
+  # I have no f* clue, but seems like many mat files
+  # have its filenames as a dictionary key 
+  # and the value of that dictionary is the actual data being stored
   for i, row in enumerate(mat):
     cell_id = i + 1 #It took me way too long to find this!
-    #Matab is 1-index why python is 0-index, so obvious now!
+    # Matab is 1-index why python is 0-index, so obvious now!
     
     if row[0].shape != (1,0):
-    #Why row[0] ?  Why not?
+    # Why row[0]? Why not?
       parse_stratification_for_cell = do_some_parsing(row[0])
       s[cell_id] = parse_stratification_for_cell
+
+      if len(s[cell_id]) > 0 and any([ math.isnan(num) for num in s[cell_id] ]):
+        nanproblems.append(cell_id)
+        s[cell_id] = None
+
+  print ", ".join([ str(cid) for cid in nanproblems ]), "had NaN values present in their stratification.\n"
 
   return s
 
@@ -117,10 +127,28 @@ def save_cells_json():
   strat = read_stratification()
   # Write all the parseds cell ids
   # Do chaining of all the list of ids like [20126, 20228]
-  
+
+  problems = {
+    "stratification": [],
+    "calcium": [],
+    "metadata": [],
+  }
+
   for cell_id, cell in allcells.iteritems():
     def maybe(info, key):
-     return info[key] if info.has_key(key) else None
+      return info[key] if info.has_key(key) else None
+
+    def hasproblem(problem, is_missing):
+      if not cell.has_key(is_missing) or cell[is_missing] is None:
+        problems[problem].append(cell_id)
+
+    hasproblem('metadata', 'name')
+
+    if (not cell.has_key('calcium') or cell['calcium'] is None) and (cell['type'] == 'ganglion' or cell['type'] == 'amacrine'):
+        problems['calcium'].append(cell_id)
+    
+    if maybe(strat, cell_id) is None:
+      problems['stratification'].append(cell_id)      
 
     cell = {  
       "id": cell_id,
@@ -134,6 +162,21 @@ def save_cells_json():
     }
 
     cells_ready_for_json.append(cell)
+
+  problems['metadata'].sort()
+  problems['calcium'].sort()
+  problems['stratification'].sort()
+
+  print "Total Cells: ", len(allcells), "\n"
+
+  if len(problems['metadata']):
+    print "Did not have cell metadata (", len(problems['metadata']), "): ", ", ".join([ str(cid) for cid in problems["metadata"] ]), "\n"
+  
+  if len(problems['calcium']):
+    print "Did not have calcium information (", len(problems['calcium']), "): ", ", ".join([ str(cid) for cid in problems["calcium"] ]), "\n"
+  
+  if len(problems['stratification']):
+    print "Did not have stratification data (", len(problems['stratification']), "): ", ", ".join([ str(cid) for cid in problems["stratification"] ]), "\n"
 
   write_json(cells_ready_for_json, '../server/config/cells.json')
 
@@ -172,6 +215,7 @@ def save_sets_json():
       'children': celltypes[type_name]
     }
     sets_ready_for_json.append( json_set )
+ 
   write_json(sets_ready_for_json, '../server/config/sets.json')
 
 def generate_json():
@@ -195,7 +239,6 @@ def main():
   read_json_into_cells('data/bipolar_cells.json', 'bipolar')
 
   process_calcium_data()
-
 
   save_cells_json()
   # save_sets_json()
