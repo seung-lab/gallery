@@ -41,6 +41,9 @@ app.directive('calcium', [ '$timeout', 'cells', function ($timeout, cells) {
           },
           options: {
             showLines: true,
+            legend: {
+              display: false,
+            }
             // legend: {
             //   onClick: function (evt, obj) {
             //     scope.onLegendClick({ 

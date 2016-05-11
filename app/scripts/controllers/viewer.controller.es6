@@ -171,16 +171,20 @@ app.controller('ViewerCtrl', [
   // Cameras
 
   $scope.cameras = [ "orthographic", "perspective" ];
+  $scope.camera = "perspective";
 
   $scope.camClick = function (cam) {
+    $scope.camera = cam;
+  };
 
-    if (cam === "orthographic") {
+  $scope.$watch('camera', function () {
+    if ($scope.camera === "orthographic") {
       camera.useOrthographic();
     } 
     else {
       camera.usePerspective();
     }
-  };
+  });
 
   $scope.views = [ "top", "side" ];
 

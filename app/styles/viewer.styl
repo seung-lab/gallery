@@ -180,9 +180,8 @@ main.viewer
 	
 .viewer .more-info.sidebar-open
 	right 715px
-	
-	
-.viewer .progress-indicator
+
+.viewer .bottom-left
 	position absolute
 	bottom 20px
 	left 20px
@@ -192,9 +191,15 @@ main.viewer
 	letter-spacing 2px
 	
 	color $WHITE
+	
+	line-height 2em
 		
+.viewer .progress-indicator
+	opacity 0
+	transition opacity 150ms ease
 
-
+.viewer .progress-indicator.onscreen
+	opacity 1
 
 
 

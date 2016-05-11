@@ -29,7 +29,7 @@ app.service('cells', [ '$q', '$resource', function ($q, $resource) {
 	this.show = function (cell_id, callback) {
 		return $q(function (resolve, reject) {
 			api.show({ id: cell_id }, function (cell) {
-				cell.color = getColor(cell.id);
+				cell.color = getColor(cell.id, cell.type);
 				
 				resolve(cell);
 
@@ -54,16 +54,17 @@ app.service('cells', [ '$q', '$resource', function ($q, $resource) {
 
 	this.create = api.create;
 
-	function getColor (i) {
+	function getColor (i, celltype) {
 
 		// From https://en.wikipedia.org/wiki/Help:Distinguishable_colors
+		// candy colored
 
-		var colors = [
-			'#F0A3FF', '#0075DC', '#993F00', '#4C005C', '#005C31', '#2BCE48',
-			'#FFCC99', '#808080', '#94FFB5', '#8F7C00', '#9DCC00', '#C20088',
-			'#003380', '#FFA405', '#FFA8BB', '#FFA8BB', '#426600', '#FF0010',
-			'#5EF1F2', '#00998F', '#740AFF', '#990000', '#FF5005', '#FFFF00'
-		];
+		// var colors = [
+		// 	'#F0A3FF', '#0075DC', '#993F00', '#4C005C', '#005C31', '#2BCE48',
+		// 	'#FFCC99', '#808080', '#94FFB5', '#8F7C00', '#9DCC00', '#C20088',
+		// 	'#003380', '#FFA405', '#FFA8BB', '#FFA8BB', '#426600', '#FF0010',
+		// 	'#5EF1F2', '#00998F', '#740AFF', '#990000', '#FF5005', '#FFFF00'
+		// ];
 
 		// From distinguishable colors from matlab. Ugly as sin.
 
@@ -74,6 +75,41 @@ app.service('cells', [ '$q', '$resource', function ($q, $resource) {
 		//   0x8c5783, 0xf69e83
 		// ];
 
+		var types = {
+			ganglion: [
+				'#edf8e9',
+				'#c7e9c0',
+				'#a1d99b',
+				'#74c476',
+				'#41ab5d',
+				'#238b45',
+				'#005a32'
+			],
+			bipolar: [
+				'#eff3ff',
+				'#c6dbef',
+				'#9ecae1',
+				'#6baed6',
+				'#4292c6',
+				'#2171b5',
+				'#084594'
+			],
+			amacrine: [ 
+				'#fee5d9',
+				'#fcbba1',
+				'#fc9272',
+				'#fb6a4a',
+				'#ef3b2c',
+				'#cb181d',
+				'#99000d'
+			],
+		};
+
+		var colors = [ '#ff0' ]; // booger green-yellow, indicates problem with data
+		if (types[celltype]) {
+			colors = types[celltype];
+		}
+		
 		return colors[ i % colors.length ];
 	}
 }]);
