@@ -21,13 +21,15 @@ app.directive('calcium', [ '$timeout', 'cells', function ($timeout, cells) {
           data: {
             labels: angles,
             datasets: cells.map(function (cell) {
+              let line_color = ColorUtils.toRGBA(cell.color, 0.4);
+
               return  {
                 label: cell.id,
                 fill: false,
                 lineTension: 0,
                 borderWidth: 1,
                 backgroundColor: cell.color,
-                borderColor: cell.color,
+                borderColor: line_color,
                 pointRadius: 1,
                 pointBackgroundColor: cell.color,
                 pointBorderColor: cell.color,
@@ -41,6 +43,13 @@ app.directive('calcium', [ '$timeout', 'cells', function ($timeout, cells) {
           },
           options: {
             showLines: true,
+            scale: {
+                ticks: {
+                  showLabelBackdrop: false,
+                  beginAtZero: true,
+                  maxTicksLimit: 4,
+                },
+            },
             legend: {
               display: false,
             }

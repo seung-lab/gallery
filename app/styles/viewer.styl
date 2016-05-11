@@ -104,10 +104,29 @@ main.viewer
 .viewer md-autocomplete input:not(.md-input)
 	height 50px
 	
+.viewer section.glider
+	height 100vh
+	width calc(95px + 33vw)
+	
+	position absolute
+	right -33vw
+	
+	transition right 400ms ease-in-out
+	
+$minimum_sidebar_width = 500px
+$width_trigger = unit($minimum_sidebar_width / .33, 'px')
+@media all and (max-width: $width_trigger)
+	.viewer section.glider
+		width $minimum_sidebar_width + 95px
+		right -1 * $minimum_sidebar_width
+
+.viewer section.glider.onscreen
+	right 0px
+
 .viewer .controls
 	position absolute
 	bottom 5px
-	right 20px
+	left 20px
 	
 	color $WHITE
 	font-size 12px
@@ -116,7 +135,7 @@ main.viewer
 	font-weight 500
 
 	width 80px
-	text-align right
+	text-align left
 
 .viewer .controls .group .title
 	margin-bottom 5px
@@ -179,9 +198,7 @@ main.viewer
 .viewer .more-info
 	position absolute
 	top 4px
-	right 15px
-	
-	transition right 400ms ease-in-out !important
+	left 15px
 	
 .viewer .more-info.sidebar-open
 	right 715px

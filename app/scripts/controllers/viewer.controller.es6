@@ -159,19 +159,6 @@ app.controller('ViewerCtrl', [
     $scope.sidebar_open = !$scope.sidebar_open;
   };
 
-  $scope.$watch( (scope) => scope.sidebar_open, function () {
-    let sidebar = angular.element('#right-sidebar'),
-        fab = angular.element('button.more-info');
-
-    sidebar.removeClass('onscreen');
-    fab.removeClass('sidebar-open');
-    if ($scope.sidebar_open) {
-      sidebar.addClass('onscreen');
-      fab.addClass('sidebar-open');
-    }
-  });
-
-
   // Cameras
 
   $scope.cameras = [ "orthographic", "perspective" ];

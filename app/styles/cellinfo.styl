@@ -2,33 +2,23 @@
 @require 'app.styl'
 
 .viewer .sidebar
-	width 700px
+	width 33vw
+	min-width 500px
 	height 100vh
 
 	position absolute
 	top 0px
-	right -@width - 5px
-	
-	transition right 400ms ease-in-out
+	left 95px
 	
 	box-sizing border-box
 	box-shadow -2px 2px 5px 0 rgba(0, 0, 0, 0.26)
 	z-index 100
 	
 	overflow-y scroll
-
-.viewer .sidebar.onscreen
-	right 0px
 	
-.viewer .sidebar-content
 	padding 50px
 	padding-top 25px
 	background-color $WHITE
-	
-	box-sizing border-box
-
-.viewer .sidebar .sidebar-content h1
-	margin-bottom 0.67em
 
 .viewer .sidebar .title
 	height $HEADER_HEIGHT
@@ -43,6 +33,29 @@
 	
 	font-size 18px
 	font-weight 500
+
+.viewer .sidebar h1
+	margin-bottom 0.67em
+
+.viewer .sidebar h2
+	
+	border-top 1px solid $BLACK
+	width 100%
+	
+	line-height 1.5em
+	
+	color $BLACK
+	font-size 12px
+	text-transform uppercase
+	font-weight 700
+	letter-spacing 2px
+	
+	padding-top 5px
+	
+	margin-top 50px
+	
+.viewer .sidebar h2:first-of-type
+	margin-top 40px
 	
 
 
