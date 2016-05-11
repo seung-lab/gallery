@@ -187,19 +187,27 @@ app.controller('ViewerCtrl', [
   });
 
   $scope.views = [ "top", "side" ];
+  $scope.current_view = null;
 
-  $scope.viewClick = function (view) {
+  camera.addEventListener('move', function () {
+    $scope.$apply(function () {
+      $scope.current_view = null;
+    });
+  });
 
-    var bbox = mesh.getVisibleBBox();
+  $scope.$watch('current_view', function () {
+    let bbox = mesh.getVisibleBBox();
 
-    if (view == "top") {
+    if ($scope.current_view == "top") {
       camera.lookBBoxFromTop(bbox);
     }
-    else if (view == "side") {
+    else if ($scope.current_view == "side") {
       camera.lookBBoxFromSide(bbox);
     } 
-    else {
-      camera.lookBBoxFromOblique(bbox);
-    }
+  });
+
+  $scope.viewClick = function (view) {
+    $scope.current_view = view;
   };
+
 }]);

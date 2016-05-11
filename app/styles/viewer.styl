@@ -132,7 +132,8 @@ main.viewer
 	background-size 65%
 	
 .viewer .controls .md-button:hover
-.viewer .controls .md-button.md-raised:not([disabled]):hover
+.viewer .controls .md-button.md-raised:not([disabled]):hover,
+.viewer .controls .md-button.md-raised:not([disabled]).active
 	background-color $WHITE
 	box-shadow 0 2px 5px 0 rgba(0, 0, 0, 0.26)
 
@@ -148,26 +149,30 @@ main.viewer
 .viewer .controls .orthographic
 	background-image url("/icons/orthographic-white.svg")	
 
-.viewer .controls .orthographic:hover
+.viewer .controls .orthographic:hover,
+.viewer .controls .orthographic.active
 	background-image url("/icons/orthographic-black.svg")	
 
 .viewer .controls .perspective
 	background-image url("/icons/perspective-white.svg")
 
-.viewer .controls .perspective:hover
+.viewer .controls .perspective:hover,
+.viewer .controls .perspective.active
 	background-image url("/icons/perspective-black.svg")
 
 
 .viewer .controls .top
 	background-image url("/icons/view-top-white.svg")	
 
-.viewer .controls .top:hover
+.viewer .controls .top:hover,
+.viewer .controls .top.active
 	background-image url("/icons/view-top-black.svg")	
 
 .viewer .controls .side
 	background-image url("/icons/view-side-white.svg")
 
-.viewer .controls .side:hover
+.viewer .controls .side:hover,
+.viewer .controls .side.active
 	background-image url("/icons/view-side-black.svg")
 
 

@@ -6,6 +6,14 @@ app.factory('camera', function (scene) {
     var _this = this,
       _needsrender = false;
 
+    _this.events = {
+      move: [],
+    };
+
+    this.addEventListener = function (evt, fn) {
+      _this.events[evt].push(fn);
+    };
+
     this.createPerspective = function () { 
 
       // default values for camera
@@ -86,7 +94,7 @@ app.factory('camera', function (scene) {
 
     };
 
-    this.animate = function() {
+    this.animate = function () {
       requestAnimationFrame(_this.animate);
       _this.controls.update();
     };
@@ -107,7 +115,15 @@ app.factory('camera', function (scene) {
     this.initController = function( renderer ) {
   		_this.renderer = renderer;
       _this.controls = new THREE.TrackballControls( _this.perspectiveCam , renderer.domElement );
-			_this.controls.addEventListener( 'change', _this.render );
+      _this.controls.addEventListener('change', function () {
+        _this.render();
+      });
+
+      _this.controls.addEventListener('move', function () {
+        _this.events.move.forEach(function (fn) {
+          fn();
+        });
+      });
 
       _this.animate();
     };

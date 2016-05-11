@@ -84,6 +84,7 @@ THREE.TrackballControls = function (object, domElement) {
 	var changeEvent = { type: 'change' };
 	var startEvent = { type: 'start' };
 	var endEvent = { type: 'end' };
+	var moveEvent = { type: 'move' };
 
 
 	// methods
@@ -355,11 +356,21 @@ THREE.TrackballControls = function (object, domElement) {
 
 		if (lastPosition.distanceToSquared(_this.object.position) > EPS || this.orthoZoom) {
 
+			if (!this.orthoZoom) {
+				_this.dispatchEvent(moveEvent);
+			}
+
+			_this.dispatchEvent(changeEvent);
+
 			//This is updated when we zoom using orthographic camera
 			this.orthoZoom = false;
-			_this.dispatchEvent(changeEvent);
 			lastPosition.copy(_this.object.position);
 		}
+	};
+
+	this.cancelMotion = function () {
+		_moveCurr.copy(_movePrev);
+		_panStart.copy(_panEnd);
 	};
 
 	this.reset = function () {
@@ -375,10 +386,11 @@ THREE.TrackballControls = function (object, domElement) {
 
 		_this.object.lookAt(_this.target);
 
-		_this.dispatchEvent(changeEvent);
-
 		lastPosition.copy(_this.object.position);
 
+		_this.cancelMotion();
+
+		_this.dispatchEvent(changeEvent);
 	};
 
 	// listeners
