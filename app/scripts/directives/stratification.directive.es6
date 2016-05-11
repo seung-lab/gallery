@@ -53,6 +53,7 @@ app.directive('stratification', [ '$timeout', 'cells', function ($timeout, cells
           options: {
             showLines: true,
             legend: {
+              display: false,
               onClick: function (evt, obj) {
                 scope.onLegendClick({ 
                   cell_id: parseInt(obj.text, 10),

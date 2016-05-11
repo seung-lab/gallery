@@ -19,20 +19,15 @@
 	padding 50px
 	padding-top 25px
 	background-color $WHITE
+	
+	line-height 1.5em
+	
+.viewer .sidebar a
+	@extend p a
+	line-height 1.75em
 
-.viewer .sidebar .title
-	height $HEADER_HEIGHT
-	background-color $WHITE
-	
-	display flex
-	align-items center
-	
-	box-sizing border-box
-	padding-left 40px
-	border-bottom 2px solid $BLACK
-	
-	font-size 18px
-	font-weight 500
+.viewer .sidebar .celltypes
+	text-transform capitalize
 
 .viewer .sidebar h1
 	margin-bottom 0.67em
@@ -53,11 +48,30 @@
 	padding-top 5px
 	
 	margin-top 50px
+	margin-bottom 25px
 	
 .viewer .sidebar h2:first-of-type
 	margin-top 40px
 	
+.viewer .sidebar h3
+	width 100%
+	
+	line-height 1.5em
+	
+	color $BLACK
+	font-size 12px
+	text-transform uppercase
+	font-weight 700
+	letter-spacing 2px
 
+.viewer .sidebar .stratification-chart
+	margin-top 45px
 
+.viewer .sidebar table.classification td
+	width 10em
+	
 
+.viewer .sidebar .footer ul
+	columns 2
+	list-style-type none
 

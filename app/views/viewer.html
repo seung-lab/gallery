@@ -48,14 +48,32 @@
 
         <h2>Classification</h2>
 
-        <div>
-          <span ng-repeat="type in celltypes">{{type}}{{$last ? '' : ', '}}</span><br>
-          <span ng-repeat="name in cellnames">{{name}}{{$last ? '' : ', '}}</span>
-        </div>
+        <table class="classification">
+          <tr>
+            <td>{{ celltypes.length !== 1 ? 'Types' : 'Type' }}</td>
+            <td>
+              <span class="celltypes" ng-repeat="type in celltypes">
+                <a href="http://wiki.eyewire.org/index.php?title={{type}}_Cell">{{type}}</a>{{$last ? '' : ', '}}
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ cellnames.length !== 1 ? 'Designations' : 'Designation' }}</td>
+            <td>
+              <span ng-repeat="name in cellnames">{{name}}{{$last ? '' : ', '}}</span>
+            </td>
+          </tr>
+          <tr>
+            <td>Cell Count</td>
+            <td>{{neurons.length}}</td>
+          </tr>
+        </table>
 
         <h2>Stratification</h2>
 
-        <div ng-controller="stratificationController">
+        <p>Retinal cells stratify though the tissue. Their depth profile is useful for understanding their place in a computation &mdash; inputs and outputs.</p>
+
+        <div class="stratification-chart" ng-controller="stratificationController">
           <stratification 
             bindto-id="chart-stratification"  
             chart="chart"  
@@ -105,6 +123,18 @@
             </a>
           </p>
         </div> -->
+
+        <h2>More Information</h2>
+
+        <div class="footer">
+          <ul>
+            <li><a href="http://wiki.eyewire.org/index.php?title=Retinal_Neuron_Classification">Retinal Cell Wiki</a></li>
+            <li><a href="http://wiki.eyewire.org/index.php?title=E2198">About e2198</a></li>
+            <li><a href="http://eyewire.org">Eyewire</a></li>
+          </ul>
+
+          <a href="http://seunglab.org">Seung Lab @ Princeton</a>
+        </div>
     </div>
   </section>
 
