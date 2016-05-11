@@ -22,13 +22,14 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 				callback(cell);
 			}
 			else {
-				cells.show(cell_id, function (cell) {
-					createModel(cell, function (cell) {
-						_cache.put(cell_id.toString(), cell);
-						resolve(cell);
-						callback(cell);
+				cells.show(cell_id)
+					.then(function (cell) {
+						createModel(cell, function (cell) {
+							_cache.put(cell_id.toString(), cell);
+							resolve(cell);
+							callback(cell);
+						});
 					});
-				});
 			}
 		});
 	}
@@ -72,7 +73,7 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 		for (let cell_id of neurons) {
 			let promise = get(cell_id, function (cell) {
 				scene.add(cell.mesh);
-				_displayed.push(cell.mesh);
+				_displayed.push(cell);
 
 				camera.render();
 			})
@@ -93,16 +94,17 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 			}
 			
 			camera.render();
+
+			return _displayed;
 		});
 	};
 
 	this.clear = function () {
-		for (let msh of _displayed) {
-			scene.remove(msh);
+		for (let cell of _displayed) {
+			scene.remove(cell.mesh);
 		}
 
 		_displayed = [];
-		
 		camera.render();
 	};
 

@@ -24,12 +24,14 @@ app.controller('ViewerCtrl', [
   mesh.display($scope.neurons, function (fraction) {
     $scope.loading.value = Math.round(fraction * 100);
   })
-  .then(function () { 
+  .then(function (displayed_cells) { 
     var bbox = mesh.getVisibleBBox();
     camera.lookBBoxFromSide(bbox);
 
     $scope.loading.show = false;
     $scope.loading.value = 100;
+
+    return displayed_cells;
   });
 
   // Quick Search

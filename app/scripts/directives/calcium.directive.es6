@@ -30,7 +30,7 @@ app.directive('calcium', [ '$timeout', 'cells', function ($timeout, cells) {
                 borderWidth: 1,
                 backgroundColor: cell.color,
                 borderColor: line_color,
-                pointRadius: 1,
+                pointRadius: 2,
                 pointBackgroundColor: cell.color,
                 pointBorderColor: cell.color,
                 pointHoverBackgroundColor: cell.color,
