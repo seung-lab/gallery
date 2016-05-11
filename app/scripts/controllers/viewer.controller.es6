@@ -78,6 +78,10 @@ app.controller('ViewerCtrl', [
   };
 
   $scope.goToResult = function (item) {
+    if (!item || !item.value) {
+      return;
+    }
+
     $state.go('viewer', {
       neurons: item.value,
     });
@@ -91,7 +95,7 @@ app.controller('ViewerCtrl', [
     if ($scope.selectedItem) {
       $scope.goToResult($scope.selectedItem);
     }
-    else {
+    else if ($scope.txt) {
       let results = $scope.querySearch($scope.txt);
       if (results.length) {
         $scope.goToResult(results[0]);
