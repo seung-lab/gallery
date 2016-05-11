@@ -19,7 +19,7 @@
     <div class="controls">
       <div class="group">
         <div ng-repeat="cam in cameras">
-          <md-button aria-label="{{cam}}" ng-class="[ 'md-fab', 'md-mini', 'md-raised', cam, { active: (cam === camera) }]" ng-click="camClick(cam)">
+          <md-button aria-label="{{cam}}" ng-class="[ 'md-fab', 'md-mini', 'md-raised', cam, { active: (cam === camera) }]" ng-click="camClick($event, cam)">
             <md-tooltip md-direction="left" md-visible="tooltipVisible" md-autohide="true">
               {{cam}}
             </md-tooltip>
@@ -29,7 +29,7 @@
 
        <div class="group">
         <div ng-repeat="view in views">
-          <md-button aria-label="{{view}}" ng-class="[ 'md-fab', 'md-mini', 'md-raised', view, { active: (view === current_view) }]" ng-click="viewClick(view)">
+          <md-button aria-label="{{view}}" ng-class="[ 'md-fab', 'md-mini', 'md-raised', view, { active: (view === current_view) }]" ng-click="viewClick($event, view)">
             <md-tooltip md-direction="left" md-visible="tooltipVisible" md-autohide="true">
               {{view}}
             </md-tooltip>

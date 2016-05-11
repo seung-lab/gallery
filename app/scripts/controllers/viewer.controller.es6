@@ -154,7 +154,9 @@ app.controller('ViewerCtrl', [
     // Solves bug where once button is clicked it gains focus
     // and space bar generates a click and a keydown event that 
     // cancel each other.
-    angular.element('.more-info').blur();
+    if (evt) {
+      evt.target.blur();
+    }
 
     $scope.sidebar_open = !$scope.sidebar_open;
   };
@@ -164,7 +166,8 @@ app.controller('ViewerCtrl', [
   $scope.cameras = [ "orthographic", "perspective" ];
   $scope.camera = "perspective";
 
-  $scope.camClick = function (cam) {
+  $scope.camClick = function (evt, cam) {
+    evt.target.blur();
     $scope.camera = cam;
   };
 
@@ -197,7 +200,8 @@ app.controller('ViewerCtrl', [
     } 
   });
 
-  $scope.viewClick = function (view) {
+  $scope.viewClick = function (evt, view) {
+    evt.target.blur();
     $scope.current_view = view;
   };
 
