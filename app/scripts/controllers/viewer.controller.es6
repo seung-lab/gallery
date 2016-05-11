@@ -52,7 +52,7 @@ app.controller('ViewerCtrl', [
       return cellinfos;
     });
 
-      /**
+    /**
    * Populates the autocomplete list shown
    */
   $scope.querySearch = function (query) {
@@ -95,8 +95,8 @@ app.controller('ViewerCtrl', [
     if ($scope.selectedItem) {
       $scope.goToResult($scope.selectedItem);
     }
-    else if ($scope.txt) {
-      let results = $scope.querySearch($scope.txt);
+    else if ($scope.searchText) {
+      let results = $scope.querySearch($scope.searchText);
       if (results.length) {
         $scope.goToResult(results[0]);
       }
