@@ -142,7 +142,7 @@ app.controller('ViewerCtrl', [
     
   // Sidebar
 
-  $scope.sidebar_open = false;
+  $scope.sidebar_open = $state.params.fullscreen || false;;
 
   angular.element(window).off('keydown.sidebarToggle').on('keydown.sidebarToggle', function (evt) {
     if (evt.keyCode === 32) {
@@ -187,9 +187,9 @@ app.controller('ViewerCtrl', [
   $scope.current_view = null;
 
   camera.addEventListener('move', function () {
-    $scope.$apply(function () {
+    $timeout(function () { // needed to avoid accidently executing inside an $apply
       $scope.current_view = null;
-    });
+    }, 0);
   });
 
   $scope.$watch('current_view', function () {
@@ -208,4 +208,17 @@ app.controller('ViewerCtrl', [
     $scope.current_view = view;
   };
 
+  $scope.sidebarFullscreen = $state.params.fullscreen || false;
+  $scope.fullscreenToggle = function (evt) {
+    evt.target.blur();
+    evt.preventDefault();
+    $scope.sidebarFullscreen = !$scope.sidebarFullscreen;
+  };
+
+  // prevent scrolling on spacebar
+  angular.element('body').keydown(function (evt) {
+    if (evt.keyCode === 32) {
+      evt.preventDefault();
+    }
+  });
 }]);

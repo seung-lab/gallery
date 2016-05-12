@@ -113,7 +113,11 @@ main.viewer
 	
 	pointer-events none
 	
-	transition right 400ms ease-in-out
+	transition right 400ms ease-in-out, width 400ms ease-in-out
+	
+.viewer section.glider.fullscreen
+	width calc(95px + 100vw)
+	
 	
 $minimum_sidebar_width = 600px
 $width_trigger = unit($minimum_sidebar_width / .33, 'px')
@@ -121,6 +125,10 @@ $width_trigger = unit($minimum_sidebar_width / .33, 'px')
 	.viewer section.glider
 		width $minimum_sidebar_width + 95px
 		right -1 * $minimum_sidebar_width
+		
+	.viewer section.glider.fullscreen
+		width calc(95px + 100vw)
+		right -100vw
 
 .viewer section.glider.onscreen
 	right 0px

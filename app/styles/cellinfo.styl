@@ -24,6 +24,12 @@
 	
 	font-size 14px
 	
+	transition width 400ms ease-in-out, min-width 400ms ease-in-out
+	
+.viewer .fullscreen .sidebar
+	width 100vw
+	min-width 100vw
+	
 .viewer .sidebar a
 	@extend p a
 	line-height 1.75em
@@ -76,4 +82,27 @@
 .viewer .sidebar .footer ul
 	columns 2
 	list-style-type none
+	
+.viewer .sidebar .fullscreen
+	position absolute
+	
+	top 25px
+	right 50px
+	
+	color $BLACK
+	font-size 12px
+	font-weight 500
+	text-transform uppercase
+	letter-spacing 2px
+	padding-bottom 3px
+	border-bottom 2px solid $BLACK
+	
+	cursor pointer
+	outline none
+	
+.viewer section.onscreen .sidebar .fullscreen
+	position fixed
+	
+
+
 

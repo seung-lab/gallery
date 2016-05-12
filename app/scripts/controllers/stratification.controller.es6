@@ -13,7 +13,7 @@ app.controller("stratificationController", [ '$q', '$scope', '$state', 'cells', 
 		let promises = [];
 
 		for (let cell_id of $scope.neurons) {
-			promises.push(cells.show(cell_id));
+			promises.push(cells.show(cell_id, $scope.neurons.length));
 		}
 
 		return $q.all(promises);

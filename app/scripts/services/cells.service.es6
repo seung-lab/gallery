@@ -28,7 +28,7 @@ app.service('cells', [ '$q', '$resource', 'CacheFactory', function ($q, $resourc
 		destroy: { method: 'DELETE' },
 	});
 
-	this.show = function (cell_id) {
+	this.show = function (cell_id, count) {
 		return $q(function (resolve, reject) {
 			let cell = _cache.get(cell_id.toString());
 
@@ -41,8 +41,15 @@ app.service('cells', [ '$q', '$resource', 'CacheFactory', function ($q, $resourc
 
 			let unfufilled_cell = api.show({ id: cell_id }, function (cell) {
 				if (!cell.color) {
-					cell.color = colorize_by_type(cell);
-					// cell.color = '#fff';
+					if (count === 1) {
+						cell.color = '#fff';
+					}
+					else if (count < 16) {
+						cell.color = colorize_by_type(cell);	
+					}
+					else {
+						cell.color = colorize_by_distinctiveness(cell);
+					}
 				}
 				
 				_cache.put(cell.id.toString(), cell);
@@ -121,7 +128,9 @@ app.service('cells', [ '$q', '$resource', 'CacheFactory', function ($q, $resourc
       return color;
     }
 
-    function colorize_by_id (cell) {
+    let _id_index = 0;
+
+    function colorize_by_distinctiveness (cell) {
 		
 		// From https://en.wikipedia.org/wiki/Help:Distinguishable_colors
 		// candy colored
@@ -142,6 +151,10 @@ app.service('cells', [ '$q', '$resource', 'CacheFactory', function ($q, $resourc
 		//   0x8c5783, 0xf69e83
 		// ];
 
-		return colors[ cell.id % colors.length ];
+		let color = colors[ _id_index % colors.length ];
+
+		_id_index++;
+
+		return color;
 	}
 }]);

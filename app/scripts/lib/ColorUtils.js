@@ -138,7 +138,22 @@ var ColorUtils = {};
 	 */
 	ColorUtils.toHSL = function (color) {
 		if (typeof(color) === 'string') {
-			color = ColorUtils.hexToRGB(color);
+			var match = color.match(/^hsla?\( *(\d+) *, *([\d\.]+)%? *, *([\d\.]+)%? *,? *([\d\.]+)? *\)$/);
+			if (match) {
+				return { 
+					h: parseInt(match[1], 10),
+					s: parseFloat(match[2], 10),
+					l: parseFloat(match[3], 10),
+					a: (match[4] === undefined 
+							? 1 
+							: Math.min(Math.max(parseFloat(match[4], 10), 0), 1)
+						),
+				};
+			}
+			else {
+				color = ColorUtils.hexToRGB(color);	
+			}
+			
 			return ColorUtils.RGBtoHSL(color.r, color.g, color.b);
 		}
 		else if (color.r !== undefined) {

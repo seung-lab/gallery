@@ -8,7 +8,8 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 
 	let _displayed = [];
 
-	function get (cell_id, callback) {
+	// count is used to decide how to color the neurons in the cells.service
+	function get (cell_id, callback, count) {
 		if (!cell_id) {
 			callback(null);
 			return;
@@ -22,7 +23,7 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 				callback(cell);
 			}
 			else {
-				cells.show(cell_id)
+				cells.show(cell_id, count)
 					.then(function (cell) {
 						createModel(cell, function (cell) {
 							_cache.put(cell_id.toString(), cell);
@@ -79,7 +80,7 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 				_displayed.push(cell);
 
 				camera.render();
-			})
+			}, neurons.length)
 			.finally(function () {
 				completed++;
 
