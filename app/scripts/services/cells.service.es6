@@ -41,8 +41,8 @@ app.service('cells', [ '$q', '$resource', 'CacheFactory', function ($q, $resourc
 
 			let unfufilled_cell = api.show({ id: cell_id }, function (cell) {
 				if (!cell.color) {
-					// cell.color = colorize_by_type(cell);
-					cell.color = '#fff';
+					cell.color = colorize_by_type(cell);
+					// cell.color = '#fff';
 				}
 				
 				_cache.put(cell.id.toString(), cell);

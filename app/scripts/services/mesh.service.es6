@@ -138,13 +138,12 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 			}
 		});
 
-		// showBoundingBox( bbox );
+		// this.showBoundingBox( bbox );
 		return bbox;
 	}
 
 
-	let showBoundingBox = function (bbox) {
-
+	this.showBoundingBox = function (bbox) {
 		let box_geometry = new THREE.BoxGeometry( bbox.max.x - bbox.min.x , bbox.max.y - bbox.min.y , bbox.max.z - bbox.min.z );
 		let material = new THREE.MeshBasicMaterial({ color: 0x666666, wireframe: true });
 		let cube = new THREE.Mesh( box_geometry, material );
