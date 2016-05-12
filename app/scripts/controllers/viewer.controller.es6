@@ -150,6 +150,11 @@ app.controller('ViewerCtrl', [
         $scope.toggle();  
       });
     }
+    else if (evt.keyCode === 70) { // f
+      $scope.$apply(function () {
+        $scope.fullscreenToggle();
+      });
+    }
   });
 
   $scope.toggle = function (evt) {
@@ -210,8 +215,10 @@ app.controller('ViewerCtrl', [
 
   $scope.sidebarFullscreen = $state.params.fullscreen || false;
   $scope.fullscreenToggle = function (evt) {
-    evt.target.blur();
-    evt.preventDefault();
+    if (evt) {
+      evt.target.blur();
+    }
+
     $scope.sidebarFullscreen = !$scope.sidebarFullscreen;
   };
 
