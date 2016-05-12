@@ -23,7 +23,7 @@ app.directive('stratification', [ '$timeout', 'cells', function ($timeout, cells
             datasets: cells.map(function (cell) {
               let data = [];
               for (let i = 0; i < cell.stratification.length; i++) {
-                data.push({ x: i, y: cell.stratification[i] });
+                data.push({ x: cell.stratification[i][0], y: cell.stratification[i][1] });
               }
 
               let color = cell.color;

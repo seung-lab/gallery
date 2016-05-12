@@ -5,6 +5,7 @@ import json
 import math
 
 import subprocess
+import sys
 
 allcells = defaultdict(dict)
 
@@ -60,18 +61,6 @@ def process_calcium_data():
       }
     }
 
-def do_some_parsing( array ):
-  """
-    This have just changed
-    What should we do?
-
-    is a 2d array, where the first column
-    is the x position, and the second y
-  """
-
-
-  return list(array[200:300,1])
-
 def read_stratification():
   """
     Reads .strat.mat and parses into 
@@ -80,7 +69,7 @@ def read_stratification():
     if the key doesn't exists and empty list
     is returned
   """
-  s = defaultdict(list)
+  strat = defaultdict(list)
   mat = scipy.io.loadmat('rawdata/strat.mat')['strat']
 
   nanproblems = []
@@ -89,22 +78,23 @@ def read_stratification():
   # I have no f* clue, but seems like many mat files
   # have its filenames as a dictionary key 
   # and the value of that dictionary is the actual data being stored
+
   for i, row in enumerate(mat):
     cell_id = i + 1 #It took me way too long to find this!
     # Matab is 1-index why python is 0-index, so obvious now!
     
-    if row[0].shape != (1,0):
-    # Why row[0]? Why not?
-      parse_stratification_for_cell = do_some_parsing(row[0])
-      s[cell_id] = parse_stratification_for_cell
+    row = row[0] # Why row[0]? Why not?
 
-      if len(s[cell_id]) > 0 and any([ math.isnan(num) for num in s[cell_id] ]):
+    if row.shape != (1,0):
+      strat[cell_id] = [ [x,y] for x,y in row ] # convert to list, which is JSON serializable
+
+      if len(strat[cell_id]) > 0 and any([ math.isnan(x) or math.isnan(y) for x, y in strat[cell_id] ]):
         nanproblems.append(cell_id)
-        s[cell_id] = None
+        strat[cell_id] = None
 
   print ", ".join([ str(cid) for cid in nanproblems ]), "had NaN values present in their stratification.\n"
 
-  return s
+  return strat
 
 
 def write_json (object_to_dump , fname):
