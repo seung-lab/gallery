@@ -45,6 +45,13 @@ app.controller('SearchController', function ($scope, $timeout, $state, cells) {
 		choices.sort();
 	 
 		return choices.map(function (state) {
+			if (!state) {
+				return {
+					value: null,
+					display: "null",
+				};
+			}
+
 			return {
 				value: state.toLowerCase(),
 				display: state || "null",

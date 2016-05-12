@@ -5,6 +5,11 @@ app.config(function ($stateProvider) {
       .state('main', {
         url: '/',
         templateUrl: 'templates/homepage.html',
-        controller: 'HomepageCtrl'
-      });
+        controller: 'HomepageCtrl',
+      })
+      .state('publications', {
+      	url: '/#publications',
+      	templateUrl: 'templates/homepage.html',
+        controller: 'HomepageCtrl',
+      })
   });
