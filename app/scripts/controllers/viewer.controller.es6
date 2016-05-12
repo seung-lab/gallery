@@ -91,6 +91,8 @@ app.controller('ViewerCtrl', [
   };
 
   $scope.searchKeydown = function (evt) {
+    evt.stopPropagation();
+
     if (evt.keyCode !== 13) { // enter key
       return;
     }

@@ -21,9 +21,15 @@ app.directive('stratification', [ '$timeout', 'cells', function ($timeout, cells
           type: 'scatter',
           data: {
             datasets: cells.map(function (cell) {
+
+              let fmt = (z, factor) => Math.round(z * factor) / factor;
+
               let data = [];
               for (let i = 0; i < cell.stratification.length; i++) {
-                data.push({ x: cell.stratification[i][0], y: cell.stratification[i][1] });
+                data.push({ 
+                  x: fmt(cell.stratification[i][0], 1e3), 
+                  y: fmt(cell.stratification[i][1], 1e7), 
+                });
               }
 
               let color = cell.color;
