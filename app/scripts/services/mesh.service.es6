@@ -29,6 +29,9 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 							resolve(cell);
 							callback(cell);
 						});
+					})
+					.catch(function () {
+						reject(null);
 					});
 			}
 		});
@@ -67,8 +70,8 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 			neurons = [ neurons ];
 		}
 
-		let loaded = [],
-			numloaded = 0;
+		let completed = 0,
+			completed_promise = $q.defer();
 		
 		for (let cell_id of neurons) {
 			let promise = get(cell_id, function (cell) {
@@ -77,25 +80,27 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 
 				camera.render();
 			})
-			.then(function () {
-				numloaded++;
+			.finally(function () {
+				completed++;
 
 				if (progresscb) {
-					progresscb(numloaded / loaded.length);
+					progresscb(completed / neurons.length);
+				}
+			})
+			.finally(function () {
+				if (completed === neurons.length) {
+					completed_promise.resolve();
 				}
 			});
-
-			loaded.push(promise);
 		}
 
-		return $q.all(loaded).then(function () {
+		return completed_promise.promise.then(function () {
 			if (progresscb) {
-				progresscb(numloaded / loaded.length);
+				progresscb(completed / neurons.length);
 			}
-			
-			camera.render();
 
-			return _displayed;
+			camera.render();
+			return _displayed;	
 		});
 	};
 
@@ -126,14 +131,12 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 	this.getVisibleBBox = function () {
 		let bbox = new THREE.Box3();
 
-		for (let cell_id of _cache.keys()) {
-			get(cell_id, function (cell) { 
-				if (cell.mesh.visible) {
-					let meshBbox = cell.mesh.geometry.boundingBox;
-					bbox.union(meshBbox)
-				}
-			});
-		}
+		_displayed.forEach(function (cell) {
+			if (cell.mesh.visible) {
+				let meshBbox = cell.mesh.geometry.boundingBox;
+				bbox.union(meshBbox)
+			}
+		});
 
 		// showBoundingBox( bbox );
 		return bbox;
@@ -143,7 +146,7 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 	let showBoundingBox = function (bbox) {
 
 		let box_geometry = new THREE.BoxGeometry( bbox.max.x - bbox.min.x , bbox.max.y - bbox.min.y , bbox.max.z - bbox.min.z );
-		let material = new THREE.MeshBasicMaterial({ color: 0x000, wireframe: true });
+		let material = new THREE.MeshBasicMaterial({ color: 0x666666, wireframe: true });
 		let cube = new THREE.Mesh( box_geometry, material );
 
 		let scale = 1.0;

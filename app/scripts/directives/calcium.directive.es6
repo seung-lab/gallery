@@ -21,20 +21,26 @@ app.directive('calcium', [ '$timeout', 'cells', function ($timeout, cells) {
           data: {
             labels: angles,
             datasets: cells.map(function (cell) {
-              let line_color = ColorUtils.toRGBA(cell.color, 0.4);
+              let color = cell.color;
+              if (cells.length === 1) {
+                color = '#1A1A1A';
+              }
+
+              let line_color = ColorUtils.toRGBA(color, 0.4);
 
               return  {
                 label: cell.id,
                 fill: false,
                 lineTension: 0,
                 borderWidth: 1,
-                backgroundColor: cell.color,
+                backgroundColor: color,
                 borderColor: line_color,
-                pointRadius: 2,
-                pointBackgroundColor: cell.color,
-                pointBorderColor: cell.color,
-                pointHoverBackgroundColor: cell.color,
-                pointHoverBorderColor: cell.color,
+                pointRadius: 3,
+                pointHoverRadius: 4,
+                pointBackgroundColor: color,
+                pointBorderColor: color,
+                pointHoverBackgroundColor: color,
+                pointHoverBorderColor: color,
                 data: angles.map(function (angle) {
                   return cell.calcium.activations[scope.activation][angle];
                 }),

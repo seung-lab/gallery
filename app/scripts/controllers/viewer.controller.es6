@@ -24,9 +24,10 @@ app.controller('ViewerCtrl', [
   mesh.display($scope.neurons, function (fraction) {
     $scope.loading.value = Math.round(fraction * 100);
   })
-  .then(function (displayed_cells) { 
+  .finally(function (displayed_cells) { 
     var bbox = mesh.getVisibleBBox();
     camera.lookBBoxFromSide(bbox);
+    camera.render();
 
     $scope.loading.show = false;
     $scope.loading.value = 100;

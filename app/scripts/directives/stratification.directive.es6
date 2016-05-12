@@ -26,23 +26,28 @@ app.directive('stratification', [ '$timeout', 'cells', function ($timeout, cells
                 data.push({ x: i, y: cell.stratification[i] });
               }
 
+              let color = cell.color;
+              if (cells.length === 1) {
+                color = '#1A1A1A';
+              }
+
               return {
                 label: cell.id,
                 fill: false,
                 lineTension: 0,
-                backgroundColor: cell.color,
-                borderColor: cell.color,
+                backgroundColor: color,
+                borderColor: color,
                 borderWidth: 1,
                 borderCapStyle: 'butt',
                 borderDash: [],
                 borderDashOffset: 0.0,
                 borderJoinStyle: 'miter',
-                pointBorderColor: cell.color,
-                pointBackgroundColor: cell.color,
+                pointBorderColor: color,
+                pointBackgroundColor: color,
                 pointBorderWidth: 1,
                 pointHoverRadius: 5,
-                pointHoverBackgroundColor: cell.color,
-                pointHoverBorderColor: cell.color,
+                pointHoverBackgroundColor: color,
+                pointHoverBorderColor: color,
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
@@ -52,6 +57,22 @@ app.directive('stratification', [ '$timeout', 'cells', function ($timeout, cells
           },
           options: {
             showLines: true,
+            scales: {
+              // yAxes: [{
+              //   scaleLabel: {
+              //     display: true,
+              //     labelString: "Dogecoin in USD",
+              //     fontSize: 14,
+              //   },
+              // }],
+              // xAxes: [{
+              //   scaleLabel: {
+              //     display: true,
+              //     labelString: "Day from Start of Year",
+              //     fontSize: 14,
+              //   },
+              // }],
+            },
             legend: {
               display: false,
               onClick: function (evt, obj) {
