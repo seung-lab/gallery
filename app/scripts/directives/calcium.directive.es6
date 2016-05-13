@@ -26,7 +26,7 @@ app.directive('calcium', [ '$timeout', 'cells', function ($timeout, cells) {
                 color = '#1A1A1A';
               }
 
-              let line_color = ColorUtils.toRGBA(color, 0.4);
+              let line_color = ColorUtils.toRGBA(color, 1);
 
               return  {
                 label: cell.id,
@@ -35,8 +35,8 @@ app.directive('calcium', [ '$timeout', 'cells', function ($timeout, cells) {
                 borderWidth: 1,
                 backgroundColor: color,
                 borderColor: line_color,
-                pointRadius: 3,
-                pointHoverRadius: 4,
+                pointRadius: 2,
+                pointHoverRadius: 3,
                 pointBackgroundColor: color,
                 pointBorderColor: color,
                 pointHoverBackgroundColor: color,
@@ -50,10 +50,19 @@ app.directive('calcium', [ '$timeout', 'cells', function ($timeout, cells) {
           options: {
             showLines: true,
             scale: {
+                scaleLabel: {
+                  display: true,
+                  fontColor: ColorUtils.toRGBA('#1A1A00', 0.5),
+                },
                 ticks: {
                   showLabelBackdrop: false,
                   beginAtZero: true,
                   maxTicksLimit: 4,
+                  fontColor: ColorUtils.toRGBA('#1A001A', 0.5),
+                },
+                gridLines: {
+                  color: ColorUtils.toRGBA('#001A1A', 0.05),
+                  lineWidth: 1,
                 },
             },
             legend: {

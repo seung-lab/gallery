@@ -41,10 +41,14 @@
     <md-button ng-class="[ 'more-info', 'md-fab', 'md-raised', { 'sidebar-open': sidebar_open }]" ng-click="toggle($event)" aria-label="toggle menu" >
       <md-icon ng-hide="sidebar_open" md-svg-icon="icons/left-chevron-black.svg" ></md-icon>
       <md-icon ng-hide="!sidebar_open"  md-svg-icon="icons/right-chevron-black.svg"></md-icon>
+
+      <md-tooltip md-direction="left" md-visible="tooltipVisible" md-autohide="true">
+        characterization (spacebar)
+      </md-tooltip>
     </md-button>
 
      <div id="right-sidebar" class="sidebar">
-        <div ng-click="fullscreenToggle($event)" class="fullscreen">{{ sidebarFullscreen ? "To Viewer" : "Fullscreen" }}</div>
+        <div title="Fullscreen (f)" ng-click="fullscreenToggle($event)" class="fullscreen">{{ sidebarFullscreen ? "To Viewer" : "Fullscreen" }}</div>
         <h1>Characterization</h1>
 
         <h2>Classification</h2>
@@ -143,8 +147,6 @@
             <li><a href="http://wiki.eyewire.org/index.php?title=E2198">About e2198</a></li>
             <li><a href="http://eyewire.org">Eyewire</a></li>
           </ul>
-
-          <a href="http://seunglab.org">Seung Lab @ Princeton</a>
         </div>
     </div>
   </section>

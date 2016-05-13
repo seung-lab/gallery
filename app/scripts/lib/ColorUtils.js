@@ -30,7 +30,7 @@ var ColorUtils = {};
 	 */
 	ColorUtils.average = function (color1, color2, blending) {
 		blending = (blending === undefined) ? 0.5 : blending;
-		blending = Utils.clamp(blending, 0, 1);
+		blending = clamp(blending, 0, 1);
 
 		color1 = ColorUtils.toRGB(color1);
 		color2 = ColorUtils.toRGB(color2);		
@@ -96,7 +96,7 @@ var ColorUtils = {};
 		var delta = Math.round((args.percent / 100) * 255);
 		var value = hsv.v + delta;
 
-		hsv.v = Utils.clamp(value, 0, 255);
+		hsv.v = clamp(value, 0, 255);
 
 		var brightcolor = ColorUtils.HSVtoRGB(hsv.h, hsv.s, hsv.v);
 		brightcolor.a = alpha;
@@ -118,8 +118,8 @@ var ColorUtils = {};
 	ColorUtils.lighten = function (args) {
 		var color = args.color;
 		var hsl = ColorUtils.RGBtoHSL(color.r, color.g, color.b);
-		hsl.l += Utils.clamp(args.percent / 100, -1, 1);
-		hsl.l = Utils.clamp(hsl.l, 0, 1);
+		hsl.l += clamp(args.percent / 100, -1, 1);
+		hsl.l = clamp(hsl.l, 0, 1);
 
 		var lightcolor = ColorUtils.HSLtoRGB(hsl);
 		lightcolor.a = color.a;
@@ -245,7 +245,7 @@ var ColorUtils = {};
 	 * Required: 
 	 *   [0] h: degrees 
 	 *   [1] s: [0, 1]
-	 *   [2] l: [0, 255]
+	 *   [2] l: [0, 1]
 	 * 
 	 * Returns: {r,g,b}
 	 */
@@ -256,8 +256,8 @@ var ColorUtils = {};
 
 		h = h % 360;
 		h = h >= 0 ? h : h + 360;
-		s = Utils.clamp(s, 0, 1);
-		l = Utils.clamp(l, 0, 1);
+		s = clamp(s, 0, 1);
+		l = clamp(l, 0, 1);
 
 		var chroma = (1 - Math.abs(2 * l - 1)) * s;
 		var hprime = h / 60;
@@ -297,7 +297,7 @@ var ColorUtils = {};
 			if (!rgb.hasOwnProperty(component)) { return; }
 
 			rgb[component] = Math.round(255 * (rgb[component] + m));
-			rgb[component] = Utils.clamp(rgb[component], 0, 255);
+			rgb[component] = clamp(rgb[component], 0, 255);
 		}
 
 		return rgb;
@@ -404,19 +404,19 @@ var ColorUtils = {};
 		['h'].forEach(function (x) {
 			if (!color.hasOwnProperty(x)) { return; }
 
-			color[x] = Utils.clamp(Math.round(color[x]), 0, 360);
+			color[x] = clamp(Math.round(color[x]), 0, 360);
 		});
 
 		['v', 'r', 'g', 'b'].forEach(function (x) {
 			if (!color.hasOwnProperty(x)) { return; }
 
-			color[x] = Utils.clamp(Math.round(color[x]), 0, 255);
+			color[x] = clamp(Math.round(color[x]), 0, 255);
 		});
 			
 		['a', 's', 'l'].forEach(function (x) {
 			if (!color.hasOwnProperty(x)) { return; }
 
-			color[x] = Utils.clamp(color[x], 0, 1);
+			color[x] = clamp(color[x], 0, 1);
 		});
 
 		return color;
@@ -632,8 +632,8 @@ var ColorUtils = {};
 		a = ColorUtils.toRGB(a);
 		b = ColorUtils.toRGB(b);
 
-		a.a = Utils.nvl(a.a, 1);
-		b.a = Utils.nvl(b.a, 1);
+		a.a = nvl(a.a, 1);
+		b.a = nvl(b.a, 1);
 
 		// This is for stupid stuff like where
 		// one color specified alpha as 0 to 255
@@ -648,7 +648,15 @@ var ColorUtils = {};
 			b.a /= maxalpha;
 		}
 
-		return Utils.hasheq(a, b);
+		return a.r === b.r && a.g === b.g && a.b === b.b && a.a === b.a;
 	};
+
+	function nvl (val, ifnull) {
+		return val === undefined ? ifnull : val;
+	}
+
+	function clamp (val, min, max) {
+		return Math.min(Math.max(val, min), max);
+	}
 
 })();
