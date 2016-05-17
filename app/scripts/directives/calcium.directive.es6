@@ -13,7 +13,11 @@ app.directive('calcium', [ '$timeout', 'cells', function ($timeout, cells) {
 
         if (cells.length) {
           angles = Object.keys(cells[0].calcium.activations[scope.activation]).map( (angle) => parseInt(angle, 10));
-          angles.sort();
+          angles.sort( (a,b) => a - b );
+        }
+
+        if (angles[angles.length - 1] === 360) {
+          angles.unshift(angles.pop());
         }
 
         scope.chart = new Chart(ctx, {
