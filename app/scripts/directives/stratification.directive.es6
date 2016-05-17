@@ -24,12 +24,24 @@ app.directive('stratification', [ '$timeout', 'cells', function ($timeout, cells
 
               let fmt = (z, factor) => Math.round(z * factor) / factor;
 
+              cell.stratification.sort(function (a, b) {
+                return a[0] - b[0];
+              });
+
               let data = [];
               for (let i = 0; i < cell.stratification.length; i++) {
                 data.push({ 
                   x: fmt(cell.stratification[i][0], 1e3), 
                   y: fmt(cell.stratification[i][1], 1e7), 
                 });
+              }
+
+              while (data.length && data[0].y === 0) {
+                data.shift();
+              }
+
+              while (data.length && data[data.length - 1].y === 0) {
+                data.pop();
               }
 
               let color = cell.color;
@@ -51,11 +63,11 @@ app.directive('stratification', [ '$timeout', 'cells', function ($timeout, cells
                 pointBorderColor: color,
                 pointBackgroundColor: color,
                 pointBorderWidth: 1,
-                pointHoverRadius: 5,
+                pointHoverRadius: 3,
                 pointHoverBackgroundColor: color,
                 pointHoverBorderColor: color,
                 pointHoverBorderWidth: 2,
-                pointRadius: 1,
+                pointRadius: 0,
                 pointHitRadius: 10,
                 data: data,
               };
