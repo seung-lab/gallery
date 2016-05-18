@@ -28,30 +28,38 @@ app.service('cells', [ '$q', '$resource', 'CacheFactory', function ($q, $resourc
 		destroy: { method: 'DELETE' },
 	});
 
+	this.colorize = function (cell, count) {	
+		if (!cell.color) {
+			if (count === 1) {
+				cell.color = '#fff';
+			}
+			else if (count < 16) {
+				cell.color = colorize_by_type(cell);	
+			}
+			else {
+				cell.color = colorize_by_distinctiveness(cell);
+			}
+		}
+	};
+
 	this.show = function (cell_id, count) {
+		let _this = this;
+
 		return $q(function (resolve, reject) {
 			let cell = _cache.get(cell_id.toString());
 
 			if (cell) {
 				cell.$promise.then(function () {
+					_this.colorize(cell, count);
+					_cache.put(cell.id.toString(), cell);
+
 					resolve(cell);
 				});
 				return;
 			}
 
 			let unfufilled_cell = api.show({ id: cell_id }, function (cell) {
-				if (!cell.color) {
-					if (count === 1) {
-						cell.color = '#fff';
-					}
-					else if (count < 16) {
-						cell.color = colorize_by_type(cell);	
-					}
-					else {
-						cell.color = colorize_by_distinctiveness(cell);
-					}
-				}
-				
+				_this.colorize(cell, count);
 				_cache.put(cell.id.toString(), cell);
 
 				resolve(cell);
@@ -72,6 +80,18 @@ app.service('cells', [ '$q', '$resource', 'CacheFactory', function ($q, $resourc
 					callback(cellinfos);
 				}
 			});
+		});
+	};
+
+	this.uncolor = function () {
+		_cache.keys().forEach(function (key) {
+			let cell = _cache.get(key);
+			cell.color = null;
+			_cache.put(key, cell);
+		});
+
+		Object.keys(_color_types).forEach(function (key) {
+			_color_types[key].index = 0;
 		});
 	};
 

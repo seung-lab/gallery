@@ -76,6 +76,11 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 		
 		for (let cell_id of neurons) {
 			let promise = get(cell_id, function (cell) {
+				cells.colorize(cell, neurons.length);
+
+				cell.mesh.material.color = new THREE.Color(cell.color);
+				cell.mesh.material.needsUpdate = true;
+
 				scene.add(cell.mesh);
 				_displayed.push(cell);
 
@@ -109,6 +114,8 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 		for (let cell of _displayed) {
 			scene.remove(cell.mesh);
 		}
+
+		cells.uncolor();
 
 		_displayed = [];
 		camera.render();
