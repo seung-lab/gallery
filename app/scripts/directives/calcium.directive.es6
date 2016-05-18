@@ -25,6 +25,8 @@ app.directive('calcium', [ '$timeout', 'cells', function ($timeout, cells) {
           data: {
             labels: angles,
             datasets: cells.map(function (cell) {
+              let fmt = (z, factor) => Math.round(z * factor) / factor;
+
               let color = cell.color;
               if (cells.length === 1) {
                 color = '#1A1A1A';
@@ -39,14 +41,23 @@ app.directive('calcium', [ '$timeout', 'cells', function ($timeout, cells) {
                 borderWidth: 1,
                 backgroundColor: color,
                 borderColor: line_color,
+               
+                // not well documented but code requires this 
+                // to unset hover state, maybe a library bug
+                radius: 2, 
+               
                 pointRadius: 2,
+                pointBorderWidth: 1,
                 pointHoverRadius: 3,
+                hitRadius: 10,
+
                 pointBackgroundColor: color,
                 pointBorderColor: color,
                 pointHoverBackgroundColor: color,
                 pointHoverBorderColor: color,
                 data: angles.map(function (angle) {
                   return cell.calcium.activations[scope.activation][angle];
+                  // return fmt(cell.calcium.activations[scope.activation][angle], 1e4)
                 }),
               };
             }),

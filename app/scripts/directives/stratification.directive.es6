@@ -56,10 +56,10 @@ app.directive('stratification', [ '$timeout', 'cells', function ($timeout, cells
                 backgroundColor: color,
                 borderColor: color,
                 borderWidth: 1,
-                borderCapStyle: 'butt',
+                
                 borderDash: [],
                 borderDashOffset: 0.0,
-                borderJoinStyle: 'miter',
+                
                 pointBorderColor: color,
                 pointBackgroundColor: color,
                 pointBorderWidth: 1,
