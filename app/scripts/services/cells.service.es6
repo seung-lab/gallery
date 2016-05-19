@@ -96,6 +96,8 @@ app.service('cells', [ '$q', '$resource', 'CacheFactory', function ($q, $resourc
 		_cache.keys().forEach(function (key) {
 			let cell = _cache.get(key);
 			cell.color = null;
+			cell.hidden = false;
+			
 			_cache.put(key, cell);
 		});
 
