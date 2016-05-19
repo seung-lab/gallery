@@ -1,0 +1,13 @@
+<div>
+	<div class="handle"></div>
+	<div 
+		ng-repeat="cell in cells"
+		ng-mouseenter="mouseenter(cell)"
+		ng-mouseleave="mouseleave(cell)"
+		ng-click="click(cell)"
+		ng-class="{ 'color-container': true, hidden: cell.hidden }" 
+	>
+		<div style="border-color: {{ cells.length === 1 ? '#1a1a1a' : cell.color }}; background-color: {{ cells.length === 1 ? '#1a1a1a' : cell.color }}" class="color"></div>
+		<div class="identifier">{{cell.id}}</div>
+	</div>
+</div>

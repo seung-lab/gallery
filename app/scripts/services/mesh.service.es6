@@ -124,7 +124,7 @@ app.service('mesh', function ($q, scene, camera, cells, CacheFactory) {
 	this.toggleVisibility = function (cell_id) {
 
 		get(cell_id, function (cell) { 
-			if (cell.mesh.visible == true) {
+			if (cell.mesh.visible) {
 				cell.mesh.visible = false;
 			}
 			else {

@@ -42,6 +42,15 @@ app.service('cells', [ '$q', '$resource', 'CacheFactory', function ($q, $resourc
 		}
 	};
 
+	this.get = function (cellids) {
+		let promises = [];
+		for (let cellid of cellids) {
+			promises.push(this.show(cellid, cellids.length));
+		}
+
+		return $q.all(promises);
+	};
+
 	this.show = function (cell_id, count) {
 		let _this = this;
 
