@@ -9,8 +9,10 @@
  * DELETE	/cells/:id					->	destroy
  */
 
-app.service('cells', [ '$q', '$resource', 'CacheFactory', function ($q, $resource, CacheFactory) {
+app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', function ($q, $resource, meshService, CacheFactory) {
 	let _cache = CacheFactory('cells');
+
+	let _this = this;
 
 	var api = $resource('/1.0/cells/:id', { id: '@_id' }, { 
 		list: { 
@@ -28,7 +30,7 @@ app.service('cells', [ '$q', '$resource', 'CacheFactory', function ($q, $resourc
 		destroy: { method: 'DELETE' },
 	});
 
-	this.colorize = function (cell, count) {	
+	function colorize (cell, count) {	
 		if (!cell.color) {
 			if (count === 1) {
 				cell.color = '#fff';
@@ -40,44 +42,52 @@ app.service('cells', [ '$q', '$resource', 'CacheFactory', function ($q, $resourc
 				cell.color = colorize_by_distinctiveness(cell);
 			}
 		}
-	};
 
-	this.get = function (cellids) {
+		return cell;
+	}
+
+	this.get = function (cellids = []) {
+		if (!cellids 
+			|| (Array.isArray(cellids) && cellids.length === 0)) {
+
+			let defer = $q.defer();
+			defer.resolve([]);
+			return defer.promise;
+		}
+		else if (!Array.isArray(cellids)) {
+			cellids = [ cellids ];
+		}
+
+		let _this = this;
+
 		let promises = [];
-		for (let cellid of cellids) {
-			promises.push(this.show(cellid, cellids.length));
+
+		for (let cell_id of cellids) {
+		 	let promise = $q(function (resolve, reject) {
+				let cell = _cache.get(cell_id.toString());
+
+				if (cell) {
+					cell.$promise.then(function () {
+						_cache.put(cell.id.toString(), cell);
+						resolve(cell);
+					});
+					return;
+				}
+
+				let unfufilled_cell = api.show({ id: cell_id }, function (cell) {
+					_cache.put(cell.id.toString(), cell);
+					resolve(cell);
+				}, function () {
+					reject(null);
+				});
+
+				_cache.put(cell_id.toString(), unfufilled_cell);
+			});
+
+			promises.push(promise);
 		}
 
 		return $q.all(promises);
-	};
-
-	this.show = function (cell_id, count) {
-		let _this = this;
-
-		return $q(function (resolve, reject) {
-			let cell = _cache.get(cell_id.toString());
-
-			if (cell) {
-				cell.$promise.then(function () {
-					_this.colorize(cell, count);
-					_cache.put(cell.id.toString(), cell);
-
-					resolve(cell);
-				});
-				return;
-			}
-
-			let unfufilled_cell = api.show({ id: cell_id }, function (cell) {
-				_this.colorize(cell, count);
-				_cache.put(cell.id.toString(), cell);
-
-				resolve(cell);
-			}, function () {
-				reject(null);
-			});
-
-			_cache.put(cell_id.toString(), unfufilled_cell);
-		});
 	};
 
 	this.list = function (callback) {
@@ -92,7 +102,77 @@ app.service('cells', [ '$q', '$resource', 'CacheFactory', function ($q, $resourc
 		});
 	};
 
-	this.uncolor = function () {
+	this.display = function (cellids = [], progresscb) {
+		if (!cellids 
+			|| (Array.isArray(cellids) && cellids.length === 0)) {
+
+			let defer = $q.defer();
+			defer.resolve([]);
+			return defer.promise;
+		}
+		else if (!Array.isArray(cellids)) {
+			cellids = [ cellids ];
+		}
+
+		let completed = 0,
+			completed_promise = $q.defer();
+
+		let displayed = [];
+
+		for (let cellid of cellids) {
+			let promise = this.get(cellid)
+				.then(function (cells) {
+					return cells && cells[0];
+				})
+				.then(function (cell) {
+					if (!cell.color) {
+						cell = colorize(cell, cellids.length);
+					}
+
+					_cache.put(cell.id.toString(), cell);
+					return cell;
+				})
+				.then(function (cell) {
+					return meshService.createModel(cell);
+				})
+				.then(function (cell) {
+					_cache.put(cell.id.toString(), cell);
+
+					displayed.push(cell);
+
+					if (progresscb) {
+						progresscb(completed / cellids.length, cell);
+					}
+
+					return cell;
+				})
+				.catch(function () {
+					completed_promise.reject('loading failed');
+				})
+				.finally(function () {
+					completed++;
+
+					if (progresscb) {
+						progresscb(completed / cellids.length);
+					}
+				})
+				.finally(function () {
+					if (completed === cellids.length) {
+						completed_promise.resolve();
+					}
+				});
+		}
+
+		return completed_promise.promise.then(function () {
+			if (progresscb) {
+				progresscb(completed / cellids.length);
+			}
+
+			return displayed;	
+		});
+	};
+
+	this.clear = function () {
 		_cache.keys().forEach(function (key) {
 			let cell = _cache.get(key);
 			cell.color = null;

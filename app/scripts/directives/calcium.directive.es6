@@ -1,6 +1,6 @@
 'use strict';
   
-app.directive('calcium', [ '$timeout', 'cells', function ($timeout, cells) {
+app.directive('calcium', [ '$timeout', 'cellService', function ($timeout, cellService) {
 
   var chartLinker = function (scope, element, attrs) {
       scope.init().then(function (cells) {

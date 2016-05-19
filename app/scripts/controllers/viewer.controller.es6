@@ -2,8 +2,8 @@
 
 // include axes for debugging
 app.controller('ViewerCtrl', [
-  '$scope', '$timeout', '$state', '$document', '$window', 'mesh', 'camera', 'cells',
-  function ($scope, $timeout, $state, $document, $window, mesh, camera, cells) {
+  '$scope', '$timeout', '$state', '$document', '$window', 'meshService', 'camera', 'cellService', 'scene',
+  function ($scope, $timeout, $state, $document, $window, meshService, camera, cellService, scene) {
   
   let self = this;
   self.states = [];
@@ -19,39 +19,34 @@ app.controller('ViewerCtrl', [
     value: 0,
   };
 
-  mesh.clear();
+  $scope.cells = [];
 
-  mesh.display($scope.neurons, function (fraction) {
+  cellService.clear();
+
+  cellService.display($scope.neurons, function (fraction, cell) {
     $scope.loading.value = Math.round(fraction * 100);
+    
+    if (cell && cell.mesh) { 
+      $scope.cells.push(cell);
+      scene.add(cell.mesh);
+    }
+
+    camera.render();
   })
-  .finally(function (displayed_cells) { 
-    var bbox = mesh.getVisibleBBox();
+  .finally(function () { 
+    var bbox = meshService.getVisibleBBox($scope.cells);
     camera.lookBBoxFromSide(bbox);
     camera.render();
 
     $scope.loading.show = false;
     $scope.loading.value = 100;
-
-    return displayed_cells;
   });
 
   // Quick Search
 
-  $scope.cells = [];
-  $scope.celltypes = [];
-  $scope.cellname = [];
-
-  cells.list()
+  cellService.list()
     .then(function (cellinfos) {
-      $scope.cells = cellinfos.filter(function (cell) {
-        return $scope.neurons.indexOf(parseInt(cell.id, 10)) !== -1;
-      });
-
-      $scope.cellnames = _.uniq($scope.cells.map( (cell) => cell.name ));
-      $scope.celltypes = _.uniq($scope.cells.map( (cell) => cell.type ));
-
       self.states = loadAllAutocompletes(cellinfos);
-
       return cellinfos;
     });
 
@@ -84,6 +79,8 @@ app.controller('ViewerCtrl', [
     if (!item || !item.value) {
       return;
     }
+
+    clearScene();
 
     $state.go('viewer', {
       neurons: item.value,
@@ -200,7 +197,7 @@ app.controller('ViewerCtrl', [
   });
 
   $scope.$watch('current_view', function () {
-    let bbox = mesh.getVisibleBBox();
+    let bbox = meshService.getVisibleBBox($scope.cells);
 
     if ($scope.current_view == "top") {
       camera.lookBBoxFromTop(bbox);
@@ -230,4 +227,10 @@ app.controller('ViewerCtrl', [
       evt.preventDefault();
     }
   });
+
+  function clearScene () {
+    $scope.cells.forEach( (cell) => scene.remove(cell.mesh) );
+    $scope.cells = [];
+    camera.render();
+  }
 }]);

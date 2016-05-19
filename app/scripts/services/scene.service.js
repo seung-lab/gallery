@@ -1,6 +1,6 @@
 'use strict';
 
-(function (app, THREE){
+(function (app, THREE) {
 
 app.factory('scene', function () {
     var scene = new THREE.Scene();

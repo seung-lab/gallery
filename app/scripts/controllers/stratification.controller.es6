@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller("stratificationController", [ '$q', '$scope', '$state', 'cells', 'mesh', function ($q, $scope, $state, cells, mesh) {
+app.controller("stratificationController", [ '$q', '$scope', '$state', 'cellService', 'meshService', function ($q, $scope, $state, cellService, meshService) {
 
 	$scope.initChart = function () {
 		$scope.neurons = [];
@@ -9,33 +9,26 @@ app.controller("stratificationController", [ '$q', '$scope', '$state', 'cells', 
 				.map( (cellid) => parseInt(cellid, 10) );
 		}
 
-		
-		let promises = [];
-
-		for (let cell_id of $scope.neurons) {
-			promises.push(cells.show(cell_id, $scope.neurons.length));
-		}
-
-		return $q.all(promises);
+		return cellService.get($scope.neurons);
 	};
 
 	$scope.onLegendClick = function (cell_id) {
-		mesh.toggleVisibility(cell_id);
+		meshService.toggleVisibility(cell_id);
 	};
 
 	$scope.onLegendMouseout = function () {
 		for (let id of $scope.neurons) {
-			mesh.setOpacity(id, 1.0)
+			meshService.setOpacity(id, 1.0)
 		}
 	};
 
 	$scope.onLegendMouseover = function (cell_id) {
 		for (let id of $scope.neurons) {
 			if (id !== cell_id) {
-				mesh.setOpacity(id, 0.25);
+				meshService.setOpacity(id, 0.25);
 			}
 			else {
-				mesh.setOpacity(id, 1.0);	
+				meshService.setOpacity(id, 1.0);	
 			}
 		}
 	};

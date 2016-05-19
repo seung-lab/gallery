@@ -1,6 +1,6 @@
 'use strict';
   
-app.directive('stratification', [ '$timeout', 'cells', function ($timeout, cells) {
+app.directive('stratification', [ '$timeout', 'cellService', function ($timeout, cellService) {
 
   var chartLinker = function (scope, element, attrs) {
       scope.$on('$destroy', function () {
