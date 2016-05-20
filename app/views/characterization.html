@@ -45,23 +45,18 @@
 
 <h3>ON</h3>
 
-<div ng-controller="calciumController">
-  <calcium 
-    bindto-id="chart-calcium-on"
-    activation="on"
-    init="initChart()" />
-</div>
+<calcium 
+  activation="on"
+  cells="cells" />
 
 <br><br>
 
 <h3>OFF</h3>
 
-<div ng-controller="calciumController">
-  <calcium 
-    bindto-id="chart-calcium-off"
-    activation="off"
-    init="initChart()" />
-</div>
+<calcium 
+  activation="off"
+  cells="cells" />
+
 
 <!--  <div flex="grow">
   <h2>Wiki Overview</h2>

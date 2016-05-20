@@ -1,21 +1,18 @@
 'use strict';
   
-app.directive('stratification', [ '$timeout', 'cellService', function ($timeout, cellService) {
+app.directive('stratification', function () {
 
   var chartLinker = function (scope, element, attrs) {
-      init(scope).then(function () {
-        makeChart(scope, element);
-      });
+    
+    scope.chart = makeChart(scope, element);
+    
+    scope.$watch(function (scope) {
+      return scope.cells.map( (cell) => cell.id ).join('');
+    }, function () {
+      scope.chart.config.data.datasets = createDatasets(scope.cells);
+      scope.chart.update(0, true);
+    });
 
-      scope.$watch(function (scope) {
-        return scope.cells.map( (cell) => cell.id ).join('');
-      }, function () {
-        scope.chart.config.data.datasets = createDatasets(scope.cells);
-        scope.chart.update(0, true);
-      });
-  };
-
-  function init (scope) {
     scope.$watch(function (scope) {
       return scope.cells.map( (cell) => cell.hidden ? 't' : 'f' ).join('');
     }, 
@@ -28,11 +25,6 @@ app.directive('stratification', [ '$timeout', 'cellService', function ($timeout,
     }, 
     function (value) {
       updateChartColors(scope);
-    });
-
-    return cellService.get(scope.cellids).then(function (cells) {
-      scope.cells.push.apply(scope.cells, cells);
-      return cells;
     });
   };
 
@@ -52,7 +44,11 @@ app.directive('stratification', [ '$timeout', 'cellService', function ($timeout,
       let cell = dict[dataset.label];
       let color = cell.color;
 
-      if (cell.hidden) {
+      if (scope.cells.length === 1) {
+        color = '#1A1A1A';
+      }
+
+      if (!cell.highlight && cell.hidden) {
         color = "rgba(0,0,0,0)";
       }
       else if (!cell.highlight && any) {
@@ -82,12 +78,16 @@ app.directive('stratification', [ '$timeout', 'cellService', function ($timeout,
 
     cells = cells.filter( (cell) => cell.stratification );
 
-    scope.chart = new Chart(ctx, {
+    return new Chart(ctx, {
       type: 'scatter',
       data: {
         datasets: createDatasets(cells),
       },
       options: {
+        responsive: true,
+        animation: {
+          duration: 0,
+        },
         showLines: true,
         scales: {
           // yAxes: [{
@@ -107,28 +107,13 @@ app.directive('stratification', [ '$timeout', 'cellService', function ($timeout,
         },
         legend: {
           display: false,
-        //   onClick: function (evt, obj) {
-        //     scope.onLegendClick({ 
-        //       cell_id: parseInt(obj.text, 10),
-        //     });
-        //   },
-        //   onHover: function (evt, obj) { // custom feature, had to modify library
-        //     scope.onLegendMouseover({
-        //       cell_id: parseInt(obj.text, 10),
-        //     });
-        //   },
-        // },
-        // hover: {
-        //   onHover: function () {
-        //     scope.onLegendMouseout();
-        //   },
         },
       },
     });
   }
 
   function createDatasets (cells) {
-    cells = cells.filter( (cell) => cell.stratification );
+    cells = cells.filter( (cell) => cell.stratification && !cell.hidden );
 
     return cells.map(function (cell) {
 
@@ -197,6 +182,6 @@ app.directive('stratification', [ '$timeout', 'cellService', function ($timeout,
     link: chartLinker,
   };
 
-}]);
+});
    
 

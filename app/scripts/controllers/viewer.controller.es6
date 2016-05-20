@@ -26,8 +26,10 @@ app.controller('ViewerCtrl', [
   cellService.display($scope.neurons, function (fraction, cell) {
     $scope.loading.value = Math.round(fraction * 100);
     
-    if (cell && cell.mesh) { 
+    if (cell && !cell.mesh) { 
       $scope.cells.push(cell);
+    }
+    else if (cell && cell.mesh) {
       scene.add(cell.mesh);
     }
 

@@ -129,6 +129,10 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 						cell = colorize(cell, cellids.length);
 					}
 
+					if (progresscb) {
+						progresscb(completed / cellids.length, cell);
+					}
+
 					_cache.put(cell.id.toString(), cell);
 					return cell;
 				})
@@ -177,6 +181,7 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 			let cell = _cache.get(key);
 			cell.color = null;
 			cell.hidden = false;
+			cell.highlight = false;
 			
 			_cache.put(key, cell);
 		});

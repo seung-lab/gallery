@@ -15,6 +15,7 @@ app.directive('chartlegend',
 
 			scope.click = function (cell) {
 				cell.hidden = !cell.hidden;
+				cell.highlight = !cell.hidden;
 				meshService.toggleVisibility(cell);
 			};
 
