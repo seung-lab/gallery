@@ -5,16 +5,13 @@ app.directive('chartlegend',
 
 	return {
 		restrict: "E",
-		scope: true,
+		scope: {
+			cells: "=",
+		},
 		templateUrl: "templates/chartlegend.html",
 		replace: false,
 		transclude: false,
 		link: function (scope, element, attrs) {
-			scope.cells = [];
-
-			cellService.get(scope.$parent.neurons).then(function (cellobjs) {
-				scope.cells = cellobjs;
-			});
 
 			scope.click = function (cell) {
 				cell.hidden = !cell.hidden;
@@ -22,18 +19,22 @@ app.directive('chartlegend',
 			};
 
 			scope.mouseleave = function (cell) {
+				cell.highlight = false; 
+
 				for (let cell of scope.cells) {
 					meshService.setOpacity(cell, 1.0)
 				}
 			};
 
-			scope.mouseenter = function (clickcell) {
+			scope.mouseenter = function (hovercell) {
 				for (let cell of scope.cells) {
-					if (cell.id !== clickcell.id) {
+					if (cell.id !== hovercell.id) {
+						cell.highlight = false;
 						meshService.setOpacity(cell, 0.25);
 					}
 					else {
-						meshService.setOpacity(cell, 1.0); 
+						cell.highlight = true;
+						meshService.setOpacity(cell, 1.00); 
 					}
 				}
 			};

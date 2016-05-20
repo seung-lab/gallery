@@ -230,7 +230,7 @@ app.controller('ViewerCtrl', [
 
   function clearScene () {
     $scope.cells.forEach( (cell) => scene.remove(cell.mesh) );
-    $scope.cells = [];
+    $scope.cells.length = 0;
     camera.render();
   }
 }]);

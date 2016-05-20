@@ -30,15 +30,10 @@
 
 <h3>IPL Depth by Percent Total Arbor Volume</h3>
 
-<div class="stratification-chart" ng-controller="stratificationController">
-  <stratification 
-    bindto-id="chart-stratification"  
-    chart="chart"  
-    on-legend-click="onLegendClick(cell_id)"
-    on-legend-mouseover="onLegendMouseover(cell_id)"
-    on-legend-mouseout="onLegendMouseout(cell_id)"
-    init="initChart()" /> 
-</div> 
+<stratification 
+  cells="cells"
+  cellids="neurons"
+  init="initChart()" /> 
 
 <h2>Preferred Direction</h2>
 
@@ -54,9 +49,6 @@
   <calcium 
     bindto-id="chart-calcium-on"
     activation="on"
-    on-legend-click="onLegendClick(cell_id)"
-    on-legend-mouseover="onLegendMouseover(cell_id)"
-    on-legend-mouseout="onLegendMouseout(cell_id)"
     init="initChart()" />
 </div>
 
@@ -68,9 +60,6 @@
   <calcium 
     bindto-id="chart-calcium-off"
     activation="off"
-    on-legend-click="onLegendClick(cell_id)"
-    on-legend-mouseover="onLegendMouseover(cell_id)"
-    on-legend-mouseout="onLegendMouseout(cell_id)"
     init="initChart()" />
 </div>
 

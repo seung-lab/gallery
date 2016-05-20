@@ -12,7 +12,10 @@ app.directive('calcium', [ '$timeout', 'cellService', function ($timeout, cellSe
         let angles = [ 360, 45, 90, 135, 180, 225, 270, 315 ];
 
         if (cells.length) {
-          angles = Object.keys(cells[0].calcium.activations[scope.activation]).map( (angle) => parseInt(angle, 10));
+          angles = Object.keys(
+            cells[0].calcium.activations[scope.activation]
+          ).map( (angle) => parseInt(angle, 10));
+          
           angles.sort( (a,b) => a - b );
         }
 
