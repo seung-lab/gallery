@@ -16,27 +16,15 @@ app.directive('chartlegend',
 			scope.click = function (cell) {
 				cell.hidden = !cell.hidden;
 				cell.highlight = !cell.hidden;
-				meshService.toggleVisibility(cell);
 			};
 
 			scope.mouseleave = function (cell) {
 				cell.highlight = false; 
-
-				for (let cell of scope.cells) {
-					meshService.setOpacity(cell, 1.0)
-				}
 			};
 
 			scope.mouseenter = function (hovercell) {
 				for (let cell of scope.cells) {
-					if (cell.id !== hovercell.id) {
-						cell.highlight = false;
-						meshService.setOpacity(cell, 0.25);
-					}
-					else {
-						cell.highlight = true;
-						meshService.setOpacity(cell, 1.00); 
-					}
+					cell.highlight = (cell.id === hovercell.id);
 				}
 			};
 
@@ -45,6 +33,37 @@ app.directive('chartlegend',
 					cell.hidden = !cell.hidden;
 				});
 			};
+
+			scope.$watch(function (scope) {
+				return scope.cells.map( (cell) => cell.hidden ? 't' : 'f' ).join('');
+			}, 
+			function (value) {
+				updateMeshVisibility(scope.cells);
+			});
+
+			scope.$watch(function (scope) {
+				return scope.cells.map( (cell) => cell.highlight ? 't' : 'f' ).join('');
+			}, 
+			function (value) {
+				updateMeshVisibility(scope.cells);
+			});
+
+			function updateMeshVisibility (cells) {
+				let any = cells.map( (cell) => cell.highlight ).reduce( (a,b) => a || b, false);
+
+				cells.forEach(function (cell) {
+					meshService.setVisibility(cell, true);
+					meshService.setOpacity(cell, 1.00); 
+						
+					if (cell.hidden) {
+						meshService.setVisibility(cell, false);
+					}
+					else if (any && !cell.highlight) {
+						meshService.setOpacity(cell, 0.25); 
+					}
+				});
+
+			}
 		},
 	};
 });

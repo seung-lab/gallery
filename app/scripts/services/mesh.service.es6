@@ -37,17 +37,12 @@ app.service('meshService', function ($q, scene, camera) {
 		});
 	}
 
-	this.toggleVisibility = function (cell) {
+	this.setVisibility = function (cell, visible) {
 		if (!cell.mesh) {
 			return;
 		}
-
-		if (cell.mesh.visible) {
-			cell.mesh.visible = false;
-		}
-		else {
-			cell.mesh.visible = true;
-		}
+		
+		cell.mesh.visible = visible || false;
 
 		camera.render();
 	};
