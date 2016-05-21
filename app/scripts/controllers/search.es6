@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('SearchController', function ($scope, $timeout, $state, cells) {
+app.controller('SearchController', function ($scope, $timeout, $state, cellService) {
 
 	let self = this;
 
@@ -16,7 +16,7 @@ app.controller('SearchController', function ($scope, $timeout, $state, cells) {
 		self.states = loadAllAutocompletes();
 	});
 
-	let loaded = cells.list()
+	let loaded = cellService.list()
 		.then(function (cellinfos) {
 			$scope.cells = cellinfos;
 			return cellinfos;
