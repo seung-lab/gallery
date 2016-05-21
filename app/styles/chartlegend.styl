@@ -1,18 +1,19 @@
 @require 'colors.styl'
 
 chartlegend	
+	position relative
 	flex-shrink 0
 		
 	width 100%
 	
-	max-height 250px
+	max-height 300px
 	overflow scroll
 
 	z-index 200
 	
 	display flex
-	flex-direction row
-	align-items center
+	flex-direction column
+	align-items flex-start
 	
 	background-color $WHITE
 	box-shadow rgba(0, 0, 0, 0.15) 0px 0px 100px
@@ -22,12 +23,24 @@ chartlegend
 	
 chartlegend > div
 	display flex
+	flex-direction column
+	align-items center
+	justify-content center
+	
+	width 100%
+	
+chartlegend .labels
+	display flex
 	flex-direction row
 	align-items center
 	justify-content center
 	flex-wrap wrap
 	
 	width 100%
+	
+chartlegend .inverter
+	position relative
+	top -15px
 	
 chartlegend .handle
 	position absolute

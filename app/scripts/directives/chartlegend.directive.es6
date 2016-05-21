@@ -39,6 +39,12 @@ app.directive('chartlegend',
 					}
 				}
 			};
+
+			scope.invert = function (evt) {
+				scope.cells.forEach(function (cell) {
+					cell.hidden = !cell.hidden;
+				});
+			};
 		},
 	};
 });
