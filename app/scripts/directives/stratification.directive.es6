@@ -48,8 +48,11 @@ app.directive('stratification', function () {
         color = '#1A1A1A';
       }
 
+      dataset.hidden = false;
+
       if (!cell.highlight && cell.hidden) {
-        color = "rgba(0,0,0,0)";
+        //color = "rgba(0,0,0,0)";
+        dataset.hidden = true;
       }
       else if (!cell.highlight && any) {
         color = ColorUtils.toRGBA(color, 0.25);

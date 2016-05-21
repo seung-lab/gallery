@@ -2951,8 +2951,9 @@ module.exports = function(Chart) {
 				this.updateElement(point, index, reset);
 			}, this);
 
-			if (this.chart.options.showLines && this.chart.options.elements.line.tension !== 0)
+			if (this.chart.options.showLines && this.chart.options.elements.line.tension !== 0) {
 				this.updateBezierControlPoints();
+			}
 		},
 
 		getPointBackgroundColor: function(point, index) {
@@ -4008,7 +4009,9 @@ module.exports = function(Chart) {
 
 			// This will loop through any data and do the appropriate element update for the type
 			helpers.each(this.data.datasets, function(dataset, datasetIndex) {
-				this.getDatasetMeta(datasetIndex).controller.update();
+				if (this.isDatasetVisible(datasetIndex)) {
+					this.getDatasetMeta(datasetIndex).controller.update();
+				}
 			}, this);
 
 			this.render(animationDuration, lazy);

@@ -44,12 +44,15 @@ app.directive('calcium', [ function () {
       let cell = dict[dataset.label];
       let color = cell.color;
 
+      dataset.hidden = false;
+
       if (scope.cells.length === 1) {
         color = '#1A1A1A';
       }
 
       if (!cell.highlight && cell.hidden) {
-        color = "rgba(0,0,0,0)";
+        dataset.hidden = true;
+        // color = "rgba(0,0,0,0)";
       }
       else if (!cell.highlight && any) {
         color = ColorUtils.toRGBA(color, 0.25);

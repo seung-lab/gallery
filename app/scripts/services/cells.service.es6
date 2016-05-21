@@ -35,9 +35,9 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 			if (count === 1) {
 				cell.color = '#fff';
 			}
-			else if (count < 16) {
-				cell.color = colorize_by_type(cell);	
-			}
+			// else if (count < 16) {
+			// 	cell.color = colorize_by_type(cell);	
+			// }
 			else {
 				cell.color = colorize_by_distinctiveness(cell);
 			}
