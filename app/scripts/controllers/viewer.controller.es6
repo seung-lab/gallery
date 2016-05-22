@@ -44,6 +44,14 @@ app.controller('ViewerCtrl', [
     $scope.loading.value = 100;
   });
 
+  $scope.cellnames = [];
+  $scope.celltypes = [];
+
+  $scope.$watch( () => $scope.cells.length, function () {
+    $scope.cellnames = _.uniq($scope.cells.map( (cell) => cell.name ));
+    $scope.celltypes = _.uniq($scope.cells.map( (cell) => cell.type ));    
+  });
+
   // Quick Search
 
   cellService.list()
