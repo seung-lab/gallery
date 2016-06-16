@@ -6,7 +6,11 @@
         <span md-highlight-text="searchText" md-highlight-flags="^i">{{item.display}}</span>
         </md-item-template>
         <md-not-found>
-        No matches found for "{{searchText}}".
+        {{
+          autocompleteLoaded 
+          ? 'No matches.'
+          : "Loading autocompletions..."
+        }}
         </md-not-found>
       </md-autocomplete>
       <i ng-click="goToResult(selectedItem)" class="search-action fa fa-search" aria-hidden="true"></i>

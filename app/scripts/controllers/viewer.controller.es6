@@ -54,10 +54,11 @@ app.controller('ViewerCtrl', [
 
   // Quick Search
 
+  $scope.autocompleteLoaded = false;
   cellService.list()
     .then(function (cellinfos) {
+      $scope.autocompleteLoaded = true;
       self.states = loadAllAutocompletes(cellinfos);
-      return cellinfos;
     });
 
     /**
