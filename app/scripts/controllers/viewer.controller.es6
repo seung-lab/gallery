@@ -177,6 +177,10 @@ app.controller('ViewerCtrl', [
     }
 
     $scope.sidebar_open = !$scope.sidebar_open;
+
+    if ($scope.sidebar_open) {
+      angular.element('.characterization').scrollTo('#stratification > div', { msec: 0, offset: -25 });
+    }
   };
 
   // Cameras

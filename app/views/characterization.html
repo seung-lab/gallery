@@ -1,4 +1,29 @@
-<infoheader heading="Startification">
+<h1>Characterization</h1>
+
+<h2>Classification</h2>
+
+<table class="classification">
+  <tr>
+    <td>{{ celltypes.length !== 1 ? 'Types' : 'Type' }}</td>
+    <td>
+      <span class="celltypes" ng-repeat="type in celltypes">
+        <a href="http://wiki.eyewire.org/index.php?title={{type}}_Cell">{{type}}</a>{{$last ? '' : ', '}}
+      </span>
+    </td>
+  </tr>
+  <tr>
+    <td>{{ cellnames.length !== 1 ? 'Designations' : 'Designation' }}</td>
+    <td>
+      <span ng-repeat="name in cellnames">{{name}}{{$last ? '' : ', '}}</span>
+    </td>
+  </tr>
+  <tr>
+    <td>Cell Count</td>
+    <td>{{neurons.length}}</td>
+  </tr>
+</table>
+
+<infoheader id="stratification" heading="Stratification">
 
 <p>Retinal cells stratify though the tissue. Their depth profile is useful for understanding their place in a computation &mdash; inputs and outputs.</p>
 </infoheader>
@@ -31,29 +56,6 @@
 <calcium 
   activation="off"
   cells="cells" />
-
-<h2>Classification</h2>
-
-<table class="classification">
-  <tr>
-    <td>{{ celltypes.length !== 1 ? 'Types' : 'Type' }}</td>
-    <td>
-      <span class="celltypes" ng-repeat="type in celltypes">
-        <a href="http://wiki.eyewire.org/index.php?title={{type}}_Cell">{{type}}</a>{{$last ? '' : ', '}}
-      </span>
-    </td>
-  </tr>
-  <tr>
-    <td>{{ cellnames.length !== 1 ? 'Designations' : 'Designation' }}</td>
-    <td>
-      <span ng-repeat="name in cellnames">{{name}}{{$last ? '' : ', '}}</span>
-    </td>
-  </tr>
-  <tr>
-    <td>Cell Count</td>
-    <td>{{neurons.length}}</td>
-  </tr>
-</table>
 
 <!--  <div flex="grow">
   <h2>Wiki Overview</h2>

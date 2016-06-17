@@ -16,8 +16,12 @@ You'll need nodejs, npm, and mongodb to bootstrap.
 	* Unzip into a location of choice. (Note: This is where you will run the daemon)
 	* Open terminal and use the following command to make the directory where mongo will store data: `$ mkdir -p /data/db`
 	* Start the mongodb server in a separate terminal window (if you get an error, you may need to ‘sudo’ this command): `$ ./mongodb-xxxxxxx/bin/mongod`
-6. Run `gulp`
-7. Run `npm start`
+6. git submodule update --init
+7. cd import
+8. python main.py
+9. Acquire meshes from someone who has them (~850MB)
+10. Run `gulp`
+11. Run `npm start`
 
 # Code coverage
 
