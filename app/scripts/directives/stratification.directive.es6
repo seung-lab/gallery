@@ -9,7 +9,9 @@ app.directive('stratification', function () {
     scope.$watch(function (scope) {
       return scope.cells.map( (cell) => cell.id ).join('');
     }, function () {
-      scope.chart.config.data.datasets = createDatasets(scope.cells);
+      let datasets = createDatasets(scope.cells);
+      scope.chart.config.data.datasets = datasets;
+      scope.chart.config.options.scales.yAxes[0].ticks.max = computeMaxlabel(datasets);
       scope.chart.update(0, true);
     });
 
@@ -55,7 +57,7 @@ app.directive('stratification', function () {
         dataset.hidden = true;
       }
       else if (!cell.highlight && any) {
-        color = ColorUtils.toRGBA(color, 0.25);
+        dataset.hidden = true;
       }
 
       [
@@ -73,6 +75,25 @@ app.directive('stratification', function () {
     scope.chart.update(0, true);
   }
 
+  function computeMaxlabel (datasets) {
+   let max = 0;
+
+    let data, y;
+    for (let i = datasets.length - 1; i >= 0; i--) {
+      data = datasets[i].data;
+      for (let j = data.length - 1; j >= 0; j--) {
+        y = data[j].y;
+        max = (y > max && y) || max;
+      }
+    }
+
+    let explabel = max.toExponential();
+    let firstsigfig = Number(explabel[0]) + 1;
+    let matches = explabel.match(/e([+-]\d+)/);
+    let magnitude = Number(matches[1]);
+    return firstsigfig * Math.pow(10, magnitude);
+  }
+
   function makeChart (scope, element) {
     let cells = scope.cells;
 
@@ -81,10 +102,12 @@ app.directive('stratification', function () {
 
     cells = cells.filter( (cell) => cell.stratification );
 
+    let datasets = createDatasets(cells);
+
     return new Chart(ctx, {
       type: 'scatter',
       data: {
-        datasets: createDatasets(cells),
+        datasets: datasets,
       },
       options: {
         responsive: true,
@@ -93,20 +116,28 @@ app.directive('stratification', function () {
         },
         showLines: true,
         scales: {
-          // yAxes: [{
-          //   scaleLabel: {
-          //     display: true,
-          //     labelString: "Dogecoin in USD",
-          //     fontSize: 14,
-          //   },
-          // }],
-          // xAxes: [{
-          //   scaleLabel: {
-          //     display: true,
-          //     labelString: "Day from Start of Year",
-          //     fontSize: 14,
-          //   },
-          // }],
+          yAxes: [{
+            // scaleLabel: {
+            //   display: true,
+            //   labelString: "Dogecoin in USD",
+            //   fontSize: 14,
+            // },
+             ticks: {
+              min: 0,
+              max: computeMaxlabel(datasets),
+            },
+          }],
+          xAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: "% IPL Depth",
+              fontSize: 12,
+            },
+            ticks: {
+              min: -20,
+              max: 120,
+            },
+          }],
         },
         legend: {
           display: false,

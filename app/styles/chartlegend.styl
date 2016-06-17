@@ -19,6 +19,11 @@ chartlegend
 	box-shadow rgba(0, 0, 0, 0.15) 0px 0px 100px
 	
 	padding 50px
+	padding-top 25px
+	padding-bottom 25px
+	
+	font-size 12px
+	
 	box-sizing border-box
 	
 chartlegend > div
@@ -39,8 +44,8 @@ chartlegend .labels
 	width 100%
 	
 chartlegend .inverter
-	position relative
-	top -15px
+	position absolute
+	top 15px
 	
 chartlegend .handle
 	position absolute
@@ -59,9 +64,9 @@ chartlegend .color-container
 	justify-content flex-start
 	align-items center
 	
-	padding 10px
-	padding-left 20px
-	padding-right 20px
+	padding 5px
+	padding-left 10px
+	padding-right 10px
 	
 	cursor pointer
 	outline none
@@ -73,16 +78,16 @@ chartlegend .color-container:hover
 
 chartlegend .color-container.hidden .color
 	background-color transparent !important
-	border-width 2px
+	border-width 1px
 
 chartlegend .color
 	border solid
-	border-width 9px
+	border-width 4px
 	border-radius 100%
 	
 	background-color transparent !important
 	
-	width 18px
+	width 8px
 	height @width
 	
 	margin-right 10px

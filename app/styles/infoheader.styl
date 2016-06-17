@@ -1,0 +1,32 @@
+@require 'colors.styl'
+
+infoheader
+	position relative
+	
+infoheader > div
+	position relative
+	
+infoheader .more
+	position absolute
+	top 5px
+	right 5px
+	
+	width 10px
+	height @width
+	
+	font-weight 600
+	user-select none
+	
+	cursor pointer
+	outline none
+	
+
+infoheader .rollup
+	height 0px
+	max-height 0px
+	overflow-y hidden
+	transition height 400ms ease-in-out
+	
+infoheader .rollup.onscreen
+	height auto
+	max-height 10000px

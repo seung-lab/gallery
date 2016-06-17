@@ -5,7 +5,7 @@
         <md-item-template>
         <span md-highlight-text="searchText" md-highlight-flags="^i">{{item.display}}</span>
         </md-item-template>
-        <md-not-found>
+        <md-not-found> 
         {{
           autocompleteLoaded 
           ? 'No matches.'
@@ -52,7 +52,7 @@
     </md-button>
 
      <div id="right-sidebar" class="sidebar">
-        <div title="Fullscreen (f)" ng-click="fullscreenToggle($event)" class="fullscreen button">{{ sidebarFullscreen ? "To Viewer" : "Fullscreen" }}</div>
+        <div title="Fullscreen (f)" ng-click="fullscreenToggle($event)" class="fullscreen">{{ sidebarFullscreen ? "To Viewer" : "Fullscreen" }}</div>
         <div class="characterization" ng-include="'templates/characterization.html'"></div>
         <chartlegend cells="cells" />
     </div>    

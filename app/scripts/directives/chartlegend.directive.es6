@@ -19,7 +19,11 @@ app.directive('chartlegend',
 			};
 
 			scope.mouseleave = function (cell) {
-				cell.highlight = false; 
+				// timeout necessary to keep multiple events on mouse exit
+				// triggering unnecessary renders. It kills the performance.
+				$timeout(function () { 
+					cell.highlight = false; 
+				}, 10);
 			};
 
 			scope.mouseenter = function (hovercell) {
@@ -34,21 +38,31 @@ app.directive('chartlegend',
 				});
 			};
 
+			scope.restore = function (evt) {
+				scope.cells.forEach(function (cell) {
+					cell.hidden = false;
+				});
+			};
+
 			scope.$watch(function (scope) {
 				return scope.cells.map( (cell) => cell.hidden ? 't' : 'f' ).join('');
 			}, 
 			function (value) {
-				updateMeshVisibility(scope.cells);
+				updateMeshVisibility(scope, scope.cells);
 			});
 
 			scope.$watch(function (scope) {
 				return scope.cells.map( (cell) => cell.highlight ? 't' : 'f' ).join('');
 			}, 
 			function (value) {
-				updateMeshVisibility(scope.cells);
+				updateMeshVisibility(scope, scope.cells);
 			});
 
-			function updateMeshVisibility (cells) {
+			function updateMeshVisibility (scope, cells) {
+				if (scope.$parent.sidebarFullscreen) {
+					return;
+				}
+
 				let any = cells.map( (cell) => cell.highlight ).reduce( (a,b) => a || b, false);
 
 				cells.forEach(function (cell) {

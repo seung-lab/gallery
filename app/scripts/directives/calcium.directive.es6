@@ -9,7 +9,9 @@ app.directive('calcium', [ function () {
       return scope.cells.map( (cell) => cell.id ).join('');
     }, 
     function (value) {
-      scope.chart.config.data.datasets = makeDatasets(scope.cells, scope.activation);
+      let datasets = makeDatasets(scope.cells, scope.activation);
+      scope.chart.config.data.datasets = datasets;
+      scope.chart.config.options.scale.ticks.max = computeMaxlabel(datasets);
       scope.chart.update(0, true);
     });
 
@@ -55,7 +57,7 @@ app.directive('calcium', [ function () {
         // color = "rgba(0,0,0,0)";
       }
       else if (!cell.highlight && any) {
-        color = ColorUtils.toRGBA(color, 0.25);
+        dataset.hidden = true;
       }
 
       [
@@ -73,17 +75,38 @@ app.directive('calcium', [ function () {
     scope.chart.update(0, true);
   }
 
+
+  function computeMaxlabel (datasets) {
+   let max = 0;
+
+    let data;
+    for (let i = datasets.length - 1; i >= 0; i--) {
+      data = datasets[i].data;
+      for (let j = data.length - 1; j >= 0; j--) {
+       max = (data[j] > max && data[j]) || max;
+      }
+    }
+
+    let explabel = max.toExponential();
+    let firstsigfig = Number(explabel[0]) + 0.5;
+    let matches = explabel.match(/e([+-]\d+)/);
+    let magnitude = Number(matches[1]);
+    return Math.ceil(firstsigfig * Math.pow(10, magnitude));
+  }
+
   function makeChart (scope, element) {
     let canvas = angular.element(element).find('canvas')[0];
     let ctx = canvas.getContext('2d');
 
     let angles = makeLabels(scope.cells, scope.activation);    
 
+    let datasets = makeDatasets(scope.cells, scope.activation);
+
     return new Chart(ctx, {
       type: 'radar',
       data: {
         labels: angles,
-        datasets: makeDatasets(scope.cells, scope.activation),
+        datasets: datasets,
       },
       options: {
         responsive: true,
@@ -101,6 +124,8 @@ app.directive('calcium', [ function () {
               beginAtZero: true,
               maxTicksLimit: 4,
               fontColor: ColorUtils.toRGBA('#1A001A', 0.5),
+              max: computeMaxlabel(datasets),
+              min: 0,
             },
             gridLines: {
               color: ColorUtils.toRGBA('#001A1A', 0.05),
