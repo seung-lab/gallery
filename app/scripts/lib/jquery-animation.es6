@@ -29,8 +29,6 @@ $.fn.scrollTo = function (target, options) {
 	var offset = options.offset || 0;
 
 	target = $(target).first();
-
-	console.log(target, target.position())
 	
 	var position_offset = target.position().top + offset;
 
