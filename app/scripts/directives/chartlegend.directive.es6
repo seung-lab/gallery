@@ -15,7 +15,7 @@ app.directive('chartlegend',
 
 			scope.click = function (cell) {
 				cell.hidden = !cell.hidden;
-				cell.highlight = !cell.hidden;
+				cell.highlight = false;
 			};
 
 			scope.mouseleave = function (cell) {
