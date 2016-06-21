@@ -19,6 +19,7 @@ app.controller('ViewerCtrl', [
     value: 0,
   };
 
+  clearScene();
   $scope.cells = [];
 
   cellService.clear();
@@ -246,6 +247,7 @@ app.controller('ViewerCtrl', [
   });
 
   function clearScene () {
+    $scope.cells = $scope.cells || [];
     $scope.cells.forEach( (cell) => scene.remove(cell.mesh) );
     $scope.cells.length = 0;
     camera.render();
