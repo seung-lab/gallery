@@ -147,6 +147,11 @@ app.controller('ViewerCtrl', [
    
     return Object.keys(cells).map(function (key) {
       let field = cells[key];
+
+      if (field.value.length > 1) {
+        field.display += ` (${field.value.length} cells)`;
+      }
+
       field.value = field.value.join(",");
       return field;
     })
