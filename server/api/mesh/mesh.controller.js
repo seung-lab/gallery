@@ -18,6 +18,12 @@ exports.show = function(req, res) {
 		dotfiles: 'deny',
 		headers: { 
 			"Content-Type": 'text/plain',
+
+			// prevent compress from gzipping
+			// which erases the content-length header
+			// which is necessary for showing progress.
+			// gzip -9 doesn't do anything for these anyway
+			"Cache-Control": 'no-transform', 
 		},
 	};
 
