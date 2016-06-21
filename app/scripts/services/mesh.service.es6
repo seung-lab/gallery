@@ -5,7 +5,7 @@
 
 app.service('meshService', function ($q, scene, camera) {
 
-	this.createModel = function (cell) {
+	this.createModel = function (cell, progressfn) {
 		let url = '/1.0/mesh/' + cell.segment;
 
 		let ctm = new THREE.CTMLoader(false); // showstatus: false
@@ -19,11 +19,11 @@ app.service('meshService', function ($q, scene, camera) {
 				return;
 			}
 
-			ctm.load(url, function (geometry) { 
+			ctm.load(url, progressfn, function (geometry) {
 				cell.material = new THREE.MeshLambertMaterial({ 
 					color: cell.color, 
 					wireframe: false, 
-					transparent: false, 
+					transparent: false,
 					opacity: 1.0,
 				});
 

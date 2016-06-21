@@ -82,7 +82,6 @@ gulp.task('scripts', function () {
             "app/bower_components/threejs/build/three.js",
             "app/bower_components/angular/angular.js",
             "app/bower_components/lodash/dist/lodash.js",
-            "app/bower_components/js-openctm/src/CTMLoader.js",
             "app/bower_components/angular-resource/angular-resource.js",
             "app/bower_components/angular-cookies/angular-cookies.js",
             // "app/bower_components/angular-mocks/angular-mocks.js",
@@ -106,6 +105,21 @@ gulp.task('scripts', function () {
     }
 
     return glp.pipe(gulp.dest('dist/public/js'));
+});
+
+gulp.task('workers', function () {
+    var glp = gulp.src([
+            'app/workers/**'
+        ])
+        .pipe(transpileES6())
+
+    if (argv.production) {
+        glp = glp.pipe(sourcemaps.init())
+                .pipe(uglify())
+            .pipe(sourcemaps.write(SOURCEMAPDEST));
+    }
+
+    return glp.pipe(gulp.dest('dist/public/js/workers/'));
 });
 
 gulp.task('templates', function () {
@@ -155,9 +169,15 @@ gulp.task('copy-index', function() {
 
 gulp.task('watch',function (done) {
     gulp.watch([
+        '!app/workers/**',
         'app/**/*.js',
         'app/**/*.es6',
     ], [ 'scripts' ]);
+
+    gulp.watch([
+        'app/workers/**/*.js',
+        'app/workers/**/*.es6',
+    ], [ 'workers' ]);
 
     gulp.watch([
         '!app/index.html',
@@ -189,5 +209,5 @@ gulp.task('clean', function () {
     ]);
 });
 
-gulp.task('default', [ 'scripts', 'bower', 'templates', 'images', 'documents', 'styles', 'copy-index' ]);
+gulp.task('default', [ 'scripts', 'workers', 'bower', 'templates', 'images', 'documents', 'styles', 'copy-index' ]);
 

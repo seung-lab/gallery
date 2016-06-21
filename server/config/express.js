@@ -22,7 +22,16 @@ module.exports = function(app) {
   app.set('views', config.root + '/server/views');
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
-  app.use(compression());
+  // app.use(compression({ filter: function (req, res) {
+  //   console.log(req.url, "???");
+  //   if (req.url.match(/mesh/)) {
+  //     console.log(req.url, "no compression");
+  //     return false;
+  //   }
+
+  //   // fallback to standard filter function
+  //   return compression.filter(req, res);
+  // } }));
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(methodOverride());

@@ -114,8 +114,21 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 			cellids = [ cellids ];
 		}
 
-		let completed = 0,
+		let completed = {},
 			completed_promise = $q.defer();
+
+		function computeCompleted () {
+			let sum = 0;
+			let keys = Object.keys(completed);
+
+			for (let i = 0; i < keys.length; i++) {
+				sum += completed[keys[i]];
+			}
+
+			return sum / cellids.length;
+		}
+
+		cellids.forEach( (cid) => { completed[cid] = 0 });
 
 		let displayed = [];
 
@@ -130,14 +143,24 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 					}
 
 					if (progresscb) {
-						progresscb(completed / cellids.length, cell);
+						progresscb(computeCompleted(), cell);
 					}
 
 					_cache.put(cell.id.toString(), cell);
 					return cell;
 				})
 				.then(function (cell) {
-					return meshService.createModel(cell);
+					return meshService.createModel(cell, function (args) {
+						let nfract = 0.75;
+						if (args.network !== -1) {
+							completed[cell.id] = nfract * args.network + (1 - nfract) * args.decoded;
+						}
+						else {
+							completed[cell.id] = args.decoded;	
+						}
+
+						progresscb(computeCompleted());
+					});
 				})
 				.then(function (cell) {
 					_cache.put(cell.id.toString(), cell);
@@ -145,7 +168,7 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 					displayed.push(cell);
 
 					if (progresscb) {
-						progresscb(completed / cellids.length, cell);
+						progresscb(computeCompleted(), cell);
 					}
 
 					return cell;
@@ -154,14 +177,14 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 					completed_promise.reject('loading failed');
 				})
 				.finally(function () {
-					completed++;
+					completed[cellid] = 1;
 
 					if (progresscb) {
-						progresscb(completed / cellids.length);
+						progresscb(computeCompleted());
 					}
 				})
 				.finally(function () {
-					if (completed === cellids.length) {
+					if (computeCompleted() > 0.999999) {
 						completed_promise.resolve();
 					}
 				});
@@ -169,7 +192,7 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 
 		return completed_promise.promise.then(function () {
 			if (progresscb) {
-				progresscb(completed / cellids.length);
+				progresscb(computeCompleted());
 			}
 
 			return displayed;	
