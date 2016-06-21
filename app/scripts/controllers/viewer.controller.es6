@@ -24,7 +24,9 @@ app.controller('ViewerCtrl', [
   cellService.clear();
 
   cellService.display($scope.neurons, function (fraction, cell) {
-    $scope.loading.value = Math.round(fraction * 100);
+    $timeout(function () {
+      $scope.loading.value = Math.round(fraction * 100);  
+    }, 0);
     
     if (cell && !cell.mesh) { 
       $scope.cells.push(cell);

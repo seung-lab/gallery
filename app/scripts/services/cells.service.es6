@@ -151,7 +151,7 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 				})
 				.then(function (cell) {
 					return meshService.createModel(cell, function (args) {
-						let nfract = 0.75;
+						let nfract = 0.90;
 						if (args.network !== -1) {
 							completed[cell.id] = nfract * args.network + (1 - nfract) * args.decoded;
 						}
