@@ -104,6 +104,7 @@ THREE.CTMLoader.prototype.load = function(url, progressCallback, callback, param
 				worker.onmessage = function (event) {
 					var ctmFile = event.data[0];
 
+					// copied from ctm.js so we can do 0 copy transfers.
 					var i = ctmFile.header.triangleCount * 3,
 						v = ctmFile.header.vertexCount * 3,
 						n = ctmFile.body.normals ? ctmFile.header.vertexCount * 3 : 0,
