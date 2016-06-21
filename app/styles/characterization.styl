@@ -1,9 +1,11 @@
 @require 'colors.styl'
 @require 'app.styl'
 
+$MIN_SIDEBAR_WIDTH = 400px
+
 .viewer .sidebar
 	width 33vw
-	min-width 600px
+	min-width $MIN_SIDEBAR_WIDTH
 	height 100vh
 
 	position absolute
@@ -85,8 +87,10 @@
 	flex-grow 1
 	flex-shrink 1
 
-.viewer .sidebar .stratification-chart
-	margin-top 25px
+@media all and (max-width: ($MIN_SIDEBAR_WIDTH / .33)) 
+	.viewer .sidebar .characterization
+		padding 25px	
+		padding-top 15px
 
 .viewer .sidebar table.classification td
 	width 10em
