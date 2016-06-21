@@ -6,6 +6,10 @@ infoheader
 infoheader > div
 	position relative
 	
+infoheader h2
+	outline none
+	cursor pointer
+	
 infoheader .more
 	position absolute
 	top 5px
@@ -22,11 +26,9 @@ infoheader .more
 	
 
 infoheader .rollup
-	height 0px
 	max-height 0px
 	overflow-y hidden
-	transition height 400ms ease-in-out
+	transition max-height 400ms ease-in-out
 	
 infoheader .rollup.onscreen
-	height auto
-	max-height 10000px
+	max-height 200px

@@ -5,8 +5,8 @@ app.directive('infoheader', [function () {
     restrict: "E",
     scope: {},
     template: `<div>
-      <h2>{{heading}}</h2>
-      <div ng-click="onscreen = !onscreen" class="more">
+      <h2 ng-click="onscreen = !onscreen">{{heading}}</h2>
+      <div class="more">
         {{ onscreen ? '&mdash;' : ' +' }}
       </div>
       <div ng-transclude ng-class='{ rollup: true, onscreen: onscreen }'></div>
