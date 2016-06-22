@@ -56,8 +56,8 @@ app.factory('camera', function (scene) {
       _this.height = height;
 
       _this.aspectRatio = width / height;
-      _this.controls.object.aspect =  _this.aspectRatio;
-      _this.controls.object.updateProjectionMatrix();
+      _this.camera.aspect =  _this.aspectRatio;
+      _this.camera.updateProjectionMatrix();
       _this.controls.handleResize();
       _this.render();
     };
@@ -70,7 +70,7 @@ app.factory('camera', function (scene) {
       _this.controls.update();
 
       if (_needsrender) {
-        _this.renderer.render(scene, _this.controls.object);  
+        _this.renderer.render(scene, _this.camera);  
         _needsrender = false;
       }
 
@@ -78,18 +78,8 @@ app.factory('camera', function (scene) {
     });
 
     this.zoomorthographicBBox = function (height, width) {
-      height = Math.max(width / _this.aspectRatio, height)
-      var zoomFactor = 1.2
-    
-      // Camera frustums
-      // _this.controls.object.left = _this.aspectRatio * height / 2  * zoomFactor; 
-      // _this.controls.object.right = -_this.aspectRatio * height / 2 * zoomFactor; 
-      // _this.controls.object.top = -height / 2 * zoomFactor; 
-      // _this.controls.object.bottom = height / 2 * zoomFactor;
-    
       _this.controls.reset();
-      _this.controls.orthoZoom = true;
-      _this.controls.object.updateProjectionMatrix();
+      _this.camera.updateProjectionMatrix();
       _this.controls.update();
       _this.render();
     };
