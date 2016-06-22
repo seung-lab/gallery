@@ -27,7 +27,7 @@ THREE.TrackballControls = function (camera, domElement) {
 
 	this.rotateSpeed = 3.0;
 	this.zoomSpeed = 0.02;
-	this.panSpeed = 400;
+	this.panSpeed = 1;
 
 	this.noRotate = false;
 	this.noZoom = false;
@@ -264,6 +264,13 @@ THREE.TrackballControls = function (camera, domElement) {
 		return distance_to_target / zoom_level_1; // e.g. 0.5x, 2x, 10x
 	};
 
+	this.screenHeightInWorldCoordinates = function () {
+		let distance_to_target = _this.camera.position.clone().sub(_this.target).length();
+
+		// dont know why, but there seems to be a constant factor of ~100 difference off
+		return 2 * Math.tan(this.camera.fov / this.camera.aspect / 2) * distance_to_target / 100;
+	};
+
 	this.panCamera = (function() {
 
 		var mouseChange = new THREE.Vector2(),
@@ -271,18 +278,12 @@ THREE.TrackballControls = function (camera, domElement) {
 			pan = new THREE.Vector3();
 
 		return function () {
-
 			mouseChange.copy(_panEnd).sub(_panStart);
 
-			let len = mouseChange.length()
+			if (mouseChange.lengthSq() > EPSILON) {
+				let screenHeight = _this.screenHeightInWorldCoordinates();
 
-			if (len) {
-
-				let factor = _this.computeZoomFactor();
-
-				mouseChange.multiplyScalar(_this.panSpeed * factor);
-
-				console.log(mouseChange, factor)
+				mouseChange.multiplyScalar(screenHeight); 
 
 				pan.copy(_eye).cross(_this.camera.up).setLength(mouseChange.x);
 				pan.add(cameraUp.copy(_this.camera.up).setLength(mouseChange.y));
