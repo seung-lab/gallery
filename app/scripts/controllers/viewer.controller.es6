@@ -203,10 +203,10 @@ app.controller('ViewerCtrl', [
 
   $scope.$watch('camera', function () {
     if ($scope.camera === "orthographic") {
-      camera.useOrthographic();
+      camera.orthographicMode();
     } 
     else {
-      camera.usePerspective();
+      camera.perspectiveMode();
     }
   });
 

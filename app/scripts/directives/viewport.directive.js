@@ -15,6 +15,7 @@ app.directive('viewport', [ 'camera', '$timeout', function (camera, $timeout) {
         var renderer = new THREE.WebGLRenderer({ 
           antialias: true,
           alpha: true,
+          logarithmicDepthBuffer: true,
         });
 
         //TODO implement stereoscopic
