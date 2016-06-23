@@ -102,7 +102,7 @@ app.factory('camera', function (scene) {
 
       var size = bbox.size();
 
-      var fovrad = _this.camera.fov / 360 * 2 * Math.PI;
+      var fovrad = _this.camera.fov * THREE.Math.DEG2RAD;
       var dist = (Math.max(size.y, size.z) / 2) / Math.tan(fovrad);
 
       var center = bbox.center();
@@ -120,7 +120,7 @@ app.factory('camera', function (scene) {
       
       var size = bbox.size();
 
-      var fovrad = _this.camera.fov / 360 * 2 * Math.PI;
+      var fovrad = _this.camera.fov * THREE.Math.DEG2RAD;
       var dist = (Math.max(size.x, size.y) / 2) / Math.tan(fovrad);
 
       var center = bbox.center();

@@ -230,7 +230,7 @@ THREE.TrackballControls = function (camera, domElement) {
 		var len = _eye.length();
 		var newlen = _eye.clone().multiplyScalar(factor).length();
 
-		let fov_rad = this.camera.fov / 360.0 *  2.0 * Math.PI;
+		let fov_rad = this.camera.fov * THREE.Math.DEG2RAD;
 		let zoomMax = _zoomMax / Math.tan(fov_rad);
 
 		if (newlen < _zoomMin) {
@@ -261,7 +261,7 @@ THREE.TrackballControls = function (camera, domElement) {
 	}
 
 	this.computeZoomFactor = function () {
-		let zoom_level_1 = (this.screen.height / 2) / Math.tan(this.camera.fov / 2);
+		let zoom_level_1 = (this.screen.height / 2) / Math.tan(this.camera.fov * THREE.Math.DEG2RAD / 2);
 		let distance_to_target = _this.camera.position.clone().sub(_this.target).length();
 
 		return distance_to_target / zoom_level_1; // e.g. 0.5x, 2x, 10x
@@ -270,7 +270,7 @@ THREE.TrackballControls = function (camera, domElement) {
 	this.screenHeightInWorldCoordinates = function () {
 		let distance_to_target = _this.camera.position.clone().sub(_this.target).length();
 
-		let fov_rad = this.camera.fov / 360.0 *  2.0 * Math.PI;
+		let fov_rad = this.camera.fov * THREE.Math.DEG2RAD;
 		return 2 * Math.tan(fov_rad / this.camera.aspect / 2) * distance_to_target;
 	};
 
