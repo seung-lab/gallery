@@ -129,7 +129,7 @@ app.factory('camera', function (scene) {
 
       _this.controls.position0.set(center.x, center.y, center.z + 2 * dist);
 
-      _this.controls.up0.set(-1, 0, 0);
+      _this.controls.up0.set(1, 0, 0);
 
       this.updateControls();
     };

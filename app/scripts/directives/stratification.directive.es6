@@ -2,7 +2,7 @@
   
 app.directive('stratification', function () {
 
-  var chartLinker = function (scope, element, attrs) {
+  let chartLinker = function (scope, element, attrs) {
     
     scope.chart = makeChart(scope, element);
     
@@ -99,7 +99,7 @@ app.directive('stratification', function () {
 
     let canvas = angular.element(element).find('canvas')[0];
     let ctx = canvas.getContext('2d');
-
+ 
     cells = cells.filter( (cell) => cell.stratification );
 
     let datasets = createDatasets(cells);
