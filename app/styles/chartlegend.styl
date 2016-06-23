@@ -53,6 +53,44 @@ chartlegend .labels
 chartlegend .inverter
 	position absolute
 	top 15px
+	right 15px
+	
+	height 35px
+	width @height
+	
+	background-image url("/icons/invert-selection.svg")
+	background-repeat no-repeat
+	background-position center center
+	background-size 75%
+	
+	opacity 0.5
+	
+	cursor pointer
+	transition opacity 150ms ease
+
+chartlegend .inverter:hover
+	opacity 0.75
+	
+chartlegend .restorer
+	position absolute
+	top 15px
+	left 15px
+	
+	height 35px
+	width @height
+	
+	background-image url("/icons/restore.svg")
+	background-repeat no-repeat
+	background-position center center
+	background-size 75%
+	
+	opacity 0.5
+	
+	cursor pointer
+	transition opacity 150ms ease
+
+chartlegend .restorer:hover
+	opacity 0.75
 	
 chartlegend .handle
 	position absolute

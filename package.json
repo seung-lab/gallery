@@ -28,6 +28,7 @@
     "composable-middleware": "^0.3.0",
     "compression": "^1.2.1",
     "cookie-parser": "^1.4.1",
+    "d3": "^3.5.17",
     "debug": "^2.1.0",
     "del": "^1.2.0",
     "domino": "^1.0.19",
