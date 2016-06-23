@@ -78,7 +78,8 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 					_cache.put(cell.id.toString(), cell);
 					resolve(cell);
 				}, function () {
-					reject(null);
+					alert(`Cell #${cell_id} was not found. It will not be displayed.`);
+					resolve(null);
 				});
 
 				_cache.put(cell_id.toString(), unfufilled_cell);
@@ -87,7 +88,9 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 			promises.push(promise);
 		}
 
-		return $q.all(promises);
+		return $q.all(promises).then(function (cells) {
+			return cells.filter( (cell) => cell );
+		});
 	};
 
 	this.list = function (callback) {
@@ -138,6 +141,11 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 					return cells && cells[0];
 				})
 				.then(function (cell) {
+					if (!cell) {
+						completed[cellid] = 1;
+						return new Error(`Cell ${cellid} not found.`);
+					}
+
 					if (!cell.color) {
 						cell = colorize(cell, cellids.length);
 					}
