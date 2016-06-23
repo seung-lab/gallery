@@ -27,7 +27,6 @@ THREE.TrackballControls = function (camera, domElement) {
 
 	this.rotateSpeed = 3.0;
 	this.zoomSpeed = 0.02;
-	this.panSpeed = 1;
 
 	this.noRotate = false;
 	this.noZoom = false;
@@ -38,6 +37,7 @@ THREE.TrackballControls = function (camera, domElement) {
 	// Which makes the interface look more fluid, the amount of inertia is controlled by dynamicDampingFactor
 	this.staticMoving = false;
 	this.dynamicDampingFactor = 0.2;
+	this.panDynamicDampingFactor = 0.19;
 
 	this.minDistance = 0;
 	this.maxDistance = Infinity;
@@ -301,7 +301,7 @@ THREE.TrackballControls = function (camera, domElement) {
 				} 
 				else {
 					// This restart this event.
-					_panStart.add(mouseChange.subVectors(_panEnd, _panStart).multiplyScalar(_this.dynamicDampingFactor));
+					_panStart.add(mouseChange.subVectors(_panEnd, _panStart).multiplyScalar(this.panDynamicDampingFactor));
 				}
 			}
 		};

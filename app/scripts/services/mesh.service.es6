@@ -7,8 +7,6 @@ app.service('meshService', function ($q, scene, camera) {
 
 	this.workers = [];
 
-	let worker = new Worker("js/workers/CTMWorker.js");
-
 	this.terminateWorkers = function () {
 		this.workers.forEach( (wrkr) => wrkr.terminate() );
 		this.workers = [];
