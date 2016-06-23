@@ -67,7 +67,7 @@ THREE.TrackballControls = function (camera, domElement) {
 
 	_zoomAmt = 0,
 	_zoomMin = 4e2,
-	_zoomMax = 1e7,
+	_zoomMax = 1e5,
 
 	_touchZoomDistanceStart = 0,
 	_touchZoomDistanceEnd = 0,
@@ -230,18 +230,21 @@ THREE.TrackballControls = function (camera, domElement) {
 		var len = _eye.length();
 		var newlen = _eye.clone().multiplyScalar(factor).length();
 
+		let fov_rad = this.camera.fov / 360.0 *  2.0 * Math.PI;
+		let zoomMax = _zoomMax / Math.tan(fov_rad);
+
 		if (newlen < _zoomMin) {
 			factor *= 1.2;
 		}
-		else if (newlen > _zoomMax) {
+		else if (newlen > zoomMax) {
 			factor *= 0.95;
 		}
 
-		// if ((factor > 0.9 && factor < 1 && len - _zoomMin < 400)
-		// 	|| (factor > 1 && factor < 1.05 && len - _zoomMax > -(_zoomMax * 0.05))) {
+		if ((factor > 0.9 && factor < 1 && len - _zoomMin < 400)
+			|| (factor > 1 && factor < 1.05 && len - zoomMax > -(zoomMax * 0.05))) {
 
-		// 	factor = 1
-		// }
+			factor = 1
+		}
 
 		if (len === 0) {
 			_eye.set(0.1, 0.1, 0.1);
@@ -249,7 +252,7 @@ THREE.TrackballControls = function (camera, domElement) {
 		else if (newlen < _zoomMin / 2) {
 			_zoomAmt = 0;
 		}
-		else if (newlen > _zoomMax * 5) {
+		else if (newlen > zoomMax * 5) {
 			_zoomAmt = 0;
 		}
 		else {
@@ -267,8 +270,8 @@ THREE.TrackballControls = function (camera, domElement) {
 	this.screenHeightInWorldCoordinates = function () {
 		let distance_to_target = _this.camera.position.clone().sub(_this.target).length();
 
-		// dont know why, but there seems to be a constant factor of ~100 difference off
-		return 2 * Math.tan(this.camera.fov / this.camera.aspect / 2) * distance_to_target / 100;
+		let fov_rad = this.camera.fov / 360.0 *  2.0 * Math.PI;
+		return 2 * Math.tan(fov_rad / this.camera.aspect / 2) * distance_to_target;
 	};
 
 	this.panCamera = (function() {
@@ -452,14 +455,10 @@ THREE.TrackballControls = function (camera, domElement) {
 		event.stopPropagation();
 
 		if (_state === STATE.ROTATE && !_this.noRotate) {
-
 			_movePrev.copy(_moveCurr);
 			_moveCurr.copy(getMouseOnCircle(event.pageX, event.pageY));
-
 		} 
 		else if (_state === STATE.ZOOM && !_this.noZoom) {
-
-			_zoomEnd.copy(getMouseOnScreen(event.pageX, event.pageY));
 
 		} 
 		else if (_state === STATE.PAN && !_this.noPan) {

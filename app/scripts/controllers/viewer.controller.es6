@@ -208,6 +208,10 @@ app.controller('ViewerCtrl', [
     else {
       camera.perspectiveMode();
     }
+
+    let bbox = meshService.getVisibleBBox($scope.cells);
+    $scope.current_view = 'side';
+    camera.lookBBoxFromSide(bbox);
   });
 
   $scope.views = [ "top", "side" ];
@@ -256,5 +260,7 @@ app.controller('ViewerCtrl', [
     $scope.cells.forEach( (cell) => scene.remove(cell.mesh) );
     $scope.cells.length = 0;
     camera.render();
+
+    meshService.terminateWorkers();
   }
 }]);

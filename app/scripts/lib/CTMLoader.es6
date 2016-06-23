@@ -90,6 +90,8 @@ THREE.CTMLoader.prototype.load = function(url, progressCallback, callback, param
 	var xhr = new XMLHttpRequest();
 	let network = 0;
 
+	var worker;
+
 	xhr.onreadystatechange = function () {
 		if (xhr.readyState !== 4) {
 			return;
@@ -99,7 +101,7 @@ THREE.CTMLoader.prototype.load = function(url, progressCallback, callback, param
 			var binaryData = new Uint8Array(xhr.response);
 
 			if (parameters.useWorker) {
-				var worker = parameters.worker || new Worker("js/workers/CTMWorker.js");
+				worker = parameters.worker || new Worker("js/workers/CTMWorker.js");
 
 				worker.onmessage = function (event) {
 					var ctmFile = event.data[0];
@@ -188,6 +190,8 @@ THREE.CTMLoader.prototype.load = function(url, progressCallback, callback, param
 	xhr.responseType = "arraybuffer";
 
 	xhr.send(null);	
+
+	return worker;
 };
 
 

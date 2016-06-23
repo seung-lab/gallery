@@ -77,13 +77,6 @@ app.factory('camera', function (scene) {
       requestAnimationFrame(hardRender);
     });
 
-    this.zoomorthographicBBox = function (height, width) {
-      _this.controls.reset();
-      _this.camera.updateProjectionMatrix();
-      _this.controls.update();
-      _this.render();
-    };
-
     this.initController = function(renderer) {
   		_this.renderer = renderer;
       _this.controls = new THREE.TrackballControls(_this.camera, renderer.domElement);
@@ -98,35 +91,47 @@ app.factory('camera', function (scene) {
       });
     };
 
-    // FIXME scale such that the bounding box cover the viewport
-    this.lookBBoxFromTop = function( bbox ) {
+    this.updateControls = function () {
+      _this.controls.reset();
+      _this.camera.updateProjectionMatrix();
+      _this.controls.update();
+      _this.render();
+    };
+
+    this.lookBBoxFromTop = function (bbox) {
+
+      var size = bbox.size();
 
       var center = bbox.center();
-      // center.x = center.x + bbox.size().x / 2.0;
+      center.x += size.x / 2.0;
+
+      var fovrad = _this.camera.fov / 360 * 2 * Math.PI;
+      var dist = (Math.max(size.y, size.z) / 2) / Math.tan(fovrad);
 
       _this.controls.target0 = center;
-      _this.controls.position0.set( center.x + 10000 , center.y , center.z );
+      _this.controls.position0.set(center.x + 2 * dist, center.y, center.z);
 
-      _this.controls.up0.set( 0 , 0, -1 );
+      _this.controls.up0.set(0, 0, -1);
 
-      var height = bbox.size().z;
-      var width = bbox.size().y;
-      this.zoomorthographicBBox(height , width);
+      this.updateControls();
     };
 
     this.lookBBoxFromSide = function (bbox) {
       
+      var size = bbox.size();
+
       var center = bbox.center();
-      // center.z = center.z + bbox.size().z / 2.0;
+      center.z += size.z / 2.0;
+
+      var fovrad = _this.camera.fov / 360 * 2 * Math.PI;
+      var dist = (Math.max(size.x, size.y) / 2) / Math.tan(fovrad);
 
       _this.controls.target0 = center;
-      _this.controls.position0.set(center.x, center.y, 1.0);
+      _this.controls.position0.set(center.x, center.y, center.z + 2 * dist);
 
-      _this.controls.up0.set( 1 , 0, 0 );
+      _this.controls.up0.set(-1, 0, 0);
 
-      var height = bbox.size().x;
-      var width = bbox.size().y;
-      this.zoomorthographicBBox(height, width);
+      this.updateControls();
     };
 
     _this.aspectRatio = window.innerWidth / window.innerHeight;

@@ -5,10 +5,21 @@
 
 app.service('meshService', function ($q, scene, camera) {
 
+	this.workers = [];
+
+	let worker = new Worker("js/workers/CTMWorker.js");
+
+	this.terminateWorkers = function () {
+		this.workers.forEach( (wrkr) => wrkr.terminate() );
+		this.workers = [];
+	};
+
 	this.createModel = function (cell, progressfn) {
 		let url = '/1.0/mesh/' + cell.segment;
 
 		let ctm = new THREE.CTMLoader(false); // showstatus: false
+
+		let _this = this;
 
 		return $q(function (resolve, reject) {
 			if (cell.mesh) {
@@ -19,7 +30,18 @@ app.service('meshService', function ($q, scene, camera) {
 				return;
 			}
 
+			let worker = new Worker("js/workers/CTMWorker.js");
+
 			ctm.load(url, progressfn, function (geometry) {
+				if (!geometry) {
+					reject(cell);
+				}
+
+				let workerindex = _this.workers.indexOf(worker);
+				if (workerindex !== -1) {
+					_this.workers.splice(workerindex, 1)
+				}
+
 				cell.material = new THREE.MeshLambertMaterial({ 
 					color: cell.color, 
 					wireframe: false, 
@@ -33,7 +55,14 @@ app.service('meshService', function ($q, scene, camera) {
 				geometry.computeBoundingBox();
 
 				resolve(cell);
-			}, { useWorker: true });
+			}, { 
+				useWorker: true,
+				worker: worker,
+			});
+
+			if (worker) {
+				_this.workers.push(worker);
+			}
 		});
 	}
 
