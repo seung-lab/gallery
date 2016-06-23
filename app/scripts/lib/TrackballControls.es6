@@ -310,28 +310,28 @@ THREE.TrackballControls = function (camera, domElement) {
 
 				change.multiplyScalar(screenHeight); 
 
-				// Make sure the neuron can't escape into deep space
+				// Make sure the neuron can't escape into deep space (BUGGY)
 
-				let screencoords = _this.target0.project(_this.camera);
-				screencoords.x *= _this.screen.width / 2;
-				screencoords.y *= _this.screen.height / 2; 
+				// let screencoords = _this.target0.project(_this.camera);
+				// screencoords.x *= _this.screen.width / 2;
+				// screencoords.y *= _this.screen.height / 2; 
 
-				screencoords.x += _this.screen.width / 2;
-				screencoords.y += _this.screen.height / 2; 
+				// screencoords.x += _this.screen.width / 2;
+				// screencoords.y += _this.screen.height / 2; 
 
-				if (screencoords.x <= 0) {
-					change.x = Math.max(change.x, 0);
-				}
-				else if (screencoords.x >= _this.screen.width) {
-					change.x = Math.min(change.x, 0);
-				}
+				// if (screencoords.x <= 0) {
+				// 	change.x = Math.max(change.x, 0);
+				// }
+				// else if (screencoords.x >= _this.screen.width) {
+				// 	change.x = Math.min(change.x, 0);
+				// }
 
-				if (screencoords.y <= 0) {
-					change.y = Math.min(change.y, 0);
-				}
-				else if (screencoords.y >= _this.screen.height) {
-					change.y = Math.max(change.y, 0);
-				}
+				// if (screencoords.y <= 0) {
+				// 	change.y = Math.min(change.y, 0);
+				// }
+				// else if (screencoords.y >= _this.screen.height) {
+				// 	change.y = Math.max(change.y, 0);
+				// }
 
 				// Move the neuron
 
