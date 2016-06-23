@@ -277,23 +277,13 @@ THREE.TrackballControls = function (camera, domElement) {
 	this.panCamera = (function() {
 
 		var mouseChange = new THREE.Vector2(),
-			cameraUp = new THREE.Vector3(),
 			pan = new THREE.Vector3();
 
 		return function () {
 			mouseChange.copy(_panEnd).sub(_panStart);
 
 			if (mouseChange.lengthSq() > EPSILON) {
-				let screenHeight = _this.screenHeightInWorldCoordinates();
-
-				mouseChange.multiplyScalar(screenHeight); 
-
-				pan.copy(_eye).cross(_this.camera.up).setLength(mouseChange.x);
-				pan.add(cameraUp.copy(_this.camera.up).setLength(mouseChange.y));
-
-				// When panning target an camera moves, this means the target doesn't change
-				_this.camera.position.add(pan);
-				_this.target.add(pan);
+				_this.panCameraInstantly(mouseChange);
 
 				// If static movement is set to false the camera has some sort of inertia
 				if (_this.staticMoving) {
@@ -306,6 +296,29 @@ THREE.TrackballControls = function (camera, domElement) {
 			}
 		};
 	}());
+
+	this.panCameraInstantly = (function () {
+		let change = new THREE.Vector2(),
+			cameraUp = new THREE.Vector3(),
+			pan = new THREE.Vector3();
+
+		return function (displacement) {
+			change.copy(displacement);
+
+			if (change.lengthSq() > EPSILON) {
+				let screenHeight = _this.screenHeightInWorldCoordinates();
+
+				change.multiplyScalar(screenHeight); 
+
+				pan.copy(_eye).cross(_this.camera.up).setLength(change.x);
+				pan.add(cameraUp.copy(_this.camera.up).setLength(change.y));
+
+				// When panning target an camera moves, this means the target doesn't change
+				_this.camera.position.add(pan);
+				_this.target.add(pan);
+			}
+		};
+	})();
 
 	this.checkDistances = function () {
 		if (!_this.noZoom || !_this.noPan) {
@@ -425,6 +438,10 @@ THREE.TrackballControls = function (camera, domElement) {
 
 		if (_state === STATE.NONE) {
 			_state = event.button;
+
+			if (event.button === 1) { // middle click
+				_state = STATE.PAN;
+			}
 		}
 
 		_this.cancelMotion();
@@ -482,14 +499,14 @@ THREE.TrackballControls = function (camera, domElement) {
 
 	}
 
-	function mousewheel(event) {
+	function mousewheel (event) {
 
 		if (_this.enabled === false) return;
 
 		event.preventDefault();
 		event.stopPropagation();
 
-		var delta = 0;
+		let delta = 0;
 
 		if (event.wheelDelta) { // WebKit / Opera / Explorer 9
 			delta = event.wheelDelta / 40;
@@ -497,6 +514,15 @@ THREE.TrackballControls = function (camera, domElement) {
 		else if (event.detail) { // Firefox
 			delta = - event.detail / 3;
 		}
+
+		// This logic is only partially figured out. That 1/30 number was
+		// determined experimentally, but somehow it works for mouse and trackpad.
+		let displacement = getMouseOnCircle(event.pageX, event.pageY)
+				.multiplyScalar(1 / 30 * delta);
+
+		displacement.x *= -1;
+
+		_this.panCameraInstantly(displacement);
 
 		_zoomAmt += delta;
 		_this.dispatchEvent(startEvent);
