@@ -5,13 +5,32 @@
 
 app.service('meshService', function ($q, scene, camera) {
 
-	this.workers = [];
+	let _this = this;
 
-	let worker = new Worker("js/workers/CTMWorker.js");
+	this.workers = {
+		threads: [],
+		index: 0,
+	};
+
+	function startThreads () {
+		let cores = navigator.hardwareConcurrency || 4;
+
+		for (let i = 0; i < cores - 1; i++) {
+			_this.workers.threads.push(
+				new Worker("js/workers/PersistentCTMWorker.js")
+			);
+		}
+
+		_this.workers.index = 0;
+	}
+
+	startThreads();
 
 	this.terminateWorkers = function () {
-		this.workers.forEach( (wrkr) => wrkr.terminate() );
-		this.workers = [];
+		// this.workers.threads.forEach( (wrkr) => wrkr.terminate() );
+		// this.workers.threads = [];
+
+		// startThreads();
 	};
 
 	this.createModel = function (cell, progressfn) {
@@ -30,16 +49,12 @@ app.service('meshService', function ($q, scene, camera) {
 				return;
 			}
 
-			let worker = new Worker("js/workers/CTMWorker.js");
+			let worker = _this.workers.threads[_this.workers.index];
+			_this.workers.index = (_this.workers.index + 1) % _this.workers.threads.length;
 
 			ctm.load(url, progressfn, function (geometry) {
 				if (!geometry) {
 					reject(cell);
-				}
-
-				let workerindex = _this.workers.indexOf(worker);
-				if (workerindex !== -1) {
-					_this.workers.splice(workerindex, 1)
 				}
 
 				cell.material = new THREE.MeshLambertMaterial({ 
@@ -59,10 +74,6 @@ app.service('meshService', function ($q, scene, camera) {
 				useWorker: true,
 				worker: worker,
 			});
-
-			if (worker) {
-				_this.workers.push(worker);
-			}
 		});
 	}
 
