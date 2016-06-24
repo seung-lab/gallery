@@ -254,19 +254,23 @@ app.directive('stratification', function () {
         xScale, yScale,
         xAxis, yAxis,
         margin,
+        toolTip,
+        ipl,
+        volume,
         svg,
+        cellId,
         lineGenerator;
 
 
     function createChart() {
       width = angular.element('.characterization').width(),
-      height = 300;
+      height = 500;
 
       margin = {
-        top: 30,
+        top: 10,
         right: 20,
         bottom: 30,
-        left: 50,
+        left: 35,
       };
 
       // Set graph dimensions
@@ -280,20 +284,26 @@ app.directive('stratification', function () {
       // Define axes
       xAxis = d3.svg.axis().scale(xScale)
         .orient('bottom')
+        .innerTickSize(-height)
+        .outerTickSize(0)
+        .tickPadding([7])
         .ticks(5);
 
       yAxis = d3.svg.axis().scale(yScale)
         .orient('left')
+        .innerTickSize(-width)
+        .outerTickSize(0)
+        .tickPadding([7])
         .ticks(5);
 
       // Set range of data
-      xScale.domain([-20, 120]); // IPL %
-      yScale.domain([0, 0.05]);  // Arbor Volume Density
+      yScale.domain([120, -20]); // IPL % | GCL Bottom
+      xScale.domain([0, 0.05]);  // Arbor Volume Density
 
       // Define line generator
       lineGenerator = d3.svg.line()
-        .x(function(d) { return xScale(d.x)})
-        .y(function(d) { return yScale(d.y)});
+        .x(function(d) { return xScale(d.y)}) // Value is intentionally flipped
+        .y(function(d) { return yScale(d.x)});
 
       // Add svg canvas
       svg = d3.select("#stratification-chart")
@@ -304,12 +314,24 @@ app.directive('stratification', function () {
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
 
+
+      // Define 'div' for tooltips
+      toolTip = d3.select("#tooltip")
+        .style("opacity", 0);
+
+      cellId = d3.select("#cell-id");
+      ipl = d3.select("#ipl");
+      volume = d3.select("#volume");
+
       // Add X axis
       svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
+        .call(xAxis)
+        .selectAll("text")
+          .style("text-anchor", "middle");
 
+      // Add Y axis
       svg.append("g")
         .attr("class", "y axis")
         .call(yAxis);
@@ -328,9 +350,43 @@ app.directive('stratification', function () {
       dataset.forEach(function(cell) {
         let data = cell.data;
         
+        // Add a line for each cell
         svg.append('path')
           .attr("class", "line")
+          .attr("stroke", cell.color)
           .attr("d", lineGenerator(data));
+
+        // Add *invisble* scatterplot for hover
+        svg.selectAll('dot')
+          .data(data)
+          .enter()
+            .append("circle")
+            .attr("r", 3)
+            .attr("class", "point")
+            .attr("cx", function(d) { return xScale(d.y); }) // Datum intentionally flipped
+            .attr("cy", function(d) { return yScale(d.x); })
+            .on('mouseover', function(d) {
+              toolTip.transition()
+                .duration(200)
+                .style('opacity', 1);
+              toolTip
+                .style('left', width - 50 + "px") // Datum intentionally flipped
+                .style('top', height - 35 + "px");
+              cellId
+                .text(cell.label);
+              volume 
+                .text(d.y);
+              ipl
+                .text(d.x);
+            })
+            .on('mouseout', function(d) {
+              toolTip.transition()
+                .duration(200)
+                .style('opacity', 0);
+            })
+
+
+
       });
     }
 
