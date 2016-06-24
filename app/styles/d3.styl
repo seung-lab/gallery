@@ -1,1 +1,70 @@
 @require 'colors.styl'
+
+path 
+	// stroke $BLACK
+	stroke-width 1
+	fill none
+	
+.axis path,
+.axis line
+	fill none
+	stroke grey
+	stroke-width 1
+	shape-rendering crispEdges
+	
+.axis
+	font-size 11px
+	
+.tick line
+	opacity 0.2
+	
+#tooltip
+	position absolute
+	text-align left
+	line-height 1.5em
+	width 60px
+	padding 20px
+	font-size 11px
+	font-family sans-serif
+	color $BLACK
+	background $WHITE
+	border-radius 5px
+	pointer-events none
+	box-shadow rgba(0,0,0,0.075) 0px 0px 50px
+	
+#tooltip h3
+	font-size 11px
+	margin 0
+	text-transform uppercase
+	
+#tooltip hr
+	text-align left
+	margin 0
+	margin-bottom 5px
+	width 5px
+	height 1px 
+	left 0
+	background-color $BLACK
+	
+#tooltip h4
+	margin 0
+	margin-top 5px
+	font-size 10px
+	letter-spacing 1px
+	text-transform uppercase
+	font-weight bold
+	
+#tooltip p
+	margin 0
+	font-size 11px
+	font-weight normal
+	
+
+circle
+	transition all 100ms ease
+	fill $BLACK
+	opacity 0
+	
+circle:hover
+	opacity 1
+	

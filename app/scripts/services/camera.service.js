@@ -102,13 +102,13 @@ app.factory('camera', function (scene) {
 
       var size = bbox.size();
 
-      var center = bbox.center();
-      center.x += size.x / 2.0;
-
-      var fovrad = _this.camera.fov / 360 * 2 * Math.PI;
+      var fovrad = _this.camera.fov * THREE.Math.DEG2RAD;
       var dist = (Math.max(size.y, size.z) / 2) / Math.tan(fovrad);
 
-      _this.controls.target0 = center;
+      var center = bbox.center();
+      _this.controls.target0 = center.clone();
+      center.x += size.x / 2.0;
+
       _this.controls.position0.set(center.x + 2 * dist, center.y, center.z);
 
       _this.controls.up0.set(0, 0, -1);
@@ -120,13 +120,13 @@ app.factory('camera', function (scene) {
       
       var size = bbox.size();
 
-      var center = bbox.center();
-      center.z += size.z / 2.0;
-
-      var fovrad = _this.camera.fov / 360 * 2 * Math.PI;
+      var fovrad = _this.camera.fov * THREE.Math.DEG2RAD;
       var dist = (Math.max(size.x, size.y) / 2) / Math.tan(fovrad);
 
-      _this.controls.target0 = center;
+      var center = bbox.center();
+      _this.controls.target0 = center.clone();
+      center.z += size.z / 2.0;
+
       _this.controls.position0.set(center.x, center.y, center.z + 2 * dist);
 
       _this.controls.up0.set(1, 0, 0);

@@ -108,6 +108,10 @@ app.controller('ViewerCtrl', [
       return;
     }
 
+    $scope.gotoFirstAutocompleteResult();
+  };
+
+  $scope.gotoFirstAutocompleteResult = function () {
     if ($scope.selectedItem) {
       $scope.goToResult($scope.selectedItem);
     }
