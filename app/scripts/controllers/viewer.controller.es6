@@ -32,7 +32,8 @@ app.controller('ViewerCtrl', [
     if (cell && !cell.mesh) { 
       $scope.cells.push(cell);
     }
-    else if (cell && cell.mesh) {
+    else if (cell && cell.mesh && $scope.cells.indexOf(cell) !== -1) { 
+      // indexOf prevents cells from a previous search that just completed rendering from appearing
       scene.add(cell.mesh);
     }
 
@@ -261,8 +262,15 @@ app.controller('ViewerCtrl', [
 
   function clearScene () {
     $scope.cells = $scope.cells || [];
-    $scope.cells.forEach( (cell) => scene.remove(cell.mesh) );
     $scope.cells.length = 0;
+
+    let objects = scene.children;
+    objects.forEach(function (obj) {
+      if (obj instanceof THREE.Mesh) {
+        scene.remove(obj);
+      }
+    });
+
     camera.render();
 
     meshService.terminateWorkers();
