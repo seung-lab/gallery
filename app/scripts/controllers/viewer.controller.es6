@@ -264,7 +264,7 @@ app.controller('ViewerCtrl', [
     $scope.cells = $scope.cells || [];
     $scope.cells.length = 0;
 
-    let objects = scene.children;
+    let objects = _.extend([], scene.children);
     objects.forEach(function (obj) {
       if (obj instanceof THREE.Mesh) {
         scene.remove(obj);
