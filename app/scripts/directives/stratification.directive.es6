@@ -268,9 +268,9 @@ app.directive('stratification', function () {
 
       margin = {
         top: 10,
-        right: 20,
+        right: 40,
         bottom: 30,
-        left: 35,
+        left: 25,
       };
 
       // Set graph dimensions
@@ -319,6 +319,7 @@ app.directive('stratification', function () {
       toolTip = d3.select("#tooltip")
         .style("opacity", 0);
 
+      // Tooltip keys
       cellId = d3.select("#cell-id");
       ipl = d3.select("#ipl");
       volume = d3.select("#volume");
@@ -343,12 +344,19 @@ app.directive('stratification', function () {
       // Apply data
       let dataset = createDataset(cells);
 
+      if (dataset.length === 1) {
+        dataset[0].color = "#1A1A1A";
+      } 
+
       // Reset chart
       d3.selectAll("path.line").remove();
 
       // Create lines
       dataset.forEach(function(cell) {
         let data = cell.data;
+
+        //Update scale X domain
+        xScale.domain([0, d3.max(data, function(d) { return d.y; })]); // Datum intentionally flipped
         
         // Add a line for each cell
         svg.append('path')
@@ -383,11 +391,21 @@ app.directive('stratification', function () {
               toolTip.transition()
                 .duration(200)
                 .style('opacity', 0);
-            })
-
-
-
+            });
       });
+
+      //Update X axis
+      svg.select(".x.axis")
+          .transition()
+          .duration(500)
+        .call(xAxis);
+
+      //Update Y axis
+      svg.select(".y.axis")
+          .transition()
+          .duration(500)
+        .call(yAxis);
+
     }
 
     // Call this on resize
