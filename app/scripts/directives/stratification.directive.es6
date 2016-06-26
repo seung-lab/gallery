@@ -11,6 +11,7 @@ app.directive('stratification', function () {
       return scope.cells.map( (cell) => cell.id ).join('');
     }, function () {
       charter.updateChart(scope);
+      console.log('load new data');
       // let datasets = createDatasets(scope.cells);
       // scope.chart.config.data.datasets = datasets;
       // scope.chart.config.options.scales.yAxes[0].ticks.max = computeMaxlabel(datasets);
@@ -22,6 +23,9 @@ app.directive('stratification', function () {
     }, 
     function (value) {
       updateChartColors(scope);
+      console.log('update hidden');
+      // charter.updateChart(scope);
+      // Use this to toggle cells on and off, (set some kind of ignore attr)
     });
 
     scope.$watch(function (scope) {
@@ -29,6 +33,8 @@ app.directive('stratification', function () {
     }, 
     function (value) {
       updateChartColors(scope);
+      console.log('update highlight');
+      // Use this to show only one piece of datum at a time | Highlight
     });
   };
 
@@ -244,6 +250,8 @@ app.directive('stratification', function () {
         label: cell.id,
         color: cell.color,
         annotation: cell.annotation,
+        highlight: cell.highlight,
+        hidden: cell.hidden,
         data: data,
       };
     });
@@ -258,7 +266,9 @@ app.directive('stratification', function () {
         ipl,
         volume,
         svg,
+        clip,
         cellId,
+        label,
         lineGenerator;
 
 
@@ -302,8 +312,14 @@ app.directive('stratification', function () {
 
       // Define line generator
       lineGenerator = d3.svg.line()
-        .x(function(d) { return xScale(d.y)}) // Value is intentionally flipped
-        .y(function(d) { return yScale(d.x)});
+        .interpolate("basis")
+        .x(function(d) { return xScale(d.y); }) // Value is intentionally flipped
+        .y(function(d) { return yScale(d.x); });
+
+      // Join data by key <label>
+      function label(d) {
+        return d.label;
+      }
 
       // Add svg canvas
       svg = d3.select("#stratification-chart")
@@ -313,6 +329,15 @@ app.directive('stratification', function () {
         .append("g")
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
+
+       //make a clip path for the graph  
+      clip = svg.append("svg:clipPath")
+        .attr("id", "clip")
+        .append("svg:rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", width)
+        .attr("height", height);   
 
 
       // Define 'div' for tooltips
@@ -348,51 +373,73 @@ app.directive('stratification', function () {
         dataset[0].color = "#1A1A1A";
       } 
 
-      // Reset chart
-      d3.selectAll("path.line").remove();
+      // Reset chart --> Seems so wasteful
+      d3.selectAll(".series").remove();
 
-      // Create lines
-      dataset.forEach(function(cell) {
-        let data = cell.data;
+      //Update scale X domain | Datum intentionally flipped
+      xScale.domain([
+        0, 
+        d3.max(dataset, function(d) { // forEach element of dataSet
+          return d3.max(d.data, function(dd) { // forEach element of dataSet.data
+            return dd.y; // return value
+          }); 
+        })
+      ]);
 
-        //Update scale X domain
-        xScale.domain([0, d3.max(data, function(d) { return d.y; })]); // Datum intentionally flipped
-        
-        // Add a line for each cell
-        svg.append('path')
-          .attr("class", "line")
-          .attr("stroke", cell.color)
-          .attr("d", lineGenerator(data));
+      // Announce to D3 that we'll be binding our dataset to 'series' objects
+      let series = svg.selectAll(".series")
+        .data(dataset, label);
 
-        // Add *invisble* scatterplot for hover
-        svg.selectAll('dot')
-          .data(data)
-          .enter()
-            .append("circle")
-            .attr("r", 3)
-            .attr("class", "point")
-            .attr("cx", function(d) { return xScale(d.y); }) // Datum intentionally flipped
-            .attr("cy", function(d) { return yScale(d.x); })
-            .on('mouseover', function(d) {
-              toolTip.transition()
-                .duration(200)
-                .style('opacity', 1);
-              toolTip
-                .style('left', width - 50 + "px") // Datum intentionally flipped
-                .style('top', height - 35 + "px");
-              cellId
-                .text(cell.label);
-              volume 
-                .text(d.y);
-              ipl
-                .text(d.x);
-            })
-            .on('mouseout', function(d) {
-              toolTip.transition()
-                .duration(200)
-                .style('opacity', 0);
-            });
-      });
+      // Create separate groups for each series object 
+      let seriesEnter = series.enter().append("g")
+        .attr("class", "series")
+        .attr("id", function(d) { return d.label; }); // Name each uniquely wrt cell label
+
+      seriesEnter.append("path")
+        .attr("class", "line")
+        .attr("d", function(d) { return lineGenerator(d.data); })
+        .attr("stroke", function(d) { return d.color; });
+
+      // Draw a hidden scatterplot, for mouseover
+      let scatterEnter = seriesEnter.selectAll('dot')
+        .data( function(d) { // Use accessor functions to dive into data
+          let label = d.label;
+          let output = d.data.map(function(obj){ 
+            let rObj = {
+              x: obj.x,
+              y: obj.y,
+              label: label,
+            };
+            return rObj;
+          });
+
+          return output;
+        })
+        .enter()
+          .append("circle")
+          .attr("r", 3)
+          .attr("class", "point")
+          .attr("cx", function(d) { return xScale(d.y); }) // Datum intentionally flipped
+          .attr("cy", function(d) { return yScale(d.x); })
+          .on('mouseover', function(d) {
+            toolTip.transition()
+              .duration(200)
+              .style('opacity', 1);
+            toolTip
+              .style('left', width - 50 + "px") // Datum intentionally flipped
+              .style('top', height - 35 + "px");
+            cellId
+              .text(d.label);
+            volume 
+              .text(d.y);
+            ipl
+              .text(d.x);
+          })
+          .on('mouseout', function(d) {
+            toolTip.transition()
+              .duration(200)
+              .style('opacity', 0);
+          });
 
       //Update X axis
       svg.select(".x.axis")
