@@ -24,7 +24,7 @@ app.directive('stratification', function () {
     function (value) {
       updateChartColors(scope);
       console.log('update hidden');
-      // charter.updateChart(scope);
+      charter.updateChart(scope);
       // Use this to toggle cells on and off, (set some kind of ignore attr)
     });
 
