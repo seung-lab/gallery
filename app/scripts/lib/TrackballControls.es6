@@ -241,8 +241,6 @@ THREE.TrackballControls = function (camera, domElement) {
 		let zoomMin = _zoom.min / Math.tan(fov_rad);
 		let zoomMax = _zoom.max / Math.tan(fov_rad);
 
-		let displacement = new THREE.Vector2(0, 0);
-
 		if (newlen < zoomMin) {
 			factor *= 1.2;
 		}
@@ -269,11 +267,9 @@ THREE.TrackballControls = function (camera, domElement) {
 			_eye.multiplyScalar(factor);
 		}
 
-		if (factor - 1 > 1e-3 && newlen < zoomMax) {
-			displacement.copy(_zoom.displacement);
-		}
-
-		_this.panCameraInstantly(displacement);
+		if (newlen < zoomMax) {
+			_this.panCameraInstantly(_zoom.displacement);
+		}		
 	}
 
 	this.computeZoomFactor = function () {
