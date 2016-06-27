@@ -12,7 +12,7 @@ app.directive('stratification', function () {
       let dataset = createDataset(scope.cells);
           _cellCount = dataset.length; 
 
-      if (_cellCount === 1) {
+      if (_cellCount === 1 && dataset.length) {
         dataset[0].color = "#1A1A1A"; // Cell white, data black
       }
 
@@ -25,6 +25,10 @@ app.directive('stratification', function () {
     function (value) {
       let dataset = createDataset(scope.cells);
 
+      if (_cellCount === 1 && dataset.length) {
+        dataset[0].color = "#1A1A1A"; // Cell white, data black
+      }
+
       charter.updateChart(dataset);
     });
 
@@ -36,7 +40,7 @@ app.directive('stratification', function () {
 
       for(let i = 0; i < scope.cells.length; i++) {
         let cell = scope.cells[i];
-        if (cell.highlight) {
+        if (cell.highlight && !cell.hidden) {
           highlight = true;
           break;
         }
@@ -47,7 +51,7 @@ app.directive('stratification', function () {
         ? highlightDataset(scope.cells)
         : createDataset(scope.cells);
 
-      if (_cellCount === 1 && dataset.length === 1) {
+      if (_cellCount === 1 && dataset.length && dataset.length === 1) {
         dataset[0].color = "#1A1A1A"; // Cell white, data black
       } 
 
@@ -144,6 +148,32 @@ app.directive('stratification', function () {
     });
   }
 
+  function distance(v1, v2) { // Customized to only calculate y distance
+    return Math.sqrt((v1.y - v2.y) * (v1.y - v2.y));
+  }
+
+  // k = Number of points returned
+  // target = Target point
+  // points = sample array
+  // Customized to compare only y values
+  function k_nearest(k, points, target) { 
+    let _this = this;
+
+    // swartzarian transform
+    let distpts = points.map(function (point) {
+      return [
+        distance(target, point),
+        point
+      ];
+    });
+
+    distpts.sort((a, b) => {
+      return a[0] - b[0];
+    });
+
+    return distpts.map((x) => x[1]).slice(0, k);
+  }
+
   let charter = (function() {
     let width, height,
         xScale, yScale,
@@ -165,7 +195,7 @@ app.directive('stratification', function () {
 
       margin = {
         top: 25,
-        right: 0,
+        right: 10,
         bottom: 50,
         left: 25,
       };
@@ -199,7 +229,7 @@ app.directive('stratification', function () {
 
       // Define line generator
       lineGenerator = d3.svg.line()
-        .interpolate("basis")
+        .interpolate("linear")
         .x(function(d) { return xScale(d.y); }) // Value is intentionally flipped
         .y(function(d) { return yScale(d.x); });
 
@@ -288,21 +318,32 @@ app.directive('stratification', function () {
 
     function updateChart(dataset) { // Load the dataset | Refresh chart
       //Update scale X domain | Datum intentionally flipped
-      xScale.domain([
-        0, 
-        d3.max(dataset, function(d) { // forEach element of dataSet
-          return d3.max(d.data, function(dd) { // forEach element of dataSet.data
-            return dd.y; // return value
-          }); 
-        })
-      ]);
+      if (dataset.length !== 0) {
+        xScale.domain([
+          0, 
+          d3.max(dataset, function(d) { // forEach element of dataSet
+            return d3.max(d.data, function(dd) { // forEach element of dataSet.data
+              return dd.y; // return value
+            }); 
+          })
+        ]);
+      }
 
       // Announce to D3 that we'll be binding our dataset to 'series' objects
       let series = svg.selectAll(".series")
         .data(dataset, function(d) { return d.label; }); // Key function for data join
 
+      let seriesHit = svg.selectAll(".series-hit")
+        .data(dataset, function(d) { return d.label; }); // Key function for data join
+
       // Remove extra data points on highlight
       let seriesExit = series.exit().transition()
+            .duration(200)
+            .style("opacity", 0)
+            .remove();
+
+      // Remove extra data points on highlight
+      let seriesHitExit = seriesHit.exit().transition()
             .duration(200)
             .style("opacity", 0)
             .remove();
@@ -320,62 +361,80 @@ app.directive('stratification', function () {
           .duration(200)
           .attr("opacity", 1);
 
-      // // Draw a hidden scatterplot, for mouseover
-      let scatter = series.selectAll('dot')
-        .data( function(d) { // Use accessor functions to dive into data
-          let label = d.label,
-              color = d.color;
-          let output = d.data.map(function(obj){ 
-            let rObj = {
-              x: obj.x,
-              y: obj.y,
-              label: label,
-              color: color,
-            };
-            return rObj;
-          });
+      // Create separate groups for each series object | This line for mouseover
+      let seriesHitEnter = series.enter().append("g")
+        .attr("class", "series-hit")
+        .attr("id", function(d) { return d.label + "_hit"; }) // Name each uniquely wrt cell label
+        .append("path")
+          .attr("class", "line hit_line")
+          .attr("opacity", 0)
+          .attr("d", function(d) { return lineGenerator(d.data); }) // Draw series line
+          .attr("stroke", function(d) { return d.color; })
+        .transition()
+          .duration(200)
+          .attr("opacity", 0.2);
 
-          return output;
-        });
-      
-      let scatterEnter = scatter.enter().append("circle")
-        .attr("r", 10)
-        .attr("class", "point")
-        .style("fill", function(d) { return d.color; })
-        .attr("cx", function(d) { return xScale(d.y); }) // Datum intentionally flipped
-        .attr("cy", function(d) { return yScale(d.x); })
-        .on('mouseover', function(d) {
-          d3.select(this)
-            .attr("r", 5) // this --> selected circle
-            .transition()
-            .duration(200);
-          tooltip.transition()
-            .duration(200)
-            .style('opacity', 1);
-          tooltip
-            .style('left', width - this.getBoundingClientRect().width - 75 + "px")
-            .style('top', function() {
-              return Math.abs(d3.mouse(d3.select('#stratification-svg').node())[1]) > height / 2
-                ? 55 + "px" // Top
-                : height - this.getBoundingClientRect().height + "px"; // Bottom
+      let seriesHitSelect = svg.selectAll(".series-hit") // Mouseover the hit lines
+        .on('mouseover', function(dd) {
+          d3.select(this).on('mousemove', function(d) {
+            d3.selectAll("circle")
+              .remove(); // Don't pollute space with invisible circles
+            let dataScale = [],
+                nearest,
+                mousepos = {
+                  x: d3.mouse(d3.select('#stratification-svg').node())[0],
+                  y: d3.mouse(d3.select('#stratification-svg').node())[1] - margin.top,
+                };
+
+            d.data.forEach(function(datum) {
+              let rObj = {
+                    x:  xScale(datum.y), // X, Y flipped
+                    x0: datum.y,         // X, Y flipped
+                    y:  yScale(datum.x), // X, Y flipped
+                    y0: datum.x,         // X, Y flipped
+                  };
+              dataScale.push(rObj);
             });
-          cellId
-            .text(d.label);
-          volume 
-            .text(d.y);
-          ipl
-            .text(d.x);
+
+            nearest = k_nearest(1, dataScale, mousepos)[0]; // First of his name
+
+            d3.select(this).append("circle")
+              .attr("r", 0)
+              .attr("class", "point")
+              .style("fill", function(d) { return d.color; })
+              .attr("cx", nearest.x)
+              .attr("cy", nearest.y)
+              .transition()
+                .duration(200)
+                .attr("r", 5);
+
+            tooltip.transition()
+              .duration(200)
+              .style('opacity', 1);
+            tooltip
+              .style('left', function() {
+                return width - this.getBoundingClientRect().width + margin.right + "px";
+              })
+              .style('top', function() {
+                return Math.abs(d3.mouse(d3.select('#stratification-svg').node())[1]) > height / 2
+                  ? 55 + "px" // Top
+                  : height - this.getBoundingClientRect().height + "px"; // Bottom
+              });
+            cellId
+              .text(d.label);
+            volume 
+              .text(nearest.x0);
+            ipl
+              .text(nearest.y0);
+          })
         })
         .on('mouseout', function(d) {
-            d3.select(this)
+            d3.selectAll("circle")
               .remove(); // Don't pollute space with invisible circles
             tooltip.transition()
               .duration(200)
               .style('opacity', 0);
         });
-
-      let scatterExit = scatter.exit()
-          .remove();
 
       //Update X axis
       svg.select(".x.axis")
