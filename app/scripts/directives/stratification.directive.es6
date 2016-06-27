@@ -369,10 +369,7 @@ app.directive('stratification', function () {
           .attr("class", "line hit_line")
           .attr("opacity", 0)
           .attr("d", function(d) { return lineGenerator(d.data); }) // Draw series line
-          .attr("stroke", function(d) { return d.color; })
-        .transition()
-          .duration(200)
-          .attr("opacity", 0.2);
+          .attr("stroke", function(d) { return d.color; });
 
       let seriesHitSelect = svg.selectAll(".series-hit") // Mouseover the hit lines
         .on('mouseover', function(dd) {
