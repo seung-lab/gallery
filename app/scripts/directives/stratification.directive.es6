@@ -25,10 +25,6 @@ app.directive('stratification', function () {
     function (value) {
       let dataset = createDataset(scope.cells);
 
-      if (_cellCount === 1 && dataset.length === 1) {
-        dataset[0].color = "#1A1A1A"; // Cell white, data black
-      } 
-
       charter.updateChart(dataset);
     });
 
@@ -36,8 +32,26 @@ app.directive('stratification', function () {
       return scope.cells.map( (cell) => cell.highlight ? 't' : 'f' ).join('');
     }, 
     function (value) {
-      // console.log('update highlight');
-      // Use this to show only one piece of datum at a time | Highlight
+      let highlight = false;
+
+      for(let i = 0; i < scope.cells.length; i++) {
+        let cell = scope.cells[i];
+        if (cell.highlight) {
+          highlight = true;
+          break;
+        }
+        highlight = false;
+      }
+
+      let dataset = highlight === true
+        ? highlightDataset(scope.cells)
+        : createDataset(scope.cells);
+
+      if (_cellCount === 1 && dataset.length === 1) {
+        dataset[0].color = "#1A1A1A"; // Cell white, data black
+      } 
+
+      charter.updateChart(dataset);
     });
   };
 
@@ -46,6 +60,49 @@ app.directive('stratification', function () {
 
   function createDataset (cells) {
     cells = cells.filter( (cell) => cell.stratification && !cell.hidden );
+
+    return cells.map(function (cell) {
+
+      let fmt = (z, factor) => Math.round(z * factor) / factor;
+
+      cell.stratification.sort(function (a, b) {
+        return a[0] - b[0];
+      });
+
+      let data = [];
+      for (let i = 0; i < cell.stratification.length; i++) {
+        data.push({ 
+          x: fmt(cell.stratification[i][0], 1e3), 
+          y: fmt(cell.stratification[i][1], 1e7), 
+        });
+      }
+
+      while (data.length && data[0].y === 0) {
+        data.shift();
+      }
+
+      while (data.length && data[data.length - 1].y === 0) {
+        data.pop();
+      }
+
+      let color = cell.color;
+      // if (cells.length === 1) {
+      //   color = '#1A1A1A';
+      // }
+
+      return {
+        annotation: cell.annotation,
+        highlight: cell.highlight,
+        hidden: cell.hidden,
+        color: cell.color,
+        label: cell.id,
+        data: data,
+      };
+    });
+  }
+
+  function highlightDataset (cells) {
+    cells = cells.filter( (cell) => cell.stratification && !cell.hidden && cell.highlight );
 
     return cells.map(function (cell) {
 
@@ -300,7 +357,7 @@ app.directive('stratification', function () {
             .style('top', function() {
               return Math.abs(d3.mouse(d3.select('#stratification-svg').node())[1]) > height / 2
                 ? 55 + "px" // Top
-                : height - this.getBoundingClientRect().height + 15 + "px"; // Bottom
+                : height - this.getBoundingClientRect().height + "px"; // Bottom
             });
           cellId
             .text(d.label);
