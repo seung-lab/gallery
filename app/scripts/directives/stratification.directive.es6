@@ -107,10 +107,10 @@ app.directive('stratification', function () {
       height = 500;
 
       margin = {
-        top: 10,
+        top: 25,
         right: 0,
         bottom: 50,
-        left: 50,
+        left: 25,
       };
 
       // Set graph dimensions
@@ -206,9 +206,9 @@ app.directive('stratification', function () {
       // Axis label | X
       let xLabel = svg.select(".x.axis")
           .append("text")
-            // .attr("class", "axis-label")
+            .attr("class", "axis-label")
             .attr("text-anchor", "middle")
-            .attr("transform", "translate(" + (width/2) + ", 35)")
+            .attr("transform", "translate(" + (width/2) + ", 45)")
             .text("Arbor Volume Density");
 
       // Add Y axis
@@ -217,12 +217,12 @@ app.directive('stratification', function () {
         .call(yAxis);
 
       // Axis label | Y
-      let yLabel = svg.select(".y.axis")
-          .append("text")
-            // .attr("class", "axis-label")
-            .attr("text-anchor", "middle")
-            .attr("transform", "translate(-35," + (height/2) + ") rotate(-90)")
-            .text("% IPL Depth");
+      // let yLabel = svg.select(".y.axis")
+      //     .append("text")
+      //       // .attr("class", "axis-label")
+      //       .attr("text-anchor", "middle")
+      //       .attr("transform", "translate(-35," + (height/2) + ") rotate(-90)")
+      //       .text("% IPL Depth | Arbor Volume Density");
 
       svg.selectAll(".tick")
         .filter(function (d, i) { return i === 0;  })
@@ -266,12 +266,14 @@ app.directive('stratification', function () {
       // // Draw a hidden scatterplot, for mouseover
       let scatter = series.selectAll('dot')
         .data( function(d) { // Use accessor functions to dive into data
-          let label = d.label;
+          let label = d.label,
+              color = d.color;
           let output = d.data.map(function(obj){ 
             let rObj = {
               x: obj.x,
               y: obj.y,
               label: label,
+              color: color,
             };
             return rObj;
           });
@@ -280,20 +282,25 @@ app.directive('stratification', function () {
         });
       
       let scatterEnter = scatter.enter().append("circle")
-        .attr("r", 3)
+        .attr("r", 10)
         .attr("class", "point")
+        .style("fill", function(d) { return d.color; })
         .attr("cx", function(d) { return xScale(d.y); }) // Datum intentionally flipped
         .attr("cy", function(d) { return yScale(d.x); })
         .on('mouseover', function(d) {
+          d3.select(this)
+            .attr("r", 5) // this --> selected circle
+            .transition()
+            .duration(200);
           tooltip.transition()
             .duration(200)
             .style('opacity', 1);
           tooltip
-            .style('left', width - this.getBoundingClientRect().width - 50 + "px")
+            .style('left', width - this.getBoundingClientRect().width - 75 + "px")
             .style('top', function() {
               return Math.abs(d3.mouse(d3.select('#stratification-svg').node())[1]) > height / 2
-                ? 35 + "px"           // Put tooltip in top
-                : height - this.getBoundingClientRect().height - 20 + "px";  // Put tooltip in bottom
+                ? 55 + "px" // Top
+                : height - this.getBoundingClientRect().height + 15 + "px"; // Bottom
             });
           cellId
             .text(d.label);
@@ -303,6 +310,8 @@ app.directive('stratification', function () {
             .text(d.x);
         })
         .on('mouseout', function(d) {
+            d3.select(this)
+              .remove(); // Don't pollute space with invisible circles
             tooltip.transition()
               .duration(200)
               .style('opacity', 0);
