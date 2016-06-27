@@ -21,6 +21,7 @@ app.controller('ViewerCtrl', [
 
   clearScene();
   $scope.cells = [];
+  $scope.sidebarFullscreen = false;
 
   cellService.clear();
 

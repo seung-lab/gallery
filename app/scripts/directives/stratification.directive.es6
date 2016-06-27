@@ -33,6 +33,13 @@ app.directive('stratification', function () {
     });
 
     scope.$watch(function (scope) {
+      // =^..^= Not sure how to continually monitor this
+      if (scope.$parent.$parent.sidebarFullscreen) {
+        console.log('fullscreen');
+      }
+    });
+
+    scope.$watch(function (scope) {
       return scope.cells.map( (cell) => cell.highlight ? 't' : 'f' ).join('');
     }, 
     function (value) {
