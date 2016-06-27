@@ -65,9 +65,12 @@ THREE.TrackballControls = function (camera, domElement) {
 	_lastAxis = new THREE.Vector3(),
 	_lastAngle = 0,
 
-	_zoomAmt = 0,
-	_zoomMin = 4e2,
-	_zoomMax = 1e5,
+	_zoom = {
+		amt: 0,
+		min: 4e2,
+		max: 1e5,
+		displacement: new THREE.Vector2(),
+	};
 
 	_touchZoomDistanceStart = 0,
 	_touchZoomDistanceEnd = 0,
@@ -210,18 +213,22 @@ THREE.TrackballControls = function (camera, domElement) {
 			scrollFactor = _touchZoomDistanceStart / _touchZoomDistanceEnd;
 			_touchZoomDistanceStart = _touchZoomDistanceEnd;
 			_this.zoom(scrollFactor);
-			_zoomAmt = 0;
+			_zoom.amt = 0;
 		} 
 		else {
-			scrollFactor = Math.max(1.0 - _zoomAmt * this.zoomSpeed, 0.01);
+			scrollFactor = Math.max(1.0 - _zoom.amt * this.zoomSpeed, 0.01);
 
 			_this.zoom(scrollFactor);
 
 			if (_this.staticMoving) {
-				_zoomAmt = 0;
+				_zoom.amt = 0;
 			}
 			else {
-				_zoomAmt *= this.dynamicDampingFactor;
+				_zoom.amt *= this.dynamicDampingFactor;
+
+				if (_zoom.amt < 1e-10) {
+					_zoom.amt = 0;
+				}
 			}
 		}
 	};
@@ -231,16 +238,17 @@ THREE.TrackballControls = function (camera, domElement) {
 		var newlen = _eye.clone().multiplyScalar(factor).length();
 
 		let fov_rad = this.camera.fov * THREE.Math.DEG2RAD;
-		let zoomMax = _zoomMax / Math.tan(fov_rad);
+		let zoomMin = _zoom.min / Math.tan(fov_rad);
+		let zoomMax = _zoom.max / Math.tan(fov_rad);
 
-		if (newlen < _zoomMin) {
+		if (newlen < zoomMin) {
 			factor *= 1.2;
 		}
 		else if (newlen > zoomMax) {
 			factor *= 0.95;
 		}
 
-		if ((factor > 0.9 && factor < 1 && len - _zoomMin < 400)
+		if ((factor > 0.9 && factor < 1 && len - zoomMin < 400)
 			|| (factor > 1 && factor < 1.05 && len - zoomMax > -(zoomMax * 0.05))) {
 
 			factor = 1
@@ -249,15 +257,19 @@ THREE.TrackballControls = function (camera, domElement) {
 		if (len === 0) {
 			_eye.set(0.1, 0.1, 0.1);
 		}
-		else if (newlen < _zoomMin / 2) {
-			_zoomAmt = 0;
+		else if (newlen < zoomMin / 2) {
+			_zoom.amt = 0;
 		}
 		else if (newlen > zoomMax * 5) {
-			_zoomAmt = 0;
+			_zoom.amt = 0;
 		}
 		else {
 			_eye.multiplyScalar(factor);
 		}
+
+		if (newlen < zoomMax) {
+			_this.panCameraInstantly(_zoom.displacement);
+		}		
 	}
 
 	this.computeZoomFactor = function () {
@@ -547,9 +559,9 @@ THREE.TrackballControls = function (camera, domElement) {
 
 		displacement.x *= -1;
 
-		_this.panCameraInstantly(displacement);
+		_zoom.displacement.copy(displacement);
 
-		_zoomAmt += delta;
+		_zoom.amt += delta;
 		_this.dispatchEvent(startEvent);
 		_this.dispatchEvent(endEvent);
 	}
