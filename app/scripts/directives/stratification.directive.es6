@@ -35,6 +35,7 @@ app.directive('stratification', function () {
     scope.$watch(function (scope) {
       // =^..^= Not sure how to continually monitor this
       if (scope.$parent.$parent.sidebarFullscreen) {
+        debugger;
         console.log('fullscreen');
       }
     });
