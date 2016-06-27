@@ -108,9 +108,9 @@ app.directive('stratification', function () {
 
       margin = {
         top: 10,
-        right: 40,
+        right: 0,
         bottom: 50,
-        left: 25,
+        left: 50,
       };
 
       // Set graph dimensions
@@ -209,7 +209,7 @@ app.directive('stratification', function () {
             // .attr("class", "axis-label")
             .attr("text-anchor", "middle")
             .attr("transform", "translate(" + (width/2) + ", 35)")
-            .text("% IPL Depth");
+            .text("Arbor Volume Density");
 
       // Add Y axis
       svg.append("g")
@@ -221,11 +221,11 @@ app.directive('stratification', function () {
           .append("text")
             // .attr("class", "axis-label")
             .attr("text-anchor", "middle")
-            .attr("transform", "translate(" + (height/2) + ") rotate(-90)")
-            .text("Arbor Volume Density");
+            .attr("transform", "translate(-35," + (height/2) + ") rotate(-90)")
+            .text("% IPL Depth");
 
       svg.selectAll(".tick")
-        .filter(function (d) { return d === 0;  })
+        .filter(function (d, i) { return i === 0;  })
         .text("");
     }
 
