@@ -4,8 +4,9 @@ app.directive('stratification', function () {
 
   let chartLinker = function (scope, element, attrs) {
     let _cellCount; // Hack
-    charter.createChart();
+    charter.init();
 
+    // Dataset loaded watcher
     scope.$watch(function (scope) {
       return scope.cells.map( (cell) => cell.id ).join('');
     }, function () {
@@ -19,6 +20,7 @@ app.directive('stratification', function () {
       charter.updateChart(dataset);
     });
 
+    // Cell hidden watcher
     scope.$watch(function (scope) {
       return scope.cells.map( (cell) => cell.hidden ? 't' : 'f' ).join('');
     }, 
@@ -32,14 +34,42 @@ app.directive('stratification', function () {
       charter.updateChart(dataset);
     });
 
-    scope.$watch(function (scope) {
-      // =^..^= Not sure how to continually monitor this
-      if (scope.$parent.$parent.sidebarFullscreen) {
-        debugger;
-        console.log('fullscreen');
-      }
-    });
+      // =^..^= Monitor Sidebar size change
+    let resizeElement = document.getElementById('right-sidebar'),
+        resizeCallback = function() {
+            charter.resize();
+        };
 
+    addResizeListener(resizeElement, resizeCallback);
+
+    // Fullscreen watcher
+    // scope.$watch(function (scope) {
+    //     return [document.getElementById('right-sidebar').offsetWidth].join('');
+    // },
+    // function (value) {
+    //   console.log('directive got resized:', value);
+    // });
+
+    // =^..^= Monitor fullscreen
+    // scope.$watch(function (scope) {
+    //     return scope.$parent.$parent.sidebarFullscreen;
+    // },
+    // function (value) {
+    //   console.log('directive got resized:', value);
+    //   console.log(angular.element('.characterization').width());
+    //   charter.resize();
+    // });
+
+    // scope.$watch(function (scope) {
+    //   // =^..^= Not sure how to continually monitor this
+    //   if (scope.$parent.$parent.sidebarFullscreen) {
+    //     console.log('fullscreen');
+    //   } else {
+    //     console.log('sidebar');
+    //   }
+    // });
+
+    // Highlight cell watcher
     scope.$watch(function (scope) {
       return scope.cells.map( (cell) => cell.highlight ? 't' : 'f' ).join('');
     }, 
@@ -194,11 +224,12 @@ app.directive('stratification', function () {
         clip,
         cellId,
         label,
+        xLabel,
+        dataset_old,
         lineGenerator;
 
-
-    function createChart() {
-      width = angular.element('.characterization').width(),
+    function init() {
+      width = angular.element('.characterization').width();
       height = 500;
 
       margin = {
@@ -213,8 +244,12 @@ app.directive('stratification', function () {
       height = height - margin.top - margin.bottom;
 
       // Set ranges
-      xScale = d3.scale.linear().range([0, width]),
+      xScale = d3.scale.linear().range([0, width]);
       yScale = d3.scale.linear().range([height, 0]); // Reverse for SVG drawing
+
+      // Set domain of data
+      yScale.domain([120, -20]); // IPL % | GCL Bottom
+      xScale.domain([0, 0.05]);  // Arbor Volume Density
 
       // Define axes
       xAxis = d3.svg.axis().scale(xScale)
@@ -231,22 +266,16 @@ app.directive('stratification', function () {
         .tickPadding([7])
         .ticks(5);
 
-      // Set range of data
-      yScale.domain([120, -20]); // IPL % | GCL Bottom
-      xScale.domain([0, 0.05]);  // Arbor Volume Density
-
-      // Define line generator
-      lineGenerator = d3.svg.line()
-        .interpolate("linear")
-        .x(function(d) { return xScale(d.y); }) // Value is intentionally flipped
-        .y(function(d) { return yScale(d.x); });
+      // Set axis and line scale
+      xAxis.scale(xScale);
+      yAxis.scale(yScale);
 
       // Add svg canvas
       svg = d3.select("#stratification-chart")
         .append("svg")
           .attr("id", "stratification-svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
+          // .attr("width", width + margin.left + margin.right)
+          // .attr("height", height + margin.top + margin.bottom)
         .append("g")
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
@@ -272,18 +301,7 @@ app.directive('stratification', function () {
         tooltip = d3.select("#tooltip")
           .append("p")
           .attr("id", "volume");
-        tooltip = d3.select("#tooltip");
-
-
-
-       //make a clip path for the graph  
-      clip = svg.append("svg:clipPath")
-        .attr("id", "clip")
-        .append("svg:rect")
-        .attr("x", 0)
-        .attr("y", 0)
-        .attr("width", width)
-        .attr("height", height);   
+        tooltip = d3.select("#tooltip"); 
 
       // Tooltip keys
       cellId = d3.select("#cell-id");
@@ -299,12 +317,12 @@ app.directive('stratification', function () {
           .style("text-anchor", "start");
 
       // Axis label | X
-      let xLabel = svg.select(".x.axis")
-          .append("text")
-            .attr("class", "axis-label")
-            .attr("text-anchor", "middle")
-            .attr("transform", "translate(" + (width/2) + ", 45)")
-            .text("Arbor Volume Density");
+      xLabel = svg.select(".x.axis")
+        .append("text")
+          .attr("class", "axis-label")
+          .attr("text-anchor", "middle")
+          .attr("transform", "translate(" + (width/2) + ", 45)")
+          .text("Arbor Volume Density");
 
       // Add Y axis
       svg.append("g")
@@ -322,9 +340,56 @@ app.directive('stratification', function () {
       svg.selectAll(".tick")
         .filter(function (d, i) { return i === 0;  })
         .text("");
+
+
+      // Define line generator
+      lineGenerator = d3.svg.line()
+        .interpolate("linear")
+        .x(function(d) { debugger; return xScale(d.y); }) // Value is intentionally flipped
+        .y(function(d) { return yScale(d.x); });
+    }
+
+    function resize() {
+      
+      // Update width
+      width = angular.element('.characterization').width();
+      height = 500;
+
+      // Set graph dimensions
+      width = width - margin.left - margin.right;
+      height = height - margin.top - margin.bottom;
+
+      // Update ranges
+      xScale.range([0, width]),
+      yScale.range([height, 0]); // Reverse for SVG drawing
+
+      yAxis
+        .orient('left')
+        .innerTickSize(-width)
+        .outerTickSize(0)
+        .tickPadding([7])
+        .ticks(5);
+
+      // Update axis and line
+      xAxis.scale(xScale);
+      yAxis.scale(yScale);
+
+      // Axis label | X
+      xLabel
+       .attr("transform", "translate(" + (width/2) + ", 45)");
+
+      let seriesUpdate = d3.selectAll('.series').selectAll('path')
+          .attr("d", function(d) { return lineGenerator(d.data); });
+
+      let seriesHitUpdate = d3.selectAll('.series-hit').selectAll('path')
+          .attr("d", function(d) { return lineGenerator(d.data); });
+
+      updateChart(dataset_old); // Update chart with existing dataset
     }
 
     function updateChart(dataset) { // Load the dataset | Refresh chart
+      dataset_old = dataset;
+      // dataset = dataset_in;
       //Update scale X domain | Datum intentionally flipped
       if (dataset.length !== 0) {
         xScale.domain([
@@ -443,47 +508,23 @@ app.directive('stratification', function () {
 
       //Update X axis
       svg.select(".x.axis")
-          .transition()
-          .duration(200)
         .call(xAxis);
 
       //Update Y axis
       svg.select(".y.axis")
-          .transition()
-          .duration(200)
         .call(yAxis);
 
     }
 
-    // Call this on resize
-    function calcWidth(container) {
-      let width = container.width(),
-          paddingLeft = container.css('padding-left'), 
-          paddingRight = container.css('padding-right');
-
-      paddingLeft = paddingLeft.slice(0, -2); // CSS returns "px"
-      paddingRight = paddingRight.slice(0, -2);
-
-      width = width - paddingLeft - paddingRight;
-
-      return width;
-    }
-
     return {
-      calcWidth: function() {
-        calcWidth();
+      updateChart: function(dataset) {  
+        updateChart(dataset);
       },
-      updateChart: function(scope) {  
-        updateChart(scope);
+      init: function() {  
+        init();
       },
-      toggleCell: function(scope) {  
-        toggleCell(scope);
-      },
-      highlightCell: function(scope) {  
-        highlightCell(scope);
-      },
-      createChart: function() {  
-        createChart();
+      resize: function() {  
+        resize();
       },
     };
 
