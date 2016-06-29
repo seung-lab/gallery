@@ -269,6 +269,7 @@ THREE.TrackballControls = function (camera, domElement) {
 
 		if (newlen < zoomMax) {
 			_this.panCameraInstantly(_zoom.displacement);
+			_zoom.displacement.multiplyScalar(_this.dynamicDampingFactor);
 		}		
 	}
 
