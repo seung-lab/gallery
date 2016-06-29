@@ -3,20 +3,13 @@
 app.directive('stratification', function () {
 
   let chartLinker = function (scope, element, attrs) {
-    let _cellCount; // Hack
     charter.init();
 
     // Dataset loaded watcher
     scope.$watch(function (scope) {
-      return scope.cells.map( (cell) => cell.id ).join('');
+      return scope.cells.map( (cell) => cell.id ).join(',');
     }, function () {
       let dataset = createDataset(scope.cells);
-          _cellCount = dataset.length; 
-
-      if (_cellCount === 1 && dataset.length) {
-        dataset[0].color = "#1A1A1A"; // Cell white, data black
-      }
-
       charter.updateChart(dataset);
     });
 
@@ -26,11 +19,6 @@ app.directive('stratification', function () {
     }, 
     function (value) {
       let dataset = createDataset(scope.cells);
-
-      if (_cellCount === 1 && dataset.length) {
-        dataset[0].color = "#1A1A1A"; // Cell white, data black
-      }
-
       charter.updateChart(dataset);
     });
 
@@ -89,10 +77,6 @@ app.directive('stratification', function () {
         ? highlightDataset(scope.cells)
         : createDataset(scope.cells);
 
-      if (_cellCount === 1 && dataset.length && dataset.length === 1) {
-        dataset[0].color = "#1A1A1A"; // Cell white, data black
-      } 
-
       charter.updateChart(dataset);
     });
   };
@@ -128,15 +112,15 @@ app.directive('stratification', function () {
       }
 
       let color = cell.color;
-      // if (cells.length === 1) {
-      //   color = '#1A1A1A';
-      // }
+      if (cells.length === 1) {
+        color = '#1A1A1A';
+      }
 
       return {
         annotation: cell.annotation,
         highlight: cell.highlight,
         hidden: cell.hidden,
-        color: cell.color,
+        color: color,
         label: cell.id,
         data: data,
       };
