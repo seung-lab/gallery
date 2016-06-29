@@ -345,7 +345,7 @@ app.directive('stratification', function () {
       // Define line generator
       lineGenerator = d3.svg.line()
         .interpolate("linear")
-        .x(function(d) { debugger; return xScale(d.y); }) // Value is intentionally flipped
+        .x(function(d) { return xScale(d.y); }) // Value is intentionally flipped
         .y(function(d) { return yScale(d.x); });
     }
 
@@ -447,10 +447,11 @@ app.directive('stratification', function () {
       let seriesHitSelect = svg.selectAll(".series-hit") // Mouseover the hit lines
         .on('mouseover', function(dd) {
           d3.select(this).on('mousemove', function(d) {
+
             d3.selectAll("circle")
               .remove(); // Don't pollute space with invisible circles
+
             let dataScale = [],
-                nearest,
                 mousepos = {
                   x: d3.mouse(d3.select('#stratification-svg').node())[0],
                   y: d3.mouse(d3.select('#stratification-svg').node())[1] - margin.top,
@@ -458,15 +459,16 @@ app.directive('stratification', function () {
 
             d.data.forEach(function(datum) {
               let rObj = {
-                    x:  xScale(datum.y), // X, Y flipped
-                    x0: datum.y,         // X, Y flipped
-                    y:  yScale(datum.x), // X, Y flipped
-                    y0: datum.x,         // X, Y flipped
-                  };
+                x:  xScale(datum.y), // X, Y flipped
+                x0: datum.y,         // "
+                y:  yScale(datum.x), // "
+                y0: datum.x,         // "
+              };
+
               dataScale.push(rObj);
             });
 
-            nearest = k_nearest(1, dataScale, mousepos)[0]; // First of his name
+            let nearest = k_nearest(1, dataScale, mousepos)[0]; 
 
             d3.select(this).append("circle")
               .attr("r", 0)
@@ -481,6 +483,7 @@ app.directive('stratification', function () {
             tooltip.transition()
               .duration(200)
               .style('opacity', 1);
+
             tooltip
               .style('left', function() {
                 return width - this.getBoundingClientRect().width + margin.right + "px";
@@ -490,17 +493,17 @@ app.directive('stratification', function () {
                   ? 55 + "px" // Top
                   : height - this.getBoundingClientRect().height + "px"; // Bottom
               });
-            cellId
-              .text(d.label);
-            volume 
-              .text(nearest.x0);
-            ipl
-              .text(nearest.y0);
+
+            cellId.text(d.label);
+            volume.text(nearest.x0);
+            ipl.text(nearest.y0);
+
           })
         })
         .on('mouseout', function(d) {
             d3.selectAll("circle")
               .remove(); // Don't pollute space with invisible circles
+
             tooltip.transition()
               .duration(200)
               .style('opacity', 0);
@@ -513,21 +516,13 @@ app.directive('stratification', function () {
       //Update Y axis
       svg.select(".y.axis")
         .call(yAxis);
-
     }
 
     return {
-      updateChart: function(dataset) {  
-        updateChart(dataset);
-      },
-      init: function() {  
-        init();
-      },
-      resize: function() {  
-        resize();
-      },
+      updateChart: updateChart,
+      init: init,
+      resize: resize,
     };
-
   })();
 
 
