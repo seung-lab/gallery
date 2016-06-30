@@ -213,7 +213,7 @@ app.directive('stratification', function () {
         xLabel, yLabel,
         yLabel_INL, yLabel_GCL,
         yLabel_ON, yLabel_OFF,
-        yAxis_IPL_Tick,
+        yAxis_IPL_Ticks,
         yAxis_ONOFF_Tick,
         yLabel_Layers,
         yLabel_ON_Transient, yLabel_ON_Sustained,
@@ -425,29 +425,45 @@ app.directive('stratification', function () {
       // ON OFF Tick
       yAxis_ONOFF_Tick = d3.select('.y')
           .append('line')
+            .attr('class', 'tick-right')
             .attr("x1", width)
             .attr("x2", (width + 10))
             .attr("y1", yScale(45))
-            .attr("y2", yScale(45))
-            .attr('class', 'tick-right');
+            .attr("y2", yScale(45));
 
-      yAxis_IPL_Tick = d3.select('.y');
+      yAxis_IPL_Ticks = d3.select('.y');
       
-        // IPL Start
-        yAxis_IPL_Tick.append('line')
+        // IPL Start | Left
+        yAxis_IPL_Ticks.append('line')
+          .attr('class', 'tick-left')
           .attr("x1", 0)
           .attr("x2", -10)
           .attr("y1", yScale(0))
-          .attr("y2", yScale(0))
-          .attr('class', 'tick-left');
+          .attr("y2", yScale(0));
 
-        // IPL End
-        yAxis_IPL_Tick.append('line')
+        // IPL End | Left
+        yAxis_IPL_Ticks.append('line')
+          .attr('class', 'tick-left')
           .attr("x1", 0)
           .attr("x2", -10)
           .attr("y1", yScale(100))
-          .attr("y2", yScale(100))
-          .attr('class', 'tick-left');
+          .attr("y2", yScale(100));
+
+        // IPL Start | Right
+        yAxis_IPL_Ticks.append('line')
+          .attr('class', 'tick-right')
+          .attr("x1", width)
+          .attr("x2", (width + 10))
+          .attr("y1", yScale(0))
+          .attr("y2", yScale(0));
+
+        // IPL End | Right
+        yAxis_IPL_Ticks.append('line')
+          .attr('class', 'tick-right')
+          .attr("x1", width)
+          .attr("x2", (width + 10))
+          .attr("y1", yScale(100))
+          .attr("y2", yScale(100));
 
 
       // Define line generator
@@ -487,8 +503,8 @@ app.directive('stratification', function () {
     yLabel_ON.attr("transform", "translate(" + (width + 25) + "," + yScale(22.5) + ") rotate(90)");
       yLabel_OFF.attr("transform", "translate(" + (width + 25) + "," + yScale(72.5) + ") rotate(90)");
       yLabel_OFF_Transient.attr("transform", "translate(" + (width - 18) + "," + yScale(14) + ")"); // 18~Offset
-      yLabel_OFF_Sustained.attr("transform", "translate(" + (width - 18) + "," + yScale(36.5) + ")"); // 18~Offset
-      yLabel_ON_Transient.attr("transform", "translate(" + (width - 18) + "," + yScale(53.5) + ")"); // 18~Offset
+      yLabel_OFF_Sustained.attr("transform", "translate(" + (width - 18) + "," + yScale(37) + ")"); // 18~Offset
+      yLabel_ON_Transient.attr("transform", "translate(" + (width - 18) + "," + yScale(55) + ")"); // 18~Offset
       yLabel_ON_Sustained.attr("transform", "translate(" + (width - 18) + "," + yScale(81) + ")"); // 18~Offset
 
     // Top Bar
@@ -500,6 +516,11 @@ app.directive('stratification', function () {
 
     // ON OFF Tick
     yAxis_ONOFF_Tick
+      .attr("x1", width)
+      .attr("x2", (width + 10));
+
+    // IPL Ticks | Right
+    yAxis_IPL_Ticks.selectAll('.tick-right')
       .attr("x1", width)
       .attr("x2", (width + 10));
 
@@ -561,7 +582,6 @@ app.directive('stratification', function () {
       let seriesHitSelect = svg.selectAll(".series-hit") // Mouseover the hit lines
         .on('mouseover', function(dd) {
           d3.select(this).on('mousemove', function(d) {
-
             d3.selectAll("circle")
               .remove(); // Don't pollute space with invisible circles
 
@@ -598,14 +618,12 @@ app.directive('stratification', function () {
               .duration(100)
               .style('opacity', 1);
 
-            tooltip
+            tooltip // Setting positioning logic 
               .style('left', function() {
-                return width - this.getBoundingClientRect().width + margin.right + "px";
+                  return nearest.x + "px";
               })
               .style('top', function() {
-                return Math.abs(d3.mouse(d3.select('#stratification-svg').node())[1]) > height / 2
-                  ? 55 + "px" // Top
-                  : height - this.getBoundingClientRect().height + "px"; // Bottom
+                  return nearest.y + "px";
               });
 
             cellId.text(d.label);
