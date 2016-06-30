@@ -216,6 +216,7 @@ app.directive('stratification', function () {
         yLabel_Layers,
         yLabel_ON_Transient, yLabel_ON_Sustained,
         yLabel_OFF_Transient, yLabel_OFF_Sustained,
+        yLabel_Top,
         dataset_old,
         tickValues,
         lineGenerator;
@@ -226,9 +227,9 @@ app.directive('stratification', function () {
 
       margin = {
         top: 25,
-        right: 50,
+        right: 35,
         bottom: 50,
-        left: 50,
+        left: 35,
         padding: 100,
       };
 
@@ -410,6 +411,15 @@ app.directive('stratification', function () {
               .style("stroke-linecap", "round")
               .style("stroke-dasharray", ("3, 10"));
 
+      // Labels for top bar
+      yLabel_Top = d3.selectAll('.y')
+          .append('line')
+            .attr("x1", 0)
+            .attr("x2", width)
+            .attr("y1", yScale(-20))
+            .attr("y2", yScale(-20))
+            .attr('class', 'top-bar');
+
 
       // Define line generator
       lineGenerator = d3.svg.line()
@@ -434,7 +444,7 @@ app.directive('stratification', function () {
       yScale.range([height, 0]); // Reverse for SVG drawing
 
       yAxis
-        .innerTickSize(width - 50)
+        .innerTickSize(width - 50);
 
       // Update axis and line
       xAxis.scale(xScale);
@@ -451,6 +461,13 @@ app.directive('stratification', function () {
       yLabel_OFF_Sustained.attr("transform", "translate(" + (width - 18) + "," + yScale(36.5) + ")"); // 18~Offset
       yLabel_ON_Transient.attr("transform", "translate(" + (width - 18) + "," + yScale(53.5) + ")"); // 18~Offset
       yLabel_ON_Sustained.attr("transform", "translate(" + (width - 18) + "," + yScale(81) + ")"); // 18~Offset
+
+    // Top Bar
+      yLabel_Top 
+        .attr("x1", 0)
+        .attr("x2", width)
+        .attr("y1", yScale(-20))
+        .attr("y2", yScale(-20));
 
 
       let seriesUpdate = d3.selectAll('.series').selectAll('path')
@@ -580,8 +597,8 @@ app.directive('stratification', function () {
       svg.select(".y.axis")
         .call(yAxis)
         .selectAll('.tick').selectAll('text')
-          .style('text-anchor', 'end')
-          .attr("transform", "translate(25, 0)"); // Add a bit of padding after line
+            .style('text-anchor', 'end')
+            .attr("transform", "translate(25, 0)"); // Add a bit of padding after line
     }
 
     function updateDomain(dataset) {
