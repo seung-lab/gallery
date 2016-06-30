@@ -208,12 +208,14 @@ app.directive('stratification', function () {
         ipl,
         volume,
         svg,
-        clip,
         cellId,
         label,
         xLabel, yLabel,
         yLabel_INL, yLabel_GCL,
         yLabel_ON, yLabel_OFF,
+        yLabel_Layers,
+        yLabel_ON_Transient, yLabel_ON_Sustained,
+        yLabel_OFF_Transient, yLabel_OFF_Sustained,
         dataset_old,
         tickValues,
         lineGenerator;
@@ -324,6 +326,7 @@ app.directive('stratification', function () {
         .attr("class", "y axis")
         .call(yAxis)
         .selectAll('text')
+          .attr("class", "axis-label axis-label-minor")
           .style('text-anchor', 'end');
 
       // Axis label | Y
@@ -343,7 +346,7 @@ app.directive('stratification', function () {
             .text("INL");
 
       // Axis label | Y --> GCL
-      yLabel_INL = svg.select(".y.axis")
+      yLabel_GCL = svg.select(".y.axis")
           .append("text")
             .attr("class", "axis-label")
             .attr("text-anchor", "middle")
@@ -366,9 +369,46 @@ app.directive('stratification', function () {
             .attr("transform", "translate(" + (width + 25) + "," + yScale(72.5) + ") rotate(90)") // Dynamic Scale
             .text("OFF");
 
-      // svg.selectAll(".tick")
-      //   .filter(function (d, i) { return i === 0;  })
-      //   .text("");
+      // Axis label | Y --> OFF Transient
+      yLabel_OFF_Transient = svg.select('.y.axis')
+          .append("text")
+              .attr("class", "axis-label sub-label axis-label-minor")
+              .attr("text-anchor", "end")
+              .attr("transform", "translate(" + (width - 18) + "," + yScale(14) + ")") // Dynamic Scale
+              .text("Transient");
+
+      // Axis label | Y --> OFF Sustained
+      yLabel_OFF_Sustained = svg.select('.y.axis')
+          .append("text")
+              .attr("class", "axis-label sub-label axis-label-minor")
+              .attr("text-anchor", "end")
+              .attr("transform", "translate(" + (width - 18) + "," + yScale(36.5) + ")") // Dynamic Scale
+              .text("Sustained");
+
+      // Axis label | Y --> ON Transient
+      yLabel_ON_Transient = svg.select('.y.axis')
+          .append("text")
+              .attr("class", "axis-label sub-label axis-label-minor")
+              .attr("text-anchor", "end")
+              .attr("transform", "translate(" + (width - 18) + "," + yScale(53.5) + ")") // Dynamic Scale
+              .text("Transient");
+
+      // Axis label | Y --> ON Sustained
+      yLabel_ON_Sustained = svg.select('.y.axis')
+          .append("text")
+              .attr("class", "axis-label sub-label axis-label-minor")
+              .attr("text-anchor", "end")
+              .attr("transform", "translate(" + (width - 18) + "," + yScale(81) + ")") // Dynamic Scale
+              .text("Sustained");
+
+      // Style Transient + Sustained Lines with Dashes
+      yLabel_Layers = d3.selectAll('.y')
+          .selectAll('.tick')
+          .filter( function(d, i) { return i % 2 === 1; } )
+            .selectAll('line')
+              .style("stroke-width", ("1.5"))
+              .style("stroke-linecap", "round")
+              .style("stroke-dasharray", ("3, 10"));
 
 
       // Define line generator
@@ -405,8 +445,12 @@ app.directive('stratification', function () {
        .attr("transform", "translate(" + (width/2) + ", 35)");
 
     // Axis label | Y
-    yLabel_ON.attr("transform", "translate(" + (width + 25) + "," + yScale(22.5) + ") rotate(90)"); // Dynamic Scale
-    yLabel_OFF.attr("transform", "translate(" + (width + 25) + "," + yScale(72.5) + ") rotate(90)"); // Dynamic Scale
+    yLabel_ON.attr("transform", "translate(" + (width + 25) + "," + yScale(22.5) + ") rotate(90)");
+      yLabel_OFF.attr("transform", "translate(" + (width + 25) + "," + yScale(72.5) + ") rotate(90)");
+      yLabel_OFF_Transient.attr("transform", "translate(" + (width - 18) + "," + yScale(14) + ")"); // 18~Offset
+      yLabel_OFF_Sustained.attr("transform", "translate(" + (width - 18) + "," + yScale(36.5) + ")"); // 18~Offset
+      yLabel_ON_Transient.attr("transform", "translate(" + (width - 18) + "," + yScale(53.5) + ")"); // 18~Offset
+      yLabel_ON_Sustained.attr("transform", "translate(" + (width - 18) + "," + yScale(81) + ")"); // 18~Offset
 
 
       let seriesUpdate = d3.selectAll('.series').selectAll('path')
