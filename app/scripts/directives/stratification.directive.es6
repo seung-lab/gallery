@@ -87,6 +87,15 @@ app.directive('stratification', function () {
   // ------------------------------------
   // D3
 
+  // Modify D3 prototype to enable first and last child selections
+  d3.selection.prototype.first = function() {
+    return d3.select(this[0][0]);
+  };
+  d3.selection.prototype.last = function() {
+    var last = this.size() - 1;
+    return d3.select(this[0][last]);
+  };
+
   function createDataset (cells, cellCount) {
     cells = cells.filter( (cell) => cell.stratification && !cell.hidden );
 
@@ -201,7 +210,7 @@ app.directive('stratification', function () {
 
   let charter = (function() {
     let width, height,
-        xScale, xScaleDisp, yScale,
+        xScale, yScale,
         xAxis, yAxis,
         margin,
         tooltip,
@@ -246,20 +255,20 @@ app.directive('stratification', function () {
 
       // Set ranges
       xScale = d3.scale.linear().range([0, width]);
-      xScaleDisp = d3.scale.linear().range([0, (width - margin.padding)]);
       yScale = d3.scale.linear().range([height, 0]); // Reverse for SVG drawing
 
       // Set domain of data
       yScale.domain([120, -20]); // IPL % | GCL Bottom
-      xScale.domain([0, 0.05]);  // Arbor Volume Density
+      xScale.domain([0, 0.1]);  // Arbor Volume Density
 
       // Define axes
-      xAxis = d3.svg.axis().scale(xScale)
+      xAxis = d3.svg.axis()
         .orient('bottom')
         .outerTickSize(-height)
-        .ticks(0);
+        .tickPadding([7])
+        .ticks(5);
 
-      yAxis = d3.svg.axis().scale(yScale)
+      yAxis = d3.svg.axis()
         .orient('right')
         .innerTickSize(width - 50)
         .outerTickSize(0)
@@ -321,7 +330,7 @@ app.directive('stratification', function () {
         .append("text")
           .attr("class", "axis-label")
           .attr("text-anchor", "middle")
-          .attr("transform", "translate(" + (width/2) + ", 35)")
+          .attr("transform", "translate(" + (width/2) + ", 50)")
           .text("Arbor Volume Density");
 
       // Add Y axis
@@ -409,7 +418,6 @@ app.directive('stratification', function () {
           .selectAll('.tick')
           .filter( function(d, i) { return i % 2 === 1; } )
             .selectAll('line')
-              .style("stroke-width", ("1.5"))
               .style("stroke-linecap", "round")
               .style("stroke-dasharray", ("3, 10"));
 
@@ -465,11 +473,10 @@ app.directive('stratification', function () {
           .attr("y1", yScale(100))
           .attr("y2", yScale(100));
 
-
       // Define line generator
       lineGenerator = d3.svg.line()
         .interpolate("linear")
-        .x(function(d) { return xScaleDisp(d.y); }) // Value is intentionally flipped
+        .x(function(d) { return xScale(d.y); }) // Value intentionally flipped
         .y(function(d) { return yScale(d.x); });
     }
 
@@ -485,7 +492,6 @@ app.directive('stratification', function () {
 
       // Update ranges
       xScale.range([0, width]);
-      xScaleDisp.range([0, (width - margin.padding)]);
       yScale.range([height, 0]); // Reverse for SVG drawing
 
       yAxis
@@ -495,9 +501,12 @@ app.directive('stratification', function () {
       xAxis.scale(xScale);
       yAxis.scale(yScale);
 
+      // Update domain to allow for additional right padding
+      // xAxis.scale().domain()[0] += 0.05;
+
       // Axis label | X
       xLabel
-       .attr("transform", "translate(" + (width/2) + ", 35)");
+       .attr("transform", "translate(" + (width/2) + ", 50)");
 
     // Axis label | Y
     yLabel_ON.attr("transform", "translate(" + (width + 25) + "," + yScale(22.5) + ") rotate(90)");
@@ -536,6 +545,8 @@ app.directive('stratification', function () {
 
     function updateChart(dataset) { // Load the dataset | Refresh chart
       dataset_old = dataset;
+
+      // console.log('update_max ' + xAxis.scale().domain()[1]);
 
       // Announce to D3 that we'll be binding our dataset to 'series' objects
       let series = svg.selectAll(".series")
@@ -593,7 +604,7 @@ app.directive('stratification', function () {
 
             d.data.forEach(function(datum) {
               let rObj = {
-                x:  xScaleDisp(datum.y), // X, Y flipped
+                x:  xScale(datum.y), // X, Y flipped
                 x0: datum.y,         // "
                 y:  yScale(datum.x), // "
                 y0: datum.x,         // "
@@ -651,18 +662,30 @@ app.directive('stratification', function () {
         .selectAll('.tick').selectAll('text')
             .style('text-anchor', 'end')
             .attr("transform", "translate(25, 0)"); // Add a bit of padding after line
+
+      // Remove first and last ticks from X axis
+      d3.select('.x.axis').selectAll('.tick').first().remove();
+      d3.select('.x.axis').selectAll('.tick').last ().remove();
+
     }
 
     function updateDomain(dataset) {
       //Update scale X domain | Datum intentionally flipped
       if (dataset.length !== 0) {
-        xScaleDisp.domain([
+        xScale.domain([
           0, 
           d3.max(dataset, function(d) { // forEach element of dataSet
             return d3.max(d.data, function(dd) { // forEach element of dataSet.data
               return dd.y; // return value
             }); 
           })
+        ]);
+
+        let spacer = 0.4; // Squeeze X-Axis
+
+        xScale.domain([
+          0,
+          xAxis.scale().domain()[1] * spacer + xAxis.scale().domain()[1]
         ]);
       }
     }
