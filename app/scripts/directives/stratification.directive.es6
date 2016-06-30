@@ -213,6 +213,8 @@ app.directive('stratification', function () {
         xLabel, yLabel,
         yLabel_INL, yLabel_GCL,
         yLabel_ON, yLabel_OFF,
+        yAxis_IPL_Tick,
+        yAxis_ONOFF_Tick,
         yLabel_Layers,
         yLabel_ON_Transient, yLabel_ON_Sustained,
         yLabel_OFF_Transient, yLabel_OFF_Sustained,
@@ -412,13 +414,40 @@ app.directive('stratification', function () {
               .style("stroke-dasharray", ("3, 10"));
 
       // Labels for top bar
-      yLabel_Top = d3.selectAll('.y')
+      yLabel_Top = d3.select('.y')
           .append('line')
             .attr("x1", 0)
             .attr("x2", width)
             .attr("y1", yScale(-20))
             .attr("y2", yScale(-20))
             .attr('class', 'top-bar');
+
+      // ON OFF Tick
+      yAxis_ONOFF_Tick = d3.select('.y')
+          .append('line')
+            .attr("x1", width)
+            .attr("x2", (width + 10))
+            .attr("y1", yScale(45))
+            .attr("y2", yScale(45))
+            .attr('class', 'tick-right');
+
+      yAxis_IPL_Tick = d3.select('.y');
+      
+        // IPL Start
+        yAxis_IPL_Tick.append('line')
+          .attr("x1", 0)
+          .attr("x2", -10)
+          .attr("y1", yScale(0))
+          .attr("y2", yScale(0))
+          .attr('class', 'tick-left');
+
+        // IPL End
+        yAxis_IPL_Tick.append('line')
+          .attr("x1", 0)
+          .attr("x2", -10)
+          .attr("y1", yScale(100))
+          .attr("y2", yScale(100))
+          .attr('class', 'tick-left');
 
 
       // Define line generator
@@ -468,6 +497,11 @@ app.directive('stratification', function () {
         .attr("x2", width)
         .attr("y1", yScale(-20))
         .attr("y2", yScale(-20));
+
+    // ON OFF Tick
+    yAxis_ONOFF_Tick
+      .attr("x1", width)
+      .attr("x2", (width + 10));
 
 
       let seriesUpdate = d3.selectAll('.series').selectAll('path')
