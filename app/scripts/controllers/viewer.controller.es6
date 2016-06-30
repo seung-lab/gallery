@@ -71,7 +71,7 @@ app.controller('ViewerCtrl', [
   $scope.querySearch = function (query) {
     query = query || "";
     query = query.toLowerCase();
-    query = query.split(/ *, */g);
+    query = query.split(/ *[ ,] */g);
     query = query.length 
       ? query[query.length - 1]
       : "";
@@ -90,7 +90,7 @@ app.controller('ViewerCtrl', [
     // blocks the main area and doesn't get removed
 
     $timeout(function () {
-      $scope.goToResult(item);
+      
     }, 0);
   };
 
@@ -124,7 +124,7 @@ app.controller('ViewerCtrl', [
       
       let neurons = [];
 
-      $scope.searchText.split(/ *, */g).forEach(function (query) {
+      $scope.searchText.split(/ *[ ,] */g).forEach(function (query) {
         let results = $scope.querySearch(query);
 
         if (results.length) {
