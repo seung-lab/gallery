@@ -230,14 +230,15 @@ app.directive('stratification', function () {
         yLabel_Top,
         dataset_old,
         tickValues,
-        lineGenerator;
+        lineGenerator,
+        areaGenerator;
 
     function init() {
       width = angular.element('.characterization').width();
       height = 500;
 
       margin = {
-        top: 25,
+        top: 0,
         right: 35,
         bottom: 50,
         left: 35,
@@ -478,6 +479,7 @@ app.directive('stratification', function () {
         .interpolate("linear")
         .x(function(d) { return xScale(d.y); }) // Value intentionally flipped
         .y(function(d) { return yScale(d.x); });
+
     }
 
     function resize() {
@@ -546,8 +548,6 @@ app.directive('stratification', function () {
     function updateChart(dataset) { // Load the dataset | Refresh chart
       dataset_old = dataset;
 
-      // console.log('update_max ' + xAxis.scale().domain()[1]);
-
       // Announce to D3 that we'll be binding our dataset to 'series' objects
       let series = svg.selectAll(".series")
         .data(dataset, function(d) { return d.label; }); // Key function for data join
@@ -605,9 +605,9 @@ app.directive('stratification', function () {
             d.data.forEach(function(datum) {
               let rObj = {
                 x:  xScale(datum.y), // X, Y flipped
-                x0: datum.y,         // "
-                y:  yScale(datum.x), // "
-                y0: datum.x,         // "
+                x0: datum.y,        
+                y:  yScale(datum.x),
+                y0: datum.x,        
               };
 
               dataScale.push(rObj);
@@ -631,7 +631,7 @@ app.directive('stratification', function () {
 
             tooltip // Setting positioning logic 
               .style('left', function() {
-                  return nearest.x + "px";
+                  return nearest.x + 25 + "px";
               })
               .style('top', function() {
                   return nearest.y + "px";
@@ -665,7 +665,7 @@ app.directive('stratification', function () {
 
       // Remove first and last ticks from X axis
       d3.select('.x.axis').selectAll('.tick').first().remove();
-      d3.select('.x.axis').selectAll('.tick').last ().remove();
+      d3.select('.x.axis').selectAll('.tick').last().remove();
 
     }
 
