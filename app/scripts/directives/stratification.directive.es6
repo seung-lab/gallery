@@ -33,33 +33,6 @@ app.directive('stratification', function () {
 
     addResizeListener(resizeElement, resizeCallback);
 
-    // Fullscreen watcher
-    // scope.$watch(function (scope) {
-    //     return [document.getElementById('right-sidebar').offsetWidth].join('');
-    // },
-    // function (value) {
-    //   console.log('directive got resized:', value);
-    // });
-
-    // =^..^= Monitor fullscreen
-    // scope.$watch(function (scope) {
-    //     return scope.$parent.$parent.sidebarFullscreen;
-    // },
-    // function (value) {
-    //   console.log('directive got resized:', value);
-    //   console.log(angular.element('.characterization').width());
-    //   charter.resize();
-    // });
-
-    // scope.$watch(function (scope) {
-    //   // =^..^= Not sure how to continually monitor this
-    //   if (scope.$parent.$parent.sidebarFullscreen) {
-    //     console.log('fullscreen');
-    //   } else {
-    //     console.log('sidebar');
-    //   }
-    // });
-
     // Highlight cell watcher
     scope.$watch(function (scope) {
       return scope.cells.map( (cell) => cell.highlight ? 't' : 'f' ).join('');
@@ -230,15 +203,14 @@ app.directive('stratification', function () {
         yLabel_Top,
         dataset_old,
         tickValues,
-        lineGenerator,
-        areaGenerator;
+        lineGenerator;
 
     function init() {
       width = angular.element('.characterization').width();
       height = 500;
 
       margin = {
-        top: 0,
+        top: 25,
         right: 35,
         bottom: 50,
         left: 35,
@@ -262,6 +234,17 @@ app.directive('stratification', function () {
       yScale.domain([120, -20]); // IPL % | GCL Bottom
       xScale.domain([0, 0.1]);  // Arbor Volume Density
 
+       // Add svg
+      svg = d3.select("#stratification-chart")
+        .attr("class", "chart")
+        .append("svg")
+          .attr("id", "stratification-svg")
+          // .attr("width", width + margin.left + margin.right)
+          // .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
+
       // Define axes
       xAxis = d3.svg.axis()
         .orient('bottom')
@@ -280,43 +263,33 @@ app.directive('stratification', function () {
       xAxis.scale(xScale);
       yAxis.scale(yScale);
 
-      // Add svg canvas
-      svg = d3.select("#stratification-chart")
-        .append("svg")
-          .attr("id", "stratification-svg")
-          // .attr("width", width + margin.left + margin.right)
-          // .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-          .attr("transform",
-                "translate(" + margin.left + "," + margin.top + ")");
-
       // Define 'div' for tooltips
       tooltip = d3.select("#stratification-chart")
         .append("div")
-        .attr("id", "tooltip");
-        tooltip = d3.select("#tooltip")
-          .append("h3")
-          .attr("id", "cell-id");
-        tooltip = d3.select("#tooltip")
+        .attr("class", "tooltip");
+
+      tooltip
+        .append("h3")
+          .attr("class", "cell-id");
+        tooltip
           .append("hr");
-        tooltip = d3.select("#tooltip")
+        tooltip
           .append("h4")
           .text("IPL%");
-        tooltip = d3.select("#tooltip")
+        tooltip
           .append("p")
-          .attr("id", "ipl");
-        tooltip = d3.select("#tooltip")
+          .attr("class", "ipl");
+        tooltip
           .append("h4")
           .text("Volume");
-        tooltip = d3.select("#tooltip")
+        tooltip
           .append("p")
-          .attr("id", "volume");
-        tooltip = d3.select("#tooltip"); 
+          .attr("class", "volume");
 
       // Tooltip keys
-      cellId = d3.select("#cell-id");
-      volume = d3.select("#volume");
-      ipl    = d3.select("#ipl");
+      cellId = tooltip.select(".cell-id");
+      volume = tooltip.select(".volume");
+      ipl    = tooltip.select(".ipl");
 
       // Add X axis
       svg.append("g")
@@ -570,7 +543,7 @@ app.directive('stratification', function () {
       // Create separate groups for each series object 
       let seriesEnter = series.enter().append("g")
         .attr("class", "series")
-        .attr("id", function(d) { return d.label; }) // Name each uniquely wrt cell label
+        .attr("id", function(d) { return "series-" + d.label; }) // Name each uniquely wrt cell label
         .append("path")
           .attr("class", "line")
           .attr("opacity", 0)
@@ -593,7 +566,7 @@ app.directive('stratification', function () {
       let seriesHitSelect = svg.selectAll(".series-hit") // Mouseover the hit lines
         .on('mouseover', function(dd) {
           d3.select(this).on('mousemove', function(d) {
-            d3.selectAll("circle")
+            svg.selectAll("circle")
               .remove(); // Don't pollute space with invisible circles
 
             let dataScale = [],
@@ -644,7 +617,7 @@ app.directive('stratification', function () {
           })
         })
         .on('mouseout', function(d) {
-            d3.selectAll("circle")
+            svg.selectAll("circle")
               .remove(); // Don't pollute space with invisible circles
 
             tooltip.transition()

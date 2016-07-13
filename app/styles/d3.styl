@@ -1,6 +1,6 @@
 @require 'colors.styl'
 
-#stratification-chart
+.chart
 	position relative
 	display block
 	left 0
@@ -9,17 +9,30 @@
 	height 500px
 	
 
-#stratification-svg
+svg
 	position relative
 	display block
 	left 0
 	top 0
 	width 100%
 	height 100%
+	
+.calcium-svg
+	position relative
+	display block
+	left 0
+	top 0
+	width 100%
+	
+.radar
+	position relative
+	display block
+	width 100%
 
 path 
 	// stroke $BLACK
 	stroke-width 1
+	fill none
 	
 .hit_line
 	// stroke $BLACK
@@ -28,6 +41,26 @@ path
 
 .series
 	fill none
+	
+.rad-axis
+	fill none
+	stroke grey
+	stroke-width 1
+	shape-rendering crispEdges
+	opacity 0.2
+	
+.regional-label
+	fill grey
+	
+.regional-axis
+	fill none
+	stroke grey
+	stroke-width 1
+	opacity 0.2
+	
+.regional-circle
+	fill $WHITE
+	opacity 1
 	
 .axis path,
 .axis line
@@ -65,7 +98,7 @@ path
 	fill $BLACK
 	opacity 1
 	
-#tooltip
+#stratification-chart .tooltip
 	position absolute
 	text-align left
 	line-height 1.5em
@@ -80,13 +113,13 @@ path
 	pointer-events none
 	box-shadow rgba(0,0,0,0.075) 0px 0px 50px
 	
-#tooltip h3
+#stratification-chart .tooltip h3
 	text-align left
 	font-size 11px
 	margin 0
 	text-transform uppercase
 	
-#tooltip hr
+#stratification-chart .tooltip hr
 	text-align left
 	margin 0
 	margin-bottom 5px
@@ -95,7 +128,7 @@ path
 	left 0
 	background-color $BLACK
 	
-#tooltip h4
+#stratification-chart .tooltip h4
 	text-align left
 	margin 0
 	margin-top 5px
@@ -104,7 +137,7 @@ path
 	text-transform uppercase
 	font-weight bold
 	
-#tooltip p
+#stratification-chart .tooltip p
 	text-align left
 	margin 0
 	font-size 11px
@@ -113,6 +146,5 @@ path
 
 circle
 	transition opacity 100ms ease
-	fill $BLACK
 	opacity 1
 	
