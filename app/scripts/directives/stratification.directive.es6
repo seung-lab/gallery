@@ -269,8 +269,11 @@ app.directive('stratification', function () {
         .attr("class", "tooltip");
 
       tooltip
-        .append("h3")
-          .attr("class", "cell-id");
+        .append("h4")
+        .text("ID");
+        tooltip
+          .append("h3")
+            .attr("class", "cell-id");
         tooltip
           .append("hr");
         tooltip

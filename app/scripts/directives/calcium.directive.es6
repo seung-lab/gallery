@@ -61,6 +61,8 @@ app.directive('calcium', [ function () {
       dict[cell.id + ""] = cell;
     });
 
+    scope.dataset = makeDataset(scope); // Rebuild dataset
+
     scope.dataset.forEach(function (datum) {
       let cell = dict[datum.label];
       let color = cell.color;
@@ -87,7 +89,14 @@ app.directive('calcium', [ function () {
 
     });
 
-    scope.dataset = makeDataset(scope);
+    // Update dataset
+    let i = scope.dataset.length
+    while (i--) {
+      if (scope.dataset[i].hidden) {
+        scope.dataset.splice(i, 1);
+      }
+    }
+
     scope.chart.update(scope); // Update chart here
   }
 
@@ -254,8 +263,12 @@ app.directive('calcium', [ function () {
       // Define 'div' for tooltips
       tooltip = d3.select("calcium[activation=" + scope.activation + "]")
         .append("div")
-        .attr("class", "tooltip")
-        .attr("id", "tooltip-" + scope.activation);
+          .attr("id", "tooltip-" + scope.activation)
+          .attr("class", "tooltip");
+
+      tooltip
+        .append("h4")
+        .text("ID");
         tooltip
           .append("h3")
           .attr("class", "cell-id");
@@ -292,7 +305,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             series.exit().transition()
-              .duration(200)
+              .duration(50)
               .style("opacity", 0)
               .remove();
             
@@ -318,12 +331,13 @@ app.directive('calcium', [ function () {
             // Create Groups / Cell Series
             seriesCircleGroup.enter().append("g")
               .attr('id', function(d) { return "cell-circle-series-group-" + scope.activation + "-" + d.label; })
+              .attr('cell-label', function(d) { return d.label; })
               .attr('class', "circle-series-group")
               .style("fill", function(d) { return d.color; });
 
             // Remove extra data points
             seriesCircleGroup.exit().transition()
-              .duration(200)
+              .duration(50)
               .style("opacity", 0)
               .remove(); 
 
@@ -332,7 +346,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             seriesPoints.exit().transition()
-              .duration(200)
+              .duration(50)
               .style("opacity", 0)
               .remove(); 
 
@@ -357,16 +371,26 @@ app.directive('calcium', [ function () {
 
             element // Select circle
               .transition()
-                .duration(100)
+                .duration(50)
                 .attr("r", 7.5)
-                .attr("opacity", 1);
+                .style("opacity", 1);
 
             // Get positon of datum
             let x = parseInt(element.attr('cx')),
                 y = parseInt(element.attr('cy'));
 
+            // Logic for padding
+            x = x > radius
+                ? x - 75
+                : x + 75;
+
+            y = y > radius
+                ? y - 75
+                : y + 60;
+
             tooltip.transition()
-              .duration(100)
+              .duration(50)
+              .style('z-index', 1)
               .style('opacity', 1);
 
             tooltip // Setting positioning logic 
@@ -377,8 +401,13 @@ app.directive('calcium', [ function () {
                   return y + "px";
               });
 
-              // cellId.text(dd.label);
-              activation.text( element.datum() ); // Convert cartesian coords
+            let activation_output = element.datum();
+                activation_output = activation_output.toFixed(5);
+
+            activation.text(activation_output); // Convert cartesian coords
+
+            let cell_label = d3.select(this.parentNode).attr('cell-label');
+            cellId.text(cell_label);
           });
 
           // MouseOut Tooltip
@@ -392,8 +421,10 @@ app.directive('calcium', [ function () {
                 .attr("opacity", 1);
 
             tooltip.transition()
-              .duration(100)
-              .style('opacity', 0);
+              .duration(50)
+              .style('opacity', 0)
+              .style('z-index', -1);
+
           });
     }
 
@@ -482,7 +513,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             radAxis.exit().transition()
-              .duration(200)
+              .duration(50)
               .style("opacity", 0)
               .remove();
 
@@ -504,7 +535,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             thetaAxisLabels.exit().transition()
-              .duration(200)
+              .duration(50)
               .style("opacity", 0)
               .remove();
 
@@ -544,7 +575,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             regionalAxes.exit().transition()
-              .duration(200)
+              .duration(50)
               .style("opacity", 0)
               .remove();
 
@@ -554,7 +585,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             regionalLabels.exit().transition()
-              .duration(200)
+              .duration(50)
               .style("opacity", 0)
               .remove();
 
@@ -607,11 +638,7 @@ app.directive('calcium', [ function () {
       labelScale.domain([0, radius])
       labelScale.range([
         0, 
-        d3.max(dataset, function(d) { // forEach element of dataSet
-          return d3.max(d.data, function(dd) { // forEach element of dataSet.data
-            return dd; // return value
-          }); 
-        })
+        max
       ]);
     }
 
@@ -619,8 +646,8 @@ app.directive('calcium', [ function () {
       width = angular.element('.characterization').width();
       height = width; // square format
 
-      width = width > 400
-        ? 400
+      width = width > 500
+        ? 500
         : width;
 
       // Set graph dimensions
