@@ -47,21 +47,23 @@
 
 </infoheader>
 
-<h3>On</h3>
+<div class="radar-container">
+  <div id="radar-on" class="radar-chart">
+    <calcium
+      class="radar"
+      activation="on"
+      cells="cells" />
+    <h3>On</h3>
+  </div>
 
-<calcium
-  class="radar"
-  activation="on"
-  cells="cells" />
-
-<br><br>
-
-<h3>Off</h3>
-
-<calcium
-  class="radar"
-  activation="off"
-  cells="cells" />
+  <div id="radar-off" class="radar-chart">
+    <calcium
+      class="radar"
+      activation="off"
+      cells="cells" />
+    <h3>Off</h3>
+  </div>
+</div>
 
 <!--  <div flex="grow">
   <h2>Wiki Overview</h2>

@@ -533,13 +533,13 @@ app.directive('stratification', function () {
 
       // Remove extra data points on highlight
       let seriesExit = series.exit().transition()
-            .duration(200)
+            .duration(100)
             .style("opacity", 0)
             .remove();
 
       // Remove extra data points on highlight
       let seriesHitExit = seriesHit.exit().transition()
-            .duration(200)
+            .duration(100)
             .style("opacity", 0)
             .remove();
 
@@ -553,7 +553,7 @@ app.directive('stratification', function () {
           .attr("d", function(d) { return lineGenerator(d.data); }) // Draw series line
           .attr("stroke", function(d) { return d.color; })
         .transition()
-          .duration(50)
+          .duration(100)
           .attr("opacity", 1);
 
       // Create separate groups for each series object | This line for mouseover
@@ -598,7 +598,7 @@ app.directive('stratification', function () {
               .attr("cx", nearest.x)
               .attr("cy", nearest.y)
               .transition()
-                .duration(50)
+                .duration(100)
                 .attr("r", 5);
 
             tooltip.transition()

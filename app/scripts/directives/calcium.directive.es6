@@ -135,10 +135,10 @@ app.directive('calcium', [ function () {
         height,
         radius,
         margin = {
-          top: 50,
-          right: 50,
-          bottom: 50,
-          left: 50,
+          top: 35,
+          right: 35,
+          bottom: 35,
+          left: 35,
         };
 
     // Data
@@ -161,6 +161,7 @@ app.directive('calcium', [ function () {
 
     // SVG element groups
     let svg,
+        svg_container,
         seriesGroup,
         radAxisGroup,
         thetaAxisGroup,
@@ -201,19 +202,21 @@ app.directive('calcium', [ function () {
       dataset = scope.dataset;
       angles = scope.angles;
 
-      setDimensions();
-
       // Add svg
-      svg = d3.select("calcium[activation=" + scope.activation + "]")
-        .attr("class", "radar-chart chart")
-        .append("svg")
-          .attr("id", scope.activation + "_svg")
-          .append("g")
-            .attr("transform",
-                  "translate(" + margin.left + "," + margin.top + ")");
+      svg_container = d3.select("calcium[activation=" + scope.activation + "]")
+        .attr("class", "radar-chart chart");
+
+      svg = svg_container
+          .append("svg")
+            .attr("id", scope.activation + "_svg")
+            .append("g")
+              .attr("transform",
+                    "translate(" + margin.left + "," + margin.top + ")");
 
       // Set local svg reference
       svg = d3.select('#' + scope.activation + "_svg").select("g");
+
+      setDimensions();
 
       radScale = d3.scale.linear();   // Define main scale
       labelScale = d3.scale.linear(); // Inverse for setting labels
@@ -305,7 +308,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             series.exit().transition()
-              .duration(50)
+              .duration(100)
               .style("opacity", 0)
               .remove();
             
@@ -315,7 +318,7 @@ app.directive('calcium', [ function () {
                 .attr("id", function(d) { return "radar-" + scope.activation + "-" + d.label; }) // Name each uniquely wrt cell label
                 .attr("opacity", 0)
               .transition()
-                .duration(50)
+                .duration(100)
                 .attr("opacity", 1);
 
             // Update Series Lines
@@ -337,7 +340,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             seriesCircleGroup.exit().transition()
-              .duration(50)
+              .duration(100)
               .style("opacity", 0)
               .remove(); 
 
@@ -346,7 +349,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             seriesPoints.exit().transition()
-              .duration(50)
+              .duration(100)
               .style("opacity", 0)
               .remove(); 
 
@@ -361,8 +364,8 @@ app.directive('calcium', [ function () {
               .attr("cx", function(d, i) { return polarX(radScale(d), angles[i]); })
               .attr("cy", function(d, i) { return polarY(radScale(d), angles[i]); })
             .transition()
-              .duration(50)
-              .attr("r", 5)
+              .duration(100)
+              .attr("r", 2)
               .attr("opacity", 1);
 
           // Mouseover Tooltip
@@ -371,8 +374,8 @@ app.directive('calcium', [ function () {
 
             element // Select circle
               .transition()
-                .duration(50)
-                .attr("r", 7.5)
+                .duration(100)
+                .attr("r", 5)
                 .style("opacity", 1);
 
             // Get positon of datum
@@ -389,7 +392,7 @@ app.directive('calcium', [ function () {
                 : y + 60;
 
             tooltip.transition()
-              .duration(50)
+              .duration(100)
               .style('z-index', 1)
               .style('opacity', 1);
 
@@ -416,12 +419,12 @@ app.directive('calcium', [ function () {
 
             element // Select circle
               .transition()
-                .duration(50)
-                .attr("r", 5)
+                .duration(100)
+                .attr("r", 2)
                 .attr("opacity", 1);
 
             tooltip.transition()
-              .duration(50)
+              .duration(100)
               .style('opacity', 0)
               .style('z-index', -1);
 
@@ -513,7 +516,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             radAxis.exit().transition()
-              .duration(50)
+              .duration(100)
               .style("opacity", 0)
               .remove();
 
@@ -535,7 +538,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             thetaAxisLabels.exit().transition()
-              .duration(50)
+              .duration(100)
               .style("opacity", 0)
               .remove();
 
@@ -547,7 +550,7 @@ app.directive('calcium', [ function () {
             // Update Theta Axis Labels
             thetaAxisLabels
               .attr("transform",function(d) {  // Position labels
-                let radius_plus  = radius + 15; // Position labels out a bit
+                let radius_plus  = radius + 10; // Position labels out a bit
                 return "translate(" + 
                   polarX(radius_plus, d) + "," + 
                   polarY(radius_plus, d) + ")";
@@ -570,12 +573,12 @@ app.directive('calcium', [ function () {
                 .attr("d", function(d) { return lineGenerator(d.data); }) // Draw radarLines line
                 .attr("stroke", function(d) { return d.color; })
               .transition()
-                .duration(50)
+                .duration(100)
                 .attr("opacity", 1);
 
             // Remove extra data points
             regionalAxes.exit().transition()
-              .duration(50)
+              .duration(100)
               .style("opacity", 0)
               .remove();
 
@@ -585,14 +588,14 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             regionalLabels.exit().transition()
-              .duration(50)
+              .duration(100)
               .style("opacity", 0)
               .remove();
 
             // Create Regional Value Background Circles
             regionalLabels.enter().append("circle")
                   .attr('class', 'regional-circle')
-                  .attr("r", 10);
+                  .attr("r", 7.5);
 
             // Update Regional Value Background Circles
             regionalLabels
@@ -644,18 +647,23 @@ app.directive('calcium', [ function () {
 
     function setDimensions() {
       width = angular.element('.characterization').width();
+      width /= 2; // Side by Side
       height = width; // square format
 
       width = width > 500
         ? 500
         : width;
 
+      // SVG width --> height
+      svg_container
+        .style('width', function() { return width + "px"; })
+        .style('height', function() { return width + "px"; });
+
       // Set graph dimensions
       width = width - margin.left - margin.right;
       height = height - margin.top - margin.bottom;
 
       radius = width / 2;
-
     }
 
     return {
