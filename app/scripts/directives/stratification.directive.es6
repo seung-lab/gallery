@@ -239,8 +239,6 @@ app.directive('stratification', function () {
         .attr("class", "chart")
         .append("svg")
           .attr("id", "stratification-svg")
-          // .attr("width", width + margin.left + margin.right)
-          // .attr("height", height + margin.top + margin.bottom)
         .append("g")
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
@@ -297,6 +295,7 @@ app.directive('stratification', function () {
       // Add X axis
       svg.append("g")
         .attr("class", "x axis")
+        .attr("id", "x-axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis)
         .selectAll("text")
@@ -313,6 +312,7 @@ app.directive('stratification', function () {
       // Add Y axis
       svg.append("g")
         .attr("class", "y axis")
+        .attr("id", "y-axis")
         .call(yAxis)
         .selectAll('text')
           .attr("class", "axis-label axis-label-minor")
@@ -421,6 +421,7 @@ app.directive('stratification', function () {
         // IPL Start | Left
         yAxis_IPL_Ticks.append('line')
           .attr('class', 'tick-left')
+          .attr('id', 'tick-left-start')
           .attr("x1", 0)
           .attr("x2", -10)
           .attr("y1", yScale(0))
@@ -429,6 +430,7 @@ app.directive('stratification', function () {
         // IPL End | Left
         yAxis_IPL_Ticks.append('line')
           .attr('class', 'tick-left')
+          .attr('id', 'tick-left-end')
           .attr("x1", 0)
           .attr("x2", -10)
           .attr("y1", yScale(100))
@@ -437,6 +439,7 @@ app.directive('stratification', function () {
         // IPL Start | Right
         yAxis_IPL_Ticks.append('line')
           .attr('class', 'tick-right')
+          .attr('id', 'tick-right-start')
           .attr("x1", width)
           .attr("x2", (width + 10))
           .attr("y1", yScale(0))
@@ -445,6 +448,7 @@ app.directive('stratification', function () {
         // IPL End | Right
         yAxis_IPL_Ticks.append('line')
           .attr('class', 'tick-right')
+          .attr('id', 'tick-right-end')
           .attr("x1", width)
           .attr("x2", (width + 10))
           .attr("y1", yScale(100))
@@ -461,8 +465,8 @@ app.directive('stratification', function () {
     function resize() {
       
       // Update width
-      width = angular.element('.characterization').width();
-      height = 500;
+      width = angular.element('#stratification-chart').width();
+      height = angular.element('#stratification-chart').height();
 
       // Set graph dimensions
       width = width - margin.left - margin.right;
@@ -479,6 +483,11 @@ app.directive('stratification', function () {
       xAxis.scale(xScale);
       yAxis.scale(yScale);
 
+      svg.select('#x-axis').attr("transform", "translate(0," + height + ")");
+
+      xAxis.outerTickSize(-height);
+
+
       // Update domain to allow for additional right padding
       // xAxis.scale().domain()[0] += 0.05;
 
@@ -493,6 +502,10 @@ app.directive('stratification', function () {
       yLabel_OFF_Sustained.attr("transform", "translate(" + (width - 18) + "," + yScale(37) + ")"); // 18~Offset
       yLabel_ON_Transient.attr("transform", "translate(" + (width - 18) + "," + yScale(55) + ")"); // 18~Offset
       yLabel_ON_Sustained.attr("transform", "translate(" + (width - 18) + "," + yScale(81) + ")"); // 18~Offset
+      
+    yLabel.attr("transform", "translate(-20," + yScale(45) + ") rotate(-90)");
+      yLabel_INL.attr("transform", "translate(-20," + yScale(-10) + ") rotate(-90)");
+      yLabel_GCL.attr("transform", "translate(-20," + yScale(110) + ") rotate(-90)");
 
     // Top Bar
       yLabel_Top 
@@ -504,19 +517,36 @@ app.directive('stratification', function () {
     // ON OFF Tick
     yAxis_ONOFF_Tick
       .attr("x1", width)
-      .attr("x2", (width + 10));
+      .attr("x2", (width + 10))
+      .attr("y1", yScale(45))
+      .attr("y2", yScale(45));
 
     // IPL Ticks | Right
     yAxis_IPL_Ticks.selectAll('.tick-right')
       .attr("x1", width)
       .attr("x2", (width + 10));
 
+    yAxis_IPL_Ticks.select('#tick-left-end')
+      .attr("y1", yScale(100))
+      .attr("y2", yScale(100));
 
-      let seriesUpdate = d3.selectAll('.series').selectAll('path')
-          .attr("d", function(d) { return lineGenerator(d.data); });
+    yAxis_IPL_Ticks.select('#tick-left-start')
+      .attr("y1", yScale(0))
+      .attr("y2", yScale(0));
 
-      let seriesHitUpdate = d3.selectAll('.series-hit').selectAll('path')
-          .attr("d", function(d) { return lineGenerator(d.data); });
+    yAxis_IPL_Ticks.select('#tick-right-end')
+      .attr("y1", yScale(100))
+      .attr("y2", yScale(100));
+
+    yAxis_IPL_Ticks.select('#tick-right-start')
+      .attr("y1", yScale(0))
+      .attr("y2", yScale(0));
+
+    let seriesUpdate = d3.selectAll('.series').selectAll('path')
+        .attr("d", function(d) { return lineGenerator(d.data); });
+
+    let seriesHitUpdate = d3.selectAll('.series-hit').selectAll('path')
+        .attr("d", function(d) { return lineGenerator(d.data); });
 
       updateChart(dataset_old); // Update chart with existing dataset
     }
