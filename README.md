@@ -18,10 +18,12 @@ You'll need nodejs, npm, and mongodb to bootstrap.
 	* Start the mongodb server in a separate terminal window (if you get an error, you may need to ‘sudo’ this command): `$ ./mongodb-xxxxxxx/bin/mongod`
 6. git submodule update --init
 7. cd import
-8. python main.py
-9. Acquire meshes from someone who has them (~850MB)
-10. Run `gulp`
-11. Run `npm start`
+8. mkdir data
+9. sudo apt-get install liboctave-dev
+10. python main.py (or main_py3.py for Py3)
+11. Acquire meshes from someone who has them (~850MB)
+12. Run `gulp`
+13. Run `npm start`
 
 # Code coverage
 
