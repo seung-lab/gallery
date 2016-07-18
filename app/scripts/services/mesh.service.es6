@@ -6,7 +6,7 @@
 app.service('meshService', function ($q, scene, camera) {
 	this.tasks = [];
 	this.workers = [];
-	this.maxWorkerCount = navigator.hardwareConcurrency || 2;
+	this.maxWorkerCount = navigator.hardwareConcurrency || 4;
 
 	this.terminateWorkers = function () {
 		this.workers.forEach( (wrkr) => wrkr.terminate() );
