@@ -67,7 +67,9 @@ app.factory('camera', function (scene) {
     };
 
     requestAnimationFrame(function hardRender () {
-      _this.controls.update();
+      if (_this.controls) {
+        _this.controls.update();
+      }
 
       if (_needsrender) {
         _this.renderer.render(scene, _this.camera);  
