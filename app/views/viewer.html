@@ -13,7 +13,7 @@
         }}
         </md-not-found>
       </md-autocomplete>
-      <i ng-click="goToResult(selectedItem)" class="search-action fa fa-search" aria-hidden="true"></i>
+      <i ng-click="gotoFirstAutocompleteResult()" class="search-action" aria-hidden="true"></i>
       <div class="advanced" ng-location="search"></div>
     </div>
 </header>
@@ -43,8 +43,7 @@
     </div>
 
     <md-button ng-class="[ 'more-info', 'md-fab', 'md-raised', { 'sidebar-open': sidebar_open }]" ng-click="toggle($event)" aria-label="toggle menu" >
-      <md-icon ng-hide="sidebar_open" md-svg-icon="icons/left-chevron-black.svg" ></md-icon>
-      <md-icon ng-hide="!sidebar_open"  md-svg-icon="icons/right-chevron-black.svg"></md-icon>
+      <md-icon md-svg-icon="icons/stats.svg" ></md-icon>
 
       <md-tooltip md-direction="left" md-visible="tooltipVisible" md-autohide="true">
         characterization (spacebar)

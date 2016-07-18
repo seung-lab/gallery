@@ -32,7 +32,8 @@ app.controller('ViewerCtrl', [
     if (cell && !cell.mesh) { 
       $scope.cells.push(cell);
     }
-    else if (cell && cell.mesh) {
+    else if (cell && cell.mesh && $scope.cells.indexOf(cell) !== -1) { 
+      // indexOf prevents cells from a previous search that just completed rendering from appearing
       scene.add(cell.mesh);
     }
 
@@ -70,6 +71,10 @@ app.controller('ViewerCtrl', [
   $scope.querySearch = function (query) {
     query = query || "";
     query = query.toLowerCase();
+    query = query.split(/ *[ ,] */g);
+    query = query.length 
+      ? query[query.length - 1]
+      : "";
 
     let results = query
       ? self.states.filter(function (state) {
@@ -85,7 +90,7 @@ app.controller('ViewerCtrl', [
     // blocks the main area and doesn't get removed
 
     $timeout(function () {
-      $scope.goToResult(item);
+      
     }, 0);
   };
 
@@ -108,13 +113,29 @@ app.controller('ViewerCtrl', [
       return;
     }
 
+    $scope.gotoFirstAutocompleteResult();
+  };
+
+  $scope.gotoFirstAutocompleteResult = function () {
     if ($scope.selectedItem) {
       $scope.goToResult($scope.selectedItem);
     }
     else if ($scope.searchText) {
-      let results = $scope.querySearch($scope.searchText);
-      if (results.length) {
-        $scope.goToResult(results[0]);
+      
+      let neurons = [];
+
+      $scope.searchText.split(/ *[ ,] */g).forEach(function (query) {
+        let results = $scope.querySearch(query);
+
+        if (results.length) {
+          neurons.push.apply(neurons, results[0].value.split(/,/g));
+        }
+      });
+
+      neurons = _.uniq(neurons);
+      
+      if (neurons.length) {
+        $scope.goToResult({ value: neurons.join(',') });
       }
     }
   };
@@ -257,8 +278,15 @@ app.controller('ViewerCtrl', [
 
   function clearScene () {
     $scope.cells = $scope.cells || [];
-    $scope.cells.forEach( (cell) => scene.remove(cell.mesh) );
     $scope.cells.length = 0;
+
+    let objects = _.extend([], scene.children);
+    objects.forEach(function (obj) {
+      if (obj instanceof THREE.Mesh) {
+        scene.remove(obj);
+      }
+    });
+
     camera.render();
 
     meshService.terminateWorkers();

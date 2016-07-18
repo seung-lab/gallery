@@ -27,7 +27,6 @@ THREE.TrackballControls = function (camera, domElement) {
 
 	this.rotateSpeed = 3.0;
 	this.zoomSpeed = 0.02;
-	this.panSpeed = 1;
 
 	this.noRotate = false;
 	this.noZoom = false;
@@ -38,6 +37,7 @@ THREE.TrackballControls = function (camera, domElement) {
 	// Which makes the interface look more fluid, the amount of inertia is controlled by dynamicDampingFactor
 	this.staticMoving = false;
 	this.dynamicDampingFactor = 0.2;
+	this.panDynamicDampingFactor = 0.19;
 
 	this.minDistance = 0;
 	this.maxDistance = Infinity;
@@ -65,9 +65,12 @@ THREE.TrackballControls = function (camera, domElement) {
 	_lastAxis = new THREE.Vector3(),
 	_lastAngle = 0,
 
-	_zoomAmt = 0,
-	_zoomMin = 4e2,
-	_zoomMax = 1e5,
+	_zoom = {
+		amt: 0,
+		min: 4e2,
+		max: 1e5,
+		displacement: new THREE.Vector2(),
+	};
 
 	_touchZoomDistanceStart = 0,
 	_touchZoomDistanceEnd = 0,
@@ -210,18 +213,22 @@ THREE.TrackballControls = function (camera, domElement) {
 			scrollFactor = _touchZoomDistanceStart / _touchZoomDistanceEnd;
 			_touchZoomDistanceStart = _touchZoomDistanceEnd;
 			_this.zoom(scrollFactor);
-			_zoomAmt = 0;
+			_zoom.amt = 0;
 		} 
 		else {
-			scrollFactor = Math.max(1.0 - _zoomAmt * this.zoomSpeed, 0.01);
+			scrollFactor = Math.max(1.0 - _zoom.amt * this.zoomSpeed, 0.01);
 
 			_this.zoom(scrollFactor);
 
 			if (_this.staticMoving) {
-				_zoomAmt = 0;
+				_zoom.amt = 0;
 			}
 			else {
-				_zoomAmt *= this.dynamicDampingFactor;
+				_zoom.amt *= this.dynamicDampingFactor;
+
+				if (_zoom.amt < 1e-10) {
+					_zoom.amt = 0;
+				}
 			}
 		}
 	};
@@ -230,17 +237,18 @@ THREE.TrackballControls = function (camera, domElement) {
 		var len = _eye.length();
 		var newlen = _eye.clone().multiplyScalar(factor).length();
 
-		let fov_rad = this.camera.fov / 360.0 *  2.0 * Math.PI;
-		let zoomMax = _zoomMax / Math.tan(fov_rad);
+		let fov_rad = this.camera.fov * THREE.Math.DEG2RAD;
+		let zoomMin = _zoom.min / Math.tan(fov_rad);
+		let zoomMax = _zoom.max / Math.tan(fov_rad);
 
-		if (newlen < _zoomMin) {
+		if (newlen < zoomMin) {
 			factor *= 1.2;
 		}
 		else if (newlen > zoomMax) {
 			factor *= 0.95;
 		}
 
-		if ((factor > 0.9 && factor < 1 && len - _zoomMin < 400)
+		if ((factor > 0.9 && factor < 1 && len - zoomMin < 400)
 			|| (factor > 1 && factor < 1.05 && len - zoomMax > -(zoomMax * 0.05))) {
 
 			factor = 1
@@ -249,19 +257,24 @@ THREE.TrackballControls = function (camera, domElement) {
 		if (len === 0) {
 			_eye.set(0.1, 0.1, 0.1);
 		}
-		else if (newlen < _zoomMin / 2) {
-			_zoomAmt = 0;
+		else if (newlen < zoomMin / 2) {
+			_zoom.amt = 0;
 		}
 		else if (newlen > zoomMax * 5) {
-			_zoomAmt = 0;
+			_zoom.amt = 0;
 		}
 		else {
 			_eye.multiplyScalar(factor);
 		}
+
+		if (newlen < zoomMax) {
+			_this.panCameraInstantly(_zoom.displacement);
+			_zoom.displacement.multiplyScalar(_this.dynamicDampingFactor);
+		}		
 	}
 
 	this.computeZoomFactor = function () {
-		let zoom_level_1 = (this.screen.height / 2) / Math.tan(this.camera.fov / 2);
+		let zoom_level_1 = (this.screen.height / 2) / Math.tan(this.camera.fov * THREE.Math.DEG2RAD / 2);
 		let distance_to_target = _this.camera.position.clone().sub(_this.target).length();
 
 		return distance_to_target / zoom_level_1; // e.g. 0.5x, 2x, 10x
@@ -270,30 +283,20 @@ THREE.TrackballControls = function (camera, domElement) {
 	this.screenHeightInWorldCoordinates = function () {
 		let distance_to_target = _this.camera.position.clone().sub(_this.target).length();
 
-		let fov_rad = this.camera.fov / 360.0 *  2.0 * Math.PI;
+		let fov_rad = this.camera.fov * THREE.Math.DEG2RAD;
 		return 2 * Math.tan(fov_rad / this.camera.aspect / 2) * distance_to_target;
 	};
 
 	this.panCamera = (function() {
 
 		var mouseChange = new THREE.Vector2(),
-			cameraUp = new THREE.Vector3(),
 			pan = new THREE.Vector3();
 
 		return function () {
 			mouseChange.copy(_panEnd).sub(_panStart);
 
 			if (mouseChange.lengthSq() > EPSILON) {
-				let screenHeight = _this.screenHeightInWorldCoordinates();
-
-				mouseChange.multiplyScalar(screenHeight); 
-
-				pan.copy(_eye).cross(_this.camera.up).setLength(mouseChange.x);
-				pan.add(cameraUp.copy(_this.camera.up).setLength(mouseChange.y));
-
-				// When panning target an camera moves, this means the target doesn't change
-				_this.camera.position.add(pan);
-				_this.target.add(pan);
+				_this.panCameraInstantly(mouseChange);
 
 				// If static movement is set to false the camera has some sort of inertia
 				if (_this.staticMoving) {
@@ -301,11 +304,59 @@ THREE.TrackballControls = function (camera, domElement) {
 				} 
 				else {
 					// This restart this event.
-					_panStart.add(mouseChange.subVectors(_panEnd, _panStart).multiplyScalar(_this.dynamicDampingFactor));
+					_panStart.add(mouseChange.subVectors(_panEnd, _panStart).multiplyScalar(this.panDynamicDampingFactor));
 				}
 			}
 		};
 	}());
+
+	this.panCameraInstantly = (function () {
+		let change = new THREE.Vector2(),
+			cameraUp = new THREE.Vector3(),
+			pan = new THREE.Vector3();
+
+		return function (displacement) {
+			change.copy(displacement);
+
+			if (change.lengthSq() > EPSILON) {
+				let screenHeight = _this.screenHeightInWorldCoordinates();
+
+				change.multiplyScalar(screenHeight); 
+
+				// Make sure the neuron can't escape into deep space (BUGGY)
+
+				// let screencoords = _this.target0.project(_this.camera);
+				// screencoords.x *= _this.screen.width / 2;
+				// screencoords.y *= _this.screen.height / 2; 
+
+				// screencoords.x += _this.screen.width / 2;
+				// screencoords.y += _this.screen.height / 2; 
+
+				// if (screencoords.x <= 0) {
+				// 	change.x = Math.max(change.x, 0);
+				// }
+				// else if (screencoords.x >= _this.screen.width) {
+				// 	change.x = Math.min(change.x, 0);
+				// }
+
+				// if (screencoords.y <= 0) {
+				// 	change.y = Math.min(change.y, 0);
+				// }
+				// else if (screencoords.y >= _this.screen.height) {
+				// 	change.y = Math.max(change.y, 0);
+				// }
+
+				// Move the neuron
+
+				pan.copy(_eye).cross(_this.camera.up).setLength(change.x);
+				pan.add(cameraUp.copy(_this.camera.up).setLength(change.y));
+
+				// When panning target an camera moves, this means the target doesn't change
+				_this.camera.position.add(pan);
+				_this.target.add(pan);
+			}
+		};
+	})();
 
 	this.checkDistances = function () {
 		if (!_this.noZoom || !_this.noPan) {
@@ -425,6 +476,10 @@ THREE.TrackballControls = function (camera, domElement) {
 
 		if (_state === STATE.NONE) {
 			_state = event.button;
+
+			if (event.button === 1) { // middle click
+				_state = STATE.PAN;
+			}
 		}
 
 		_this.cancelMotion();
@@ -482,14 +537,14 @@ THREE.TrackballControls = function (camera, domElement) {
 
 	}
 
-	function mousewheel(event) {
+	function mousewheel (event) {
 
 		if (_this.enabled === false) return;
 
 		event.preventDefault();
 		event.stopPropagation();
 
-		var delta = 0;
+		let delta = 0;
 
 		if (event.wheelDelta) { // WebKit / Opera / Explorer 9
 			delta = event.wheelDelta / 40;
@@ -498,7 +553,16 @@ THREE.TrackballControls = function (camera, domElement) {
 			delta = - event.detail / 3;
 		}
 
-		_zoomAmt += delta;
+		// This logic is only partially figured out. That 1/30 number was
+		// determined experimentally, but somehow it works for mouse and trackpad.
+		let displacement = getMouseOnCircle(event.pageX, event.pageY)
+				.multiplyScalar(1 / 30 * delta);
+
+		displacement.x *= -1;
+
+		_zoom.displacement.copy(displacement);
+
+		_zoom.amt += delta;
 		_this.dispatchEvent(startEvent);
 		_this.dispatchEvent(endEvent);
 	}
@@ -609,7 +673,6 @@ THREE.TrackballControls = function (camera, domElement) {
 
 	// force an update at start
 	this.update();
-
 };
 
 THREE.TrackballControls.prototype = Object.create(THREE.EventDispatcher.prototype);

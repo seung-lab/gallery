@@ -78,7 +78,8 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 					_cache.put(cell.id.toString(), cell);
 					resolve(cell);
 				}, function () {
-					reject(null);
+					alert(`Cell #${cell_id} was not found. It will not be displayed.`);
+					resolve(null);
 				});
 
 				_cache.put(cell_id.toString(), unfufilled_cell);
@@ -87,7 +88,9 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 			promises.push(promise);
 		}
 
-		return $q.all(promises);
+		return $q.all(promises).then(function (cells) {
+			return cells.filter( (cell) => cell );
+		});
 	};
 
 	this.list = function (callback) {
@@ -138,6 +141,11 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 					return cells && cells[0];
 				})
 				.then(function (cell) {
+					if (!cell) {
+						completed[cellid] = 1;
+						return new Error(`Cell ${cellid} not found.`);
+					}
+
 					if (!cell.color) {
 						cell = colorize(cell, cellids.length);
 					}
@@ -271,15 +279,24 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 
     function colorize_by_distinctiveness (cell) {
 		
+    	// Chosen manually
+
+    	var colors = [
+    				   '#ff3f3f', '#007eff', '#0eff90', 
+    		'#e9ff34', '#ffa500', '#fc49ff', '#47ffff', 
+    		'#bb71ff', '#00ff1f', '#ffa2a2', '#1700d4',
+    		'#b1007a', '#8a1515', '#908e8e'
+    	];
+
 		// From https://en.wikipedia.org/wiki/Help:Distinguishable_colors
 		// candy colored
 
-		var colors = [
-			'#F0A3FF', '#0075DC', '#993F00', '#4C005C', '#005C31', '#2BCE48',
-			'#FFCC99', '#808080', '#94FFB5', '#8F7C00', '#9DCC00', '#C20088',
-			'#003380', '#FFA405', '#FFA8BB', '#FFA8BB', '#426600', '#FF0010',
-			'#5EF1F2', '#00998F', '#740AFF', '#990000', '#FF5005', '#FFFF00'
-		];
+		// var colors = [
+		// 	'#F0A3FF', '#0075DC', '#993F00', '#4C005C', '#005C31', '#2BCE48',
+		// 	'#FFCC99', '#808080', '#94FFB5', '#8F7C00', '#9DCC00', '#C20088',
+		// 	'#003380', '#FFA405', '#FFA8BB', '#FFA8BB', '#426600', '#FF0010',
+		// 	'#5EF1F2', '#00998F', '#740AFF', '#990000', '#FF5005', '#FFFF00'
+		// ];
 
 		// From distinguishable colors from matlab. Ugly as sin.
 
