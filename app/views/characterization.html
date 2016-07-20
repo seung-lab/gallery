@@ -23,45 +23,55 @@
   </tr>
 </table>
 
-<infoheader id="stratification" heading="Stratification">
+<div class="chart-container">
+  <div id="stratification-container" class="data-view-container">
 
-<p>
-  Retinal cells stratify though the tissue. Their depth profile is useful for understanding their place in a computation &mdash; inputs and outputs.
-  <br><br>
-  The following chart is a representation of neuron arbor volume density (horizontal axis) by % IPL depth (vertical axis).
-</p>
-</infoheader>
+    <infoheader id="stratification" class="header-rule" heading="Stratification">
 
-<!-- <h4> Arbor Volume Density by % IPL Depth</h4> -->
+    <p>
+      Retinal cells stratify though the tissue. Their depth profile is useful for understanding their place in a computation &mdash; inputs and outputs.
+      <br><br>
+      The following chart is a representation of neuron arbor volume density (horizontal axis) by % IPL depth (vertical axis).
+    </p>
+    </infoheader>
 
-<stratification id="stratification-chart"
-  cells="cells"
-  cellids="neurons"
-  init="initChart()"/>
+    <!-- <h4> Arbor Volume Density by % IPL Depth</h4> -->
 
-<infoheader heading="Preferred Direction">
+    <stratification id="stratification-chart"
+      cells="cells"
+      cellids="neurons"
+      init="initChart()"/>
 
-<p>The following data is based on a two-photon calcium imaging experiment using lights strobed at the indicated angles. Data are only available for ganglion and some amacrine cells as only the face of the ganglion cell layer was labeled and imaged.</p>
-
-<p>These methods are described in <a href="http://www.nature.com/nature/journal/v471/n7337/full/nature09818.html">Biggman, et al. 2011</a>. [<a ui-sref="publications">3</a>]</p> 
-
-</infoheader>
-
-<div class="radar-container">
-  <div id="radar-on" class="radar-chart">
-    <calcium
-      class="radar"
-      activation="on"
-      cells="cells" />
-    <h3>On</h3>
   </div>
 
-  <div id="radar-off" class="radar-chart">
-    <calcium
-      class="radar"
-      activation="off"
-      cells="cells" />
-    <h3>Off</h3>
+  <div id="preferred-direction-container" class="data-view-container">
+
+    <infoheader class="header-rule" heading="Preferred Direction">
+
+    <p>The following data is based on a two-photon calcium imaging experiment using lights strobed at the indicated angles. Data are only available for ganglion and some amacrine cells as only the face of the ganglion cell layer was labeled and imaged.</p>
+
+    <p>These methods are described in <a href="http://www.nature.com/nature/journal/v471/n7337/full/nature09818.html">Biggman, et al. 2011</a>. [<a ui-sref="publications">3</a>]</p> 
+
+    </infoheader>
+
+    <div class="radar-container">
+      <div id="radar-on" class="radar-chart">
+        <calcium
+          class="radar"
+          activation="on"
+          cells="cells" />
+        <h3>On</h3>
+      </div>
+
+      <div id="radar-off" class="radar-chart">
+        <calcium
+          class="radar"
+          activation="off"
+          cells="cells" />
+        <h3>Off</h3>
+      </div>
+    </div>
+
   </div>
 </div>
 

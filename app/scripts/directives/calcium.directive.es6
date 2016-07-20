@@ -646,8 +646,7 @@ app.directive('calcium', [ function () {
     }
 
     function setDimensions() {
-      width = angular.element('.characterization').width();
-      width /= 2; // Side by Side
+      width = angular.element('.radar-chart').width();
       height = width; // square format
 
       width = width > 500

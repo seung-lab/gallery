@@ -251,6 +251,48 @@ app.controller('ViewerCtrl', [
       evt.target.blur();
     }
 
+    if (!$scope.sidebarFullscreen) { // If Fullscreen
+      angular.element('.data-view-container')
+             .addClass('data-view-fullscreen');             
+
+      angular.element('.chart-container')
+             .addClass('row-align');
+
+      angular.element('.radar-chart')
+             .addClass('radar-chart-fullscreen');
+
+      angular.element('#stratification-chart')
+             .css('height', '95%');
+
+      let display_units = { vh: "vh", vw: "vw" };
+
+      // Find limiting screen dimension
+      let limiting_factor = window.innerWidth < window.innerHeight
+          ? display_units.vw
+          : display_units.vh;
+
+      angular.element('#preferred-direction-container')
+             .css('max-width', 35 + limiting_factor);
+    }
+    else {
+      angular.element('.data-view-container')
+             .removeClass('data-view-fullscreen'); 
+
+      angular.element('.chart-container')
+             .removeClass('row-align');
+
+      angular.element('.radar-chart')
+              .removeClass('radar-chart-fullscreen');
+
+      angular.element('#stratification-chart')
+             .css('height', '85%');
+
+      angular.element('#preferred-direction-container')
+             .css('max-width', "100%");
+
+      angular.element('#chart-container').css('width', '100%');
+    }
+
     $scope.sidebarFullscreen = !$scope.sidebarFullscreen;
   };
 
