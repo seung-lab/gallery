@@ -72,6 +72,10 @@ app.controller('ViewerCtrl', [
   $scope.querySearch = function (query) {
     query = query || "";
     query = query.toLowerCase();
+    query = query.split(/ *[ ,] */g);
+    query = query.length 
+      ? query[query.length - 1]
+      : "";
 
     let results = query
       ? self.states.filter(function (state) {
@@ -87,7 +91,7 @@ app.controller('ViewerCtrl', [
     // blocks the main area and doesn't get removed
 
     $timeout(function () {
-      $scope.goToResult(item);
+      
     }, 0);
   };
 
@@ -118,9 +122,21 @@ app.controller('ViewerCtrl', [
       $scope.goToResult($scope.selectedItem);
     }
     else if ($scope.searchText) {
-      let results = $scope.querySearch($scope.searchText);
-      if (results.length) {
-        $scope.goToResult(results[0]);
+      
+      let neurons = [];
+
+      $scope.searchText.split(/ *[ ,] */g).forEach(function (query) {
+        let results = $scope.querySearch(query);
+
+        if (results.length) {
+          neurons.push.apply(neurons, results[0].value.split(/,/g));
+        }
+      });
+
+      neurons = _.uniq(neurons);
+      
+      if (neurons.length) {
+        $scope.goToResult({ value: neurons.join(',') });
       }
     }
   };
