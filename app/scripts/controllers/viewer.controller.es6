@@ -301,7 +301,7 @@ app.controller('ViewerCtrl', [
               .removeClass('radar-chart-fullscreen');
 
       angular.element('#stratification-chart')
-             .css('height', '85%');
+             .css('height', '40vh');
 
       angular.element('#preferred-direction-container')
              .css('max-width', "100%");
