@@ -268,6 +268,9 @@ app.controller('ViewerCtrl', [
     }
 
     if (!$scope.sidebarFullscreen) { // If Fullscreen
+      angular.element('#fullscreen-icon')
+             .addClass('rotate-ninety');
+
       angular.element('.chart-view-container')
              .addClass('data-view-fullscreen');             
 
@@ -291,6 +294,9 @@ app.controller('ViewerCtrl', [
              .css('max-width', 35 + limiting_factor);
     }
     else {
+      angular.element('#fullscreen-icon')
+             .removeClass('rotate-ninety');
+
       angular.element('.chart-view-container')
              .removeClass('data-view-fullscreen'); 
 

@@ -29,6 +29,27 @@ $MIN_SIDEBAR_WIDTH = 450px
 	
 	transition width 400ms ease-in-out, min-width 400ms ease-in-out
 	
+.characterization-header
+	display flex
+	align-items center
+	flex-direction row
+	justify-content space-between
+	padding 15px
+	padding-left 25px
+	box-shadow rgba(0,0,0,0.15) 0px 0px 50px
+	
+button.md-button.circular-button
+	border-radius 100%
+	width 50px
+	height 50px
+	padding 0
+	margin 0
+	min-width 0
+	
+.rotate-ninety
+	transform rotate(180deg)
+	transition all 250ms ease-in-out
+	
 .viewer .fullscreen .sidebar
 	width 100vw
 	min-width 100vw
@@ -110,7 +131,6 @@ $MIN_SIDEBAR_WIDTH = 450px
 	
 .viewer .sidebar .fullscreen
 	position absolute
-	
 	top 25px
 	right 50px
 	
