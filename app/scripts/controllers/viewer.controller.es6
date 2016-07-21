@@ -291,7 +291,7 @@ app.controller('ViewerCtrl', [
           : display_units.vh;
 
       angular.element('#preferred-direction-container')
-             .css('max-width', 35 + limiting_factor);
+             .css('max-width', 45 + limiting_factor);
     }
     else {
       angular.element('#fullscreen-icon')
