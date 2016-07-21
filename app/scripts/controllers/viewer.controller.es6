@@ -268,8 +268,11 @@ app.controller('ViewerCtrl', [
     }
 
     if (!$scope.sidebarFullscreen) { // If Fullscreen
-      angular.element('.data-view-container')
+      angular.element('.chart-view-container')
              .addClass('data-view-fullscreen');             
+
+      angular.element('.data-view-container')
+             .addClass('add-padding')
 
       angular.element('.chart-container')
              .addClass('row-align');
@@ -288,8 +291,11 @@ app.controller('ViewerCtrl', [
              .css('max-width', 35 + limiting_factor);
     }
     else {
-      angular.element('.data-view-container')
+      angular.element('.chart-view-container')
              .removeClass('data-view-fullscreen'); 
+
+      angular.element('.data-view-container')
+             .removeClass('add-padding')
 
       angular.element('.chart-container')
              .removeClass('row-align');

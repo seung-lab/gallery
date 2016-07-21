@@ -24,7 +24,7 @@
 </table>
 
 <div class="chart-container">
-  <div id="stratification-container">
+  <div id="stratification-container" class="data-view-container">
 
     <infoheader id="stratification" class="header-rule" heading="Stratification">
       <p>
@@ -37,14 +37,14 @@
     <!-- <h4> Arbor Volume Density by % IPL Depth</h4> -->
 
     <stratification id="stratification-chart" 
-      class="chart data-view-container"
+      class="chart chart-view-container stratification"
       cells="cells"
       cellids="neurons"
       init="initChart()"/>
 
   </div>
 
-  <div id="preferred-direction-container">
+  <div id="preferred-direction-container" class="data-view-container">
 
     <infoheader class="header-rule" heading="Preferred Direction">
 
@@ -54,7 +54,7 @@
 
     </infoheader>
 
-    <div class="radar-container data-view-container">
+    <div class="radar-container chart-view-container">
       <div id="radar-on" class="radar-chart">
         <calcium
           class="radar"
