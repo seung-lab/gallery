@@ -236,7 +236,6 @@ app.directive('stratification', function () {
 
        // Add svg
       svg = d3.select("#stratification-chart")
-        .attr("class", "chart")
         .append("svg")
           .attr("id", "stratification-svg")
         .append("g")

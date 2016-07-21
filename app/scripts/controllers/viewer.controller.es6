@@ -277,9 +277,6 @@ app.controller('ViewerCtrl', [
       angular.element('.radar-chart')
              .addClass('radar-chart-fullscreen');
 
-      angular.element('#stratification-chart')
-             .css('height', '95%');
-
       let display_units = { vh: "vh", vw: "vw" };
 
       // Find limiting screen dimension
@@ -299,9 +296,6 @@ app.controller('ViewerCtrl', [
 
       angular.element('.radar-chart')
               .removeClass('radar-chart-fullscreen');
-
-      angular.element('#stratification-chart')
-             .css('height', '40vh');
 
       angular.element('#preferred-direction-container')
              .css('max-width', "100%");

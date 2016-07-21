@@ -24,27 +24,27 @@
 </table>
 
 <div class="chart-container">
-  <div id="stratification-container" class="data-view-container">
+  <div id="stratification-container">
 
     <infoheader id="stratification" class="header-rule" heading="Stratification">
-
-    <p>
-      Retinal cells stratify though the tissue. Their depth profile is useful for understanding their place in a computation &mdash; inputs and outputs.
-      <br><br>
-      The following chart is a representation of neuron arbor volume density (horizontal axis) by % IPL depth (vertical axis).
-    </p>
+      <p>
+        Retinal cells stratify though the tissue. Their depth profile is useful for understanding their place in a computation &mdash; inputs and outputs.
+        <br><br>
+        The following chart is a representation of neuron arbor volume density (horizontal axis) by % IPL depth (vertical axis).
+      </p>
     </infoheader>
 
     <!-- <h4> Arbor Volume Density by % IPL Depth</h4> -->
 
-    <stratification id="stratification-chart"
+    <stratification id="stratification-chart" 
+      class="chart data-view-container"
       cells="cells"
       cellids="neurons"
       init="initChart()"/>
 
   </div>
 
-  <div id="preferred-direction-container" class="data-view-container">
+  <div id="preferred-direction-container">
 
     <infoheader class="header-rule" heading="Preferred Direction">
 
@@ -54,7 +54,7 @@
 
     </infoheader>
 
-    <div class="radar-container">
+    <div class="radar-container data-view-container">
       <div id="radar-on" class="radar-chart">
         <calcium
           class="radar"
