@@ -33,6 +33,13 @@ app.directive('stratification', function () {
 
     addResizeListener(resizeElement, resizeCallback);
 
+    let resizeElement2 = document.getElementById('stratification-chart'),
+        resizeCallback2 = function() {
+            charter.resize();
+        };
+
+    addResizeListener(resizeElement2, resizeCallback2);
+
     // Highlight cell watcher
     scope.$watch(function (scope) {
       return scope.cells.map( (cell) => cell.highlight ? 't' : 'f' ).join('');
