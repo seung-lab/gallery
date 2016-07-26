@@ -9,7 +9,7 @@ app.directive('stratification', function () {
 
     // Watch for dataset changes
     scope.$watch(function (scope) {
-      return scope.cells.map( (cell) => cell.id ).join('');
+      return scope.cells.map( (cell) => cell.id ).join(',');
     }, 
     function (value) {
       scope.dataset = makeDataset(scope);
@@ -74,12 +74,7 @@ app.directive('stratification', function () {
           datum.hidden = true;
         }
 
-        [
-          'color'
-        ].forEach(function (prop) {
-          datum[prop] = color;
-        })
-
+        datum.color = color;
       });
 
       // Update dataset
@@ -130,7 +125,6 @@ app.directive('stratification', function () {
         };
       });
     }
-
   };
 
   // ------------------------------------
@@ -145,14 +139,13 @@ app.directive('stratification', function () {
     return d3.select(this[0][last]);
   };
 
-  function distance(v1, v2) { // Customized to only calculate y distance
+  function distance(v1, v2) { 
     return Math.sqrt((v1.x - v2.x) * (v1.x - v2.x) + (v1.y - v2.y) * (v1.y - v2.y));
   }
 
   // k = Number of points returned
   // target = Target point
   // points = sample array
-  // Customized to compare only y values
   function k_nearest(k, points, target) { 
     let _this = this;
 
@@ -730,18 +723,15 @@ app.directive('stratification', function () {
     };
   }
 
-
   // ------------------------------------
   // /D3
-
 
   return {
     restrict: "E",
     scope: {
-        cells: "="
+        cells: "=",
     },
-    template: `<div>
-    </div>`,
+    template: `<div></div>`,
     replace: false,
     transclude: false,
     link: chartLinker,

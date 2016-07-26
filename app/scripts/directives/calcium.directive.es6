@@ -13,7 +13,7 @@ app.directive('calcium', [ function () {
     
     // Watch for dataset changes
     scope.$watch(function (scope) {
-      return scope.cells.map( (cell) => cell.id ).join('');
+      return scope.cells.map( (cell) => cell.id ).join(',');
     }, 
     function (value) {
       scope.dataset = makeDataset(scope);
