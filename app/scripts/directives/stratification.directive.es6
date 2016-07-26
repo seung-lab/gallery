@@ -83,12 +83,7 @@ app.directive('stratification', function () {
       });
 
       // Update dataset
-      let i = scope.dataset.length
-      while (i--) {
-        if (scope.dataset[i].hidden) {
-          scope.dataset.splice(i, 1);
-        }
-      }
+      scope.cells = scope.cells.filter( (cell) => cell.calcium && !cell.hidden );
       scope.chart.highlight(scope); // Update chart here
     }
 
@@ -596,8 +591,8 @@ app.directive('stratification', function () {
 
     function setDimensions() {
       // Update width
-      width = angular.element('#stratification-chart').width();
-      height = angular.element('#stratification-chart').height();
+      width = angular.element(element[0]).width();
+      height = angular.element(element[0]).height();
 
       // Set graph dimensions
       width = width - margin.left - margin.right;
@@ -715,10 +710,8 @@ app.directive('stratification', function () {
       if (dataset.length !== 0) {
         xScale.domain([
           0, 
-          d3.max(dataset, function(d) { // forEach element of dataSet
-            return d3.max(d.data, function(dd) { // forEach element of dataSet.data
-              return dd.y; // return value
-            }); 
+          d3.max(dataset, function (ds) { // forEach element of dataSet
+            return Math.max(...ds.data.map( d => d.y ));
           })
         ]);
 
