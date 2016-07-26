@@ -78,7 +78,7 @@ app.directive('stratification', function () {
       });
 
       // Update dataset
-      scope.cells = scope.cells.filter( (cell) => cell.calcium && !cell.hidden );
+      scope.dataset = scope.dataset.filter( (dataset) => !dataset.hidden );
       scope.chart.highlight(scope); // Update chart here
     }
 

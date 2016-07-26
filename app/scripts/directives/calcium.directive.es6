@@ -77,12 +77,7 @@ app.directive('calcium', [ function () {
         datum.hidden = true;
       }
 
-      [
-        'color'
-      ].forEach(function (prop) {
-        datum[prop] = color;
-      })
-
+      datum.color = color;
     });
 
     // Update dataset
