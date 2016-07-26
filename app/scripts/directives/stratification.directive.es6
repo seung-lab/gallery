@@ -13,7 +13,7 @@ app.directive('stratification', function () {
     }, 
     function (value) {
       scope.dataset = makeDataset(scope);
-      scope.chart.highlight(scope);
+      scope.chart.update(scope);
     });
 
     // Watch for toggling cells
@@ -84,6 +84,7 @@ app.directive('stratification', function () {
 
     function makeDataset (scope) {
       let cells = scope.cells;
+      
       cells = cells.filter( (cell) => cell.stratification && !cell.hidden );
 
       return cells.map(function (cell) {
