@@ -17,7 +17,7 @@ app.directive('calcium', [ function () {
     }, 
     function (value) {
       scope.dataset = makeDataset(scope);
-      scope.chart.highlight(scope);
+      scope.chart.update(scope);
     });
 
     // Watch for toggling cells
