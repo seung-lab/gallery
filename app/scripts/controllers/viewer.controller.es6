@@ -283,6 +283,8 @@ app.controller('ViewerCtrl', [
       angular.element('.radar-chart')
              .addClass('radar-chart-fullscreen');
 
+      // Set height of Stratification wrt Calcium data, wait to set height until Calcium
+      // has finished transitioning
       setTimeout(function(){
         let strat_height = angular.element('.radar-container').height();
 
@@ -291,12 +293,10 @@ app.controller('ViewerCtrl', [
 
       }, 350);
 
-      let display_units = { vh: "vh", vw: "vw" };
-
       // Find limiting screen dimension
       let limiting_factor = window.innerWidth < window.innerHeight
-          ? display_units.vw
-          : display_units.vh;
+          ? "vw"
+          : "vh";
 
       angular.element('#preferred-direction-container')
              .css('max-width', 45 + limiting_factor);
@@ -322,8 +322,6 @@ app.controller('ViewerCtrl', [
 
       angular.element('#preferred-direction-container')
              .css('max-width', "100%");
-
-      angular.element('#chart-container').css('width', '100%');
     }
 
     $scope.sidebarFullscreen = !$scope.sidebarFullscreen;

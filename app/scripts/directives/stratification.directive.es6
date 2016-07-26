@@ -5,8 +5,7 @@ app.directive('stratification', function () {
   let chartLinker = function (scope, element, attrs) {
 
     // Set up chart
-    scope.chart = charter();
-    scope.chart.init(scope, element);
+    scope.chart = makeChart(scope, element);
 
     // Watch for dataset changes
     scope.$watch(function (scope) {
@@ -14,7 +13,7 @@ app.directive('stratification', function () {
     }, 
     function (value) {
       scope.dataset = makeDataset(scope);
-      scope.chart.updateDataset(scope);
+      scope.chart.highlight(scope);
     });
 
     // Watch for toggling cells
@@ -35,11 +34,11 @@ app.directive('stratification', function () {
 
     // =^..^= Monitor Sidebar size change
     addResizeListener(document.getElementById('right-sidebar'), function () {
-      scope.chart.resize(scope);
+      scope.chart.update(scope);
     });
 
     addResizeListener(document.getElementById('stratification-chart'), function() {
-      scope.chart.resize(scope);
+      scope.chart.update(scope);
     });
 
     function updateChartColors (scope) {
@@ -90,7 +89,7 @@ app.directive('stratification', function () {
           scope.dataset.splice(i, 1);
         }
       }
-      scope.chart.update(scope); // Update chart here
+      scope.chart.highlight(scope); // Update chart here
     }
 
     function makeDataset (scope) {
@@ -177,7 +176,7 @@ app.directive('stratification', function () {
     return distpts.map((x) => x[1]).slice(0, k);
   }
 
-  function charter () {
+  function makeChart(scope, element) {
     // Size Characteristics
     let width,
         height,
@@ -225,53 +224,50 @@ app.directive('stratification', function () {
       .x(function(d) { return xScale(d.y); }) // Value intentionally flipped
       .y(function(d) { return yScale(d.x); });
 
-    function init(scope, element) {
+    // Values correspond to:
+    // IPL Start, End [0,100]
+    // IPL ON, OFF, 28, 45, 62
+    tickValues = [0, 28, 45, 62, 100];
 
-      // Values correspond to:
-      // IPL Start, End [0,100]
-      // IPL ON, OFF, 28, 45, 62
-      tickValues = [0, 28, 45, 62, 100];
+    // Add svg
+    svg = d3.select("#stratification-chart")
+      .append("svg")
+        .attr("id", "stratification-svg")
+      .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
 
-      // Add svg
-      svg = d3.select("#stratification-chart")
-        .append("svg")
-          .attr("id", "stratification-svg")
-        .append("g")
-          .attr("transform",
-                "translate(" + margin.left + "," + margin.top + ")");
+    // // Set local svg reference
+    // svg = d3.select('#' + scope.activation + "_svg").select("g");
 
-      // // Set local svg reference
-      // svg = d3.select('#' + scope.activation + "_svg").select("g");
+    setDimensions();
 
-      setDimensions();
+    // Set scale type
+    xScale = d3.scale.linear();
+    yScale = d3.scale.linear();
 
-      // Set scale type
-      xScale = d3.scale.linear();
-      yScale = d3.scale.linear();
+    // Set domain of data
+    yScale.domain([120, -20]); // IPL % | GCL Bottom
+    xScale.domain([0, 0.1]);  // Arbor Volume Density
+    
+    // Set domain, range
+    setScales(scope);
+    // Setup Axes Groups
+    setAxes(scope);
+    // Setup Axis Labels
+    setAxesLables();
+    // Setup Tooltip
+    setTooltip(scope);
+    // Setup Series Groups
+    setSeries();
 
-      // Set domain of data
-      yScale.domain([120, -20]); // IPL % | GCL Bottom
-      xScale.domain([0, 0.1]);  // Arbor Volume Density
-      
-      // Set domain, range
-      setScales(scope);
-      // Setup Axes Groups
-      setAxes(scope);
-      // Setup Axis Labels
-      setAxesLables();
-      // Setup Tooltip
-      setTooltip(scope);
-      // Setup Series Groups
-      setSeries();
 
-    }
-
-    function update(scope) {
+    function highlight(scope) {
       // Update Chart Series      
       updateSeries(scope);
     }
 
-    function updateDataset(scope) {
+    function update(scope) {
       // Update graph dimensions
       setDimensions(scope);
       // Update domain
@@ -281,17 +277,6 @@ app.directive('stratification', function () {
       // Update Axes
       updateAxes(scope);
       // Update Chart Series
-      updateSeries(scope);
-    }
-
-    function resize(scope) {
-      // Update graph dimensions
-      setDimensions(scope);
-      // Update domain, range
-      setScales(scope);
-      // Update Axes
-      updateAxes(scope);
-      // Update Chart Series  
       updateSeries(scope);
     }
 
@@ -748,9 +733,7 @@ app.directive('stratification', function () {
 
     return {
       update: update,
-      updateDataset: updateDataset,
-      resize: resize,
-      init: init,
+      highlight: highlight,
     };
   }
 

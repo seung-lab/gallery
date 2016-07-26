@@ -9,8 +9,7 @@ app.directive('calcium', [ function () {
     scope.dataset = makeDataset(scope);
 
     // Set up chart
-    scope.chart = charter();
-    scope.chart.init(scope, element);
+    scope.chart = makeChart(scope, element);
     
     // Watch for dataset changes
     scope.$watch(function (scope) {
@@ -18,7 +17,7 @@ app.directive('calcium', [ function () {
     }, 
     function (value) {
       scope.dataset = makeDataset(scope);
-      scope.chart.updateDataset(scope);
+      scope.chart.highlight(scope);
     });
 
     // Watch for toggling cells
@@ -37,13 +36,10 @@ app.directive('calcium', [ function () {
       updateChartColors(scope);
     });
 
-    // =^..^= Monitor Sidebar size change
-    let resizeElement = document.getElementById('right-sidebar'),
-        resizeCallback = function () {
-            scope.chart.resize(scope);
-        };
-
-    addResizeListener(resizeElement, resizeCallback);
+     // =^..^= Monitor Sidebar size change
+    addResizeListener(document.getElementById('right-sidebar'), function () {
+      scope.chart.update(scope);
+    });
 
   };
 
@@ -90,13 +86,7 @@ app.directive('calcium', [ function () {
     });
 
     // Update dataset
-    let i = scope.dataset.length
-    while (i--) {
-      if (scope.dataset[i].hidden) {
-        scope.dataset.splice(i, 1);
-      }
-    }
-
+    scope.dataset = scope.dataset.filter( ds => !ds.hidden );
     scope.chart.update(scope); // Update chart here
   }
 
@@ -107,7 +97,6 @@ app.directive('calcium', [ function () {
     cells = cells.filter( (cell) => cell.calcium && !cell.hidden );
 
     return cells.map(function (cell) {
-      let fmt = (z, factor) => Math.round(z * factor) / factor;
 
       let color = cell.color;
       if (scope.cells.length === 1) {
@@ -129,7 +118,7 @@ app.directive('calcium', [ function () {
   // ------------------------------------
   // D3
 
-  function charter () {
+  function makeChart(scope, element) {
     // Size Characteristics
     let width,
         height,
@@ -170,6 +159,9 @@ app.directive('calcium', [ function () {
 
     regions = 2; // Number of radial grid lines
 
+    dataset = scope.dataset;
+    angles = scope.angles;
+
     // Trig helper functions
     function toDegrees(rad) {
       return rad * 180 / Math.PI;
@@ -198,49 +190,43 @@ app.directive('calcium', [ function () {
       .x( function(d) { return d.x; })
       .y( function(d) { return d.y; });
 
-    function init(scope, element) {
-      dataset = scope.dataset;
-      angles = scope.angles;
+    // Add svg
+    svg_container = d3.select(element[0])
+      .attr("class", "radar-chart chart");
 
-      // Add svg
-      svg_container = d3.select("calcium[activation=" + scope.activation + "]")
-        .attr("class", "radar-chart chart");
+    svg = svg_container
+        .append("svg")
+          .attr("id", scope.activation + "_svg")
+          .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
 
-      svg = svg_container
-          .append("svg")
-            .attr("id", scope.activation + "_svg")
-            .append("g")
-              .attr("transform",
-                    "translate(" + margin.left + "," + margin.top + ")");
+    // Set local svg reference
+    svg = d3.select('#' + scope.activation + "_svg").select("g");
 
-      // Set local svg reference
-      svg = d3.select('#' + scope.activation + "_svg").select("g");
+    setDimensions();
 
-      setDimensions();
+    radScale = d3.scale.linear();   // Define main scale
+    labelScale = d3.scale.linear(); // Inverse for setting labels
 
-      radScale = d3.scale.linear();   // Define main scale
-      labelScale = d3.scale.linear(); // Inverse for setting labels
+    // Set domain, range
+    setScales(scope);
 
-      // Set domain, range
-      setScales(scope);
+    // Setup Axes Groups
+    setAxes();
 
-      // Setup Axes Groups
-      setAxes();
+    // Setup Tooltip
+    setTooltip(scope);
 
-      // Setup Tooltip
-      setTooltip(scope);
+    // Setup Series Groups
+    setSeries();
 
-      // Setup Series Groups
-      setSeries();
-
-    }
-
-    function update(scope) { 
+    function highlight(scope) { 
     // Update Chart Series      
       updateSeries(scope);
     }
 
-    function updateDataset(scope) {
+    function update(scope) {
       // Update graph dimensions
       setDimensions(scope);
       // Update domain, range
@@ -251,20 +237,9 @@ app.directive('calcium', [ function () {
       updateSeries(scope);
     }
 
-    function resize(scope) {
-      // Update graph dimensions
-      setDimensions(scope);
-      // Update domain, range
-      setScales(scope);
-      // Update Axes
-      updateAxes(scope, 2);
-      // Update Chart Series  
-      updateSeries(scope);    
-    }
-
     function setTooltip(scope) {
       // Define 'div' for tooltips
-      tooltip = d3.select("calcium[activation=" + scope.activation + "]")
+      tooltip = d3.select(element[0])
         .append("div")
           .attr("id", "tooltip-" + scope.activation)
           .attr("class", "tooltip");
@@ -625,9 +600,7 @@ app.directive('calcium', [ function () {
       radScale.range([0, radius]); // Scale = Chart Radius
 
       let max = d3.max(dataset, function(d) { // forEach element of dataSet
-          return d3.max(d.data, function(dd) { // forEach element of dataSet.data
-            return dd; // return value
-          }); 
+          return Math.max(...d.data);
         });
 
       max *= 1.2; // Padding
@@ -667,9 +640,7 @@ app.directive('calcium', [ function () {
 
     return {
       update: update,
-      updateDataset: updateDataset,
-      resize: resize,
-      init: init,
+      highlight: highlight,
     };
   }
 
