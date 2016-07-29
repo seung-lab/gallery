@@ -227,6 +227,7 @@ def main():
 
   read_json_into_cells('data/ganglion_cells.json', 'ganglion')
   read_json_into_cells('data/bipolar_cells.json', 'bipolar')
+  read_json_into_cells('data/amacrine_cells.json', 'amacrine')
 
   process_calcium_data()
 
