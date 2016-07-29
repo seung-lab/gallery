@@ -276,7 +276,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             series.exit().transition()
-              .duration(100)
+              .duration(250)
               .style("opacity", 0)
               .remove();
             
@@ -286,7 +286,7 @@ app.directive('calcium', [ function () {
                 .attr("id", function(d) { return "radar-" + scope.activation + "-" + d.label; }) // Name each uniquely wrt cell label
                 .attr("opacity", 0)
               .transition()
-                .duration(100)
+                .duration(250)
                 .attr("opacity", 1);
 
             // Update Series Lines
@@ -308,7 +308,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             seriesCircleGroup.exit().transition()
-              .duration(100)
+              .duration(250)
               .style("opacity", 0)
               .remove(); 
 
@@ -317,7 +317,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             seriesPoints.exit().transition()
-              .duration(100)
+              .duration(250)
               .style("opacity", 0)
               .remove(); 
 
@@ -332,7 +332,7 @@ app.directive('calcium', [ function () {
               .attr("cx", function(d, i) { return polarX(radScale(d), angles[i]); })
               .attr("cy", function(d, i) { return polarY(radScale(d), angles[i]); })
             .transition()
-              .duration(100)
+              .duration(250)
               .attr("r", 2)
               .attr("opacity", 1);
 
@@ -341,7 +341,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             seriesHitPoints.exit().transition()
-              .duration(100)
+              .duration(250)
               .style("opacity", 0)
               .remove(); 
 
