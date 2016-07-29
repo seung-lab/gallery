@@ -8,8 +8,10 @@ app.directive('calcium', [ function () {
     scope.angles = [ 360, 45, 90, 135, 180, 225, 270, 315, 360 ]; // Hack for line to connect to self
     scope.dataset = makeDataset(scope);
 
-    // Set up chart
-    scope.chart = makeChart(scope, element);
+    if (!scope.chart) {
+          // Set up chart
+          scope.chart = makeChart(scope, element);
+    }
     
     // Watch for dataset changes
     scope.$watch(function (scope) {
@@ -82,7 +84,7 @@ app.directive('calcium', [ function () {
 
     // Update dataset
     scope.dataset = scope.dataset.filter( ds => !ds.hidden );
-    scope.chart.update(scope); // Update chart here
+    scope.chart.updateToggle(scope); // Update chart here
   }
 
   function makeDataset (scope) {
@@ -221,15 +223,24 @@ app.directive('calcium', [ function () {
       updateSeries(scope);
     }
 
-    function update(scope) {
+    function updateToggle(scope) {
       // Update graph dimensions
       setDimensions(scope);
-      // Update domain, range
-      setScales(scope);
       // Update Axes
       updateAxes(scope, 2);
       // Update Chart Series
       updateSeries(scope);
+    }
+
+    function update(scope) {
+      
+      if (scope.dataset.length === 0) {
+        return;
+      }
+
+      updateToggle(scope);
+      // Update domain, range
+      setScales(scope);
     }
 
     function setTooltip(scope) {
@@ -292,6 +303,7 @@ app.directive('calcium', [ function () {
             // Update Series Lines
             series
                 .attr("d", function(d) { 
+                  console.log(d);
                   return lineGenerator(setRadarValues(d.data, angles)); // Draw radar line
                 })
                 .attr("stroke", function(d) { return d.color; });
@@ -413,7 +425,7 @@ app.directive('calcium', [ function () {
                 .style("opacity", 0); // Trigger after transition
 
             tooltip.transition()
-              .duration(100)
+              .duration(250)
               .style('opacity', 0)
               .style('z-index', -1);
 
@@ -505,7 +517,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             radAxis.exit().transition()
-              .duration(100)
+              .duration(250)
               .style("opacity", 0)
               .remove();
 
@@ -527,7 +539,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             thetaAxisLabels.exit().transition()
-              .duration(100)
+              .duration(250)
               .style("opacity", 0)
               .remove();
 
@@ -562,12 +574,12 @@ app.directive('calcium', [ function () {
                 .attr("d", function(d) { return lineGenerator(d.data); }) // Draw radarLines line
                 .attr("stroke", function(d) { return d.color; })
               .transition()
-                .duration(100)
+                .duration(250)
                 .attr("opacity", 1);
 
             // Remove extra data points
             regionalAxes.exit().transition()
-              .duration(100)
+              .duration(250)
               .style("opacity", 0)
               .remove();
 
@@ -577,7 +589,7 @@ app.directive('calcium', [ function () {
 
             // Remove extra data points
             regionalLabels.exit().transition()
-              .duration(100)
+              .duration(250)
               .style("opacity", 0)
               .remove();
 
@@ -654,6 +666,7 @@ app.directive('calcium', [ function () {
 
     return {
       update: update,
+      updateToggle: updateToggle,
       highlight: highlight,
     };
   }

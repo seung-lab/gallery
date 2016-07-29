@@ -4,8 +4,10 @@ app.directive('stratification', function () {
 
   let chartLinker = function (scope, element, attrs) {
 
-    // Set up chart
-    scope.chart = makeChart(scope, element);
+    if (!scope.chart) {
+          // Set up chart
+          scope.chart = makeChart(scope, element);
+    }
 
     // Watch for dataset changes
     scope.$watch(function (scope) {
@@ -164,6 +166,7 @@ app.directive('stratification', function () {
 
     // Elements
     let tooltip,
+        tooltipCircle,
         ipl,
         volume,
         svg,
@@ -281,6 +284,11 @@ app.directive('stratification', function () {
     }
 
     function update(scope) {
+
+      if (scope.dataset.length === 0) {
+        return;
+      }
+
       // Update graph dimensions
       setDimensions(scope);
       // Update domain
@@ -322,6 +330,11 @@ app.directive('stratification', function () {
       cellId = tooltip.select(".cell-id");
       volume = tooltip.select(".volume");
       ipl    = tooltip.select(".ipl");
+
+      // Tooltip circle
+      tooltipCircle = svg.append("circle")
+          .attr("r", 0)
+          .attr("class", "point circle-hidden");
 
     }
 
@@ -642,8 +655,6 @@ app.directive('stratification', function () {
 
       d3.select('#stratification-svg').on('mouseover', function() {
           d3.select(this).on('mousemove', function() {
-            svg.selectAll("circle")
-              .remove(); // Don't pollute space with invisible circles
 
             let mousepos = {
                   x: d3.mouse(d3.select(this).node())[0] - margin.left,
@@ -653,22 +664,25 @@ app.directive('stratification', function () {
             let nearest = nearestPoint(dataset, mousepos),
                 nearest_color;
 
+            if (!nearest) {
+              return;
+            }
+
             dataset.forEach(function(datum) { // Set circle color
               if (nearest.label === datum.label) {
                 nearest_color = datum.color;
               }
             });
 
-            if ( distance_scaled(mousepos, nearest) > 25 ) { // Mouseover Threshold | 25 Experimentially Determined
+            if ( distance_scaled(mousepos, nearest) > 50 ) { // Mouseover Threshold | 50 Experimentially Determined
               return;
             }
 
             d3.selectAll('.series').classed({ 'series-other': true });
             d3.select('#series-' + nearest.label).classed({ 'series-highlight': true });
 
-            seriesGroup.append("circle")
-              .attr("r", 0)
-              .attr("class", "point")
+            tooltipCircle.attr("r", 0)
+              .classed({ 'circle-hidden': false })
               .style("fill", nearest_color)
               .attr("cx", xScale(nearest.y)) // Scales Intentionally Flipped
               .attr("cy", yScale(nearest.x)) // Scales Intentionally Flipped
@@ -698,9 +712,12 @@ app.directive('stratification', function () {
 
           })
         })
-        .on('mouseout', function(d) {
-            svg.selectAll("circle")
-              .remove(); // Don't pollute space with invisible circles
+        .on('mouseout', function() {
+            tooltipCircle.classed({ 'circle-hidden': true })
+                .transition()
+                .duration(100)
+                .attr("r", 0);
+
 
             d3.selectAll('.series').classed({ 'series-highlight': false, 'series-other': false }); // Remove Highlight State
 
