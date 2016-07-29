@@ -243,10 +243,8 @@ app.directive('calcium', [ function () {
         .append("h4")
         .text("ID");
         tooltip
-          .append("h3")
+          .append("p")
           .attr("class", "cell-id");
-        tooltip
-          .append("hr");
         tooltip
           .append("h4")
           .text("Activation");
@@ -338,13 +336,34 @@ app.directive('calcium', [ function () {
               .attr("r", 2)
               .attr("opacity", 1);
 
+      let seriesHitPoints = seriesCircleGroup.selectAll('.circle-series-hit')
+            .data(function(d) { return d.data; });
+
+            // Remove extra data points
+            seriesHitPoints.exit().transition()
+              .duration(100)
+              .style("opacity", 0)
+              .remove(); 
+
+            // Create Circle Points
+            seriesHitPoints.enter().append("circle")
+              .attr("class", "circle-series-hit")
+              .attr("opacity", 0)
+              .attr("r", 0);
+
+            // Update Circle Points
+            seriesHitPoints
+              .attr("cx", function(d, i) { return polarX(radScale(d), angles[i]); })
+              .attr("cy", function(d, i) { return polarY(radScale(d), angles[i]); })
+              .attr("r", 10);
+
           // Mouseover Tooltip
-          seriesPoints.on('mouseover', function(dd) {
+          seriesHitPoints.on('mouseover', function(dd) {
             let element = d3.select(this);
 
             element // Select circle
               .transition()
-                .duration(100)
+                .duration(250)
                 .attr("r", 5)
                 .style("opacity", 1);
 
@@ -362,7 +381,7 @@ app.directive('calcium', [ function () {
                 : y + 60;
 
             tooltip.transition()
-              .duration(100)
+              .duration(250)
               .style('z-index', 1)
               .style('opacity', 1);
 
@@ -384,14 +403,14 @@ app.directive('calcium', [ function () {
           });
 
           // MouseOut Tooltip
-          seriesPoints.on('mouseout', function(dd) {
+          seriesHitPoints.on('mouseout', function(dd) {
             let element = d3.select(this);
 
             element // Select circle
               .transition()
-                .duration(100)
-                .attr("r", 2)
-                .attr("opacity", 1);
+                .duration(250)
+                .attr("r", 10)
+                .style("opacity", 0); // Trigger after transition
 
             tooltip.transition()
               .duration(100)

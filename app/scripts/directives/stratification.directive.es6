@@ -205,9 +205,6 @@ app.directive('stratification', function () {
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
 
-    // // Set local svg reference
-    // svg = d3.select('#' + scope.activation + "_svg").select("g");
-
     setDimensions();
 
     // Set scale type
@@ -308,8 +305,6 @@ app.directive('stratification', function () {
         tooltip
           .append("h3")
             .attr("class", "cell-id");
-        tooltip
-          .append("hr");
         tooltip
           .append("h4")
           .text("IPL%");
