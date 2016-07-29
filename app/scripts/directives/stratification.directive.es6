@@ -144,27 +144,6 @@ app.directive('stratification', function () {
     return Math.sqrt((v1.x - v2.x) * (v1.x - v2.x) + (v1.y - v2.y) * (v1.y - v2.y));
   }
 
-  // k = Number of points returned
-  // target = Target point
-  // points = sample array
-  function k_nearest(k, points, target) { 
-    let _this = this;
-
-    // swartzarian transform
-    let distpts = points.map(function (point) {
-      return [
-        distance(target, point),
-        point
-      ];
-    });
-
-    distpts.sort((a, b) => {
-      return a[0] - b[0];
-    });
-
-    return distpts.map((x) => x[1]).slice(0, k);
-  }
-
   function makeChart(scope, element) {
     // Size Characteristics
     let width,
@@ -249,6 +228,54 @@ app.directive('stratification', function () {
     setTooltip(scope);
     // Setup Series Groups
     setSeries();
+
+    function distance_scaled(target, point) { // Data Intentionally flipped 
+      return Math.sqrt((target.x - xScale(point.y)) * (target.x - xScale(point.y)) + 
+                       (target.y - yScale(point.x)) * (target.y - yScale(point.x)));
+    }
+
+    // k = Number of points returned
+    // target = Target point
+    // points = sample array
+    function k_nearest(k, points, target, label) {
+
+      points = points.map(function(point) {
+        return {
+          x: point.x,
+          y: point.y,
+          label: label || point.label,
+        }
+      }); 
+
+      // swartzarian transform
+      let distpts = points.map(function(point) {
+        return [
+          distance_scaled(target, point),
+          point
+        ];
+      });
+
+      distpts.sort((a, b) => {
+        return a[0] - b[0];
+      });
+
+      distpts = distpts.map((x) => x[1]).slice(0, k);
+
+      return distpts;
+    }
+
+    function nearestPoint(dataset, loc) {
+      let points = []; 
+      dataset.forEach(function(datum) {
+        points.push(k_nearest(1, datum.data, loc, datum.label)[0]); 
+      });
+
+      if (points.length > 1) {
+        return k_nearest(1, points, loc)[0];
+      }
+
+      return points[0];
+    }
 
 
     function highlight(scope) {
@@ -618,57 +645,41 @@ app.directive('stratification', function () {
             .attr("d", function(d) { return lineGenerator(d.data); }) // Draw series line
             .attr("stroke", function(d) { return d.color; });
 
-      let seriesHit = seriesGroup.selectAll(".series-hit")
-            .data(dataset, function(d) { return d.label; }); // Key function for data join
-
-          // Remove extra data points on highlight
-          seriesHit.exit().transition()
-            .duration(100)
-            .style("opacity", 0)
-            .remove();
-
-          // Create separate groups for each series object | This line for mouseover
-          seriesHit.enter().append("path")
-            .attr("id", function(d) { return d.label + "_hit"; }) // Name each uniquely wrt cell label
-            .attr("class", "line series-hit hit_line")
-            .attr("opacity", 0)
-            .attr("d", function(d) { return lineGenerator(d.data); }) // Draw series line
-            .attr("stroke", function(d) { return d.color; });
-
-      let seriesHitSelect = svg.selectAll(".series-hit") // Mouseover the hit lines
-        .on('mouseover', function(dd) {
-          d3.select(this).on('mousemove', function(d) {
+      d3.select('#stratification-svg').on('mouseover', function() {
+          d3.select(this).on('mousemove', function() {
             svg.selectAll("circle")
               .remove(); // Don't pollute space with invisible circles
 
-            let dataScale = [],
-                mousepos = {
-                  x: d3.mouse(d3.select('#stratification-svg').node())[0],
-                  y: d3.mouse(d3.select('#stratification-svg').node())[1] - margin.top,
+            let mousepos = {
+                  x: d3.mouse(d3.select(this).node())[0] - margin.left,
+                  y: d3.mouse(d3.select(this).node())[1] - margin.top,
                 };
 
-            d.data.forEach(function(datum) {
-              let rObj = {
-                x:  xScale(datum.y), // X, Y flipped
-                x0: datum.y,        
-                y:  yScale(datum.x),
-                y0: datum.x,        
-              };
+            let nearest = nearestPoint(dataset, mousepos),
+                nearest_color;
 
-              dataScale.push(rObj);
+            dataset.forEach(function(datum) { // Set circle color
+              if (nearest.label === datum.label) {
+                nearest_color = datum.color;
+              }
             });
 
-            let nearest = k_nearest(1, dataScale, mousepos)[0]; 
+            if ( distance_scaled(mousepos, nearest) > 25 ) { // Mouseover Threshold | 25 Experimentially Determined
+              return;
+            }
 
-            d3.select(this).append("circle")
+            d3.selectAll('.series').classed({ 'series-other': true });
+            d3.select('#series-' + nearest.label).classed({ 'series-highlight': true });
+
+            seriesGroup.append("circle")
               .attr("r", 0)
               .attr("class", "point")
-              .style("fill", function(d) { return d.color; })
-              .attr("cx", function() { return nearest.x; })
-              .attr("cy", function() { return nearest.y; })
+              .style("fill", nearest_color)
+              .attr("cx", xScale(nearest.y)) // Scales Intentionally Flipped
+              .attr("cy", yScale(nearest.x)) // Scales Intentionally Flipped
               .transition()
                 .duration(100)
-                .attr("r", 3);
+                .attr("r", 5);
 
             tooltip.transition()
               .duration(100)
@@ -676,15 +687,19 @@ app.directive('stratification', function () {
 
             tooltip // Setting positioning logic 
               .style('left', function() {
-                  return nearest.x + 25 + "px";
+                  x = xScale(nearest.y) < width / 2 // Avoid crossing y-axis
+                      ? xScale(nearest.y) + 75
+                      : xScale(nearest.y) - 100;
+
+                  return x + "px"; // Scales Intentionally Flipped
               })
               .style('top', function() {
-                  return nearest.y + "px";
+                  return yScale(nearest.x) + "px"; // Scales Intentionally Flipped
               });
 
-            cellId.text(d.label);
-            volume.text(nearest.x0);
-            ipl.text(nearest.y0);
+            cellId.text(nearest.label);
+            volume.text(nearest.y);
+            ipl.text(nearest.x);
 
           })
         })
@@ -692,10 +707,19 @@ app.directive('stratification', function () {
             svg.selectAll("circle")
               .remove(); // Don't pollute space with invisible circles
 
+            d3.selectAll('.series').classed({ 'series-highlight': false, 'series-other': false }); // Remove Highlight State
+
             tooltip.transition()
               .duration(100)
               .style('opacity', 0);
         });
+    }
+
+    function closestPt(loc, dataset) {
+      let points = [];
+      dataset.forEach(data => {
+        points.push(k_nearest(1, points, loc));
+      })
     }
 
     function setDomain(scope) {
