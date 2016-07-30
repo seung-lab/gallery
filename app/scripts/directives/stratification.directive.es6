@@ -4,10 +4,8 @@ app.directive('stratification', function () {
 
   let chartLinker = function (scope, element, attrs) {
 
-    if (!scope.chart) {
-          // Set up chart
-          scope.chart = makeChart(scope, element);
-    }
+    // Set up chart
+    scope.chart = makeChart(scope, element);
 
     // Watch for dataset changes
     scope.$watch(function (scope) {
@@ -284,11 +282,6 @@ app.directive('stratification', function () {
     }
 
     function update(scope) {
-
-      if (scope.dataset.length === 0) {
-        return;
-      }
-
       // Update graph dimensions
       setDimensions(scope);
       // Update domain
@@ -703,7 +696,11 @@ app.directive('stratification', function () {
                   return x + "px"; // Scales Intentionally Flipped
               })
               .style('top', function() {
-                  return yScale(nearest.x) + "px"; // Scales Intentionally Flipped
+                  y = yScale(nearest.x) > height * 0.6 // Avoid crossing y-axis
+                        ? yScale(nearest.x) - 100
+                        : yScale(nearest.x);
+
+                  return y + "px"; // Scales Intentionally Flipped
               });
 
             cellId.text(nearest.label);

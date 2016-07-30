@@ -8,10 +8,8 @@ app.directive('calcium', [ function () {
     scope.angles = [ 360, 45, 90, 135, 180, 225, 270, 315, 360 ]; // Hack for line to connect to self
     scope.dataset = makeDataset(scope);
 
-    if (!scope.chart) {
-          // Set up chart
-          scope.chart = makeChart(scope, element);
-    }
+    // Set up chart
+    scope.chart = makeChart(scope, element);
     
     // Watch for dataset changes
     scope.$watch(function (scope) {
@@ -233,11 +231,6 @@ app.directive('calcium', [ function () {
     }
 
     function update(scope) {
-      
-      if (scope.dataset.length === 0) {
-        return;
-      }
-
       updateToggle(scope);
       // Update domain, range
       setScales(scope);
@@ -303,7 +296,6 @@ app.directive('calcium', [ function () {
             // Update Series Lines
             series
                 .attr("d", function(d) { 
-                  console.log(d);
                   return lineGenerator(setRadarValues(d.data, angles)); // Draw radar line
                 })
                 .attr("stroke", function(d) { return d.color; });
