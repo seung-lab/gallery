@@ -303,7 +303,6 @@ app.directive('calcium', [ function () {
             // Update Series Lines
             series
                 .attr("d", function(d) { 
-                  console.log(d);
                   return lineGenerator(setRadarValues(d.data, angles)); // Draw radar line
                 })
                 .attr("stroke", function(d) { return d.color; });
@@ -625,23 +624,19 @@ app.directive('calcium', [ function () {
 
       radScale.range([0, radius]); // Scale = Chart Radius
 
-      let max = d3.max(dataset, function(d) { // forEach element of dataSet
-          return Math.max(...d.data);
-        });
+      let max = !dataset.length
+        ? 1
+        : d3.max(dataset, function(d) { // forEach element of dataSet
+            return Math.max(...d.data);
+          });
 
       max *= 1.2; // Padding
 
-      radScale.domain([
-        0, 
-        max
-      ]);
+      radScale.domain([ 0, max ]);
 
       // Inverse for setting labels
       labelScale.domain([0, radius])
-      labelScale.range([
-        0, 
-        max
-      ]);
+      labelScale.range([ 0, max ]);
     }
 
     function setDimensions() {
