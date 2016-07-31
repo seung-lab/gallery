@@ -1,0 +1,41 @@
+@require 'colors.styl'
+@require 'app.styl'
+
+
+.multiselect
+	background $WHITE
+	display flex
+	flex-direction row
+	
+	align-items center
+	
+.multiselect .title
+	margin-right 10px
+	width 100px
+
+.multiselect div.options
+	display flex
+	flex-direction row
+	
+	border 1px solid black
+	
+	user-select none
+
+.multiselect div.option
+	padding 5px
+	outline none
+	cursor pointer
+	
+	min-width 55px
+	text-align center
+	
+	border-right 1px solid gray
+	
+	transition color 150ms ease, background-color 150ms ease 
+	
+.multiselect div.option:last-child
+	border-right none
+
+.multiselect div.option.selected
+	color $WHITE
+	background-color $BLACK

@@ -5,8 +5,8 @@ app.controller('ViewerCtrl', [
   '$scope', '$timeout', '$state', '$document', '$window', 'meshService', 'camera', 'cellService', 'scene',
   function ($scope, $timeout, $state, $document, $window, meshService, camera, cellService, scene) {
   
-  let self = this;
-  self.states = [];
+  
+  $scope.states = [];
 
   let neuronparam = $state.params.neurons || "";
 
@@ -62,7 +62,7 @@ app.controller('ViewerCtrl', [
   cellService.list()
     .then(function (cellinfos) {
       $scope.autocompleteLoaded = true;
-      self.states = loadAllAutocompletes(cellinfos);
+      $scope.states = loadAllAutocompletes(cellinfos);
     });
 
     /**
@@ -77,10 +77,10 @@ app.controller('ViewerCtrl', [
       : "";
 
     let results = query
-      ? self.states.filter(function (state) {
+      ? $scope.states.filter(function (state) {
           return state.value.toLowerCase().indexOf(query) > -1 || state.display.toLowerCase().indexOf(query) > -1;;
         })
-      : self.states;
+      : $scope.states;
 
     return results || [];
   };
