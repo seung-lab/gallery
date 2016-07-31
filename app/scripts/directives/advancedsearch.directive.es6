@@ -12,6 +12,23 @@ app.directive('advancedsearch', [ function () {
 		};
 
 		scope.results = [];
+
+		scope.$watch(function (scope) {
+			return Object.keys(scope.filters).map(function (fltr) {
+				let activations = scope.filters[fltr];
+				return Object.keys(activations).map( 
+					(item) => activations[item] ? item : '' 
+				).join(',')
+			}).join(';');
+		}, function () {
+			scope.results = applyFilters(scope.states, scope.filters);
+		});
+	}
+
+	function applyFilters (states, filters) {
+		
+
+		return [];
 	}
 
 	return {
