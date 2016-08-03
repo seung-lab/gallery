@@ -234,6 +234,8 @@ app.directive('calcium', [ function () {
       updateToggle(scope);
       // Update domain, range
       setScales(scope);
+      // Update Chart Series
+      updateSeries(scope);
     }
 
     function setTooltip(scope) {
@@ -299,16 +301,17 @@ app.directive('calcium', [ function () {
       let seriesCircleGroup = seriesGroup.selectAll('.circle-series-group')
             .data(dataset, function(d) { return d.label; });
 
+            // Remove extra data points
+            seriesCircleGroup.exit().classed({ 'series-hidden': true })
+                                    .remove();
+
             // Create Groups / Cell Series
             seriesCircleGroup.enter().append("g")
               .attr('id', function(d) { return "cell-circle-series-group-" + scope.activation + "-" + d.label; })
               .attr('cell-label', function(d) { return d.label; })
-              .attr('class', "circle-series-group")
-              .style("fill", function(d) { return d.color; });
+              .attr('class', "circle-series-group");
 
-            // Remove extra data points
-            seriesCircleGroup.exit().classed({ 'series-hidden': true })
-                                    .remove(); 
+            seriesCircleGroup.style("fill", function(d) { return d.color; }); 
 
       let seriesPoints = seriesCircleGroup.selectAll('.circle-series')
             .data(function(d) { return d.data; });
