@@ -70,17 +70,29 @@ path
 	// stroke $BLACK
 	stroke-width 1
 	fill none
+	
+circle
+	r 0
+	transition all 100ms ease-in-out
+	
+.circle-series-hit
+	transition r 250ms ease-in-out, opacity 250ms ease-in-out
+
+.circle-ten
+	r 10
+	
+.circle-seven-five
+	r 7.5
+	
+.circle-five
+	r 5
+	
+.circle-two
+	r 2
 
 .series
 	fill none
-	
-.series-other
-	opacity 0.15
 	transition opacity 100ms ease-in-out
-	
-.series-highlight
-	opacity 1
-	transition opacity 100ms ease-in-out       
 	
 .rad-axis
 	fill none
@@ -146,17 +158,21 @@ path
 	position absolute
 	text-align left
 	line-height 1.5em
-	// width 60px 
+	
 	padding 20px
 	font-size 11px
 	font-family sans-serif
+	
 	opacity 0
+	
 	color $BLACK
 	background $WHITE
 	border-radius 5px
 	pointer-events none
 	box-shadow rgba(0,0,0,0.075) 0px 0px 50px
-	transition left 100ms ease-in-out, top 100ms ease-in-out
+	transition left 100ms ease-in-out,
+			   top 100ms ease-in-out,
+			   opacity 100ms ease-in-out
 	
 .sidebar .tooltip h3
 	text-align left
@@ -189,11 +205,21 @@ path
 	font-size 11px
 	font-weight normal
 	
-
-.circle-series
-	transition opacity 100ms ease
+.sidebar .series-hidden
+	opacity 0
+	
+.sidebar .series-other
+	opacity 0.15
+	
+.sidebar .series-soft
+	opacity 0.2
+	
+.sidebar .series-visible
 	opacity 1
 	
-.circle-hidden
-	opacity 0
+.sidebar .transition-none
+	transition none
+	
+.select-none
+	user-select none
 	

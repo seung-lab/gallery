@@ -279,19 +279,15 @@ app.directive('calcium', [ function () {
             .data(dataset, function(d) { return d.label; }); 
 
             // Remove extra data points
-            series.exit().transition()
-              .duration(250)
-              .style("opacity", 0)
-              .remove();
+            series.exit().classed({ 'series-hidden': true })
+                         .remove();
             
             // Create Series Lines
             series.enter().append("path")
-                .attr("class", "line radar-lines")
+                .attr("class", "line radar-lines transition-none series-hidden")
                 .attr("id", function(d) { return "radar-" + scope.activation + "-" + d.label; }) // Name each uniquely wrt cell label
                 .attr("opacity", 0)
-              .transition()
-                .duration(250)
-                .attr("opacity", 1);
+                .classed({ 'transition-none': false, 'series-hidden': false, 'series-visible': true });
 
             // Update Series Lines
             series
@@ -311,65 +307,53 @@ app.directive('calcium', [ function () {
               .style("fill", function(d) { return d.color; });
 
             // Remove extra data points
-            seriesCircleGroup.exit().transition()
-              .duration(250)
-              .style("opacity", 0)
-              .remove(); 
+            seriesCircleGroup.exit().classed({ 'series-hidden': true })
+                                    .remove(); 
 
       let seriesPoints = seriesCircleGroup.selectAll('.circle-series')
             .data(function(d) { return d.data; });
 
             // Remove extra data points
-            seriesPoints.exit().transition()
-              .duration(250)
-              .style("opacity", 0)
-              .remove(); 
+            seriesPoints.exit().classed({ 'series-visible': false, 'series-hidden': true })
+                               .remove();
 
             // Create Circle Points
             seriesPoints.enter().append("circle")
-              .attr("class", "circle-series")
-              .attr("opacity", 0)
-              .attr("r", 0);
+              .classed({ 'circle-series': true, 'series-hidden': false, 'series-visible': true });
 
             // Update Circle Points
             seriesPoints
               .attr("cx", function(d, i) { return polarX(radScale(d), angles[i]); })
               .attr("cy", function(d, i) { return polarY(radScale(d), angles[i]); })
-            .transition()
-              .duration(250)
-              .attr("r", 2)
-              .attr("opacity", 1);
+              .classed({ 'circle-two': true });
 
       let seriesHitPoints = seriesCircleGroup.selectAll('.circle-series-hit')
             .data(function(d) { return d.data; });
 
             // Remove extra data points
-            seriesHitPoints.exit().transition()
-              .duration(250)
-              .style("opacity", 0)
-              .remove(); 
+            seriesHitPoints.exit().classed({ 'series-visible': false, 'series-hidden': true })
+                                  .remove(); 
 
             // Create Circle Points
             seriesHitPoints.enter().append("circle")
-              .attr("class", "circle-series-hit")
-              .attr("opacity", 0)
-              .attr("r", 0);
+              .classed({ 'circle-series-hit': true, 'series-hidden': true, 'series-visible': false });
 
             // Update Circle Points
             seriesHitPoints
               .attr("cx", function(d, i) { return polarX(radScale(d), angles[i]); })
               .attr("cy", function(d, i) { return polarY(radScale(d), angles[i]); })
-              .attr("r", 10);
+              .classed({ 'circle-ten': true });
 
           // Mouseover Tooltip
           seriesHitPoints.on('mouseover', function(dd) {
             let element = d3.select(this);
 
-            element // Select circle
-              .transition()
-                .duration(250)
-                .attr("r", 5)
-                .style("opacity", 1);
+            element.classed({ 
+              'circle-ten': false,
+              'circle-five': true,
+              'series-hidden': false,
+              'series-visible': true,
+            });
 
             // Get positon of datum
             let x = parseInt(element.attr('cx')),
@@ -378,16 +362,14 @@ app.directive('calcium', [ function () {
             // Logic for padding
             x = x > radius
                 ? x - 75
-                : x + 75;
+                : x + 50;
 
             y = y > radius
                 ? y - 75
                 : y + 60;
 
-            tooltip.transition()
-              .duration(250)
-              .style('z-index', 1)
-              .style('opacity', 1);
+            tooltip.classed({ 'series-hidden': false, 'series-visible': true })
+                   .style('z-index', 1);
 
             tooltip // Setting positioning logic 
               .style('left', function() {
@@ -410,16 +392,15 @@ app.directive('calcium', [ function () {
           seriesHitPoints.on('mouseout', function(dd) {
             let element = d3.select(this);
 
-            element // Select circle
-              .transition()
-                .duration(250)
-                .attr("r", 10)
-                .style("opacity", 0); // Trigger after transition
+            element.classed({ 
+              'circle-ten': true,
+              'circle-five': false,
+              'series-hidden': true,
+              'series-visible': false,
+            });
 
-            tooltip.transition()
-              .duration(250)
-              .style('opacity', 0)
-              .style('z-index', -1);
+            tooltip.classed({ 'series-hidden': true, 'series-visible': false })
+                   .style('z-index', -1);
 
           });
     }
@@ -508,10 +489,8 @@ app.directive('calcium', [ function () {
             .data(angles, function(d) { return d; }); // Make an axis for each angle
 
             // Remove extra data points
-            radAxis.exit().transition()
-              .duration(250)
-              .style("opacity", 0)
-              .remove();
+            radAxis.exit().classed({ 'series-hidden': true })
+                          .remove();
 
             // Create Radial Axes
             radAxis.enter().append('line')
@@ -530,10 +509,8 @@ app.directive('calcium', [ function () {
             .data(angles, function(d) { return d; }); // Make an axis for each angle
 
             // Remove extra data points
-            thetaAxisLabels.exit().transition()
-              .duration(250)
-              .style("opacity", 0)
-              .remove();
+            thetaAxisLabels.exit().classed({ 'series-hidden': true })
+                                  .remove();
 
             // Create Theta Axis Labels
             thetaAxisLabels.enter().append("text")
@@ -558,37 +535,30 @@ app.directive('calcium', [ function () {
             regionalAxes.enter()
               .append("path")
                 .attr('id', function(d) { return "regional-axis_" + scope.activation + "-" + d.label; })
-                .attr('class', "regional-axis line");
+                .attr("class", "regional-axis line transition-none series-hidden")
+                .classed({ 'transition-none': false, 'series-hidden': false, 'series-soft': true });
 
             // Update Regional Axes --> Circular | Lines
             regionalAxes
                 .attr("opacity", 0)
                 .attr("d", function(d) { return lineGenerator(d.data); }) // Draw radarLines line
                 .attr("stroke", function(d) { return d.color; })
-              .transition()
-                .duration(250)
-                .attr("opacity", 1);
+                .classed({ 'series-hidden': false, 'series-soft': true });
 
             // Remove extra data points
-            regionalAxes.exit().transition()
-              .duration(250)
-              .style("opacity", 0)
-              .remove();
+            regionalAxes.exit().classed({ 'series-hidden': true, 'series-soft': false })
+                               .remove();
 
       // Join Regional Axis Data
       let regionalLabels = regionalLabelsGroup.selectAll('.regional-label')
             .data(regionValues, function(d) { return d.label; });
 
             // Remove extra data points
-            regionalLabels.exit().transition()
-              .duration(250)
-              .style("opacity", 0)
-              .remove();
+            regionalLabels.exit().classed({ 'series-hidden': true, 'series-soft': false });
 
             // Create Regional Value Background Circles
             regionalLabels.enter().append("circle")
-                  .attr('class', 'regional-circle')
-                  .attr("r", 7.5);
+                  .attr('class', 'regional-circle circle-seven-five');
 
             // Update Regional Value Background Circles
             regionalLabels

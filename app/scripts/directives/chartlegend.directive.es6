@@ -44,15 +44,14 @@ app.directive('chartlegend',
 				});
 			};
 
-			// Watch for dataset changes
-		    scope.$watch(function (scope) {
-		      return scope.cells.map( (cell) => cell.id ).join(',');
-		    }, 
-		    function (value) {
-            $timeout(function() {
-              setPadding(scope);
-            }, 0);
-		    });
+	    scope.$watch(function (scope) { // Watch for dataset changes
+	      return scope.cells.map( (cell) => cell.id ).join(',');
+	    }, 
+	    function (value) {
+          $timeout(function() {
+            setPadding(scope);
+          }, 0);
+	    });
 
 			scope.$watch(function (scope) {
 				return scope.cells.map( (cell) => cell.hidden ? 't' : 'f' ).join('');
@@ -79,7 +78,7 @@ app.directive('chartlegend',
       function setPadding(scope) {
           let viewportHeightPercent = angular.element(element[0]).height() / window.innerHeight,
               padding = 5,
-              max_padding = 15,
+              padding_max = 15,
               threshold = {
                 min: 0.025,
                 max: 0.2,
@@ -94,7 +93,7 @@ app.directive('chartlegend',
           }
 
           // Constrained, parametric padding
-          padding = Math.min(Math.max(remapRange(viewportHeightPercent, threshold.min, threshold.max, max_padding, 0), 0), max_padding);
+          padding = Math.min(Math.max(remapRange(viewportHeightPercent, threshold.min, threshold.max, padding_max, 0), 0), padding_max);
 
           angular.element('.color-container').css('padding-top', padding + 'px')
                                              .css('padding-bottom', padding + 'px');

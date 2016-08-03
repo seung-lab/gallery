@@ -1,6 +1,6 @@
 'use strict';
   
-app.directive('stratification', function () {
+app.directive('stratification', function ($timeout) {
 
   let chartLinker = function (scope, element, attrs) {
 
@@ -327,7 +327,7 @@ app.directive('stratification', function () {
       // Tooltip circle
       tooltipCircle = svg.append("circle")
           .attr("r", 0)
-          .attr("class", "point circle-hidden");
+          .attr("class", "point hidden");
 
     }
 
@@ -628,27 +628,23 @@ app.directive('stratification', function () {
             .data(dataset, function(d) { return d.label; });
 
           // Remove extra data points on highlight
-          series.exit().transition()
-            .duration(100)
-            .style("opacity", 0)
-            .remove();
+          series.exit().classed({ 'series-hidden': true })
+                       .remove();
 
           // Create separate groups for each series object 
           series.enter().append("path")
               .attr("id", function(d) { return "series-" + d.label; }) // Name each uniquely wrt cell label
-              .attr("class", "line series")
-              .attr("opacity", 0)
-            .transition()
-              .duration(100)
-              .attr("opacity", 1);
+              .attr("class", "line series transition-none series-hidden")
+              .classed({ 'transition-none': false, 'series-hidden': false, 'series-visible': true });
 
           series
             .attr("d", function(d) { return lineGenerator(d.data); }) // Draw series line
             .attr("stroke", function(d) { return d.color; });
 
+      let timer; // Timeout for series hover
+
       d3.select('#stratification-svg').on('mouseover', function() {
           d3.select(this).on('mousemove', function() {
-
             let mousepos = {
                   x: d3.mouse(d3.select(this).node())[0] - margin.left,
                   y: d3.mouse(d3.select(this).node())[1] - margin.top,
@@ -671,21 +667,23 @@ app.directive('stratification', function () {
               return;
             }
 
-            d3.selectAll('.series').classed({ 'series-other': true });
-            d3.select('#series-' + nearest.label).classed({ 'series-highlight': true });
+            if (timer) {
+              $timeout.cancel(timer);
+            }
 
-            tooltipCircle.attr("r", 0)
-              .classed({ 'circle-hidden': false })
+           timer =  $timeout(function() { // Avoid series flickering
+              d3.selectAll('.series').classed({ 'series-visible': false, 'series-other': true });
+              d3.select('#series-' + nearest.label).classed({ 'series-visible': true });
+            }, 250);
+
+            tooltipCircle
+              .classed({ 'series-hidden': false, 'series-visible': true })
               .style("fill", nearest_color)
               .attr("cx", xScale(nearest.y)) // Scales Intentionally Flipped
               .attr("cy", yScale(nearest.x)) // Scales Intentionally Flipped
-              .transition()
-                .duration(100)
-                .attr("r", 5);
+              .classed({ 'circle-five': true });
 
-            tooltip.transition()
-              .duration(100)
-              .style('opacity', 1);
+            tooltip.classed({ 'series-hidden': false, 'series-visible': true })
 
             tooltip // Setting positioning logic 
               .style('left', function() {
@@ -710,17 +708,16 @@ app.directive('stratification', function () {
           })
         })
         .on('mouseout', function() {
-            tooltipCircle.classed({ 'circle-hidden': true })
-                .transition()
-                .duration(100)
-                .attr("r", 0);
+            if (timer) {
+              $timeout.cancel(timer);
+            }
+
+            tooltipCircle.classed({ 'series-hidden': true, 'circle-five': false });
 
 
-            d3.selectAll('.series').classed({ 'series-highlight': false, 'series-other': false }); // Remove Highlight State
+            d3.selectAll('.series').classed({ 'series-visible': true, 'series-other': false }); // Remove Highlight State
 
-            tooltip.transition()
-              .duration(100)
-              .style('opacity', 0);
+            tooltip.classed({ 'series-hidden': true, 'series-visible': false });
         });
     }
 
