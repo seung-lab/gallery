@@ -283,7 +283,7 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 
     	var colors = [
     				   '#ff3f3f', '#007eff', '#0eff90', 
-    		'#e9ff34', '#ffa500', '#fc49ff', '#47ffff', 
+    		'#ffd500', '#ffa500', '#fc49ff', '#47ffff', 
     		'#bb71ff', '#00ff1f', '#ffa2a2', '#1700d4',
     		'#b1007a', '#8a1515', '#908e8e'
     	];
