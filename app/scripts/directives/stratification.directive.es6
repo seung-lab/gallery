@@ -175,12 +175,12 @@ app.directive('stratification', function ($timeout) {
     // Labels
     let xLabel, yLabel,
         yLabel_INL, yLabel_GCL,
-        yLabel_ON, yLabel_OFF,
+        yLabel_Inner, yLabel_Outer,
         yAxis_IPL_Ticks,
-        yAxis_ONOFF_Tick,
+        yAxis_Outer_Inner_Tick,
         yLabel_Layers,
-        yLabel_ON_Transient, yLabel_ON_Sustained,
-        yLabel_OFF_Transient, yLabel_OFF_Sustained,
+        yLabel_Inner_intra_SAC, yLabel_Inner_extra_SAC,
+        yLabel_Outer_intra_SAC, yLabel_Outer_extra_SAC,
         yLabel_Top;
 
     let dataset,
@@ -403,12 +403,12 @@ app.directive('stratification', function ($timeout) {
        .attr("transform", "translate(" + (width/2) + ", 50)");
 
       // Axis label | Y
-      yLabel_ON.attr("transform", "translate(" + (width + 25) + "," + yScale(22.5) + ") rotate(90)");
-        yLabel_OFF.attr("transform", "translate(" + (width + 25) + "," + yScale(72.5) + ") rotate(90)");
-        yLabel_OFF_Transient.attr("transform", "translate(" + (width - 18) + "," + yScale(14) + ")"); // 18~Offset
-        yLabel_OFF_Sustained.attr("transform", "translate(" + (width - 18) + "," + yScale(37) + ")"); // 18~Offset
-        yLabel_ON_Transient.attr("transform", "translate(" + (width - 18) + "," + yScale(55) + ")"); // 18~Offset
-        yLabel_ON_Sustained.attr("transform", "translate(" + (width - 18) + "," + yScale(81) + ")"); // 18~Offset
+      yLabel_Inner.attr("transform", "translate(" + (width + 25) + "," + yScale(22.5) + ") rotate(90)");
+        yLabel_Outer.attr("transform", "translate(" + (width + 25) + "," + yScale(72.5) + ") rotate(90)");
+        yLabel_Outer_intra_SAC.attr("transform", "translate(" + (width - 18) + "," + yScale(14) + ")"); // 18~Offset
+        yLabel_Outer_extra_SAC.attr("transform", "translate(" + (width - 18) + "," + yScale(37) + ")"); // 18~Offset
+        yLabel_Inner_intra_SAC.attr("transform", "translate(" + (width - 18) + "," + yScale(55) + ")"); // 18~Offset
+        yLabel_Inner_extra_SAC.attr("transform", "translate(" + (width - 18) + "," + yScale(81) + ")"); // 18~Offset
         
       yLabel.attr("transform", "translate(-20," + yScale(45) + ") rotate(-90)");
         yLabel_INL.attr("transform", "translate(-20," + yScale(-10) + ") rotate(-90)");
@@ -421,8 +421,8 @@ app.directive('stratification', function ($timeout) {
           .attr("y1", yScale(-20))
           .attr("y2", yScale(-20));
 
-      // ON OFF Tick
-      yAxis_ONOFF_Tick
+      // Inner Outer Tick
+      yAxis_Outer_Inner_Tick
         .attr("x1", width)
         .attr("x2", (width + 10))
         .attr("y1", yScale(45))
@@ -498,55 +498,55 @@ app.directive('stratification', function ($timeout) {
             .attr("transform", "translate(-20," + yScale(110) + ") rotate(-90)") // Dynamic Scale
             .text("GCL");
 
-      // Axis label | Y --> ON
-      yLabel_ON = svg.select(".y.axis")
+      // Axis label | Y --> Outer
+      yLabel_Inner = svg.select(".y.axis")
           .append("text")
             .attr("class", "axis-label")
             .attr("text-anchor", "middle")
             .attr("transform", "translate(" + (width + 25) + "," + yScale(22.5) + ") rotate(90)") // Dynamic Scale
-            .text("ON");
+            .text("Outer");
 
-      // Axis label | Y --> OFF
-      yLabel_OFF = svg.select(".y.axis")
+      // Axis label | Y --> Inner
+      yLabel_Outer = svg.select(".y.axis")
           .append("text")
             .attr("class", "axis-label")
             .attr("text-anchor", "middle")
             .attr("transform", "translate(" + (width + 25) + "," + yScale(72.5) + ") rotate(90)") // Dynamic Scale
-            .text("OFF");
+            .text("Inner");
 
-      // Axis label | Y --> OFF Transient
-      yLabel_OFF_Transient = svg.select('.y.axis')
+      // Axis label | Y --> Outer intra_SAC
+      yLabel_Outer_intra_SAC = svg.select('.y.axis')
           .append("text")
               .attr("class", "axis-label sub-label axis-label-minor")
               .attr("text-anchor", "end")
               .attr("transform", "translate(" + (width - 18) + "," + yScale(14) + ")") // Dynamic Scale
-              .text("Transient");
+              .text("extra-SAC");
 
-      // Axis label | Y --> OFF Sustained
-      yLabel_OFF_Sustained = svg.select('.y.axis')
+      // Axis label | Y --> Outer extra_SAC
+      yLabel_Outer_extra_SAC = svg.select('.y.axis')
           .append("text")
               .attr("class", "axis-label sub-label axis-label-minor")
               .attr("text-anchor", "end")
               .attr("transform", "translate(" + (width - 18) + "," + yScale(36.5) + ")") // Dynamic Scale
-              .text("Sustained");
+              .text("intra-SAC");
 
-      // Axis label | Y --> ON Transient
-      yLabel_ON_Transient = svg.select('.y.axis')
+      // Axis label | Y --> Inner intra_SAC
+      yLabel_Inner_intra_SAC = svg.select('.y.axis')
           .append("text")
               .attr("class", "axis-label sub-label axis-label-minor")
               .attr("text-anchor", "end")
               .attr("transform", "translate(" + (width - 18) + "," + yScale(53.5) + ")") // Dynamic Scale
-              .text("Transient");
+              .text("intra-SAC");
 
-      // Axis label | Y --> ON Sustained
-      yLabel_ON_Sustained = svg.select('.y.axis')
+      // Axis label | Y --> Inner extra_SAC
+      yLabel_Inner_extra_SAC = svg.select('.y.axis')
           .append("text")
               .attr("class", "axis-label sub-label axis-label-minor")
               .attr("text-anchor", "end")
               .attr("transform", "translate(" + (width - 18) + "," + yScale(81) + ")") // Dynamic Scale
-              .text("Sustained");
+              .text("extra-SAC");
 
-      // Style Transient + Sustained Lines with Dashes
+      // Style intra_SAC + extra_SAC Lines with Dashes
       yLabel_Layers = d3.selectAll('.y')
           .selectAll('.tick')
           .filter( function(d, i) { return i % 2 === 1; } )
@@ -563,8 +563,8 @@ app.directive('stratification', function ($timeout) {
             .attr("y2", yScale(-20))
             .attr('class', 'top-bar');
 
-      // ON OFF Tick
-      yAxis_ONOFF_Tick = d3.select('.y')
+      // Inner Outer Tick
+      yAxis_Outer_Inner_Tick = d3.select('.y')
           .append('line')
             .attr('class', 'tick-right')
             .attr("x1", width)
