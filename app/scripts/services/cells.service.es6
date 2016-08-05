@@ -284,8 +284,8 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
     	var colors = [
     				   '#ff3f3f', '#007eff', '#0eff90', 
     		'#ffd500', '#ffa500', '#fc49ff', '#47ffff', 
-    		'#bb71ff', '#00ff1f', '#ffa2a2', '#1700d4',
-    		'#b1007a', '#8a1515', '#908e8e'
+    		'#bb71ff', '#00ff1f', '#ffa2a2', '#979df2',
+    		'#b1007a', '#ff6b6b', '#908e8e'
     	];
 
 		// From https://en.wikipedia.org/wiki/Help:Distinguishable_colors
