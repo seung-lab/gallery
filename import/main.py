@@ -70,20 +70,18 @@ def read_stratification():
     is returned
   """
   strat = defaultdict(list)
-  mat = scipy.io.loadmat('rawdata/strat.mat')['strat']
+  mat = scipy.io.loadmat('rawdata/skel_strat.mat')['skel_strat'][0]
 
   nanproblems = []
 
-  # You might be wondering why ['start'] ?
+  # You might be wondering why ['strat'] or ['skel_strat'] ?
   # I have no f* clue, but seems like many mat files
   # have its filenames as a dictionary key 
   # and the value of that dictionary is the actual data being stored
 
   for i, row in enumerate(mat):
-    cell_id = i + 1 #It took me way too long to find this!
-    # Matab is 1-index why python is 0-index, so obvious now!
-    
-    row = row[0] # Why row[0]? Why not?
+    cell_id = i + 1 # It took me way too long to find this!
+    # Matab is 1-index while python is 0-index, so obvious now!
 
     if row.shape != (1,0):
       strat[cell_id] = [ [x,y] for x,y in row ] # convert to list, which is JSON serializable
