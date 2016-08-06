@@ -8,6 +8,7 @@ app.controller('SearchController', function ($scope, $timeout, $state, cellServi
 	$scope.data = {
 		show_bipolars: true,
 		show_ganglia: true,
+		show_amacrine: true,
 	};
 
 	$scope.cells = []; // { $celltype: [ ... cells ... ] }
@@ -122,6 +123,9 @@ app.controller('SearchController', function ($scope, $timeout, $state, cellServi
 			) || (
 				$scope.data.show_bipolars
 				&& cell.type === 'bipolar'
+			) || (
+				$scope.data.show_amacrine
+				&& cell.type === 'amacrine'
 			);
 		});
 
@@ -153,6 +157,10 @@ app.controller('SearchController', function ($scope, $timeout, $state, cellServi
 	});
 
 	$scope.$watch( (scope) => scope.data.show_bipolars, function () {
+		generateCards();
+	});
+
+	$scope.$watch( (scope) => scope.data.show_amacrine, function () {
 		generateCards();
 	});
 

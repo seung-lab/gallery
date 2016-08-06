@@ -16,28 +16,14 @@ You'll need nodejs, npm, and mongodb to bootstrap.
 	* Unzip into a location of choice. (Note: This is where you will run the daemon)
 	* Open terminal and use the following command to make the directory where mongo will store data: `$ mkdir -p /data/db`
 	* Start the mongodb server in a separate terminal window (if you get an error, you may need to ‘sudo’ this command): `$ ./mongodb-xxxxxxx/bin/mongod`
-<<<<<<< HEAD
 6. git submodule update --init
 7. cd import
-8. python main.py
-9. Acquire meshes from someone who has them (~850MB)
-10. Run `gulp`
-11. Run `npm start`
-=======
-* run `grunt serve`
-
-Start server with:
-* First, in another terminal run `mongod` (if you have trouble with this step, see above)
-* Then, run `grunt serve`
-
-## Dependencies
-run ./install.sh
-
-## TODO list:
-
-* improve orbit controller
-* simplify mesh when far (removing noise effect)
->>>>>>> master
+8. mkdir data
+9. sudo apt-get install liboctave-dev
+10. python main.py (or main_py3.py for Py3)
+11. Acquire meshes from someone who has them (~850MB)
+12. Run `gulp`
+13. Run `npm start`
 
 # Code coverage
 
@@ -62,7 +48,6 @@ This files will be used to populate the database when the server is run.
 * If the format of the matlab script changed, modify matlab_script.py
 
 # Contributors
-<<<<<<< HEAD
 The cell museum is being developed by Seung Lab.
 
 - Mio Akasako and Alex Norton designed the splash figure which explains the classification, they also provided blueprints, and design suggestions.
@@ -74,14 +59,3 @@ The cell museum is being developed by Seung Lab.
 
 
 
-=======
-The museum has being develop by the Seung Lab.
-
-Mio Akasako and Alex Norton designed the splash figure which explains the classification, 
-they also provided blueprints, and design suggestions.
-Nico Kemnitz suggested using OpenCTM as a mesh encoding, which greatly improved mesh loading.
-Jinseop Kim provided classification, stratification profiles and meshes for the neurons being displayed.
-Sebastian Seung provided code for creating sets of highly differentiable colors, and usability feedback.
-Jack Hudson was the driving force of the second version and implemented the homepage , and the selector page. 
-Ignacio Tartavull provided general maintenance.
->>>>>>> master

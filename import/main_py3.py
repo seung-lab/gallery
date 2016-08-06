@@ -70,18 +70,20 @@ def read_stratification():
     is returned
   """
   strat = defaultdict(list)
-  mat = scipy.io.loadmat('rawdata/skel_strat.mat')['skel_strat'][0]
+  mat = scipy.io.loadmat('rawdata/strat.mat')['strat']
 
   nanproblems = []
 
-  # You might be wondering why ['strat'] or ['skel_strat'] ?
+  # You might be wondering why ['start'] ?
   # I have no f* clue, but seems like many mat files
   # have its filenames as a dictionary key 
   # and the value of that dictionary is the actual data being stored
 
   for i, row in enumerate(mat):
-    cell_id = i + 1 # It took me way too long to find this!
-    # Matab is 1-index while python is 0-index, so obvious now!
+    cell_id = i + 1 #It took me way too long to find this!
+    # Matab is 1-index why python is 0-index, so obvious now!
+    
+    row = row[0] # Why row[0]? Why not?
 
     if row.shape != (1,0):
       strat[cell_id] = [ [x,y] for x,y in row ] # convert to list, which is JSON serializable
@@ -90,7 +92,7 @@ def read_stratification():
         nanproblems.append(cell_id)
         strat[cell_id] = None
 
-  print ", ".join([ str(cid) for cid in nanproblems ]), "had NaN values present in their stratification.\n"
+  print(", ".join([ str(cid) for cid in nanproblems ]), "had NaN values present in their stratification.\n")
 
   return strat
 
@@ -103,7 +105,7 @@ def write_json (object_to_dump , fname):
       indent = 2, 
       ensure_ascii=False)
 
-    print "Wrote to ", fname
+    print("Wrote to ", fname)
 
 def save_cells_json():
   """
@@ -122,17 +124,17 @@ def save_cells_json():
     "metadata": [],
   }
 
-  for cell_id, cell in allcells.iteritems():
+  for cell_id, cell in allcells.items():
     def maybe(info, key):
-      return info[key] if info.has_key(key) else None
+      return info[key] if key in info else None
 
     def hasproblem(problem, is_missing):
-      if not cell.has_key(is_missing) or cell[is_missing] is None:
+      if is_missing not in cell or cell[is_missing] is None:
         problems[problem].append(cell_id)
 
     hasproblem('metadata', 'name')
 
-    if (not cell.has_key('calcium') or cell['calcium'] is None) and (cell['type'] == 'ganglion' or cell['type'] == 'amacrine'):
+    if ('calcium' not in cell or cell['calcium'] is None) and (cell['type'] == 'ganglion' or cell['type'] == 'amacrine'):
         problems['calcium'].append(cell_id)
     
     if maybe(strat, cell_id) is None:
@@ -155,16 +157,16 @@ def save_cells_json():
   problems['calcium'].sort()
   problems['stratification'].sort()
 
-  print "Total Cells: ", len(allcells), "\n"
+  print("Total Cells: ", len(allcells), "\n")
 
   if len(problems['metadata']):
-    print "Did not have cell metadata (", len(problems['metadata']), "): ", ", ".join([ str(cid) for cid in problems["metadata"] ]), "\n"
+    print("Did not have cell metadata (", len(problems['metadata']), "): ", ", ".join([ str(cid) for cid in problems["metadata"] ]), "\n")
   
   if len(problems['calcium']):
-    print "Did not have calcium information (", len(problems['calcium']), "): ", ", ".join([ str(cid) for cid in problems["calcium"] ]), "\n"
-  
+    print("Did not have calcium information (", len(problems['calcium']), "): ", ", ".join([ str(cid) for cid in problems["calcium"] ]), "\n")
+
   if len(problems['stratification']):
-    print "Did not have stratification data (", len(problems['stratification']), "): ", ", ".join([ str(cid) for cid in problems["stratification"] ]), "\n"
+    print("Did not have stratification data (", len(problems['stratification']), "): ", ", ".join([ str(cid) for cid in problems["stratification"] ]), "\n")
 
   write_json(cells_ready_for_json, '../server/config/cells.json')
 
@@ -211,13 +213,13 @@ def generate_json():
 
   cmd = "octave generate_cell_json.m"
 
-  print "Executing: ", cmd
-  print subprocess.check_output(cmd, shell=True)
+  print("Executing: ", cmd)
+  print(subprocess.check_output(cmd, shell=True))
 
   cmd = "octave generate_calcium_json.m"
 
-  print "Executing: ", cmd
-  print subprocess.check_output(cmd, shell=True)
+  print("Executing: ", cmd)
+  print(subprocess.check_output(cmd, shell=True))
 
 def main():
   
