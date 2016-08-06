@@ -91,15 +91,29 @@ app.directive('stratification', function ($timeout) {
 
         let fmt = (z, factor) => Math.round(z * factor) / factor;
 
+        let strat_x = (i) => cell.stratification[i][0],
+            strat_y = (i) => cell.stratification[i][1];
+
         cell.stratification.sort(function (a, b) {
           return a[0] - b[0];
         });
 
         let data = [];
-        for (let i = 0; i < cell.stratification.length; i++) {
+        let x, y;
+
+        let stride = 4;
+
+        for (let i = 0; i < cell.stratification.length; i += stride) {
+
+          stride = Math.min(stride, cell.stratification.length - i);
+
+          // averaging filter with bin size 4 since skeletonization data is noisy
+          x = _.range(stride).map( (plus) => strat_x(i + plus) ).reduce( (a,b) => a+b, 0) / stride;
+          y = _.range(stride).map( (plus) => strat_y(i + plus) ).reduce( (a,b) => a+b, 0) / stride;
+        
           data.push({ 
-            x: fmt(cell.stratification[i][0], 1e3), 
-            y: fmt(cell.stratification[i][1], 1e7), 
+            x: fmt(x, 1e3), 
+            y: fmt(y, 1e7), 
           });
         }
 
