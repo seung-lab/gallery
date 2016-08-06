@@ -6,6 +6,7 @@ chartlegend
 	flex-shrink 0
 		
 	width 100%
+	min-height 85px
 	
 	max-height 300px
 	overflow scroll
@@ -17,7 +18,7 @@ chartlegend
 	align-items flex-start
 	
 	background-color $WHITE
-	box-shadow rgba(0, 0, 0, 0.15) 0px 0px 100px
+	box-shadow rgba(0, 0, 0, 0.15) 0px 0px 50px
 	
 	padding 50px
 	padding-top 25px
@@ -48,20 +49,13 @@ chartlegend .labels
 	justify-content center
 	flex-wrap wrap
 	
-	width 100%
+	font-size 11px
+	
+	width 95%
 	
 chartlegend .inverter
 	position absolute
-	top 15px
 	right 15px
-	
-	height 35px
-	width @height
-	
-	background-image url("/icons/invert-selection.svg")
-	background-repeat no-repeat
-	background-position center center
-	background-size 75%
 	
 	opacity 0.5
 	
@@ -73,16 +67,7 @@ chartlegend .inverter:hover
 	
 chartlegend .restorer
 	position absolute
-	top 15px
 	left 15px
-	
-	height 35px
-	width @height
-	
-	background-image url("/icons/restore.svg")
-	background-repeat no-repeat
-	background-position center center
-	background-size 75%
 	
 	opacity 0.5
 	
@@ -118,6 +103,8 @@ chartlegend .color-container
 	
 	box-sizing border-box
 	
+	transition padding 100ms ease-in-out
+	
 chartlegend .color-container:hover
 	background-color rgba($BLACK, 0.1)
 
@@ -139,5 +126,5 @@ chartlegend .color
 	
 	box-sizing border-box
 	
-	transition border-color 150ms ease, border-width 150ms ease, background-color 150ms ease
+	transition border-color 150ms ease-in, border-width 150ms ease-in, background-color 150ms ease-in
 

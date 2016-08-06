@@ -21,6 +21,7 @@ app.controller('ViewerCtrl', [
 
   clearScene();
   $scope.cells = [];
+  $scope.sidebarFullscreen = false;
 
   cellService.clear();
 
@@ -208,7 +209,7 @@ app.controller('ViewerCtrl', [
     $scope.sidebar_open = !$scope.sidebar_open;
 
     if ($scope.sidebar_open) {
-      angular.element('.characterization').scrollTo('#stratification > div', { msec: 0, offset: -25 });
+      angular.element('.characterization').scrollTo('#stratification', { msec: 0, offset: 0 });
     }
   };
 
@@ -264,6 +265,63 @@ app.controller('ViewerCtrl', [
   $scope.fullscreenToggle = function (evt) {
     if (evt) {
       evt.target.blur();
+    }
+
+    if (!$scope.sidebarFullscreen) { // If Fullscreen
+      angular.element('#fullscreen-icon')
+             .addClass('rotate-ninety');
+
+      angular.element('.chart-view-container')
+             .addClass('data-view-fullscreen');             
+
+      angular.element('.data-view-container')
+             .addClass('add-padding')
+
+      angular.element('.chart-container')
+             .addClass('row-align');
+
+      angular.element('.radar-chart')
+             .addClass('radar-chart-fullscreen');
+
+      // Set height of Stratification wrt Calcium data, wait to set height until Calcium
+      // has finished transitioning
+      setTimeout(function(){
+        let strat_height = angular.element('.radar-container').height();
+
+        angular.element('#stratification-chart')
+               .css('height', strat_height + "px");        
+
+      }, 350);
+
+      // Find limiting screen dimension
+      let limiting_factor = window.innerWidth < window.innerHeight
+          ? "vw"
+          : "vh";
+
+      angular.element('#preferred-direction-container')
+             .css('max-width', 45 + limiting_factor);
+    }
+    else {
+      angular.element('#fullscreen-icon')
+             .removeClass('rotate-ninety');
+
+      angular.element('.chart-view-container')
+             .removeClass('data-view-fullscreen'); 
+
+      angular.element('.data-view-container')
+             .removeClass('add-padding')
+
+      angular.element('#stratification-chart')
+             .css('height', "40vh");
+
+      angular.element('.chart-container')
+             .removeClass('row-align');
+
+      angular.element('.radar-chart')
+              .removeClass('radar-chart-fullscreen');
+
+      angular.element('#preferred-direction-container')
+             .css('max-width', "100%");
     }
 
     $scope.sidebarFullscreen = !$scope.sidebarFullscreen;

@@ -1,1 +1,225 @@
 @require 'colors.styl'
+
+.chart
+	position relative
+	display block
+	left 0
+	top 0
+	height 85%
+	width 100%
+	min-height 300px
+	
+.stratification
+	height 41vh
+	min-height 350px
+	min-width 350px
+	
+.radar-container
+	width 100%
+	margin-top 20px
+	margin-bottom -10px
+	
+.radar-container .radar-chart:first-child
+	float left
+	
+.radar-container .radar-chart:last-child
+	float right
+
+.radar-chart
+	display inline-block
+	width 50%
+	min-height 100px
+	
+.radar-chart-fullscreen
+	width 100%
+	
+.sidebar .radar-container h3
+	width inherent
+	margin 0
+	position relative
+	display inline-block
+	text-align center
+	font-size 9px
+	font-weight 700
+	letter-spacing 2px
+	text-transform uppercase
+	text-rendering optimizeLegibility	
+
+svg
+	position relative
+	display block
+	left 0
+	top 0
+	width 100%
+	height 100%
+	pointer-events none
+	
+.calcium-svg
+	position relative
+	display block
+	left 0
+	top 0
+	width 100%
+	
+.radar
+	position relative
+	display block
+	width 100%
+
+path 
+	// stroke $BLACK
+	stroke-width 1
+	fill none
+	
+circle
+	r 0
+	transition r 100ms ease-in-out, opacity 100ms ease-in-out
+	
+.circle-series-hit
+	transition r 250ms ease-in-out, opacity 250ms ease-in-out
+
+.circle-ten
+	r 10
+	
+.circle-seven-five
+	r 7.5
+	
+.circle-five
+	r 5
+	
+.circle-two
+	r 2
+
+.series
+	fill none
+	transition opacity 100ms ease-in-out
+	
+.rad-axis
+	fill none
+	stroke grey
+	stroke-width 1
+	shape-rendering crispEdges
+	opacity 0.2
+	
+.regional-label
+	fill grey
+	
+.regional-axis
+	fill none
+	stroke grey
+	stroke-width 1
+	opacity 0.2
+	
+.regional-circle
+	fill $WHITE
+	opacity 1
+	
+.axis path,
+.axis line
+	fill none
+	stroke grey
+	stroke-width 1
+	shape-rendering crispEdges
+	
+.axis
+	font-size 9px 	
+	
+.tick line
+	opacity 0.2
+	
+.x.axis line
+	opacity 1
+	
+.axis-label
+	font-size 9px
+	font-weight 700
+	letter-spacing 2px
+	text-transform uppercase
+	text-rendering optimizeLegibility
+	
+.axis-label-minor
+	font-weight 400
+	
+.sub-label
+// 	font-size 9px
+// 	font-weight 700
+// 	letter-spacing 2px
+	fill grey
+	
+.area
+	fill $BLACK
+	opacity 1
+	
+.point
+	opacity 1
+	transition opacity 100ms ease
+	
+.sidebar .tooltip
+	position absolute
+	text-align left
+	line-height 1.5em
+	
+	padding 20px
+	font-size 11px
+	font-family sans-serif
+	
+	opacity 0
+	
+	color $BLACK
+	background $WHITE
+	border-radius 5px
+	pointer-events none
+	box-shadow rgba(0,0,0,0.075) 0px 0px 50px
+	transition left 100ms ease-in-out,
+			   top 100ms ease-in-out,
+			   opacity 100ms ease-in-out
+	
+.sidebar .tooltip h3
+	text-align left
+	font-size 11px
+	margin 0
+	text-transform uppercase
+	
+.sidebar .tooltip hr
+	text-align left
+	margin 0
+	margin-bottom 10px
+	margin-bottom 5px
+	width 5px
+	height 1px 
+	left 0
+	background-color $BLACK
+	
+.sidebar .tooltip h4
+	text-align left
+	margin 0
+	margin-top 5px
+	font-size 10px
+	letter-spacing 1px
+	text-transform uppercase
+	font-weight bold
+	
+.sidebar .tooltip p
+	text-align left
+	margin 0
+	font-size 11px
+	font-weight normal
+	
+.sidebar .series-hidden
+	opacity 0
+	
+.sidebar .series-other
+	opacity 0.15
+	
+.sidebar .series-soft
+	opacity 0.2
+	
+.sidebar .series-visible
+	opacity 1
+	
+.sidebar .transition-none
+	transition none
+	
+.select-none
+	user-select none
+	

@@ -29,6 +29,35 @@ $MIN_SIDEBAR_WIDTH = 450px
 	
 	transition width 400ms ease-in-out, min-width 400ms ease-in-out
 	
+.characterization
+	overflow-x hidden
+	
+.characterization-header
+	display flex
+	align-items center
+	flex-direction row
+	justify-content space-between
+	padding 15px
+	padding-left 25px
+	box-shadow rgba(0,0,0,0.15) 0px 0px 50px
+	
+.characterization-header h1
+	font-size 18px
+	
+button.md-button.circular-button
+	border-radius 100%
+	width 50px
+	height 50px
+	padding 0
+	margin 0
+	min-width 0
+	
+#fullscreen-icon
+	transition all 500ms ease-in-out
+	
+.rotate-ninety
+	transform rotate(180deg)
+	
 .viewer .fullscreen .sidebar
 	width 100vw
 	min-width 100vw
@@ -48,13 +77,13 @@ $MIN_SIDEBAR_WIDTH = 450px
 
 .viewer .sidebar h2
 	
-	border-top 1px solid $BLACK
+	border-top 1px solid $GRAY
 	width 100%
 	
 	line-height 1.5em
 	
-	color $BLACK
-	font-size 12px
+	color $BLACK2
+	font-size 11px
 	text-transform uppercase
 	font-weight 700
 	letter-spacing 2px
@@ -62,10 +91,23 @@ $MIN_SIDEBAR_WIDTH = 450px
 	padding-top 5px
 	
 	margin-top 50px
-	margin-bottom 25px
+	margin-bottom 15px
 	
 .viewer .sidebar h2:first-of-type
 	margin-top 40px
+	
+.viewer .sidebar #classification-header
+	margin-top 10px
+	
+.viewer .sidebar h4
+	width 100%
+	
+	line-height 1.5em
+	
+	color $BLACK
+	text-align center
+	font-size 16px
+	font-weight 400
 	
 .viewer .sidebar h3
 	width 100%
@@ -73,10 +115,8 @@ $MIN_SIDEBAR_WIDTH = 450px
 	line-height 1.5em
 	
 	color $BLACK
-	font-size 12px
-	text-transform uppercase
-	font-weight 700
-	letter-spacing 2px
+	font-size 16px
+	font-weight 400
 	
 .viewer .sidebar .characterization
 	overflow-y scroll
@@ -102,9 +142,43 @@ $MIN_SIDEBAR_WIDTH = 450px
 	
 .viewer .sidebar .fullscreen
 	position absolute
-	
 	top 25px
 	right 50px
+	
+.viewer .sidebar .chart-view-container
+	max-width 40vw
+	display flex
+	flex-grow 1
+	align-items flex-start
+	flex-direction row
+	
+.viewer .sidebar .data-view-fullscreen
+	flex-direction column
+	
+.add-padding
+	padding-right 4vw
+	
+.viewer .sidebar .chart-view-container:first-of-type
+	max-width 100%
+	width 100%
+	
+.viewer .sidebar .data-view-container:first-of-type
+	max-width 100%
+	width 100%
+	
+.chart-container
+	width 100%
+	display flex
+	flex-direction column
+	
+.row-align
+	flex-direction row
+	align-self center
+	
+.header-rule
+	width 100%
+
+	
 	
 
 

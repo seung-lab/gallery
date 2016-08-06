@@ -50,11 +50,22 @@
       </md-tooltip>
     </md-button>
 
-     <div id="right-sidebar" class="sidebar">
-        <div title="Fullscreen (f)" ng-click="fullscreenToggle($event)" class="fullscreen">{{ sidebarFullscreen ? "To Viewer" : "Fullscreen" }}</div>
-        <div class="characterization" ng-include="'templates/characterization.html'"></div>
-        <chartlegend cells="cells" />
-    </div>    
+    <div id="right-sidebar" class="sidebar">
+      <div class="characterization-header">
+        <h1>Characterization</h1>
+
+        <md-button ng-click="fullscreenToggle($event)" class="circular-button">
+          <md-icon id="fullscreen-icon" md-svg-icon="icons/fullscreen.svg" ></md-icon>
+          <md-tooltip md-direction="left" md-visible="tooltipVisible" md-autohide="true">
+            {{ sidebarFullscreen ? "To Viewer" : "Fullscreen" }}
+          </md-tooltip>
+        </md-button>
+
+      </div>
+      <div class="characterization" ng-include="'templates/characterization.html'"></div>
+      <chartlegend cells="cells" />
+    </div>
+
   </section>
 
   <viewport layout="row" flex="grow"></viewport>

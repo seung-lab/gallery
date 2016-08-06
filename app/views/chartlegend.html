@@ -1,5 +1,19 @@
 <div>
-	<div ng-click="invert($event)" class="inverter"></div>
+    <md-button ng-click="invert($event)" class="md-icon-button md-primary inverter" aria-label="Invert">
+      <md-icon md-svg-icon="/icons/invert-selection.svg"></md-icon>
+      <md-tooltip md-direction="left" md-visible="tooltipVisible" md-autohide="true">
+	      	Invert
+	    </md-tooltip>
+    </md-button>
+
+    <md-button ng-click="restore($event)" class="md-icon-button md-primary restorer" aria-label="Invert">
+      <md-icon md-svg-icon="/icons/restore.svg"></md-icon>
+      <md-tooltip md-direction="right" md-visible="tooltipVisible" md-autohide="true">
+	      	Restore
+	    </md-tooltip>
+    </md-button>
+
+
 	<div ng-click="restore($event)" class="restorer"></div>
 	<div class="labels">
 		<div 

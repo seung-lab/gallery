@@ -84,6 +84,7 @@ gulp.task('scripts', function () {
             "app/bower_components/lodash/dist/lodash.js",
             "app/bower_components/angular-resource/angular-resource.js",
             "app/bower_components/angular-cookies/angular-cookies.js",
+            "app/bower_components/javascript-detect-element-resize/detect-element-resize.js",
             // "app/bower_components/angular-mocks/angular-mocks.js",
             // "app/bower_components/angular-scenario/angular-scenario.js",
             "app/bower_components/angular-ui-router/release/angular-ui-router.js",
