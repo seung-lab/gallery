@@ -71,7 +71,7 @@ app.factory('camera', function (scene) {
         _this.controls.update();
       }
 
-      if (_needsrender) {
+      if (_needsrender && _this.renderer) {
         _this.renderer.render(scene, _this.camera);  
         _needsrender = false;
       }
