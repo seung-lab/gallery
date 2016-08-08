@@ -47,10 +47,7 @@ app.directive('stratification', function ($timeout) {
       }
 
       let dict = {};
-      let any = false;
-
       scope.cells.forEach(function (cell) {
-        any = any || cell.highlight;
         dict[cell.id + ""] = cell;
       });
 
@@ -60,18 +57,8 @@ app.directive('stratification', function ($timeout) {
         let cell = dict[datum.label];
         let color = cell.color;
 
-        datum.hidden = false;
-
         if (scope.cells.length === 1) {
           color = '#1A1A1A';
-        }
-
-        if (!cell.highlight && cell.hidden) {
-          datum.hidden = true;
-          // color = "rgba(0,0,0,0)";
-        }
-        else if (!cell.highlight && any) { // If <any> = true, then we are highlighting
-          datum.hidden = true;
         }
 
         datum.color = color;
@@ -85,7 +72,10 @@ app.directive('stratification', function ($timeout) {
     function makeDataset (scope) {
       let cells = scope.cells;
       
-      cells = cells.filter( (cell) => cell.stratification && !cell.hidden );
+      cells = cells.filter( (cell) => cell.stratification );
+
+      let any_highlighted = false;
+      cells.forEach( (cell) => any_highlighted = any_highlighted || cell.highlight );
 
       return cells.map(function (cell) {
 
@@ -130,10 +120,18 @@ app.directive('stratification', function ($timeout) {
           color = '#1A1A1A';
         }
 
+        let hidden = false;
+        if (!cell.highlight && cell.hidden) {
+          hidden = true;
+        }
+        else if (!cell.highlight && any_highlighted) { // If <any_highlighted> = true, then we are highlighting
+          hidden = true;
+        }
+
         return {
           annotation: cell.annotation,
           highlight: cell.highlight,
-          hidden: cell.hidden,
+          hidden: hidden,
           color: color,
           label: cell.id,
           data: data,
