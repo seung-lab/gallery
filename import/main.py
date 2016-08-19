@@ -23,6 +23,9 @@ def read_json_into_cells(fname, celltype):
   cells = slurp_json(fname)[0]
 
   for cell in cells:
+    if type(cell['cells']) == int:
+      cell['cells'] = [ cell['cells'] ]
+
     for cell_id in cell['cells']:
       allcells[cell_id] = {
           "id": cell_id,
