@@ -138,7 +138,7 @@ struct('name','82wi','annotation','','cells',[20251 30001 26067]); % 30001
 struct('name','82n','annotation','','cells',[26076 26080 20161 26058 26072 20080]); % 20161
 % 
 % irregular bilayer 
-struct('name','83','annotation','','cells',[17009 20197]); % 17009
+struct('name','915','annotation','','cells',[17009 20197]); % 17009
 
 % diffuse bilayer more at off layer
 struct('name','28','annotation','','cells',[20243 20155 20163 20257 26005 20167 26033]); % 20155
