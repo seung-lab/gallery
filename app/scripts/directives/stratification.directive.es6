@@ -484,7 +484,7 @@ app.directive('stratification', function ($timeout) {
           .attr("class", "axis-label")
           .attr("text-anchor", "middle")
           .attr("transform", "translate(" + (width/2) + ", 50)")
-          .text("Skeletonized Arbor Density");
+          .text("Skeleton Density");
 
       // Axis label | Y
       yLabel = svg.select(".y.axis")

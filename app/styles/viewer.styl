@@ -229,7 +229,7 @@ $width_trigger = unit($MIN_SIDEBAR_WIDTH / .33, 'px')
 .viewer .bottom-left
 	position absolute
 	bottom 20px
-	left 20px
+	left 25px
 	
 	font-size 12px
 	text-transform uppercase
@@ -238,7 +238,14 @@ $width_trigger = unit($MIN_SIDEBAR_WIDTH / .33, 'px')
 	color $WHITE
 	
 	line-height 2em
-		
+
+.viewer .bottom-left a
+	color $WHITE
+	
+.viewer .bottom-left a:hover
+	padding-bottom 5px
+	border-bottom 1px solid $WHITE
+
 .viewer .progress-indicator
 	opacity 0
 	transition opacity 150ms ease

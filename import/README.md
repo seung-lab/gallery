@@ -34,3 +34,11 @@ The Museum currently supports four kinds of data:
 		- Extracted from https://github.com/seung-lab/e2198_Ca_imaging/blob/master/code/cell_mapping_verified.m
 		- newest map of coeffs row ids to omni ids (roi has an older one)
 
+5. Temporal Response Data
+	- `temporal_response.mat` (Matlab/Octave matrix) 
+	- In field mat.temporal_response, cells are numbered as omni_cell_id => array of temporal response data (floats)
+
+6. Final Ca2+ Export (Tuning Curves)
+	- `ca_export_museum.mat` (Matlab/Octave matrix)
+	- Final response size for 8 directions and mean temporal response for museum 
+	- Thrid row in tuning_ordered_unified_coord_base0 is the on-off combined responses, orded as 0, 45... in the final coordinates.

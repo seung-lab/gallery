@@ -36,6 +36,9 @@ def read_json_into_cells(fname, celltype):
 
   return cells
 
+def process_temporal_data():
+  pass
+
 def process_calcium_data():
   angles = slurp_json('data/angles.json')
   cell_mapping = slurp_json('data/verified_cell_mapping.json')
