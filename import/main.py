@@ -36,35 +36,32 @@ def read_json_into_cells(fname, celltype):
 
   return cells
 
-def process_temporal_data():
-  pass
-
 def process_calcium_data():
-  angles = slurp_json('data/angles.json')
+  # According to Shang Mu, ignore the angles variable in the export file,
+  # he manually determined the output order of the third line responses.
+
+  angles = [0, 45, 90, 135, 180, 225, 270, 315] 
   cell_mapping = slurp_json('data/verified_cell_mapping.json')
-  activations = slurp_json('data/calcium_activations.json')
 
-  for calcium_id, omni_id in cell_mapping:
-    calcium_id = calcium_id - 1 # matlab to python mapping
+  mat = scipy.io.loadmat('rawdata/ca_export_museum.mat')#['tuning_ordered_unified_coord_base0'][0]
+
+  responses = mat['tuning_ordered_unified_coord_base0']
+  responses = responses[2,:,:] # summary direction tuning is on third row
+
+  numcells = responses.shape[1]
+
+  for roi_id, omni_id in cell_mapping:
+    roi_id = roi_id - 1 # matlab to python mapping
     
-    on = [ activations[calcium_id][i] for i in range(0, len(activations[calcium_id]), 2) ]
-    off = [ activations[calcium_id][i] for i in range(1, len(activations[calcium_id]), 2) ]
+    response = responses[:, roi_id]
+   
+    responsemap = {}
+    for angle, activation in zip(angles, response):
+      responsemap[angle] = activation
 
-    onmap = {}
-    for angle, activation in zip(angles, on):
-      onmap[angle] = activation
-
-    offmap = {}
-    for angle, activation in zip(angles, off):
-      offmap[angle] = activation
-
-    allcells[omni_id]['calcium'] = {
-      "id": calcium_id,
-      "activations": {
-        # On and off are interleaved
-        "on": onmap,
-        "off": offmap,
-      }
+    allcells[omni_id]['directional_response'] = {
+      "id": roi_id,
+      "activations": responsemap,
     }
 
 def read_stratification():
@@ -75,7 +72,7 @@ def read_stratification():
     if the key doesn't exists and empty list
     is returned
   """
-  strat = defaultdict(list)
+  data = defaultdict(list)
   mat = scipy.io.loadmat('rawdata/skel_strat.mat')['skel_strat'][0]
 
   nanproblems = []
@@ -90,16 +87,50 @@ def read_stratification():
     # Matab is 1-index while python is 0-index, so obvious now!
 
     if row.shape != (1,0):
-      strat[cell_id] = [ [x,y] for x,y in row ] # convert to list, which is JSON serializable
+      data[cell_id] = [ [x,y] for x,y in row ] # convert to list, which is JSON serializable
 
-      if len(strat[cell_id]) > 0 and any([ math.isnan(x) or math.isnan(y) for x, y in strat[cell_id] ]):
+      if len(data[cell_id]) > 0 and any([ math.isnan(x) or math.isnan(y) for x, y in data[cell_id] ]):
         nanproblems.append(cell_id)
-        strat[cell_id] = None
+        data[cell_id] = None
 
-  print ", ".join([ str(cid) for cid in nanproblems ]), "had NaN values present in their stratification.\n"
+  if len(nanproblems):
+    print ", ".join([ str(cid) for cid in nanproblems ]), "had NaN values present in its stratification.\n"
 
-  return strat
+  return data
 
+def read_temporal_response():
+  """
+    Reads .strat.mat and parses into 
+    a default dict where keys are the
+    cells ids and the values are a list,
+    if the key doesn't exists and empty list
+    is returned
+  """
+  data = defaultdict(list)
+  mat = scipy.io.loadmat('rawdata/temporal_response.mat')['temporal_response'][0]
+
+  nanproblems = []
+
+  # You might be wondering why ['strat'] or ['skel_strat'] ?
+  # I have no f* clue, but seems like many mat files
+  # have its filenames as a dictionary key 
+  # and the value of that dictionary is the actual data being stored
+
+  for i, row in enumerate(mat):
+    cell_id = i + 1 # It took me way too long to find this!
+    # Matab is 1-index while python is 0-index, so obvious now!
+
+    if row.shape != (1,0):
+      data[cell_id] = [ t[0] for t in row ] # convert to list, which is JSON serializable
+
+      if len(data[cell_id]) > 0 and any([ math.isnan(t) for t in data[cell_id] ]):
+        nanproblems.append(cell_id)
+        data[cell_id] = None
+
+  if len(nanproblems):
+    print ", ".join([ str(cid) for cid in nanproblems ]), "had NaN values present in its temporal response.\n"
+
+  return data
 
 def write_json (object_to_dump , fname):
   
@@ -119,12 +150,15 @@ def save_cells_json():
 
   cells_ready_for_json = []
   strat = read_stratification()
+  temporal_response = read_temporal_response()
+
   # Write all the parseds cell ids
   # Do chaining of all the list of ids like [20126, 20228]
 
   problems = {
+    "temporal_response": [],
     "stratification": [],
-    "calcium": [],
+    "directional_response": [],
     "metadata": [],
   }
 
@@ -138,13 +172,16 @@ def save_cells_json():
 
     hasproblem('metadata', 'name')
 
-    if (not cell.has_key('calcium') or cell['calcium'] is None) and (cell['type'] == 'ganglion' or cell['type'] == 'amacrine'):
-        problems['calcium'].append(cell_id)
+    if (not cell.has_key('directional_response') or cell['directional_response'] is None) and (cell['type'] == 'ganglion' or cell['type'] == 'amacrine'):
+        problems['directional_response'].append(cell_id)
     
     if maybe(strat, cell_id) is None:
-      problems['stratification'].append(cell_id)      
+      problems['stratification'].append(cell_id)    
 
-    cell = {  
+    if maybe(temporal_response, cell_id) is None:
+      problems['temporal_response'].append(cell_id)     
+
+    cell = { 
       "id": cell_id,
       "name": maybe(cell, 'name'),
       "type": maybe(cell, 'type'),
@@ -152,13 +189,14 @@ def save_cells_json():
       "mesh_id": cell_id,
       "annotation": maybe(cell, 'annotation'),
       "stratification": maybe(strat, cell_id),
-      "calcium": maybe(cell, 'calcium'),
+      "temporal_response": maybe(temporal_response, cell_id),
+      "directional_response": maybe(cell, 'directional_response'),
     }
 
     cells_ready_for_json.append(cell)
 
   problems['metadata'].sort()
-  problems['calcium'].sort()
+  problems['directional_response'].sort()
   problems['stratification'].sort()
 
   print "Total Cells: ", len(allcells), "\n"
@@ -166,8 +204,8 @@ def save_cells_json():
   if len(problems['metadata']):
     print "Did not have cell metadata (", len(problems['metadata']), "): ", ", ".join([ str(cid) for cid in problems["metadata"] ]), "\n"
   
-  if len(problems['calcium']):
-    print "Did not have calcium information (", len(problems['calcium']), "): ", ", ".join([ str(cid) for cid in problems["calcium"] ]), "\n"
+  if len(problems['directional_response']):
+    print "Did not have directional_response information (", len(problems['directional_response']), "): ", ", ".join([ str(cid) for cid in problems["directional_response"] ]), "\n"
   
   if len(problems['stratification']):
     print "Did not have stratification data (", len(problems['stratification']), "): ", ", ".join([ str(cid) for cid in problems["stratification"] ]), "\n"
@@ -226,7 +264,6 @@ def generate_json():
   print subprocess.check_output(cmd, shell=True)
 
 def main():
-  
   generate_json()
 
   read_json_into_cells('data/ganglion_cells.json', 'ganglion')
