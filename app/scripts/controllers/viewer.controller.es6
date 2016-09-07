@@ -8,7 +8,9 @@ app.controller('ViewerCtrl', [
   let self = this;
   self.states = [];
 
-  let neuronparam = $state.params.neurons || "";
+  let default_set = "26137,20179,20210,20245,20254,20002,26036,26047,26056,26101"; // Type 37c
+
+  let neuronparam = $state.params.neurons || default_set;
 
   $scope.neurons = neuronparam.split(/ ?, ?/).filter( (x) => x ).map(function (cid) {
     return parseInt(cid, 10);

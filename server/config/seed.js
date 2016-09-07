@@ -12,8 +12,6 @@ var cells =require('../api/cells/cells.model');
 var cells_import = require('./cells.json')
 var sets_import = require('./sets.json')
 
-
-
 sets.find({}).remove(function() {
   sets.create(sets_import ,
   function() {

@@ -5,7 +5,7 @@ app.directive('calcium', [ function () {
   var chartLinker = function (scope, element, attrs) {
     
     // Make dataset
-    scope.angles = [ 360, 45, 90, 135, 180, 225, 270, 315, 360 ]; // Hack for line to connect to self
+    scope.angles = [ 0, 45, 90, 135, 180, 225, 270, 315, 0 ]; // Hack for line to connect to self
     scope.dataset = makeDataset(scope);
 
     // Set up chart
