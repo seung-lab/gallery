@@ -19,7 +19,8 @@
     "lodash": "^4.11.2",
     "angular-material": "^1.1.0-rc4",
     "d3": "^3.5.17",
-    "javascript-detect-element-resize": "^0.5.3"
+    "javascript-detect-element-resize": "^0.5.3",
+    "angular-sanitize": "^1.5.8"
   },
   "devDependencies": {}
 }

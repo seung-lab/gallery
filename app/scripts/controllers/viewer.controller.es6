@@ -51,12 +51,32 @@ app.controller('ViewerCtrl', [
     $scope.loading.value = 100;
   });
 
-  $scope.cellnames = [];
-  $scope.celltypes = [];
+  $scope.cell_classes = [];
+  $scope.cell_types = [];
 
   $scope.$watch( () => $scope.cells.length, function () {
-    $scope.cellnames = _.uniq($scope.cells.map( (cell) => cell.name ));
-    $scope.celltypes = _.uniq($scope.cells.map( (cell) => cell.type ));    
+    $scope.cell_classes = _.uniq($scope.cells.map( (cell) => cell.type )); // gc, bipolar, etc
+    $scope.cell_types = _.uniqBy($scope.cells.map( (cell) => {
+      let classical_type = cell.classical_type;
+
+      if (!classical_type) {
+        return {
+          type: cell.name,
+          classical: null,
+          securely_known: null,
+        };
+      }
+
+      let classical_type_name = classical_type.correspondance
+        .replace(/-alpha$/, 'α')
+        .replace(/\^(\w+)\b/, '<sup>$1</sup>');
+
+      return {
+        type: cell.name,
+        classical: `(${classical_type_name})`,
+        securely_known: classical_type.securely_known,
+      };
+    }), 'type'); // paper types
   });
 
   // Quick Search
