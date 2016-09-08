@@ -173,7 +173,8 @@ app.directive('calcium', [ function () {
     }
     
     function polarY(rad, theta) {
-      return radius + rad * Math.sin(toRadians(theta)); // Y + transtion to center
+      // -rad to flip chart to upright orientation
+      return radius + -rad * Math.sin(toRadians(theta)); // Y + transtion to center
     }
 
     // Define line 'polar' generatdebugger; or
