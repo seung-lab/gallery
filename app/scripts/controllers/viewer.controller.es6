@@ -8,7 +8,7 @@ app.controller('ViewerCtrl', [
   let self = this;
   self.states = [];
 
-  let default_set = "26137,20179,20210,20245,20254,20002,26036,26047,26056,26101"; // Type 37c
+  let default_set = "26065,20117,26051,17212"; // Type 27
 
   let neuronparam = $state.params.neurons || default_set;
 
