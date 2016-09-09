@@ -2,8 +2,8 @@
 
 // include axes for debugging
 app.controller('ViewerCtrl', [
-  '$scope', '$timeout', '$state', '$document', '$window', 'meshService', 'camera', 'cellService', 'scene',
-  function ($scope, $timeout, $state, $document, $window, meshService, camera, cellService, scene) {
+  '$scope', '$timeout', '$state', '$location', '$document', '$window', 'meshService', 'camera', 'cellService', 'scene',
+  function ($scope, $timeout, $state, $location, $document, $window, meshService, camera, cellService, scene) {
   
   let self = this;
   self.states = [];
@@ -11,6 +11,8 @@ app.controller('ViewerCtrl', [
   let default_set = "26065,20117,26051,17212"; // Type 27
 
   let neuronparam = $state.params.neurons || default_set;
+
+  $location.search('neurons', neuronparam);
 
   $scope.neurons = neuronparam.split(/ ?, ?/).filter( (x) => x ).map(function (cid) {
     return parseInt(cid, 10);
@@ -32,17 +34,19 @@ app.controller('ViewerCtrl', [
       $scope.loading.value = Math.round(fraction * 100);  
     }, 0);
     
-    if (cell && !cell.mesh) { 
+    if (cell) {
       $scope.cells.push(cell);
+      $scope.cells = _.uniq($scope.cells);
     }
-    else if (cell && cell.mesh && $scope.cells.indexOf(cell) !== -1) { 
-      // indexOf prevents cells from a previous search that just completed rendering from appearing
-      scene.add(cell.mesh);
-    }
-
-    camera.render();
   })
   .finally(function () { 
+
+    $scope.cells = $scope.cells.filter(function (cell) {
+      return $scope.neurons.indexOf(parseInt(cell.id, 10)) !== -1;
+    });
+
+    $scope.cells.forEach( (cell) => scene.add(cell.mesh) );
+
     var bbox = meshService.getVisibleBBox($scope.cells);
     camera.lookBBoxFromSide(bbox);
     camera.render();
@@ -201,16 +205,40 @@ app.controller('ViewerCtrl', [
     })
   }
 
-    
-  // Sidebar
+  // Main Menu Sidebar
 
-  $scope.sidebar_open = $state.params.fullscreen || false;;
+  $scope.main_menu_open = $state.params.browse === '1';
+
+  $scope.toggleMainMenu = function (evt) {
+    // Solves bug where once button is clicked it gains focus
+    // and space bar generates a click and a keydown event that 
+    // cancel each other.
+    if (evt) {
+      evt.target.blur();
+    }
+
+    $scope.main_menu_open = !$scope.main_menu_open;
+    
+    if ($scope.main_menu_open) {
+      $scope.charts_open = false;
+      // scroll to top of menu
+    }
+  };
+
+  // Charts Sidebar
+
+  $scope.charts_open = $state.params.charts === '1';
 
   angular.element(window).off('keydown.sidebarToggle').on('keydown.sidebarToggle', function (evt) {
     if (evt.keyCode === 32) {
       $scope.$apply(function () {
-        $scope.toggle();  
+        $scope.toggleCharts();  
       });
+    }
+    else if (evt.keyCode === 77) { // m
+     $scope.$apply(function () {
+        $scope.toggleMainMenu();  
+      }); 
     }
     else if (evt.keyCode === 70) { // f
       $scope.$apply(function () {
@@ -219,7 +247,7 @@ app.controller('ViewerCtrl', [
     }
   });
 
-  $scope.toggle = function (evt) {
+  $scope.toggleCharts = function (evt) {
 
     // Solves bug where once button is clicked it gains focus
     // and space bar generates a click and a keydown event that 
@@ -228,12 +256,29 @@ app.controller('ViewerCtrl', [
       evt.target.blur();
     }
 
-    $scope.sidebar_open = !$scope.sidebar_open;
+    $scope.charts_open = !$scope.charts_open;
 
-    if ($scope.sidebar_open) {
-      angular.element('.characterization').scrollTo('#stratification', { msec: 0, offset: 0 });
+    if ($scope.charts_open) {
+      $scope.main_menu_open = false;
+      angular.element('.characterization').scrollTo('#stratification', { msec: 0, offset: -25 });
     }
   };
+
+  $scope.$watch('main_menu_open', function () {
+    $location.search('browse', $scope.browse ? '1' : null);
+
+    if ($scope.browse) {
+      $location.search('charts', null);
+    }
+  });
+
+  $scope.$watch('charts_open', function () {
+    $location.search('charts', $scope.charts_open ? '1' : null);
+
+    if ($scope.charts_open) {
+      $location.search('browse', null);
+    }
+  });
 
   // Cameras
 

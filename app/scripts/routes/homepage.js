@@ -2,7 +2,7 @@
 
 app.config(function ($stateProvider) {
     $stateProvider
-      .state('main', {
+      .state('about', {
         url: '/about',
         templateUrl: 'templates/homepage.html',
         controller: 'HomepageCtrl',

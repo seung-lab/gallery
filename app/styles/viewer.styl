@@ -1,10 +1,11 @@
 @require 'colors.styl'
 @require 'characterization.styl'
+@require 'mainmenu.styl'
 
-header.viewer
+.viewer .searchTools
 	position absolute
-	top 0px
-	left 0px
+	top 15px
+	right 0px
 
 	z-index 10
 	border-bottom none
@@ -14,7 +15,7 @@ header.viewer
 	
 	width auto
 
-header.viewer #logo
+.viewer .searchTools #logo
 	background-color $WHITE
 	margin-top 0px
 	margin-left 10px
@@ -29,8 +30,10 @@ header.viewer #logo
 	background-repeat no-repeat
 	
 	cursor pointer
+	
+	outline none
 
-header.viewer a .title
+.viewer .searchTools a .title
 	color $WHITE
 
 main.viewer
@@ -58,7 +61,7 @@ main.viewer
 	height 35px
 	width 50px
 	position absolute
-	top 21px
+	top 7px
 	right 55px
 	vertical-align center
 	display flex
@@ -112,38 +115,55 @@ main.viewer
 .viewer md-autocomplete input,
 .viewer md-autocomplete input:not(.md-input)
 	height 50px
-	
+
 .viewer section.glider
 	height 100vh
-	width calc(95px + 33vw)
+	width 33vw
 	
 	position absolute
-	right -33vw
+	top 0px
 	
 	pointer-events none
 	
-	transition right 400ms ease-in-out, width 400ms ease-in-out
+	transition left 400ms ease-in-out, right 400ms ease-in-out, width 400ms ease-in-out
 
-.viewer section.glider.fullscreen
+.viewer section.glider.right
+	right -33vw
+	width calc(95px + 33vw)
+
+.viewer section.glider.right.fullscreen
 	width calc(95px + 100vw)
 	
+.viewer section.glider.left
+	left -33vw
+	width calc(450px + 33vw)
+	
+.viewer section.glider.left.fullscreen
+	width calc(450px + 100vw)
 
 $width_trigger = unit($MIN_SIDEBAR_WIDTH / .33, 'px')
 @media all and (max-width: $width_trigger)
-	.viewer section.glider
+	.viewer section.glider.right
 		width $MIN_SIDEBAR_WIDTH + 95px
 		right -1 * $MIN_SIDEBAR_WIDTH
 		
-	.viewer section.glider.fullscreen
+	.viewer section.glider.right.fullscreen
 		width calc(95px + 100vw)
 		right -100vw
 
-.viewer section.glider.fullscreen
+.viewer section.glider.right.fullscreen
 	right -100vw
 
-.viewer section.glider.fullscreen.onscreen,
-.viewer section.glider.onscreen
+.viewer section.glider.right.fullscreen.onscreen,
+.viewer section.glider.right.onscreen
 	right 0px
+
+.viewer section.glider.left.fullscreen
+	left 0vw
+
+.viewer section.glider.left.fullscreen.onscreen,
+.viewer section.glider.left.onscreen
+	left 0px
 	
 .viewer section.glider *
 	pointer-events auto
