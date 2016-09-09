@@ -401,6 +401,19 @@ app.directive('temporal', function ($timeout) {
         
       yLabel.attr("transform", "translate(" + (-width - 20) + ", " + yScale(y_axis_range.mid) + ") rotate(-90)");
 
+      // Update vertical bars
+      xLabel_Time.select('#eigth-bar')
+        .attr("x1", xScale(8))
+        .attr("x2", xScale(8))
+        .attr("y1", 0)
+        .attr("y2", -height);
+
+      xLabel_Time.select('#sixteenth-bar')
+        .attr("x1", xScale(16))
+        .attr("x2", xScale(16))
+        .attr("y1", 0)
+        .attr("y2", -height);
+
       // Update X axis
       svg.select(".x.axis")
         .call(xAxis);
@@ -440,19 +453,21 @@ app.directive('temporal', function ($timeout) {
       xLabel_Time = svg.select('.x');
       
       xLabel_Time.append('line')
-            .attr("x1", xScale(5))
-            .attr("x2", xScale(5))
+            .attr("x1", xScale(8))
+            .attr("x2", xScale(8))
             .attr("y1", yScale(y_axis_range.start))
             .attr("y2", yScale(y_axis_range.end))
-            .attr('class', 'top-bar')
+            .attr('id', 'eigth-bar')
+            .attr('class', 'gray-bar')
             .style("stroke-dasharray", ("3, 10"));
       
       xLabel_Time.append('line')
-            .attr("x1", xScale(10))
-            .attr("x2", xScale(10))
+            .attr("x1", xScale(16))
+            .attr("x2", xScale(16))
             .attr("y1", yScale(y_axis_range.start))
             .attr("y2", yScale(y_axis_range.end))
-            .attr('class', 'top-bar')
+            .attr('id', 'sixteenth-bar')
+            .attr('class', 'gray-bar')
             .style("stroke-dasharray", ("3, 10"));
     }
 
