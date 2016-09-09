@@ -1,0 +1,22 @@
+@require 'colors.styl'
+@require 'characterization.styl'
+
+.viewer .main-menu
+	@extend .viewer .sidebar
+	
+	position absolute
+	left initial
+	right 450px
+	
+	min-width 100px
+	
+	box-shadow -2px 2px 5px 0 rgba(0, 0, 0, 0.26)
+	
+.viewer .main-menu > div
+	padding 15px
+	
+.viewer .main-menu .title
+	color $BLACK
+	font-size 12px
+	text-transform uppercase
+	letter-spacing 1px

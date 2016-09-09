@@ -1,4 +1,5 @@
 @require 'colors.styl'
+@require 'app.styl'
 
 $transitiontime = 175ms
 
@@ -7,20 +8,6 @@ body, html
 	font-family "Roboto", "Helvetica", Arial, sans-serif
 	font-size 16px
 	letter-spacing 0.25px
-
-a
-	color $BLACK
-	text-decoration none
-
-.open-data a,
-p a,
-ol li a
-	text-decoration none
-	color $BLACK
-	transition color $transitiontime ease
-	
-	padding-bottom 2px
-	border-bottom 1px solid $BLACK
 
 main
 	display flex
