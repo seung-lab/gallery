@@ -360,7 +360,7 @@ app.directive('temporal', function ($timeout) {
       yAxis = d3.svg.axis()
         .orient('right')
         .outerTickSize(-width)
-        .tickPadding([15])
+        .tickPadding([20])
         .ticks(5);
 
       // Set axis and line scale
@@ -383,7 +383,8 @@ app.directive('temporal', function ($timeout) {
         .call(yAxis)
         .selectAll('text')
           .attr("class", "axis-label axis-label-minor")
-          .style('text-anchor', 'end');
+          .style('text-anchor', 'start');
+
     }
 
     function updateAxes(scope) {
@@ -396,9 +397,8 @@ app.directive('temporal', function ($timeout) {
 
       xAxis.outerTickSize(-height);
 
-      // Axis label | X
+      // Axis label | X + Y
       xLabel.attr("transform", "translate(" + (width/2) + ", 50)");
-        
       yLabel.attr("transform", "translate(" + (-width - 20) + ", " + yScale(y_axis_range.mid) + ") rotate(-90)");
 
       // Update vertical bars
