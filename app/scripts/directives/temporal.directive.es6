@@ -92,7 +92,7 @@ app.directive('temporal', function ($timeout) {
 
         cell.temporal_response.forEach( (datum, index) => 
           data.push({ 
-            x: index, 
+            x: (index / 7.5), // Re-map temporal domain to 4s range
             y: datum, 
           })
         );
@@ -138,7 +138,7 @@ app.directive('temporal', function ($timeout) {
     return d3.select(this[0][0]);
   };
   d3.selection.prototype.last = function() {
-    var last = this.size() - 1;
+    let last = this.size() - 1;
     return d3.select(this[0][last]);
   };
 
@@ -350,6 +350,7 @@ app.directive('temporal', function ($timeout) {
     }
 
     function setAxes(scope) {
+
       // Define axes
       xAxis = d3.svg.axis()
         .orient('bottom')
@@ -404,15 +405,15 @@ app.directive('temporal', function ($timeout) {
       yLabel.attr("transform", "translate(" + (-width - 20) + ", " + yScale(y_axis_range.mid) + ") rotate(-90)");
 
       // Update vertical bars
-      xLabel_Time.select('#eigth-bar')
-        .attr("x1", xScale(8))
-        .attr("x2", xScale(8))
+      xLabel_Time.select('#first-bar')
+        .attr("x1", xScale(1))
+        .attr("x2", xScale(1))
         .attr("y1", 0)
         .attr("y2", -height);
 
-      xLabel_Time.select('#sixteenth-bar')
-        .attr("x1", xScale(16))
-        .attr("x2", xScale(16))
+      xLabel_Time.select('#second-bar')
+        .attr("x1", xScale(2))
+        .attr("x2", xScale(2))
         .attr("y1", 0)
         .attr("y2", -height);
 
@@ -459,7 +460,7 @@ app.directive('temporal', function ($timeout) {
             .attr("x2", xScale(8))
             .attr("y1", yScale(y_axis_range.start))
             .attr("y2", yScale(y_axis_range.end))
-            .attr('id', 'eigth-bar')
+            .attr('id', 'first-bar')
             .attr('class', 'gray-bar')
             .style("stroke-dasharray", ("3, 10"));
       
@@ -468,7 +469,7 @@ app.directive('temporal', function ($timeout) {
             .attr("x2", xScale(16))
             .attr("y1", yScale(y_axis_range.start))
             .attr("y2", yScale(y_axis_range.end))
-            .attr('id', 'sixteenth-bar')
+            .attr('id', 'second-bar')
             .attr('class', 'gray-bar')
             .style("stroke-dasharray", ("3, 10"));
     }
@@ -565,7 +566,7 @@ app.directive('temporal', function ($timeout) {
 
             cellId.text(nearest.label);
             f_value.text(nearest.y.toFixed(3));
-            time_value.text(nearest.x);
+            time_value.text(nearest.x.toFixed(3));
 
           })
         })
@@ -611,10 +612,10 @@ app.directive('temporal', function ($timeout) {
         yScale.domain([
           d3.min(dataset, function (ds) { // forEach element of dataSet
             return Math.min(...ds.data.map( d => d.y ));
-          }),
+          }) * 1.25, // Bottom padding for chart
           d3.max(dataset, function (ds) { // forEach element of dataSet
             return Math.max(...ds.data.map( d => d.y ));
-          }) * 1.25 // Top padding for chart
+          }) * 1.25  // Top padding for chart
         ]);
       }
 
