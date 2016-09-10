@@ -393,6 +393,8 @@ app.directive('temporal', function ($timeout) {
       xAxis.scale(xScale);
       yAxis.scale(yScale);
 
+      yAxis.outerTickSize(-width);
+
       svg.select('#x-axis').attr("transform", "translate(0," + height + ")");
 
       xAxis.outerTickSize(-height);
