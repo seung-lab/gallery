@@ -442,7 +442,7 @@ app.directive('temporal', function ($timeout) {
           .attr("class", "axis-label")
           .attr("text-anchor", "middle")
           .attr("transform", "translate(" + (width/2) + ", 50)")
-          .text("Time");
+          .text("Time (s)");
 
       // Axis label | Y
       yLabel = svg.select(".y.axis")
