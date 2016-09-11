@@ -318,7 +318,7 @@ app.directive('temporal', function ($timeout) {
           .attr("class", "f_value");
         tooltip
           .append("h4")
-          .text("Time");
+          .text("Time (s)");
         tooltip
           .append("p")
           .attr("class", "time_value");
