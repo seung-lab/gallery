@@ -429,10 +429,6 @@ app.directive('temporal', function ($timeout) {
 
       // Translate Y-Axis ticks to right of chart
       svg.select('.y.axis').attr("transform", "translate(" + width + ", 0)");
-
-      // Remove first and last ticks from X axis
-      // svg.select('.x.axis').selectAll('.tick').first().remove();
-      // svg.select('.x.axis').selectAll('.tick').last().remove();
     }
 
     function setAxesLables() {

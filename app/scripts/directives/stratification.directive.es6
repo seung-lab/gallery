@@ -714,8 +714,8 @@ app.directive('stratification', function ($timeout) {
               });
 
             cellId.text(nearest.label);
-            volume.text(nearest.y);
-            ipl.text(nearest.x);
+            ipl.text(nearest.x.toFixed(3));
+            volume.text(nearest.y.toFixed(5));
 
           })
         })
