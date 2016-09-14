@@ -41,6 +41,11 @@ $MIN_SIDEBAR_WIDTH = 450px
 	padding-left 25px
 	box-shadow rgba(0,0,0,0.15) 0px 0px 50px
 	
+	flex-shrink 0
+
+	box-sizing border-box
+	height 50px
+	
 .characterization-header h1
 	font-size 18px
 	
@@ -58,8 +63,11 @@ button.md-button.circular-button
 	margin 0
 	min-width 0
 	
-#fullscreen-icon
+.fullscreen-icon
 	transition all 500ms ease-in-out
+	
+.fullscreen-icon + .md-ripple-container
+	border-radius 100%
 	
 .rotate-ninety
 	transform rotate(180deg)
@@ -156,17 +164,17 @@ button.md-button.circular-button
 	flex-grow 1
 	align-items flex-start
 	flex-direction row
-	
-.viewer .sidebar .data-view-fullscreen
+
+.viewer .sidebar.fullscreen .chart-view-container
 	flex-direction column
-	
-.add-padding
-	padding-right 4vw
 	
 .viewer .sidebar .chart-view-container:first-of-type
 	max-width 100%
 	width 100%
-	
+
+.viewer .sidebar.fullscreen .data-view-container
+	padding-right 4vw
+
 .viewer .sidebar .data-view-container:first-of-type
 	max-width 100%
 	width 100%
@@ -176,7 +184,7 @@ button.md-button.circular-button
 	display flex
 	flex-direction column
 	
-.row-align
+.sidebar.fullscreen .chart-container
 	flex-direction row
 	align-self center
 	

@@ -1,0 +1,123 @@
+{
+  "1ni": null, 
+  "1no": null, 
+  "1ws": {
+    "correspondance": "M1", 
+    "securely_known": true
+  }, 
+  "1wt": {
+    "correspondance": "sOff-alpha", 
+    "securely_known": true
+  }, 
+  "25": null, 
+  "27": null, 
+  "28": null, 
+  "2an": {
+    "correspondance": "F-mini^Off", 
+    "securely_known": true
+  }, 
+  "2aw": {
+    "correspondance": "F-midi^Off,J", 
+    "securely_known": true
+  }, 
+  "2i": null, 
+  "2o": null, 
+  "37c": {
+    "correspondance": "On-Off DS", 
+    "securely_known": true
+  }, 
+  "37d": {
+    "correspondance": "On-Off DS", 
+    "securely_known": true
+  }, 
+  "37r": {
+    "correspondance": "On-Off DS", 
+    "securely_known": true
+  }, 
+  "37v": {
+    "correspondance": "On-Off DS", 
+    "securely_known": true
+  }, 
+  "3i": null, 
+  "3o": null, 
+  "4i": null, 
+  "4on": null, 
+  "4ow": {
+    "correspondance": "tOff-alpha", 
+    "securely_known": true
+  }, 
+  "51": {
+    "correspondance": "W3", 
+    "securely_known": true
+  }, 
+  "5si": null, 
+  "5so": null, 
+  "5ti": null, 
+  "5to": null, 
+  "63": {
+    "correspondance": "F-mini^On", 
+    "securely_known": false
+  }, 
+  "6sn": null, 
+  "6sw": {
+    "correspondance": "tOn-alpha", 
+    "securely_known": false
+  }, 
+  "6t": {
+    "correspondance": "F-midi^On", 
+    "securely_known": false
+  }, 
+  "72": null, 
+  "73": null, 
+  "7id": {
+    "correspondance": "sOn DS", 
+    "securely_known": true
+  }, 
+  "7ir": {
+    "correspondance": "sOn DS", 
+    "securely_known": true
+  }, 
+  "7iv": {
+    "correspondance": "sOn DS", 
+    "securely_known": true
+  }, 
+  "7o": {
+    "correspondance": "tOn DS", 
+    "securely_known": false
+  }, 
+  "81i": null, 
+  "81o": null, 
+  "82n": null, 
+  "82wi": null, 
+  "82wo": null, 
+  "85": null, 
+  "8n": null, 
+  "8w": {
+    "correspondance": "sOn-alpha", 
+    "securely_known": true
+  }, 
+  "91": null, 
+  "915": null, 
+  "9n": null, 
+  "9w": {
+    "correspondance": "M2", 
+    "securely_known": true
+  }, 
+  "OFF SAC": null, 
+  "ON SAC": null, 
+  "bc1": null, 
+  "bc2": null, 
+  "bc3a": null, 
+  "bc3b": null, 
+  "bc4": null, 
+  "bc5i": null, 
+  "bc5o": null, 
+  "bc5t": null, 
+  "bc6": null, 
+  "bc7": null, 
+  "bc8/9": null, 
+  "cutoffs": null, 
+  "rbc": null, 
+  "weirdos": null, 
+  "xbc": null
+}

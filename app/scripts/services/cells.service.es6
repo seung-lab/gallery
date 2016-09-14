@@ -25,6 +25,7 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 			method: 'GET', 
 			isArray: false, 
 			cache: true, 
+			cancellable: true,
 		},
 		update: { method: 'PUT', },
 		destroy: { method: 'DELETE' },

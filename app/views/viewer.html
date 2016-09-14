@@ -21,6 +21,10 @@
 
       <!-- <div class="advanced" ng-location="search">Browse</div> -->
     </div>
+    <div class="bottom-left">
+      <div ng-class="['progress-indicator', { onscreen: loading.show }]">Loading {{loading.value}}%</div>
+      <div><a href="http://wiki.eyewire.org/index.php?title=E2198">Mouse Retinal Neurons</a></div>
+    </div>
   </section>
 
   <section ng-class="{ right: true, glider: true, onscreen: charts_open, fullscreen: sidebarFullscreen }">
@@ -54,10 +58,13 @@
       </md-tooltip>
     </md-button>
 
-    <div id="right-sidebar" class="sidebar">
+    <div id="right-sidebar" ng-class="{ sidebar: true, fullscreen: sidebarFullscreen }">
       <div class="characterization-header">
         <md-button ng-click="fullscreenToggle($event)" class="circular-button">
-          <md-icon id="fullscreen-icon" md-svg-icon="icons/fullscreen.svg" ></md-icon>
+          <md-icon ng-class="{ 
+            'fullscreen-icon': true, 
+            'rotate-ninety': sidebarFullscreen 
+          }" md-svg-icon="icons/fullscreen.svg" ></md-icon>
           <md-tooltip md-direction="left" md-visible="tooltipVisible" md-autohide="true">
             {{ sidebarFullscreen ? "To Viewer (f)" : "Fullscreen (f)" }}
           </md-tooltip>
@@ -72,9 +79,5 @@
 
   <viewport layout="row" flex="grow"></viewport>
   
-  <div class="bottom-left">
-    <div ng-class="['progress-indicator', { onscreen: loading.show }]">Loading {{loading.value}}%</div>
-    <div><a href="http://wiki.eyewire.org/index.php?title=E2198">Mouse Retinal Neurons</a></div>
-  </div>
 </main>
 
