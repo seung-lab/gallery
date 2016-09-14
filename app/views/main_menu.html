@@ -1,13 +1,25 @@
+<div class="title">
+	Museum
 
-<div class="menu">
-	<div class="title">Museum</div>
+	<md-button ng-click="$parent.fullscreenToggle($event)" class="circular-button">
+	    <md-icon ng-class="{ 'fullscreen-icon': true }" md-svg-icon="icons/fullscreen.svg" ></md-icon>
+	    <md-tooltip md-direction="left" md-visible="tooltipVisible" md-autohide="true">
+	      {{ $parent.sidebarFullscreen ? "To Viewer (f)" : "Fullscreen (f)" }}
+	    </md-tooltip>
+	</md-button>
+</div>
+
+<div ng-class="[ 'menu', { onscreen: !$parent.browse } ]">
+	<div class="navigation">
+		Menu
+	</div>
 	<div class="blurb">
 		This cell museum is where we present our finished reconstructions in an accessible format. In our viewer, you'll be able to see these finished cells represented in 3D space along with data pertinent to interpreting their significance. The neurons currently displayed here are mouse retinal cells from a dataset known as <a href="http://wiki.eyewire.org/index.php?title=E2198">e2198</a>.
 	</div>
 	<div class="primary links">
 		<ul>
-			<li><a ng-click="charts_open = true">Open Charts</a></li>
-			<li><a ng-click="browse = true">Browse Gallery</a></li>
+			<li ng-click="$parent.charts_open = true"><a>Open Charts</a></li>
+			<li><a ng-click="$parent.browse = true">Browse Gallery</a></li>
 			<li>Types Nomenclature</li>
 		</ul>
 	</div>
@@ -27,6 +39,14 @@
 	</div>
 </div>
 
-<div class="gallery">
-	This is the gallery.
+<div ng-controller="BrowseCtrl" ng-class="[ 'browse', { onscreen: $parent.browse } ]">
+	<div class="navigation">
+		<a ng-click="$parent.$parent.browse = false">Menu</a> > Browse
+	</div>
+	<div class="gallery">
+		<div ng-click="chooseType(set.type)" class="item" ng-repeat="set in sets">
+			<div class="header">{{set.type}} <span ng-if="set.classical_type" ng-class="{ notsecurelyknown: !set.securely_known }" ng-bind-html="set.classical_type_html"></span></div>
+			<img ng-if="!!set.img_url" src="{{ set.img_url }}" />
+		</div>
+	</div>
 </div>

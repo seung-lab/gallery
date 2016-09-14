@@ -1,5 +1,6 @@
 @require 'colors.styl'
 @require 'characterization.styl'
+@require 'app.styl'
 
 .viewer .main-menu
 	@extend .viewer .sidebar
@@ -11,12 +12,63 @@
 	min-width 100px
 	
 	box-shadow -2px 2px 5px 0 rgba(0, 0, 0, 0.26)
+
+.viewer .main-menu div
+	overflow-y scroll
+
+.viewer .main-menu > div > div
+	padding 25px
+	border-bottom 1px solid $BLACK
 	
-.viewer .main-menu > div
-	padding 15px
+.viewer .main-menu div.title
+	@extend .header
 	
-.viewer .main-menu .title
-	color $BLACK
-	font-size 12px
-	text-transform uppercase
-	letter-spacing 1px
+	font-size 14px
+	
+	border-bottom none
+	box-shadow rgba(0,0,0,0.15) 0px 0px 50px
+	height 50px
+	box-sizing border-box
+	
+	display flex
+	align-items center
+	justify-content space-between
+	
+	flex-shrink 0
+	
+	padding-left 25px
+	padding-right 10px
+	
+.viewer .main-menu li
+	outline none
+	line-height 25px
+
+.viewer .menu,
+.viewer .browse
+	display none
+
+.viewer .menu.onscreen,	
+.viewer .browse.onscreen
+	display block
+	
+
+.viewer .gallery .item
+	padding-bottom 15px
+	padding-left 15px
+	border-bottom 1px solid $BLACK
+	
+	cursor pointer
+	outline none
+	
+.viewer .gallery .item:hover
+	background-color rgba(0,0,0,0.05)
+
+.viewer .gallery .item .notsecurelyknown
+	color gray
+
+.viewer .gallery .item .header
+	margin-top 15px
+	margin-bottom 15px
+	
+	text-transform none
+

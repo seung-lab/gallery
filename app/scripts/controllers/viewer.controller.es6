@@ -8,6 +8,53 @@ app.controller('ViewerCtrl', [
   let self = this;
   self.states = [];
 
+  $scope.cells = [];
+  $scope.loading = {
+    show: true,
+    value: 0,
+  };
+  $scope.neurons = [];
+
+  $scope.displayCells = function (cell_ids = []) {
+    $scope.loading = {
+      show: true,
+      value: 0,
+    };
+
+    clearScene();
+    $scope.cells = [];
+    $scope.sidebarFullscreen = false;
+
+    cellService.clear();
+
+    cellService.display(cell_ids, function (fraction, cell) {
+      $timeout(function () {
+        $scope.loading.value = Math.round(fraction * 100);  
+      }, 0);
+      
+      if (cell) {
+        $scope.cells.push(cell);
+        $scope.cells = _.uniq($scope.cells);
+      }
+    })
+    .finally(function () { 
+
+      $scope.cells = $scope.cells.filter(function (cell) {
+        return $scope.neurons.indexOf(parseInt(cell.id, 10)) !== -1;
+      });
+
+      $scope.cells.forEach( (cell) => scene.add(cell.mesh) );
+
+      var bbox = meshService.getVisibleBBox($scope.cells);
+      camera.lookBBoxFromSide(bbox);
+      camera.render();
+
+      $scope.loading.show = false;
+      $scope.loading.value = 100;
+    });
+  };
+
+
   let default_set = "26065,20117,26051,17212"; // Type 27
 
   let neuronparam = $state.params.neurons || default_set;
@@ -17,43 +64,8 @@ app.controller('ViewerCtrl', [
   $scope.neurons = neuronparam.split(/ ?, ?/).filter( (x) => x ).map(function (cid) {
     return parseInt(cid, 10);
   });
-
-  $scope.loading = {
-    show: true,
-    value: 0,
-  };
-
-  clearScene();
-  $scope.cells = [];
-  $scope.sidebarFullscreen = false;
-
-  cellService.clear();
-
-  cellService.display($scope.neurons, function (fraction, cell) {
-    $timeout(function () {
-      $scope.loading.value = Math.round(fraction * 100);  
-    }, 0);
     
-    if (cell) {
-      $scope.cells.push(cell);
-      $scope.cells = _.uniq($scope.cells);
-    }
-  })
-  .finally(function () { 
-
-    $scope.cells = $scope.cells.filter(function (cell) {
-      return $scope.neurons.indexOf(parseInt(cell.id, 10)) !== -1;
-    });
-
-    $scope.cells.forEach( (cell) => scene.add(cell.mesh) );
-
-    var bbox = meshService.getVisibleBBox($scope.cells);
-    camera.lookBBoxFromSide(bbox);
-    camera.render();
-
-    $scope.loading.show = false;
-    $scope.loading.value = 100;
-  });
+  $scope.displayCells($scope.neurons);
 
   $scope.cell_classes = [];
   $scope.cell_types = [];
@@ -86,11 +98,17 @@ app.controller('ViewerCtrl', [
   // Quick Search
 
   $scope.autocompleteLoaded = false;
+  self.cellids_by_type = {};
   cellService.list()
     .then(function (cellinfos) {
       $scope.autocompleteLoaded = true;
       self.states = loadAllAutocompletes(cellinfos);
+      self.cellids_by_type = createTypeList(cellinfos);
     });
+
+  $scope.cellIdsForType = function (type) {
+    return self.cellids_by_type[type];
+  };
 
     /**
    * Populates the autocomplete list shown
@@ -105,7 +123,7 @@ app.controller('ViewerCtrl', [
 
     let results = query
       ? self.states.filter(function (state) {
-          return state.value.toLowerCase().indexOf(query) > -1 || state.display.toLowerCase().indexOf(query) > -1;;
+          return state.value.toLowerCase().indexOf(query) > -1 || state.display.toLowerCase().indexOf(query) > -1;
         })
       : self.states;
 
@@ -121,16 +139,27 @@ app.controller('ViewerCtrl', [
     }, 0);
   };
 
+  $scope.goToCellIds = function (cellids = []) {
+    
+    cellids = JSON.parse(JSON.stringify(cellids)).map(Number);
+    cellids.sort();
+
+    clearScene();
+
+    $state.go('viewer', {
+      neurons: cellids.join(','),
+    });
+
+    $scope.neurons = cellids;
+    $scope.displayCells(cellids);
+  };
+
   $scope.goToResult = function (item) {
     if (!item || !item.value) {
       return;
     }
 
-    clearScene();
-
-    $state.go('viewer', {
-      neurons: item.value,
-    });
+    $scope.goToCellIds(item.value.split(','));
   };
 
   $scope.searchKeydown = function (evt) {
@@ -162,10 +191,21 @@ app.controller('ViewerCtrl', [
       neurons = _.uniq(neurons);
       
       if (neurons.length) {
-        $scope.goToResult({ value: neurons.join(',') });
+        $scope.goToCellIds(neurons);
       }
     }
   };
+
+  function createTypeList (cellinfos) {
+    let types = {};
+
+    cellinfos.forEach(function (cell) {
+      types[cell.name] = types[cell.name] || [];
+      types[cell.name].push(parseInt(cell.id, 10));
+    });
+
+    return types;
+  }
 
   /*
    * Build `states` list of key/value pairs
@@ -208,6 +248,7 @@ app.controller('ViewerCtrl', [
   // Main Menu Sidebar
 
   $scope.main_menu_open = $state.params.browse === '1';
+  $scope.browse = $state.params.browse === '1';
 
   $scope.toggleMainMenu = function (evt) {
     // Solves bug where once button is clicked it gains focus
@@ -265,19 +306,32 @@ app.controller('ViewerCtrl', [
   };
 
   $scope.$watch('main_menu_open', function () {
+    if (!$scope.main_menu_open && $scope.browse) {
+      $scope.browse = false;
+    }
+  });
+
+  $scope.$watch('browse', function () {
     $location.search('browse', $scope.browse ? '1' : null);
 
     if ($scope.browse) {
+      $scope.main_menu_open = true;
+      $scope.charts_open = false;
       $location.search('charts', null);
     }
+
+    $location.replace();
   });
 
   $scope.$watch('charts_open', function () {
     $location.search('charts', $scope.charts_open ? '1' : null);
 
     if ($scope.charts_open) {
+      $scope.main_menu_open = false;
       $location.search('browse', null);
     }
+
+    $location.replace();
   });
 
   // Cameras
@@ -335,20 +389,6 @@ app.controller('ViewerCtrl', [
     }
 
     if (!$scope.sidebarFullscreen) { // If Fullscreen
-      angular.element('#fullscreen-icon')
-             .addClass('rotate-ninety');
-
-      angular.element('.chart-view-container')
-             .addClass('data-view-fullscreen');             
-
-      angular.element('.data-view-container')
-             .addClass('add-padding')
-
-      angular.element('.chart-container')
-             .addClass('row-align');
-
-      angular.element('.radar-chart')
-             .addClass('radar-chart-fullscreen');
 
       // Set height of Stratification wrt Calcium data, wait to set height until Calcium
       // has finished transitioning
@@ -369,23 +409,8 @@ app.controller('ViewerCtrl', [
              .css('max-width', 45 + limiting_factor);
     }
     else {
-      angular.element('#fullscreen-icon')
-             .removeClass('rotate-ninety');
-
-      angular.element('.chart-view-container')
-             .removeClass('data-view-fullscreen'); 
-
-      angular.element('.data-view-container')
-             .removeClass('add-padding')
-
       angular.element('#stratification-chart')
              .css('height', "40vh");
-
-      angular.element('.chart-container')
-             .removeClass('row-align');
-
-      angular.element('.radar-chart')
-              .removeClass('radar-chart-fullscreen');
 
       angular.element('#preferred-direction-container')
              .css('max-width', "100%");
