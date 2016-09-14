@@ -2,7 +2,10 @@
 	Museum
 
 	<md-button ng-click="$parent.fullscreenToggle($event)" class="circular-button">
-	    <md-icon ng-class="{ 'fullscreen-icon': true }" md-svg-icon="icons/fullscreen.svg" ></md-icon>
+	    <md-icon ng-class="{ 
+            'fullscreen-icon': true, 
+            'rotate-ninety': sidebarFullscreen 
+          }" md-svg-icon="icons/fullscreen.svg" ></md-icon>
 	    <md-tooltip md-direction="left" md-visible="tooltipVisible" md-autohide="true">
 	      {{ $parent.sidebarFullscreen ? "To Viewer (f)" : "Fullscreen (f)" }}
 	    </md-tooltip>
@@ -20,7 +23,7 @@
 		<ul>
 			<li ng-click="$parent.charts_open = true"><a>Open Charts</a></li>
 			<li><a ng-click="$parent.browse = true">Browse Gallery</a></li>
-			<li>Types Nomenclature</li>
+			<!-- <li>Types Nomenclature</li> -->
 		</ul>
 	</div>
 	<div class="secondary links">
@@ -34,7 +37,7 @@
 	<div class="tertiary links">
 		<ul>
 			<li><a ui-sref="about">About</a></li>
-			<li>Credits</li>
+			<!-- <li>Credits</li> -->
 		</ul>
 	</div>
 </div>
