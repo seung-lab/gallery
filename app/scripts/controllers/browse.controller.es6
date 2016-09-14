@@ -6,9 +6,15 @@ app.controller('BrowseCtrl', function ($scope, cellSetsService) {
 
   (function refreshTypes () {
   	cellSetsService.query(function (types) {
-      console.log(types);
   		types.forEach(function (type) {
   			cellSetsService.preview(type.type).$promise
+          .catch(function (err) {
+            if (err.status === 404) {
+              return { url: '' };
+            }
+
+            throw err;
+          })
   				.then(function (resp) {
 
 	  				$scope.sets.push({

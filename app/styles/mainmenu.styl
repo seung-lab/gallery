@@ -13,6 +13,9 @@
 	
 	box-shadow -2px 2px 5px 0 rgba(0, 0, 0, 0.26)
 
+.viewer .fullscreen .main-menu 
+	width 100vw
+
 .viewer .main-menu div
 	overflow-y scroll
 
@@ -50,16 +53,26 @@
 .viewer .menu.onscreen,	
 .viewer .browse.onscreen
 	display block
-	
+
+.viewer .gallery
+	display flex
+	flex-direction row
+	flex-wrap wrap
+	justify-content space-around	
 
 .viewer .gallery .item
 	padding-bottom 15px
 	padding-left 15px
 	border-bottom 1px solid $BLACK
 	
+	width 97.5%
+
 	cursor pointer
 	outline none
 	
+.viewer .fullscreen .gallery .item
+	width 300px
+
 .viewer .gallery .item:hover
 	background-color rgba(0,0,0,0.05)
 

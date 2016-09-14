@@ -38,7 +38,7 @@ app.service('cellSetsService', [ '$q', '$resource', function ($q, $resource) {
 	};
 
 	this.classicalTypeToHtml = function (type) {
-		return type
+		return (type || "")
               .replace(/-alpha$/, 'α')
               .replace(/\^(\w+)\b/, '<sup>$1</sup>');
 	};
