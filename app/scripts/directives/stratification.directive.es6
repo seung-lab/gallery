@@ -102,7 +102,7 @@ app.directive('stratification', function ($timeout) {
           y = _.range(stride).map( (plus) => strat_y(i + plus) ).reduce( (a,b) => a+b, 0) / stride;
         
           data.push({ 
-            x: fmt(x, 1e3), 
+            x: fmt(x * 100, 1e3), // * 100 to deal with renormalized stratification % 
             y: fmt(y, 1e7), 
           });
         }
