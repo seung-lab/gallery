@@ -14,6 +14,9 @@
 	align-items center
 	
 	width auto
+	
+.viewer .fullscreen .searchTools
+	left calc(100vw + 20px)
 
 .viewer .searchTools #logo
 	background-color $WHITE
@@ -62,12 +65,12 @@ main.viewer
 	width 50px
 	position absolute
 	top 7px
-	right 55px
+	right 0px
 	vertical-align center
 	display flex
 	align-items center
 	justify-content center
-	border-right 2px solid rgba(0, 0, 0, 0.15)
+	
 	color black
 	
 	background-image url("/icons/search.svg")
@@ -83,25 +86,33 @@ main.viewer
 	transition opacity 150ms ease
     
 .viewer .search .advanced
-	height 50px
-	width @height
-	
 	position absolute
-	top 15px
-	right 5px
+	top 7px
+	right -105px
 	
-	background-image url("/icons/advanced-search.svg")
-	background-repeat no-repeat
-	background-position center center
-	background-size 60%
+	color rgba($WHITE, 0.55)
+	background-color $BLACK
+	border 1px solid rgba($WHITE, 0.5)
 	
-	opacity 0.5
+	height 40px
+	display flex
+	align-items center
+	box-sizing border-box
+	padding 15px
+	
+	outline none
 	
 	cursor pointer
-	transition opacity 150ms ease
+	
+	user-select none
+	
+	transition color 150ms ease, border-color 150ms ease
 
-.viewer .search .search-action:hover,
 .viewer .search .advanced:hover
+	color rgba($WHITE, 0.8)
+	border-color rgba($WHITE, 0.75)
+
+.viewer .search .search-action:hover
 	opacity 0.75
 
 
@@ -132,6 +143,7 @@ main.viewer
 	width calc(95px + 33vw)
 
 .viewer section.glider.right.fullscreen
+	right -100vw
 	width calc(95px + 100vw)
 	
 .viewer section.glider.left
@@ -139,6 +151,7 @@ main.viewer
 	width calc(450px + 33vw)
 	
 .viewer section.glider.left.fullscreen
+	left -100vw
 	width calc(450px + 100vw)
 
 $width_trigger = unit($MIN_SIDEBAR_WIDTH / .33, 'px')
@@ -151,16 +164,10 @@ $width_trigger = unit($MIN_SIDEBAR_WIDTH / .33, 'px')
 		width calc(95px + 100vw)
 		right -100vw
 
-.viewer section.glider.right.fullscreen
-	right -100vw
-
 .viewer section.glider.right.fullscreen.onscreen,
 .viewer section.glider.right.onscreen
 	right 0px
-
-.viewer section.glider.left.fullscreen
-	left -100vw
-
+	
 .viewer section.glider.left.fullscreen.onscreen,
 .viewer section.glider.left.onscreen
 	left 0px
@@ -258,6 +265,9 @@ $width_trigger = unit($MIN_SIDEBAR_WIDTH / .33, 'px')
 	color $WHITE
 	
 	line-height 2em
+	
+.viewer .fullscreen .bottom-left
+	left calc(100vw + 35px)
 
 .viewer .bottom-left a
 	color $WHITE
