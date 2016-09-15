@@ -284,26 +284,34 @@ app.controller('ViewerCtrl', [
   $scope.charts_open = $state.params.charts === '1';
 
   angular.element(window).off('keydown.sidebarToggle').on('keydown.sidebarToggle', function (evt) {
+    let fn = function () {};
+
     if (evt.keyCode === 32) {
-      $scope.$apply(function () {
-        $scope.toggleCharts();  
-      });
+      fn = $scope.toggleCharts; 
     }
     else if (evt.keyCode === 66) { // b
-      $scope.$apply(function () {
-        $scope.toggleBrowse();
-      });
-    }
-    else if (evt.keyCode === 77) { // m
-     $scope.$apply(function () {
-        $scope.toggleMainMenu();  
-      }); 
+      fn = $scope.toggleBrowse;
     }
     else if (evt.keyCode === 70) { // f
-      $scope.$apply(function () {
-        $scope.fullscreenToggle();
-      });
+      fn = $scope.fullscreenToggle;
     }
+    else if (evt.keyCode === 77) { // m
+     fn = $scope.toggleMainMenu; 
+    }
+    else if (evt.keyCode === 79) { // o
+      $scope.camera = 'orthographic';
+    }
+    else if (evt.keyCode === 80) { // p
+      $scope.camera = 'perspective'; 
+    }
+    else if (evt.keyCode === 83) { // s
+      $scope.current_view = 'side';
+    }
+    else if (evt.keyCode === 84) { // t
+      $scope.current_view = 'top'; 
+    }
+    
+    $scope.$apply(fn);
   });
 
   $scope.toggleCharts = function (evt) {
@@ -311,7 +319,7 @@ app.controller('ViewerCtrl', [
     // Solves bug where once button is clicked it gains focus
     // and space bar generates a click and a keydown event that 
     // cancel each other.
-    if (evt) {
+    if (evt && evt.target) {
       evt.target.blur();
     }
 
@@ -370,10 +378,20 @@ app.controller('ViewerCtrl', [
       camera.perspectiveMode();
     }
 
-    let bbox = meshService.getVisibleBBox($scope.cells);
-    $scope.current_view = 'side';
-    camera.lookBBoxFromSide(bbox);
+    lookAgain(); // otherwise the camera is too zoomed in or out
   });
+
+  function lookAgain () {
+    let bbox = meshService.getVisibleBBox($scope.cells);
+    $scope.current_view = $scope.current_view || 'side';
+    
+    if ($scope.current_view == "top") {
+      camera.lookBBoxFromTop(bbox);
+    }
+    else if ($scope.current_view == "side") {
+      camera.lookBBoxFromSide(bbox);
+    } 
+  }
 
   $scope.views = [ "top", "side" ];
   $scope.current_view = null;
