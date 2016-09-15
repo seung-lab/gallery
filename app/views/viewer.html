@@ -28,7 +28,14 @@
     </div>
     <div class="bottom-left">
       <div ng-class="['progress-indicator', { onscreen: loading.show }]">Loading {{loading.value}}%</div>
-      <!-- <div ng-class="['progress-indicator', { onscreen: !loading.show }]">Type {{cell_types}}</div> -->
+      
+      <div ng-if="cell_types.length" class="progress-indicator onscreen">Type{{ cell_types.length === 1 ? '' : 's' }} &ndash;
+        <span class="cell-type" ng-repeat="type in cell_types">
+          {{type.type}}
+          <span ng-class="{ notSecurelyKnown: !type.securely_known }" ng-bind-html="type.classical"></span>{{$last ? '' : ', '}}
+        </span>
+      </div>
+
       <div><a href="http://wiki.eyewire.org/index.php?title=E2198">Mouse Retinal Neurons</a></div>
     </div>
   </section>
