@@ -17,9 +17,8 @@
           </md-not-found>
         </md-autocomplete>
         <i ng-click="gotoFirstAutocompleteResult()" class="search-action" aria-hidden="true"></i>
+        <div ng-click="toggleBrowse()" class="advanced">Browse</div>
       </div>
-
-      <!-- <div class="advanced" ng-location="search">Browse</div> -->
     </div>
     <div class="bottom-left">
       <div ng-class="['progress-indicator', { onscreen: loading.show }]">Loading {{loading.value}}%</div>

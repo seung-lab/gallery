@@ -266,6 +266,19 @@ app.controller('ViewerCtrl', [
     }
   };
 
+  $scope.toggleBrowse = function (evt) {
+    if ($scope.main_menu_open && $scope.browse) {
+      $scope.main_menu_open = false;
+    }
+    else if ($scope.main_menu_open && !$scope.browse) {
+      $scope.browse = true;
+    }
+    else { // !$scope.main_menu_open
+      $scope.main_menu_open = true;
+      $scope.browse = true;
+    }
+  };
+
   // Charts Sidebar
 
   $scope.charts_open = $state.params.charts === '1';
@@ -274,6 +287,11 @@ app.controller('ViewerCtrl', [
     if (evt.keyCode === 32) {
       $scope.$apply(function () {
         $scope.toggleCharts();  
+      });
+    }
+    else if (evt.keyCode === 66) { // b
+      $scope.$apply(function () {
+        $scope.toggleBrowse();
       });
     }
     else if (evt.keyCode === 77) { // m
@@ -417,6 +435,8 @@ app.controller('ViewerCtrl', [
     }
 
     $scope.sidebarFullscreen = !$scope.sidebarFullscreen;
+
+    $location.search('fullscreen', $scope.sidebarFullscreen ? '1' : null).replace();
   };
 
   // prevent scrolling on spacebar
