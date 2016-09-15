@@ -4,8 +4,8 @@
 
 .viewer .searchTools
 	position absolute
-	top 15px
-	left calc(33vw + 20px)
+	top 5px
+	left calc(33vw + 10px)
 
 	z-index 10
 	border-bottom none
@@ -16,7 +16,19 @@
 	width auto
 	
 .viewer .fullscreen .searchTools
-	left calc(100vw + 20px)
+	left calc(100vw + 10px)
+	
+.viewer .searchTools .md-button
+	position relative
+	top 0px
+	left 0px
+	margin-right 15px
+	
+.viewer .searchTools .md-button svg
+	transform scale(1.4)
+	
+.viewer .searchTools .md-button path
+	fill $BLACK
 
 .viewer .searchTools #logo
 	background-color $WHITE
@@ -64,7 +76,7 @@ main.viewer
 	height 35px
 	width 50px
 	position absolute
-	top 7px
+	top 16px
 	right 0px
 	vertical-align center
 	display flex
@@ -87,8 +99,8 @@ main.viewer
     
 .viewer .search .advanced
 	position absolute
-	top 7px
-	right -105px
+	top 15px
+	right -102px
 	
 	color rgba($WHITE, 0.55)
 	background-color $BLACK

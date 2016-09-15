@@ -2,8 +2,8 @@
 
 // include axes for debugging
 app.controller('ViewerCtrl', [
-  '$scope', '$timeout', '$state', '$location', '$document', '$window', 'meshService', 'camera', 'cellService', 'scene',
-  function ($scope, $timeout, $state, $location, $document, $window, meshService, camera, cellService, scene) {
+  '$scope', '$timeout', '$state', '$location', '$document', '$window', 'meshService', 'camera', 'cellSetsService', 'cellService', 'scene',
+  function ($scope, $timeout, $state, $location, $document, $window, meshService, camera, cellSetsService, cellService, scene) {
   
   let self = this;
   self.states = [];
@@ -82,10 +82,10 @@ app.controller('ViewerCtrl', [
           securely_known: null,
         };
       }
-
-      let classical_type_name = classical_type.correspondance
-        .replace(/-alpha$/, 'α')
-        .replace(/\^(\w+)\b/, '<sup>$1</sup>');
+      
+      let classical_type_name = cellSetsService.classicalTypeToHtml(
+        classical_type.correspondance
+      );
 
       return {
         type: cell.name,
@@ -254,7 +254,7 @@ app.controller('ViewerCtrl', [
     // Solves bug where once button is clicked it gains focus
     // and space bar generates a click and a keydown event that 
     // cancel each other.
-    if (evt) {
+    if (evt && evt.target) {
       evt.target.blur();
     }
 
@@ -420,7 +420,7 @@ app.controller('ViewerCtrl', [
 
   $scope.sidebarFullscreen = $state.params.fullscreen || false;
   $scope.fullscreenToggle = function (evt) {
-    if (evt) {
+    if (evt && evt.target) {
       evt.target.blur();
     }
 
