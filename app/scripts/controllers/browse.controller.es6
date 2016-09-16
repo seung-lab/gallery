@@ -33,6 +33,7 @@ app.controller('BrowseCtrl', function ($scope, cellSetsService) {
   $scope.chooseType = function (type) {
    	let cell_ids = $scope.$parent.cellIdsForType(type);
    	$scope.$parent.goToCellIds(cell_ids);
+    $scope.$parent.fullscreen = false;
   };
 
 
