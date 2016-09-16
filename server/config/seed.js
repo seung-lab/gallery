@@ -19,7 +19,8 @@ sets.find({}).remove(function() {
     return {
       type: type,
       classical_type: info ? info.correspondance : null,
-      securely_known: info ? info.securely_known : null,      
+      securely_known: info ? info.securely_known : null,
+      count: info ? info.count : null,    
     };
   });
 

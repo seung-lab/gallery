@@ -7,6 +7,7 @@ var SetsSchema = new Schema({
   type: String,
   classical_type: String,
   securely_known: Boolean,
+  count: Number,
 });
 
 module.exports = mongoose.model('Sets', SetsSchema);

@@ -49,6 +49,7 @@
 	<div class="gallery">
 		<div ng-click="chooseType(set.type)" class="item" ng-repeat="set in sets">
 			<div class="header">{{set.type}} <span ng-if="set.classical_type" ng-class="{ notsecurelyknown: !set.securely_known }" ng-bind-html="set.classical_type_html"></span></div>
+			<div class="count">{{set.count}} ct</div>
 			<img ng-if="!!set.img_url" src="{{ set.img_url }}" />
 		</div>
 	</div>

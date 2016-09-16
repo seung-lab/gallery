@@ -22,6 +22,7 @@ app.controller('BrowseCtrl', function ($scope, cellSetsService) {
               classical_type: type.classical_type,
               classical_type_html: `(${cellSetsService.classicalTypeToHtml(type.classical_type)})`,
               securely_known: type.securely_known,
+              count: type.count,
 	  					img_url: resp.url,
 	  				});
 	  			});

@@ -24,6 +24,7 @@ exports.index = function (req, res) {
         type: item.type,
         classical_type: item.classical_type,
         securely_known: item.securely_known,
+        count: item.count,
       };
     });
 

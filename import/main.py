@@ -228,8 +228,21 @@ def save_sets_json(cells):
   types = {}
 
   for cell in cells:
-    if cell['name'] is not None:
-      types[cell['name']] = cell['classical_type']
+    if cell['name'] is None:
+      continue
+
+    if not types.has_key(cell['name']):
+      types[cell['name']] = {
+        'correspondance': None,
+        "securely_known": None,
+        'count': 0,
+      }
+
+    if cell['classical_type'] is not None:
+      types[cell['name']]['correspondance'] = cell['classical_type']['correspondance']
+      types[cell['name']]['securely_known'] = cell['classical_type']['securely_known']
+
+    types[cell['name']]['count'] += 1
 
   print types
 
