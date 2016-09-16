@@ -78,21 +78,14 @@ app.directive('temporal', function ($timeout) {
       cells.forEach( (cell) => any_highlighted = any_highlighted || cell.highlight );
 
       return cells.map(function (cell) {
-
-        let fmt = (z, factor) => Math.round(z * factor) / factor;
-
-        let strat_x = (i) => cell.temporal[i][0],
-            strat_y = (i) => cell.temporal[i][1];
-
-        cell.temporal_response.sort(function (a, b) {
-          return a[0] - b[0];
-        });
-
         let data = [];
+
+        let total_time = 4; // known that experiment was 4s
+        let x_rescale = total_time / (cell.temporal_response.length - 1);
 
         cell.temporal_response.forEach( (datum, index) => 
           data.push({ 
-            x: (index / 7.5), // Re-map temporal domain to 4s range
+            x: (index * x_rescale), // Re-map temporal domain to 4s range
             y: datum, 
           })
         );
