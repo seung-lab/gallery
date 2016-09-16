@@ -203,9 +203,8 @@ app.directive('temporal', function ($timeout) {
       .y(function(d) { return yScale(d.y); });
 
     // Add svg
-    svg = d3.select("#temporal-chart")
+    svg = d3.select(element[0])
       .append("svg")
-        .attr("id", "temporal-svg")
       .append("g")
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
@@ -217,7 +216,7 @@ app.directive('temporal', function ($timeout) {
     yScale = d3.scale.linear();
 
     // Set domain of data
-    yScale.domain([-10, 10]); // Domain inferred from Flourescence % in GC paper
+    yScale.domain([-10, 10]); // Domain inferred from Fluorescence % in GC paper
     xScale.domain([0, 4]);    // Domain inferred from Time Window in GC paper
     
     // Set domain, range
@@ -492,9 +491,13 @@ app.directive('temporal', function ($timeout) {
 
           // Create separate groups for each series object 
           series.enter().append("path")
-              .attr("id", function(d) { return "series-" + d.label; }) // Name each uniquely wrt cell label
+              .attr("id", (d) => "series-" + d.label ) // Name each uniquely wrt cell label
               .attr("class", "line series transition-none series-hidden")
-              .classed({ 'transition-none': false, 'series-hidden': false, 'series-visible': true });
+              .classed({ 
+                'transition-none': false, 
+                'series-hidden': false, 
+                'series-visible': true 
+              });
 
           series
             .attr("d", function(d) { return lineGenerator(d.data); }) // Draw series line
@@ -502,7 +505,9 @@ app.directive('temporal', function ($timeout) {
 
       let timer; // Timeout for series hover
 
-      d3.select('#temporal-svg').on('mouseover', function() {
+      let realSvg = svg[0][0].parentElement; // svg is a <g> nested in an svg element
+
+      d3.select(realSvg).on('mouseover', function() {
           d3.select(this).on('mousemove', function() {
             let mousepos = {
                   x: d3.mouse(d3.select(this).node())[0] - margin.left,
