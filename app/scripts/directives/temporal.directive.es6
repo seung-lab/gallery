@@ -90,14 +90,6 @@ app.directive('temporal', function ($timeout) {
           })
         );
 
-        while (data.length && data[0].y === 0) {
-          data.shift();
-        }
-
-        while (data.length && data[data.length - 1].y === 0) {
-          data.pop();
-        }
-
         let color = cell.color;
         if (cells.length === 1) {
           color = '#1A1A1A';
