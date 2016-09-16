@@ -1,6 +1,6 @@
 'use strict';
   
-app.directive('stratification', function ($timeout) {
+app.directive('temporal', function ($timeout) {
 
   let chartLinker = function (scope, element, attrs) {
 
@@ -37,7 +37,7 @@ app.directive('stratification', function ($timeout) {
       scope.chart.update(scope);
     });
 
-    addResizeListener(document.getElementById('stratification-chart'), function() {
+    addResizeListener(document.getElementById('temporal-chart'), function() {
       scope.chart.update(scope);
     });
 
@@ -72,48 +72,23 @@ app.directive('stratification', function ($timeout) {
     function makeDataset (scope) {
       let cells = scope.cells;
       
-      cells = cells.filter( (cell) => cell.stratification );
+      cells = cells.filter( (cell) => cell.temporal_response );
 
       let any_highlighted = false;
       cells.forEach( (cell) => any_highlighted = any_highlighted || cell.highlight );
 
       return cells.map(function (cell) {
-
-        let fmt = (z, factor) => Math.round(z * factor) / factor;
-
-        let strat_x = (i) => cell.stratification[i][0],
-            strat_y = (i) => cell.stratification[i][1];
-
-        cell.stratification.sort(function (a, b) {
-          return a[0] - b[0];
-        });
-
         let data = [];
-        let x, y;
 
-        let stride = 4;
+        let total_time = 4; // known that experiment was 4s
+        let x_rescale = total_time / (cell.temporal_response.length - 1);
 
-        for (let i = 0; i < cell.stratification.length; i += stride) {
-
-          stride = Math.min(stride, cell.stratification.length - i);
-
-          // averaging filter with bin size 4 since skeletonization data is noisy
-          x = _.range(stride).map( (plus) => strat_x(i + plus) ).reduce( (a,b) => a+b, 0) / stride;
-          y = _.range(stride).map( (plus) => strat_y(i + plus) ).reduce( (a,b) => a+b, 0) / stride;
-        
+        cell.temporal_response.forEach( (datum, index) => 
           data.push({ 
-            x: fmt(x, 1e3), 
-            y: fmt(y, 1e7), 
-          });
-        }
-
-        while (data.length && data[0].y === 0) {
-          data.shift();
-        }
-
-        while (data.length && data[data.length - 1].y === 0) {
-          data.pop();
-        }
+            x: (index * x_rescale), // Re-map temporal domain to 4s range
+            y: datum, 
+          })
+        );
 
         let color = cell.color;
         if (cells.length === 1) {
@@ -148,7 +123,7 @@ app.directive('stratification', function ($timeout) {
     return d3.select(this[0][0]);
   };
   d3.selection.prototype.last = function() {
-    var last = this.size() - 1;
+    let last = this.size() - 1;
     return d3.select(this[0][last]);
   };
 
@@ -165,20 +140,30 @@ app.directive('stratification', function ($timeout) {
           right: 35,
           bottom: 50,
           left: 35,
-          padding: 100,
+          padding: 25,
         };
 
     // Scales
     let xScale,
         yScale,
         xAxis, 
-        yAxis;
+        yAxis,
+        x_axis_range = {
+          start: 0,
+          mid: 0.5,
+          end: 1,
+        },
+        y_axis_range = {
+          start: 0,
+          mid: 0.5,
+          end: 1,
+        };
 
     // Elements
     let tooltip,
         tooltipCircle,
-        ipl,
-        volume,
+        time_value,
+        f_value,
         svg,
         seriesGroup,
         cellId,
@@ -186,14 +171,11 @@ app.directive('stratification', function ($timeout) {
 
     // Labels
     let xLabel, yLabel,
-        yLabel_INL, yLabel_GCL,
         yLabel_Inner, yLabel_Outer,
-        yAxis_IPL_Ticks,
+        yAxis_time_value_Ticks,
         yAxis_Outer_Inner_Tick,
         yLabel_Layers,
-        yLabel_Inner_intra_SAC, yLabel_Inner_extra_SAC,
-        yLabel_Outer_intra_SAC, yLabel_Outer_extra_SAC,
-        yLabel_Top;
+        xLabel_Time;
 
     let dataset,
         tickValues,
@@ -202,18 +184,12 @@ app.directive('stratification', function ($timeout) {
     // Define line generator
     lineGenerator = d3.svg.line()
       .interpolate("linear")
-      .x(function(d) { return xScale(d.y); }) // Value intentionally flipped
-      .y(function(d) { return yScale(d.x); });
-
-    // Values correspond to:
-    // IPL Start, End [0,100]
-    // IPL ON, OFF, 28, 45, 62
-    tickValues = [0, 28, 45, 62, 100];
+      .x(function(d) { return xScale(d.x); })
+      .y(function(d) { return yScale(d.y); });
 
     // Add svg
-    svg = d3.select("#stratification-chart")
+    svg = d3.select(element[0])
       .append("svg")
-        .attr("id", "stratification-svg")
       .append("g")
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
@@ -225,8 +201,8 @@ app.directive('stratification', function ($timeout) {
     yScale = d3.scale.linear();
 
     // Set domain of data
-    yScale.domain([120, -20]); // IPL % | GCL Bottom
-    xScale.domain([0, 0.1]);  // Arbor Volume Density
+    yScale.domain([-10, 10]); // Domain inferred from Fluorescence % in GC paper
+    xScale.domain([0, 4]);    // Domain inferred from Time Window in GC paper
     
     // Set domain, range
     setScales(scope);
@@ -239,9 +215,9 @@ app.directive('stratification', function ($timeout) {
     // Setup Series Groups
     setSeries();
 
-    function distance_scaled(target, point) { // Data Intentionally flipped 
-      return Math.sqrt((target.x - xScale(point.y)) * (target.x - xScale(point.y)) + 
-                       (target.y - yScale(point.x)) * (target.y - yScale(point.x)));
+    function distance_scaled(target, point) {
+      return Math.sqrt((target.x - xScale(point.x)) * (target.x - xScale(point.x)) + 
+                       (target.y - yScale(point.y)) * (target.y - yScale(point.y)));
     }
 
     // k = Number of points returned
@@ -308,7 +284,7 @@ app.directive('stratification', function ($timeout) {
 
     function setTooltip(scope) {
       // Define 'div' for tooltips
-      tooltip = d3.select("#stratification-chart")
+      tooltip = d3.select("#temporal-chart")
         .append("div")
         .attr("class", "tooltip");
 
@@ -320,21 +296,21 @@ app.directive('stratification', function ($timeout) {
             .attr("class", "cell-id");
         tooltip
           .append("h4")
-          .text("IPL%");
+          .html("&Delta;F/F (%)");
         tooltip
           .append("p")
-          .attr("class", "ipl");
+          .attr("class", "f_value");
         tooltip
           .append("h4")
-          .text("Volume");
+          .text("Time (s)");
         tooltip
           .append("p")
-          .attr("class", "volume");
+          .attr("class", "time_value");
 
       // Tooltip keys
       cellId = tooltip.select(".cell-id");
-      volume = tooltip.select(".volume");
-      ipl    = tooltip.select(".ipl");
+      f_value = tooltip.select(".f_value");
+      time_value    = tooltip.select(".time_value");
 
       // Tooltip circle
       tooltipCircle = svg.append("circle")
@@ -358,6 +334,7 @@ app.directive('stratification', function ($timeout) {
     }
 
     function setAxes(scope) {
+
       // Define axes
       xAxis = d3.svg.axis()
         .orient('bottom')
@@ -367,10 +344,9 @@ app.directive('stratification', function ($timeout) {
 
       yAxis = d3.svg.axis()
         .orient('right')
-        .innerTickSize(width - 50)
-        .outerTickSize(0)
-        .tickPadding([7])
-        .tickValues(tickValues);
+        .outerTickSize(-width)
+        .tickPadding([20])
+        .ticks(5);
 
       // Set axis and line scale
       xAxis.scale(xScale);
@@ -392,89 +368,51 @@ app.directive('stratification', function ($timeout) {
         .call(yAxis)
         .selectAll('text')
           .attr("class", "axis-label axis-label-minor")
-          .style('text-anchor', 'end');
+          .style('text-anchor', 'start');
+
     }
 
     function updateAxes(scope) {
-      yAxis
-        .innerTickSize(width - 50);
 
       // Update axis and line
       xAxis.scale(xScale);
       yAxis.scale(yScale);
 
+      yAxis.outerTickSize(-width);
+
       svg.select('#x-axis').attr("transform", "translate(0," + height + ")");
 
       xAxis.outerTickSize(-height);
 
-      // Update domain to allow for additional right padding
-      // xAxis.scale().domain()[0] += 0.05;
+      // Axis label | X + Y
+      xLabel.attr("transform", "translate(" + (width/2) + ", 50)");
+      yLabel.attr("transform", "translate(" + (-width - 20) + ", " + yScale(y_axis_range.mid) + ") rotate(-90)");
 
-            // Axis label | X
-      xLabel
-       .attr("transform", "translate(" + (width/2) + ", 50)");
+      // Update vertical bars
+      xLabel_Time.select('#first-bar')
+        .attr("x1", xScale(1))
+        .attr("x2", xScale(1))
+        .attr("y1", 0)
+        .attr("y2", -height);
 
-      // Axis label | Y
-      yLabel_Inner.attr("transform", "translate(" + (width + 25) + "," + yScale(22.5) + ") rotate(90)");
-        yLabel_Outer.attr("transform", "translate(" + (width + 25) + "," + yScale(72.5) + ") rotate(90)");
-        yLabel_Outer_intra_SAC.attr("transform", "translate(" + (width - 18) + "," + yScale(14) + ")"); // 18~Offset
-        yLabel_Outer_extra_SAC.attr("transform", "translate(" + (width - 18) + "," + yScale(37) + ")"); // 18~Offset
-        yLabel_Inner_intra_SAC.attr("transform", "translate(" + (width - 18) + "," + yScale(55) + ")"); // 18~Offset
-        yLabel_Inner_extra_SAC.attr("transform", "translate(" + (width - 18) + "," + yScale(81) + ")"); // 18~Offset
-        
-      yLabel.attr("transform", "translate(-20," + yScale(45) + ") rotate(-90)");
-        yLabel_INL.attr("transform", "translate(-20," + yScale(-10) + ") rotate(-90)");
-        yLabel_GCL.attr("transform", "translate(-20," + yScale(110) + ") rotate(-90)");
+      xLabel_Time.select('#second-bar')
+        .attr("x1", xScale(2))
+        .attr("x2", xScale(2))
+        .attr("y1", 0)
+        .attr("y2", -height);
 
-      // Top Bar
-        yLabel_Top 
-          .attr("x1", 0)
-          .attr("x2", width)
-          .attr("y1", yScale(-20))
-          .attr("y2", yScale(-20));
-
-      // Inner Outer Tick
-      yAxis_Outer_Inner_Tick
-        .attr("x1", width)
-        .attr("x2", (width + 10))
-        .attr("y1", yScale(45))
-        .attr("y2", yScale(45));
-
-      // IPL Ticks | Right
-      yAxis_IPL_Ticks.selectAll('.tick-right')
-        .attr("x1", width)
-        .attr("x2", (width + 10));
-
-      yAxis_IPL_Ticks.select('#tick-left-end')
-        .attr("y1", yScale(100))
-        .attr("y2", yScale(100));
-
-      yAxis_IPL_Ticks.select('#tick-left-start')
-        .attr("y1", yScale(0))
-        .attr("y2", yScale(0));
-
-      yAxis_IPL_Ticks.select('#tick-right-end')
-        .attr("y1", yScale(100))
-        .attr("y2", yScale(100));
-
-      yAxis_IPL_Ticks.select('#tick-right-start')
-        .attr("y1", yScale(0))
-        .attr("y2", yScale(0));
-
-      //Update X axis
+      // Update X axis
       svg.select(".x.axis")
         .call(xAxis);
 
-      //Update Y axis
+      // Update Y axis
       svg.select(".y.axis")
         .call(yAxis)
         .selectAll('.tick').selectAll('text')
-            .style('text-anchor', 'end')
-            .attr("transform", "translate(25, 0)"); // Add a bit of padding after line
+            .style('text-anchor', 'end');
 
-      // Remove first and last ticks from X axis
-      d3.select('.x.axis').selectAll('.tick').first().remove();
-      d3.select('.x.axis').selectAll('.tick').last().remove();
+      // Translate Y-Axis ticks to right of chart
+      svg.select('.y.axis').attr("transform", "translate(" + width + ", 0)");
     }
 
     function setAxesLables() {
@@ -484,143 +422,36 @@ app.directive('stratification', function ($timeout) {
           .attr("class", "axis-label")
           .attr("text-anchor", "middle")
           .attr("transform", "translate(" + (width/2) + ", 50)")
-          .text("Skeleton Density");
+          .text("Time (s)");
 
       // Axis label | Y
       yLabel = svg.select(".y.axis")
           .append("text")
             .attr("class", "axis-label")
             .attr("text-anchor", "middle")
-            .attr("transform", "translate(-20," + yScale(45) + ") rotate(-90)")
-            .text("IPL Depth %");
+            .attr("transform", "translate(0," + yScale(y_axis_range.mid) + ") rotate(-90)")
+            .html("&Delta;F/F (%)");
 
-      // Axis label | Y --> INL
-      yLabel_INL = svg.select(".y.axis")
-          .append("text")
-            .attr("class", "axis-label")
-            .attr("text-anchor", "middle")
-            .attr("transform", "translate(-20," + yScale(-10) + ") rotate(-90)") // Dynamic Scale
-            .text("INL");
-
-      // Axis label | Y --> GCL
-      yLabel_GCL = svg.select(".y.axis")
-          .append("text")
-            .attr("class", "axis-label")
-            .attr("text-anchor", "middle")
-            .attr("transform", "translate(-20," + yScale(110) + ") rotate(-90)") // Dynamic Scale
-            .text("GCL");
-
-      // Axis label | Y --> Outer
-      yLabel_Inner = svg.select(".y.axis")
-          .append("text")
-            .attr("class", "axis-label")
-            .attr("text-anchor", "middle")
-            .attr("transform", "translate(" + (width + 25) + "," + yScale(22.5) + ") rotate(90)") // Dynamic Scale
-            .text("Outer");
-
-      // Axis label | Y --> Inner
-      yLabel_Outer = svg.select(".y.axis")
-          .append("text")
-            .attr("class", "axis-label")
-            .attr("text-anchor", "middle")
-            .attr("transform", "translate(" + (width + 25) + "," + yScale(72.5) + ") rotate(90)") // Dynamic Scale
-            .text("Inner");
-
-      // Axis label | Y --> Outer intra_SAC
-      yLabel_Outer_intra_SAC = svg.select('.y.axis')
-          .append("text")
-              .attr("class", "axis-label sub-label axis-label-minor")
-              .attr("text-anchor", "end")
-              .attr("transform", "translate(" + (width - 18) + "," + yScale(14) + ")") // Dynamic Scale
-              .text("extra-SAC");
-
-      // Axis label | Y --> Outer extra_SAC
-      yLabel_Outer_extra_SAC = svg.select('.y.axis')
-          .append("text")
-              .attr("class", "axis-label sub-label axis-label-minor")
-              .attr("text-anchor", "end")
-              .attr("transform", "translate(" + (width - 18) + "," + yScale(36.5) + ")") // Dynamic Scale
-              .text("intra-SAC");
-
-      // Axis label | Y --> Inner intra_SAC
-      yLabel_Inner_intra_SAC = svg.select('.y.axis')
-          .append("text")
-              .attr("class", "axis-label sub-label axis-label-minor")
-              .attr("text-anchor", "end")
-              .attr("transform", "translate(" + (width - 18) + "," + yScale(53.5) + ")") // Dynamic Scale
-              .text("intra-SAC");
-
-      // Axis label | Y --> Inner extra_SAC
-      yLabel_Inner_extra_SAC = svg.select('.y.axis')
-          .append("text")
-              .attr("class", "axis-label sub-label axis-label-minor")
-              .attr("text-anchor", "end")
-              .attr("transform", "translate(" + (width - 18) + "," + yScale(81) + ")") // Dynamic Scale
-              .text("extra-SAC");
-
-      // Style intra_SAC + extra_SAC Lines with Dashes
-      yLabel_Layers = d3.selectAll('.y')
-          .selectAll('.tick')
-          .filter( function(d, i) { return i % 2 === 1; } )
-            .selectAll('line')
-              .style("stroke-linecap", "round")
-              .style("stroke-dasharray", ("3, 10"));
-
-      // Labels for top bar
-      yLabel_Top = d3.select('.y')
-          .append('line')
-            .attr("x1", 0)
-            .attr("x2", width)
-            .attr("y1", yScale(-20))
-            .attr("y2", yScale(-20))
-            .attr('class', 'top-bar');
-
-      // Inner Outer Tick
-      yAxis_Outer_Inner_Tick = d3.select('.y')
-          .append('line')
-            .attr('class', 'tick-right')
-            .attr("x1", width)
-            .attr("x2", (width + 10))
-            .attr("y1", yScale(45))
-            .attr("y2", yScale(45));
-
-      yAxis_IPL_Ticks = d3.select('.y');
+      // Labels for 1 + 2 Time 
+      xLabel_Time = svg.select('.x');
       
-        // IPL Start | Left
-        yAxis_IPL_Ticks.append('line')
-          .attr('class', 'tick-left')
-          .attr('id', 'tick-left-start')
-          .attr("x1", 0)
-          .attr("x2", -10)
-          .attr("y1", yScale(0))
-          .attr("y2", yScale(0));
-
-        // IPL End | Left
-        yAxis_IPL_Ticks.append('line')
-          .attr('class', 'tick-left')
-          .attr('id', 'tick-left-end')
-          .attr("x1", 0)
-          .attr("x2", -10)
-          .attr("y1", yScale(100))
-          .attr("y2", yScale(100));
-
-        // IPL Start | Right
-        yAxis_IPL_Ticks.append('line')
-          .attr('class', 'tick-right')
-          .attr('id', 'tick-right-start')
-          .attr("x1", width)
-          .attr("x2", (width + 10))
-          .attr("y1", yScale(0))
-          .attr("y2", yScale(0));
-
-        // IPL End | Right
-        yAxis_IPL_Ticks.append('line')
-          .attr('class', 'tick-right')
-          .attr('id', 'tick-right-end')
-          .attr("x1", width)
-          .attr("x2", (width + 10))
-          .attr("y1", yScale(100))
-          .attr("y2", yScale(100));
+      xLabel_Time.append('line')
+            .attr("x1", xScale(8))
+            .attr("x2", xScale(8))
+            .attr("y1", yScale(y_axis_range.start))
+            .attr("y2", yScale(y_axis_range.end))
+            .attr('id', 'first-bar')
+            .attr('class', 'gray-bar')
+            .style("stroke-dasharray", ("3, 10"));
+      
+      xLabel_Time.append('line')
+            .attr("x1", xScale(16))
+            .attr("x2", xScale(16))
+            .attr("y1", yScale(y_axis_range.start))
+            .attr("y2", yScale(y_axis_range.end))
+            .attr('id', 'second-bar')
+            .attr('class', 'gray-bar')
+            .style("stroke-dasharray", ("3, 10"));
     }
 
     function setDimensions() {
@@ -645,9 +476,13 @@ app.directive('stratification', function ($timeout) {
 
           // Create separate groups for each series object 
           series.enter().append("path")
-              .attr("id", function(d) { return "series-" + d.label; }) // Name each uniquely wrt cell label
+              .attr("id", (d) => "series-" + d.label ) // Name each uniquely wrt cell label
               .attr("class", "line series transition-none series-hidden")
-              .classed({ 'transition-none': false, 'series-hidden': false, 'series-visible': true });
+              .classed({ 
+                'transition-none': false, 
+                'series-hidden': false, 
+                'series-visible': true 
+              });
 
           series
             .attr("d", function(d) { return lineGenerator(d.data); }) // Draw series line
@@ -655,7 +490,9 @@ app.directive('stratification', function ($timeout) {
 
       let timer; // Timeout for series hover
 
-      d3.select('#stratification-svg').on('mouseover', function() {
+      let realSvg = svg[0][0].parentElement; // svg is a <g> nested in an svg element
+
+      d3.select(realSvg).on('mouseover', function() {
           d3.select(this).on('mousemove', function() {
             let mousepos = {
                   x: d3.mouse(d3.select(this).node())[0] - margin.left,
@@ -675,7 +512,7 @@ app.directive('stratification', function ($timeout) {
               }
             });
 
-            if ( distance_scaled(mousepos, nearest) > 50 ) { // Mouseover Threshold | 50 Experimentially Determined
+            if ( distance_scaled(mousepos, nearest) > 25 ) { // Mouseover Threshold | 25 Experimentially Determined
               return;
             }
 
@@ -684,38 +521,38 @@ app.directive('stratification', function ($timeout) {
             }
 
            timer =  $timeout(function() { // Avoid series flickering
-              d3.selectAll('.series').classed({ 'series-visible': false, 'series-other': true });
-              d3.select('#series-' + nearest.label).classed({ 'series-visible': true });
+              svg.selectAll('.series').classed({ 'series-visible': false, 'series-other': true });
+              svg.select('#series-' + nearest.label).classed({ 'series-visible': true });
             }, 250);
 
             tooltipCircle
               .classed({ 'series-hidden': false, 'series-visible': true })
               .style("fill", nearest_color)
-              .attr("cx", xScale(nearest.y)) // Scales Intentionally Flipped
-              .attr("cy", yScale(nearest.x)) // Scales Intentionally Flipped
+              .attr("cx", xScale(nearest.x))
+              .attr("cy", yScale(nearest.y))
               .classed({ 'circle-five': true });
 
             tooltip.classed({ 'series-hidden': false, 'series-visible': true })
 
             tooltip // Setting positioning logic 
               .style('left', function() {
-                  x = xScale(nearest.y) < width / 2 // Avoid crossing y-axis
-                      ? xScale(nearest.y) + 75
-                      : xScale(nearest.y) - 100;
+                  x = xScale(nearest.x) < width / 2 // Avoid crossing x-axis
+                      ? xScale(nearest.x) + 75
+                      : xScale(nearest.x) - 100;
 
                   return x + "px"; // Scales Intentionally Flipped
               })
               .style('top', function() {
-                  y = yScale(nearest.x) > height * 0.6 // Avoid crossing y-axis
-                        ? yScale(nearest.x) - 100
-                        : yScale(nearest.x);
+                  y = yScale(nearest.y) > height * 0.6 // Avoid crossing y-axis
+                        ? yScale(nearest.y) - 100
+                        : yScale(nearest.y);
 
                   return y + "px"; // Scales Intentionally Flipped
               });
 
             cellId.text(nearest.label);
-            ipl.text(nearest.x.toFixed(3));
-            volume.text(nearest.y.toFixed(5));
+            f_value.text(nearest.y.toFixed(3));
+            time_value.text(nearest.x.toFixed(3));
 
           })
         })
@@ -724,12 +561,9 @@ app.directive('stratification', function ($timeout) {
               $timeout.cancel(timer);
             }
 
-            tooltipCircle.classed({ 'series-hidden': true, 'circle-five': false });
-
-
             d3.selectAll('.series').classed({ 'series-visible': true, 'series-other': false }); // Remove Highlight State
-
             tooltip.classed({ 'series-hidden': true, 'series-visible': false });
+            tooltipCircle.classed({ 'series-hidden': true, 'circle-five': false });
         });
     }
 
@@ -742,22 +576,38 @@ app.directive('stratification', function ($timeout) {
 
     function setDomain(scope) {
       dataset = scope.dataset;
-      //Update scale X domain | Datum intentionally flipped
+      
+      //Update scale X domain
       if (dataset.length !== 0) {
         xScale.domain([
-          0, 
+          d3.min(dataset, function (ds) { // forEach element of dataSet
+            return Math.min(...ds.data.map( d => d.x ));
+          }),
           d3.max(dataset, function (ds) { // forEach element of dataSet
-            return Math.max(...ds.data.map( d => d.y ));
+            return Math.max(...ds.data.map( d => d.x ));
           })
         ]);
+      }
 
-        let spacer = 0.4; // Squeeze X-Axis
+      x_axis_range.start = xScale.domain()[0];
+      x_axis_range.mid = (xScale.domain()[1] + xScale.domain()[0]) / 2;
+      x_axis_range.end = xScale.domain()[1];
 
-        xScale.domain([
-          0,
-          xAxis.scale().domain()[1] * spacer + xAxis.scale().domain()[1]
+      //Update scale Y domain
+      if (dataset.length !== 0) {
+        yScale.domain([
+          d3.min(dataset, function (ds) { // forEach element of dataSet
+            return Math.min(...ds.data.map( d => d.y ));
+          }) * 1.25, // Bottom padding for chart
+          d3.max(dataset, function (ds) { // forEach element of dataSet
+            return Math.max(...ds.data.map( d => d.y ));
+          }) * 1.25  // Top padding for chart
         ]);
       }
+
+      y_axis_range.start = yScale.domain()[0];
+      y_axis_range.mid = (yScale.domain()[1] + yScale.domain()[0]) / 2;
+      y_axis_range.end = yScale.domain()[1];
     }
 
     return {
