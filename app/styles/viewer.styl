@@ -1,11 +1,12 @@
 @require 'colors.styl'
+@require 'app.styl'
 @require 'characterization.styl'
 @require 'mainmenu.styl'
 
 .viewer .searchTools
 	position absolute
 	top 5px
-	left calc(33vw + 10px)
+	left s('calc(%s + 10px)', $SIDEBAR_LEFT_WIDTH)
 
 	z-index 10
 	border-bottom none
@@ -141,7 +142,7 @@ main.viewer
 
 .viewer section.glider
 	height 100vh
-	width 33vw
+	width $SIDEBAR_RIGHT_WIDTH
 	
 	position absolute
 	top 0px
@@ -151,16 +152,16 @@ main.viewer
 	transition left 400ms ease-in-out, right 400ms ease-in-out, width 400ms ease-in-out
 
 .viewer section.glider.right
-	right -33vw
-	width calc(95px + 33vw)
+	right -1 * $SIDEBAR_RIGHT_WIDTH
+	width s('calc(95px + %s)', $SIDEBAR_RIGHT_WIDTH)
 
 .viewer section.glider.right.fullscreen
 	right -100vw
 	width calc(95px + 100vw)
 	
 .viewer section.glider.left
-	left -33vw
-	width calc(450px + 33vw)
+	left -1 * $SIDEBAR_LEFT_WIDTH
+	width s('calc(450px + %s)', $SIDEBAR_LEFT_WIDTH)
 	
 .viewer section.glider.left.fullscreen
 	left -100vw
@@ -268,7 +269,7 @@ $width_trigger = unit($MIN_SIDEBAR_WIDTH / .33, 'px')
 .viewer .bottom-left
 	position absolute
 	bottom 20px
-	left calc(33vw + 35px)
+	left s('calc(%s + 35px)', $SIDEBAR_LEFT_WIDTH)
 	
 	font-size 12px
 	text-transform uppercase

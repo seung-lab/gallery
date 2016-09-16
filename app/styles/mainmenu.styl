@@ -1,10 +1,13 @@
 @require 'colors.styl'
 @require 'characterization.styl'
 @require 'app.styl'
+@require 'viewer.styl'
 
 .viewer .main-menu
 	@extend .viewer .sidebar
 	
+	width $SIDEBAR_LEFT_WIDTH
+
 	position absolute
 	left initial
 	right 450px
@@ -21,6 +24,10 @@
 
 .viewer .main-menu > div > div
 	padding 25px
+	border-bottom 1px solid gray
+	
+.viewer .main-menu > div > div:first-child,
+.viewer .main-menu > div > div:nth-child(2)
 	border-bottom 1px solid $BLACK
 	
 .viewer .main-menu div.title
