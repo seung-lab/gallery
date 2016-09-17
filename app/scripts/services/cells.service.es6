@@ -10,7 +10,7 @@
  */
 
 app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', function ($q, $resource, meshService, CacheFactory) {
-	let _cache = CacheFactory('cells');
+	let _cache = CacheFactory('cells', { number: 100 });
 
 	let _this = this;
 

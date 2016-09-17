@@ -286,6 +286,10 @@ app.controller('ViewerCtrl', [
   angular.element(window).off('keydown.sidebarToggle').on('keydown.sidebarToggle', function (evt) {
     let fn = function () {};
 
+    if (evt.metaKey) {
+      return;
+    }
+
     if (evt.keyCode === 32) {
       fn = $scope.toggleCharts; 
     }

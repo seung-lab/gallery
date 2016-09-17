@@ -34,7 +34,7 @@
 	display flex
 	align-items center
 	flex-direction row
-	justify-content space-between
+	justify-content flex-end
 	padding 15px
 	padding-left 25px
 	box-shadow rgba(0,0,0,0.15) 0px 0px 50px
@@ -46,7 +46,10 @@
 	
 .characterization-header h1
 	@extend .header
-	margin-left 25px
+	
+	position absolute
+	left 25px
+	top 5px
 	
 .characterization .notSecurelyKnown
 	color gray

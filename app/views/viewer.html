@@ -79,9 +79,16 @@
             'fullscreen-icon': true, 
             'rotate-ninety': sidebarFullscreen 
           }" md-svg-icon="icons/fullscreen.svg" ></md-icon>
-          <md-tooltip md-direction="left" md-visible="tooltipVisible" md-autohide="true">
+          <md-tooltip md-direction="bottom" md-visible="tooltipVisible" md-autohide="true">
             {{ sidebarFullscreen ? "To Viewer (f)" : "Fullscreen (f)" }}
           </md-tooltip>
+        </md-button>
+
+        <md-button ng-click="charts_open = false" class="circular-button">
+            X
+            <md-tooltip md-direction="bottom" md-visible="tooltipVisible" md-autohide="true">
+              Close Menu
+            </md-tooltip>
         </md-button>
 
       </div>
