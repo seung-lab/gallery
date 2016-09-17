@@ -111,7 +111,9 @@ app.factory('camera', function (scene) {
       _this.controls.target0 = center.clone();
       center.x += size.x / 2.0;
 
-      _this.controls.position0.set(center.x + 2 * dist, center.y, center.z);
+      var x = -1 * (center.x + 2 * dist);
+
+      _this.controls.position0.set(x, center.y, center.z);
 
       _this.controls.up0.set(0, 0, -1);
 
