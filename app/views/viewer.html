@@ -10,9 +10,22 @@
         </md-tooltip>
       </md-button>
       <div class="search">
-        <md-autocomplete ng-keydown="searchKeydown($event)" ng-disabled="isDisabled" md-no-cache="noCache" md-selected-item="selectedItem" md-search-text-change="searchTextChange(searchText)" md-search-text="searchText" md-selected-item-change="selectedItemChange(item)" md-items="item in querySearch(searchText)" md-item-text="item.display" md-min-length="0" placeholder="Museum Search">
+        <md-autocomplete 
+          ng-keydown="searchKeydown($event)" 
+          ng-disabled="false" 
+          md-no-cache="true" 
+          md-selected-item="selectedItem" 
+          md-search-text-change="searchTextChange(searchText)" 
+          md-search-text="searchText" 
+          md-selected-item-change="selectedItemChange(item)" 
+          md-items="item in querySearch(searchText)"
+          md-item-text="item.display"
+          md-escape-key="blur" 
+          md-min-length="0" 
+          placeholder="Museum Search">
+
           <md-item-template>
-          <span md-highlight-text="searchText" md-highlight-flags="^i">{{item.display}}</span>
+          <span class="autocomplete-match" md-highlight-text="searchText" md-highlight-flags="^i" ng-bind-html>{{item.display}} &ndash; {{item.count}} cell{{ item.count === 1 ? '' : 's' }}</span>
           </md-item-template>
           <md-not-found> 
           {{
