@@ -117,7 +117,7 @@ app.controller('ViewerCtrl', [
   $scope.selectedItemChange = function (item) {
     // timeout fixes angular material bug where a mask is applied that
     // blocks the main area and doesn't get removed
-    
+
     $timeout(function () {}, 0);
   };
 
@@ -152,6 +152,7 @@ app.controller('ViewerCtrl', [
     }
 
     $scope.gotoFirstAutocompleteResult();
+    angular.element(evt.target).blur();
   };
 
   $scope.gotoFirstAutocompleteResult = function () {

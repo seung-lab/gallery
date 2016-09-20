@@ -10,7 +10,7 @@
         </md-tooltip>
       </md-button>
       <div class="search">
-        <md-autocomplete 
+        <museum-md-autocomplete 
           ng-keydown="searchKeydown($event)" 
           ng-disabled="false" 
           md-no-cache="true" 
@@ -34,7 +34,7 @@
               : "Loading autocompletions..."
           }}
           </md-not-found>
-        </md-autocomplete>
+        </museum-md-autocomplete>
         <i ng-click="gotoFirstAutocompleteResult()" class="search-action" aria-hidden="true"></i>
         <div ng-click="toggleBrowse()" class="advanced">Browse</div>
       </div>

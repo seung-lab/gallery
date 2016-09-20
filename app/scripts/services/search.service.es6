@@ -42,10 +42,10 @@ app.factory('searchService', function (cellService) {
 		let metric = _this.dataset.map(function (state) {
 			return [ 
 				state, 
-				state.display.match(prefix_regexp) ? -1 : 0,
-				state.display.match(substring_regexp) ? -1 : 0,
-				levenshteinDistance(query, state.display.toLowerCase()),
-				state.display.toLowerCase()
+				state.display.match(prefix_regexp) ? -1 : 0, // prefix comes first e.g. 4 matches 4ow before 3i
+				state.display.match(substring_regexp) ? -1 : 0, // substrings e.g. SAC matches OFF SAC before random stuff
+				levenshteinDistance(query, state.display.toLowerCase()), // similar matches from edit distance
+				state.display.toLowerCase() // then by alphabetical order
 			];
 		});
 
