@@ -115,12 +115,10 @@ app.controller('ViewerCtrl', [
   $scope.querySearch = searchService.search;
 
   $scope.selectedItemChange = function (item) {
-    // fixes angular material bug where a mask is applied that
+    // timeout fixes angular material bug where a mask is applied that
     // blocks the main area and doesn't get removed
-
-    $timeout(function () {
-      
-    }, 0);
+    
+    $timeout(function () {}, 0);
   };
 
   $scope.goToCellIds = function (cellids = []) {

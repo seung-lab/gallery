@@ -25,7 +25,7 @@
           placeholder="Museum Search">
 
           <md-item-template>
-          <span class="autocomplete-match" md-highlight-text="searchText" md-highlight-flags="^i" ng-bind-html>{{item.display}} &ndash; {{item.count}} cell{{ item.count === 1 ? '' : 's' }}</span>
+          <span class="autocomplete-match" md-highlight-text="searchText" md-highlight-flags="^i">{{item.display}} &ndash; {{item.count}} cell{{ item.count === 1 ? '' : 's' }}</span>
           </md-item-template>
           <md-not-found> 
           {{

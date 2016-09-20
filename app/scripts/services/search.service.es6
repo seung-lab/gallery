@@ -12,37 +12,46 @@ app.factory('searchService', function (cellService) {
 	};
 
 	function normalizeQuery (query = "") {
-    return query.toLowerCase().split(/ *[ ,] */g);
+		return query.toLowerCase().split(/ *[ ,] */g);
 	}
 
 	this.firstResults = function (query = "") {
-    let cellids = [];
+		let cellids = [];
 
-    normalizeQuery(query).forEach(function (subquery) {
-      let results = _this.search(subquery);
-      cellids = cellids.concat([...(results[0].value)]);     
-    });
+		normalizeQuery(query).forEach(function (subquery) {
+			let results = _this.search(subquery);
+			cellids = cellids.concat([...(results[0].value)]);     
+		});
 
-    return _.uniq(cellids);
+		return _.uniq(cellids);
 	}
 
 	this.search = function (query) {
-    query = query || "";
-    query = normalizeQuery(query);
-    query = query[query.length - 1];
+		query = query || "";
+		query = normalizeQuery(query);
+		query = query[query.length - 1];
 
-    if (!query) {
-    	return _this.dataset;
-    }
+		if (!query) {
+			return _this.dataset;
+		}
 
-    let metric = _this.dataset.map(function (state) {
-      return [ state, levenshteinDistance(query, state.display.toLowerCase()) ];
-    })
-    .filter( (state_score) => state_score[1] < 3 );
+		let regquery = query.replace(/[^\w\d]/g, '');
+		let regexp = new RegExp(`^${regquery}`, 'i');
 
-    metric.sort( (a,b) => a[1] - b[1] );
+		let metric = _this.dataset.map(function (state) {
+			return [ 
+				state, 
+				levenshteinDistance(query, state.display.toLowerCase()),  
+				state.display.match(regexp) ? -1 : 0
+			];
+		})
+		// .filter( (state_score) => state_score[1] <= 3 );
 
-    return metric.map( (state_score) => state_score[0] );
+		metric.sort(function (a,b) {
+			return (a[2] - b[2]) || (a[1] - b[1]);
+		});
+
+		return metric.map( (state_score) => state_score[0] );
 	}
 
 	/* Modified from https://gist.github.com/andrei-m/982927
@@ -58,47 +67,47 @@ app.factory('searchService', function (cellService) {
 
 	// Compute the edit distance between the two given strings
 	function levenshteinDistance (a, b) {
-	  if (a.length == 0) return b.length; 
-	  if (b.length == 0) return a.length; 
+		if (a.length == 0) return b.length; 
+		if (b.length == 0) return a.length; 
 
-	  var matrix = new Array(b.length + 1);
+		var matrix = new Array(b.length + 1);
 
-	  // increment along the first column of each row
-	  for (var i = 0; i <= b.length; i++) {
-	    matrix[i] = new Array(a.length + 1);
-	    matrix[i][0] = i;
-	  }
+		// increment along the first column of each row
+		for (var i = 0; i <= b.length; i++) {
+			matrix[i] = new Array(a.length + 1);
+			matrix[i][0] = i;
+		}
 
-	  // increment each column in the first row
-	  for (var j = 0; j <= a.length; j++) {
-	    matrix[0][j] = j;
-	  }
+		// increment each column in the first row
+		for (var j = 0; j <= a.length; j++) {
+			matrix[0][j] = j;
+		}
 
-	  // Fill in the rest of the matrix
-	  for (i = 1; i <= b.length; i++) {
-	    for (j = 1; j <= a.length; j++) {
-	      if (b.charAt(i-1) == a.charAt(j-1)) {
-	        matrix[i][j] = matrix[i-1][j-1];
-	      } 
-	      else {
-	        matrix[i][j] = Math.min(
-	        	matrix[i-1][j-1] + 1, // substitution
-           	Math.min(
-           		matrix[i][j-1] + 1, // insertion
-              matrix[i-1][j] + 1  // deletion
-          )); 
-	      }
-	    }
-	  }
+		// Fill in the rest of the matrix
+		for (i = 1; i <= b.length; i++) {
+			for (j = 1; j <= a.length; j++) {
+				if (b.charAt(i-1) == a.charAt(j-1)) {
+					matrix[i][j] = matrix[i-1][j-1];
+				} 
+				else {
+					matrix[i][j] = Math.min(
+						matrix[i-1][j-1] + 1, // substitution
+						Math.min(
+							matrix[i][j-1] + 1, // insertion
+							matrix[i-1][j] + 1  // deletion
+					)); 
+				}
+			}
+		}
 
-	  return matrix[b.length][a.length];
+		return matrix[b.length][a.length];
 	};
 
 
-  /*
-   * Build `states` list of key/value pairs
-   */
- 	function loadAllAutocompletes (cellinfos) {
+	/*
+	 * Build `states` list of key/value pairs
+	 */
+	function loadAllAutocompletes (cellinfos) {
 		let cells = {};
 
 		function addInfo (cell, attr) {
@@ -129,7 +138,7 @@ app.factory('searchService', function (cellService) {
 
 			return item;
 		});
- 	}
+	}
 
- 	return this;
+	return this;
 });
