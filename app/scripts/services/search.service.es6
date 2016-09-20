@@ -36,19 +36,21 @@ app.factory('searchService', function (cellService) {
 		}
 
 		let regquery = query.replace(/[^\w\d]/g, '');
-		let regexp = new RegExp(`^${regquery}`, 'i');
+		let prefix_regexp = new RegExp(`^${regquery}`, 'i');
+		let substring_regexp = new RegExp(`${regquery}`, 'i');
 
 		let metric = _this.dataset.map(function (state) {
 			return [ 
 				state, 
-				levenshteinDistance(query, state.display.toLowerCase()),  
-				state.display.match(regexp) ? -1 : 0
+				state.display.match(prefix_regexp) ? -1 : 0,
+				state.display.match(substring_regexp) ? -1 : 0,
+				levenshteinDistance(query, state.display.toLowerCase()),
+				state.display.toLowerCase()
 			];
-		})
-		// .filter( (state_score) => state_score[1] <= 3 );
+		});
 
 		metric.sort(function (a,b) {
-			return (a[2] - b[2]) || (a[1] - b[1]);
+			return (a[1] - b[1]) || (a[2] - b[2]) || (a[3] - b[3]) || a[4].localeCompare(b[4]);
 		});
 
 		return metric.map( (state_score) => state_score[0] );
