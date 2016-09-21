@@ -43,4 +43,5 @@ app.service('cellSetsService', [ '$q', '$resource', function ($q, $resource) {
               .replace(/\^(\w+)\b/, '<sup>$1</sup>');
 	};
 	
+	return this;
 }]);

@@ -2,11 +2,10 @@
 
 // include axes for debugging
 app.controller('ViewerCtrl', [
-  '$scope', '$timeout', '$state', '$location', '$document', '$window', 'meshService', 'camera', 'cellSetsService', 'cellService', 'scene',
-  function ($scope, $timeout, $state, $location, $document, $window, meshService, camera, cellSetsService, cellService, scene) {
+  '$scope', '$timeout', '$state', '$location', '$document', '$window', 'meshService', 'camera', 'cellSetsService', 'cellService', 'searchService', 'scene',
+  function ($scope, $timeout, $state, $location, $document, $window, meshService, camera, cellSetsService, cellService, searchService, scene) {
   
   let self = this;
-  self.states = [];
 
   $scope.cells = [];
   $scope.loading = {
@@ -102,7 +101,7 @@ app.controller('ViewerCtrl', [
   cellService.list()
     .then(function (cellinfos) {
       $scope.autocompleteLoaded = true;
-      self.states = loadAllAutocompletes(cellinfos);
+      searchService.setDataset(cellinfos);
       self.cellids_by_type = createTypeList(cellinfos);
     });
 
@@ -113,30 +112,13 @@ app.controller('ViewerCtrl', [
     /**
    * Populates the autocomplete list shown
    */
-  $scope.querySearch = function (query) {
-    query = query || "";
-    query = query.toLowerCase();
-    query = query.split(/ *[ ,] */g);
-    query = query.length 
-      ? query[query.length - 1]
-      : "";
-
-    let results = query
-      ? self.states.filter(function (state) {
-          return state.value.toLowerCase().indexOf(query) > -1 || state.display.toLowerCase().indexOf(query) > -1;
-        })
-      : self.states;
-
-    return results || [];
-  };
+  $scope.querySearch = searchService.search;
 
   $scope.selectedItemChange = function (item) {
-    // fixes angular material bug where a mask is applied that
+    // timeout fixes angular material bug where a mask is applied that
     // blocks the main area and doesn't get removed
 
-    $timeout(function () {
-      
-    }, 0);
+    $timeout(function () {}, 0);
   };
 
   $scope.goToCellIds = function (cellids = []) {
@@ -159,7 +141,7 @@ app.controller('ViewerCtrl', [
       return;
     }
 
-    $scope.goToCellIds(item.value.split(','));
+    $scope.goToCellIds([ ...item.value ]);
   };
 
   $scope.searchKeydown = function (evt) {
@@ -170,6 +152,7 @@ app.controller('ViewerCtrl', [
     }
 
     $scope.gotoFirstAutocompleteResult();
+    angular.element(evt.target).blur();
   };
 
   $scope.gotoFirstAutocompleteResult = function () {
@@ -177,21 +160,11 @@ app.controller('ViewerCtrl', [
       $scope.goToResult($scope.selectedItem);
     }
     else if ($scope.searchText) {
-      
-      let neurons = [];
 
-      $scope.searchText.split(/ *[ ,] */g).forEach(function (query) {
-        let results = $scope.querySearch(query);
+      let cellids = searchService.firstResults($scope.searchText);
 
-        if (results.length) {
-          neurons.push.apply(neurons, results[0].value.split(/,/g));
-        }
-      });
-
-      neurons = _.uniq(neurons);
-      
-      if (neurons.length) {
-        $scope.goToCellIds(neurons);
+      if (cellids.length) {
+        $scope.goToCellIds(cellids);
       }
     }
   };
@@ -207,43 +180,6 @@ app.controller('ViewerCtrl', [
     return types;
   }
 
-  /*
-   * Build `states` list of key/value pairs
-   */
-  function loadAllAutocompletes (cellinfos) {
-    let cells = {};
-    function addInfo (cell, attr) {
-      if (cell[attr] === undefined) {
-        return;
-      }
-
-      cells[cell[attr]] = cells[cell[attr]] || {
-        display: cell[attr] || "null",
-        value: [],
-      };
-
-      cells[cell[attr]].value.push(cell.id);
-    }
-
-
-    for (let cell of cellinfos) {
-      addInfo(cell, 'id');
-      addInfo(cell, 'name');
-      addInfo(cell, 'description');
-      addInfo(cell, 'type');
-    }
-   
-    return Object.keys(cells).map(function (key) {
-      let field = cells[key];
-
-      if (field.value.length > 1) {
-        field.display += ` (${field.value.length} cells)`;
-      }
-
-      field.value = field.value.join(",");
-      return field;
-    })
-  }
 
   // Main Menu Sidebar
 
