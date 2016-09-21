@@ -1,6 +1,10 @@
 @require 'colors.styl'
 @require 'app.styl'
 
+$zero = 0px
+$padding_main = 20vw
+$card_width = ((90vw - $padding_main) / 2)
+
 .viewer .sidebar
 	width $SIDEBAR_RIGHT_WIDTH
 	min-width $MIN_SIDEBAR_WIDTH
@@ -28,16 +32,14 @@
 	
 	transition width 400ms ease-in-out, min-width 400ms ease-in-out
 	
-.sidebar .characterization
-	// overflow-x hidden
-	// width 100%
-	// display flex
-	// flex-direction column
-	
-.sidebar.fullscreen .characterization
+.viewer .sidebar.fullscreen .characterization
 	flex-direction row
 	flex-wrap wrap
 	align-self center
+	justify-content space-between
+	
+	padding-left 10vw
+	padding-right 10vw
 	
 .characterization-header
 	display flex
@@ -73,9 +75,13 @@
 	border-radius 5px
 	box-shadow rgba(0,0,0,0.15) 0px 1px 3px
 	
+.characterization .card .flex
+	width 100%
+	height 100%
 	display flex
 	flex-direction column
 	align-items flex-start
+	flex-shrink 0
 	
 border-top 1px solid $GRAYlassification-header .rollup
 	margin-bottom 10px
@@ -144,12 +150,16 @@ button.md-button.circular-button
 	font-weight 400
 	
 .viewer .sidebar .characterization
+	width 100%
 	overflow-y scroll
+	box-sizing border-box
 	
 	padding 10px
 	
+	display flex
+	flex-direction column
 	flex-grow 1
-	flex-shrink 1
+	flex-shrink 1	
 
 @media all and (max-width: ($MIN_SIDEBAR_WIDTH / .33)) 
 	.viewer .sidebar .characterization
@@ -177,18 +187,30 @@ button.md-button.circular-button
 	
 .viewer .sidebar .data-view-container:first-of-type
 	padding-right 0
-	max-width 100%
 	width 100%
 
-.viewer .sidebar.fullscreen .card
+.viewer .sidebar.fullscreen .flex
 	flex-direction column
 
 .viewer .sidebar.fullscreen .card:first-of-type
-	width 300px
+	margin-right 25vw
+	height auto
 	
-.viewer .sidebar.fullscreen .card
-	width 44vw
+.viewer .sidebar.fullscreen #stratification-chart
+	width $card_width
 	height @width
+	
+.viewer .sidebar.fullscreen #temporal-chart
+	height 40vh
+	min-height 200px
+
+.viewer .sidebar.fullscreen .card
+	width $card_width
+	height s('calc(3vw + %s)', $width)
+	
+.viewer .sidebar.fullscreen .card:last-of-type
+	width 100%
+	height auto
 	
 .header-rule
 	width 100%
