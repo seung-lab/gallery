@@ -82,6 +82,7 @@ gulp.task('scripts', function () {
             "app/bower_components/threejs/build/three.js",
             "app/bower_components/angular/angular.js",
             "app/bower_components/lodash/dist/lodash.js",
+            "app/bower_components/file-saver/FileSaver.js",
             "app/bower_components/angular-resource/angular-resource.js",
             "app/bower_components/angular-cookies/angular-cookies.js",
             "app/bower_components/javascript-detect-element-resize/detect-element-resize.js",

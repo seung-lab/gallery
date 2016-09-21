@@ -138,6 +138,65 @@ app.factory('camera', function (scene) {
       this.updateControls();
     };
 
+    this.takeScreenshot = function (label, filename) {
+
+      var renderer = new THREE.WebGLRenderer({ 
+        antialias: true,
+        alpha: true,
+        logarithmicDepthBuffer: true,
+      });
+
+      renderer.setClearColor(0xff0000, 0);
+      renderer.sortObjects = true;
+      renderer.clear();
+
+      var width = 4096;
+      var height = 4096 / _this.aspectRatio;
+
+      var infoheight = Math.max(200, 0.1 * height);
+
+      renderer.setSize(width, height - infoheight);
+      
+      var camera = _this.camera.clone();
+      camera.aspect = renderer.domElement.width / renderer.domElement.height;
+      camera.updateProjectionMatrix();
+
+      renderer.render(scene, camera);
+
+      var canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(renderer.domElement, 0, 0);
+
+      var font_size = Math.trunc((infoheight * 0.15) * 1000) / 1000;
+
+      ctx.font = font_size + "px Roboto";
+      ctx.fillStyle = "#f2f2f2";
+
+      ctx.fillRect(0, canvas.height - infoheight, canvas.width, infoheight);
+
+      var offset = {
+        x: 175,
+        y: infoheight / 2 - font_size,
+      };
+
+      ctx.fillStyle = "#1a1a1a";
+      ctx.fillText(label.toUpperCase(), offset.x, canvas.height - (offset.y + 1.75 * font_size));
+      ctx.fillText('MOUSE RETINAL NEURONS', offset.x, canvas.height - offset.y);
+
+      var loc = location.hostname.toUpperCase();
+      var locdim = ctx.measureText(loc);
+
+      ctx.fillText(loc, canvas.width - locdim.width - offset.x, canvas.height - offset.y);
+
+      canvas
+        .toBlob(function (blob) {
+          saveAs(blob, filename + ".png");
+        });
+    };
+
     _this.aspectRatio = window.innerWidth / window.innerHeight;
     
     this.mode = PERSPECTIVE;

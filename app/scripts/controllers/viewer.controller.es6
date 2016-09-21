@@ -202,6 +202,16 @@ app.controller('ViewerCtrl', [
     }
   };
 
+  $scope.takeScreenshot = function () {
+    let filename = $scope.cell_types.map( (type) => type.type ).join('_');
+
+    let types = $scope.cell_types.map( (type) => type.type ).sort().join(', ');
+
+    let type_text = types.length === 1 ? 'Type' : 'Types';
+
+    camera.takeScreenshot(`${type_text} - ${types}`, filename);
+  };
+
   $scope.toggleBrowse = function (evt) {
     if ($scope.main_menu_open && $scope.browse) {
       $scope.main_menu_open = false;
