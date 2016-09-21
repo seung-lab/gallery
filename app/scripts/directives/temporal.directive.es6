@@ -138,7 +138,7 @@ app.directive('temporal', function ($timeout) {
         margin = {
           top: 25,
           right: 35,
-          bottom: 60,
+          bottom: 50,
           left: 35,
           padding: 25,
         };

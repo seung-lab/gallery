@@ -163,7 +163,7 @@ app.directive('stratification', function ($timeout) {
         margin = {
           top: 25,
           right: 25,
-          bottom: 60,
+          bottom: 50,
           left: 25,
           padding: 100,
         };
