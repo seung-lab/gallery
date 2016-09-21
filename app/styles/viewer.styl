@@ -1,10 +1,12 @@
 @require 'colors.styl'
+@require 'app.styl'
 @require 'characterization.styl'
+@require 'mainmenu.styl'
 
-header.viewer
+.viewer .searchTools
 	position absolute
-	top 0px
-	left 0px
+	top 5px
+	left s('calc(%s + 10px)', $SIDEBAR_LEFT_WIDTH)
 
 	z-index 10
 	border-bottom none
@@ -13,11 +15,26 @@ header.viewer
 	align-items center
 	
 	width auto
+	
+.viewer .fullscreen .searchTools
+	left calc(100vw + 10px)
+	
+.viewer .searchTools .md-button
+	position relative
+	top 0px
+	left 0px
+	margin-right 15px
+	
+.viewer .searchTools .md-button svg
+	transform scale(1.4)
+	
+.viewer .searchTools .md-button path
+	fill $BLACK
 
-header.viewer #logo
+.viewer .searchTools #logo
 	background-color $WHITE
 	margin-top 0px
-	margin-left 10px
+	margin-left 0px
 	margin-right 5px
 
 	border-radius 2px
@@ -29,8 +46,10 @@ header.viewer #logo
 	background-repeat no-repeat
 	
 	cursor pointer
+	
+	outline none
 
-header.viewer a .title
+.viewer .searchTools a .title
 	color $WHITE
 
 main.viewer
@@ -58,13 +77,13 @@ main.viewer
 	height 35px
 	width 50px
 	position absolute
-	top 21px
-	right 55px
+	top 16px
+	right 0px
 	vertical-align center
 	display flex
 	align-items center
 	justify-content center
-	border-right 2px solid rgba(0, 0, 0, 0.15)
+	
 	color black
 	
 	background-image url("/icons/search.svg")
@@ -80,70 +99,99 @@ main.viewer
 	transition opacity 150ms ease
     
 .viewer .search .advanced
-	height 50px
-	width @height
-	
 	position absolute
 	top 15px
-	right 5px
+	right -102px
 	
-	background-image url("/icons/advanced-search.svg")
-	background-repeat no-repeat
-	background-position center center
-	background-size 60%
+	color rgba($WHITE, 0.55)
+	background-color $BLACK
+	border 1px solid rgba($WHITE, 0.5)
 	
-	opacity 0.5
+	height 40px
+	display flex
+	align-items center
+	box-sizing border-box
+	padding 15px
+	
+	outline none
 	
 	cursor pointer
-	transition opacity 150ms ease
+	
+	user-select none
+	
+	transition color 150ms ease, border-color 150ms ease
 
-.viewer .search .search-action:hover,
 .viewer .search .advanced:hover
+	color rgba($WHITE, 0.8)
+	border-color rgba($WHITE, 0.75)
+
+.viewer .search .search-action:hover
 	opacity 0.75
 
+museum-md-autocomplete
+	background-color white
 
-.viewer md-autocomplete
+.viewer museum-md-autocomplete
 	width 375px
 	height 50px
 	
-.viewer md-autocomplete md-autocomplete-wrap
+.viewer museum-md-autocomplete md-autocomplete-wrap button
+	right 40px
+
+.viewer museum-md-autocomplete md-progress-linear
+	display none
+	
+.viewer museum-md-autocomplete md-autocomplete-wrap
 	height 49px
 	
-.viewer md-autocomplete input,
-.viewer md-autocomplete input:not(.md-input)
+.viewer museum-md-autocomplete input,
+.viewer museum-md-autocomplete input:not(.md-input)
 	height 50px
-	
+
 .viewer section.glider
 	height 100vh
-	width calc(95px + 33vw)
+	width $SIDEBAR_RIGHT_WIDTH
 	
 	position absolute
-	right -33vw
+	top 0px
 	
 	pointer-events none
 	
-	transition right 400ms ease-in-out, width 400ms ease-in-out
+	transition left 400ms ease-in-out, right 400ms ease-in-out, width 400ms ease-in-out
 
-.viewer section.glider.fullscreen
+.viewer section.glider.right
+	right -1 * $SIDEBAR_RIGHT_WIDTH
+	width s('calc(95px + %s)', $SIDEBAR_RIGHT_WIDTH)
+
+.viewer section.glider.right.fullscreen
+	right -100vw
 	width calc(95px + 100vw)
 	
+.viewer section.glider.left
+	left -1 * $SIDEBAR_LEFT_WIDTH
+	width s('calc(450px + %s)', $SIDEBAR_LEFT_WIDTH)
+	
+.viewer section.glider.left.fullscreen
+	left -100vw
+	width calc(450px + 100vw)
 
-$width_trigger = unit($MIN_SIDEBAR_WIDTH / .33, 'px')
+$width_trigger = unit($MIN_SIDEBAR_WIDTH / .25, 'px')
 @media all and (max-width: $width_trigger)
-	.viewer section.glider
+	.viewer section.glider.right
 		width $MIN_SIDEBAR_WIDTH + 95px
 		right -1 * $MIN_SIDEBAR_WIDTH
 		
-	.viewer section.glider.fullscreen
+	.viewer section.glider.right.fullscreen
 		width calc(95px + 100vw)
 		right -100vw
 
-.viewer section.glider.fullscreen
-	right -100vw
-
-.viewer section.glider.fullscreen.onscreen,
-.viewer section.glider.onscreen
+.viewer section.glider.right.fullscreen.onscreen,
+.viewer section.glider.right.onscreen
 	right 0px
+	
+.viewer section.glider.left.fullscreen.onscreen,
+.viewer section.glider.left.onscreen
+	left 0px
 	
 .viewer section.glider *
 	pointer-events auto
@@ -229,7 +277,7 @@ $width_trigger = unit($MIN_SIDEBAR_WIDTH / .33, 'px')
 .viewer .bottom-left
 	position absolute
 	bottom 20px
-	left 25px
+	left s('calc(%s + 35px)', $SIDEBAR_LEFT_WIDTH)
 	
 	font-size 12px
 	text-transform uppercase
@@ -238,6 +286,9 @@ $width_trigger = unit($MIN_SIDEBAR_WIDTH / .33, 'px')
 	color $WHITE
 	
 	line-height 2em
+	
+.viewer .fullscreen .bottom-left
+	left calc(100vw + 35px)
 
 .viewer .bottom-left a
 	color $WHITE
@@ -252,10 +303,30 @@ $width_trigger = unit($MIN_SIDEBAR_WIDTH / .33, 'px')
 
 .viewer .progress-indicator.onscreen
 	opacity 1
+	
+.viewer .progress-indicator .cell-type
+	text-transform none
 
 viewport 
 	user-select none
-	
+
+/*
+ *	Media Queries
+ */
+
+// ---> Small Screen
+
+/* ----------- Non-Retina Screens ----------- */
+@media screen and (min-width: 1665px) and (min-resolution: 1dppx) and (min-resolution: 96dpi)
+	.viewer section.glider.right
+		right -1 * $MAX_SIDEBAR_WIDTH
+		width s('calc(95px + %s)', $MAX_SIDEBAR_WIDTH)
+
+/* ----------- Retina Screens ----------- */
+@media screen and (min-width: 1665px) and (min-resolution: 2dppx) and (min-resolution: 192dpi)
+	.viewer section.glider.right
+		right -1 * $MAX_SIDEBAR_WIDTH
+		width s('calc(95px + %s)', $MAX_SIDEBAR_WIDTH)
 
 
 	

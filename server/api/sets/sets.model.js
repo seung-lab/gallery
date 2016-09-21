@@ -3,11 +3,11 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var SetSchema = new Schema({
-  name: String,
-  id: String,
-  children_are_cells: Boolean,
-  children: [String]  
+var SetsSchema = new Schema({
+  type: String,
+  classical_type: String,
+  securely_known: Boolean,
+  count: Number,
 });
 
-module.exports = mongoose.model('Set', SetSchema);
+module.exports = mongoose.model('Sets', SetsSchema);

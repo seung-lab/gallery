@@ -6,6 +6,7 @@ app.directive('infoheader', [function () {
     scope: {},
     template: `<div>
       <h2 ng-click="onscreen = !onscreen">{{heading}}</h2>
+      <hr>
       <div ng-click="onscreen = !onscreen" class="more">
         {{ onscreen ? '&mdash;' : ' +' }}
       </div>

@@ -5,7 +5,7 @@ app.directive('calcium', [ function () {
   var chartLinker = function (scope, element, attrs) {
     
     // Make dataset
-    scope.angles = [ 360, 45, 90, 135, 180, 225, 270, 315, 360 ]; // Hack for line to connect to self
+    scope.angles = [ 0, 315, 270, 225, 180, 135, 90, 45, 0 ]; // Hack for line to connect to self
     scope.dataset = makeDataset(scope);
 
     // Set up chart
@@ -79,7 +79,7 @@ app.directive('calcium', [ function () {
     let cells = scope.cells,
         activation = scope.activation;
 
-    cells = cells.filter( (cell) => cell.calcium );
+    cells = cells.filter( (cell) => cell.directional_response );
 
     let any_highlighted = false;
     cells.forEach( (cell) => any_highlighted = any_highlighted || cell.highlight );
@@ -106,7 +106,7 @@ app.directive('calcium', [ function () {
         hidden: hidden,
         color: color,
         data: scope.angles.map(function (angle) {
-          return cell.calcium.activations[activation][angle];
+          return cell.directional_response.activations[angle];
         }),
       };
     });
@@ -173,7 +173,8 @@ app.directive('calcium', [ function () {
     }
     
     function polarY(rad, theta) {
-      return radius + rad * Math.sin(toRadians(theta)); // Y + transtion to center
+      // -rad to flip chart to upright orientation
+      return radius + -rad * Math.sin(toRadians(theta)); // Y + transtion to center
     }
 
     // Define line 'polar' generatdebugger; or
@@ -610,10 +611,6 @@ app.directive('calcium', [ function () {
     function setDimensions() {
       width = angular.element('.radar-chart').width();
       height = width; // square format
-
-      width = width > 500
-        ? 500
-        : width;
 
       // SVG width --> height
       svg_container

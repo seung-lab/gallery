@@ -7,30 +7,30 @@
 	top 0
 	height 85%
 	width 100%
-	min-height 300px
+	min-height 250px
 	
 .stratification
-	height 41vh
-	min-height 350px
-	min-width 350px
+	height 35vh
+	min-height 300px
+	min-width 250px
+	
+#temporal-chart
+	height 20vh
+	min-height 150px
+	min-width 150px
 	
 .radar-container
 	width 100%
-	margin-top 20px
 	margin-bottom -10px
-	
-.radar-container .radar-chart:first-child
-	float left
-	
-.radar-container .radar-chart:last-child
-	float right
 
 .radar-chart
-	display inline-block
-	width 50%
+	display block
+	width 100%
 	min-height 100px
+	margin-left auto
+	margin-right auto
 	
-.radar-chart-fullscreen
+.fullscreen .radar-chart
 	width 100%
 	
 .sidebar .radar-container h3
@@ -66,7 +66,7 @@ svg
 	display block
 	width 100%
 
-path 
+calcium svg path 
 	// stroke $BLACK
 	stroke-width 1
 	fill none
@@ -102,7 +102,7 @@ circle
 	opacity 0.2
 	
 .regional-label
-	fill grey
+	fill $BLACK2
 	
 .regional-axis
 	fill none
@@ -111,7 +111,7 @@ circle
 	opacity 0.2
 	
 .regional-circle
-	fill $WHITE
+	fill WHITE
 	opacity 1
 	
 .axis path,
@@ -127,7 +127,16 @@ circle
 .tick line
 	opacity 0.2
 	
+.y.axis tick line
+	opacity 0.2
+	
 .x.axis line
+	opacity 1
+	
+.x.axis.gray-bar line
+	opacity 0.2
+	
+#temporal-chart  g .y .tick line
 	opacity 1
 	
 .axis-label
@@ -144,7 +153,7 @@ circle
 // 	font-size 9px
 // 	font-weight 700
 // 	letter-spacing 2px
-	fill grey
+	fill $BLACK2
 	
 .area
 	fill $BLACK
@@ -165,11 +174,11 @@ circle
 	
 	opacity 0
 	
-	color $BLACK
-	background $WHITE
-	border-radius 5px
+	color $BLACK2
+	background WHITE
 	pointer-events none
-	box-shadow rgba(0,0,0,0.075) 0px 0px 50px
+	border-radius 5px
+	box-shadow rgba(0,0,0,0.15) 0px 3px 5px
 	transition left 100ms ease-in-out,
 			   top 100ms ease-in-out,
 			   opacity 100ms ease-in-out
@@ -188,7 +197,7 @@ circle
 	width 5px
 	height 1px 
 	left 0
-	background-color $BLACK
+	background-color $BLACK2
 	
 .sidebar .tooltip h4
 	text-align left

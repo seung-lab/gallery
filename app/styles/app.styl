@@ -1,5 +1,10 @@
 @require "colors.styl"
 
+$MIN_SIDEBAR_WIDTH = 400px // right sidebar
+$MAX_SIDEBAR_WIDTH = 450px // right sidebar
+$SIDEBAR_RIGHT_WIDTH = 25vw
+$SIDEBAR_LEFT_WIDTH = 400px
+
 .whitepaper
 	line-height 1.75em
 	width 700px
@@ -81,6 +86,20 @@ div.button:hover
 	background-color $WHITE
 	color $BLACK
 	
-
+.header
+	font-size 16px
+	font-weight 600
+	text-transform uppercase
+	letter-spacing 1px
+	
+a
+	text-decoration none
+	color $BLACK
+	transition color 150ms ease
+	
+	padding-bottom 2px
+	border-bottom 1px solid $BLACK	
+	
+	cursor pointer
 
 

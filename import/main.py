@@ -73,7 +73,7 @@ def read_stratification():
     is returned
   """
   data = defaultdict(list)
-  mat = scipy.io.loadmat('rawdata/skel_strat.mat')['skel_strat'][0]
+  mat = scipy.io.loadmat('rawdata/skel_strat.mat')['skel_strat_renorm'][0]
 
   nanproblems = []
 
@@ -152,6 +152,8 @@ def save_cells_json():
   strat = read_stratification()
   temporal_response = read_temporal_response()
 
+  classical_types = slurp_json('data/classical_type_map.json')  
+
   # Write all the parseds cell ids
   # Do chaining of all the list of ids like [20126, 20228]
 
@@ -188,10 +190,13 @@ def save_cells_json():
       "segment": cell_id,
       "mesh_id": cell_id,
       "annotation": maybe(cell, 'annotation'),
+      "classical_type": None,
       "stratification": maybe(strat, cell_id),
       "temporal_response": maybe(temporal_response, cell_id),
       "directional_response": maybe(cell, 'directional_response'),
     }
+
+    cell['classical_type'] = maybe(classical_types, cell['name'])
 
     cells_ready_for_json.append(cell)
 
@@ -212,43 +217,37 @@ def save_cells_json():
 
   write_json(cells_ready_for_json, '../server/config/cells.json')
 
-def save_sets_json():
+  return cells_ready_for_json
+
+def save_sets_json(cells):
   """
     You know what this does,
     stop reading me
   """
-
-  sets_ready_for_json = []
-  #Create the root sets
-  #The one that contains other sets or sets of sets,
-  # or sets of sets of ..
-  json_set = {
-    'name' : 'root',
-    'id': 0,
-    'children_are_cells': False,
-    'children': [1]
-  }
-  sets_ready_for_json.append( json_set )
-
-  #Create the GC super set
-  json_set = {
-    'name' : 'GC',
-    'id': 1,
-    'children_are_cells': False,
-    'children': range(2,len(celltypes)+2)
-  }
-  sets_ready_for_json.append( json_set )
-
-  for i, type_name in enumerate(celltypes):
-    json_set = {
-      'name' : type_name,
-      'id': i+2,
-      'children_are_cells': True,
-      'children': celltypes[type_name]
-    }
-    sets_ready_for_json.append( json_set )
  
-  write_json(sets_ready_for_json, '../server/config/sets.json')
+  types = {}
+
+  for cell in cells:
+    if cell['name'] is None:
+      continue
+
+    if not types.has_key(cell['name']):
+      types[cell['name']] = {
+        'correspondance': None,
+        "securely_known": None,
+        'count': 0,
+      }
+
+    if cell['classical_type'] is not None:
+      types[cell['name']]['correspondance'] = cell['classical_type']['correspondance']
+      types[cell['name']]['securely_known'] = cell['classical_type']['securely_known']
+
+    types[cell['name']]['count'] += 1
+
+  print types
+
+  write_json(types, '../server/config/types.json')
+
 
 def generate_json():
   """Generate JSON from matlab files from Jinseop and Shang."""
@@ -272,8 +271,8 @@ def main():
 
   process_calcium_data()
 
-  save_cells_json()
-  # save_sets_json()
+  cells = save_cells_json()
+  save_sets_json(cells)
 
 if __name__ == '__main__':
   main()

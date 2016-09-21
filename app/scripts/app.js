@@ -3,6 +3,7 @@ var app = angular.module('Museum', [
   'ngResource',
   'ui.router',
   'ngMaterial',
+  'ngSanitize',
   'angular-cache'
 ]);
 

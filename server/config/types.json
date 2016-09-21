@@ -1,0 +1,322 @@
+{
+  "1ni": {
+    "correspondance": null, 
+    "count": 5, 
+    "securely_known": null
+  }, 
+  "1no": {
+    "correspondance": null, 
+    "count": 8, 
+    "securely_known": null
+  }, 
+  "1ws": {
+    "correspondance": "M1", 
+    "count": 2, 
+    "securely_known": true
+  }, 
+  "1wt": {
+    "correspondance": "sOff-alpha", 
+    "count": 3, 
+    "securely_known": true
+  }, 
+  "25": {
+    "correspondance": null, 
+    "count": 22, 
+    "securely_known": null
+  }, 
+  "27": {
+    "correspondance": null, 
+    "count": 4, 
+    "securely_known": null
+  }, 
+  "28": {
+    "correspondance": null, 
+    "count": 7, 
+    "securely_known": null
+  }, 
+  "2an": {
+    "correspondance": "F-mini^Off", 
+    "count": 25, 
+    "securely_known": true
+  }, 
+  "2aw": {
+    "correspondance": "F-midi^Off,J", 
+    "count": 23, 
+    "securely_known": true
+  }, 
+  "2i": {
+    "correspondance": null, 
+    "count": 10, 
+    "securely_known": null
+  }, 
+  "2o": {
+    "correspondance": null, 
+    "count": 5, 
+    "securely_known": null
+  }, 
+  "37c": {
+    "correspondance": "On-Off DS", 
+    "count": 10, 
+    "securely_known": true
+  }, 
+  "37d": {
+    "correspondance": "On-Off DS", 
+    "count": 6, 
+    "securely_known": true
+  }, 
+  "37r": {
+    "correspondance": "On-Off DS", 
+    "count": 9, 
+    "securely_known": true
+  }, 
+  "37v": {
+    "correspondance": "On-Off DS", 
+    "count": 9, 
+    "securely_known": true
+  }, 
+  "3i": {
+    "correspondance": null, 
+    "count": 7, 
+    "securely_known": null
+  }, 
+  "3o": {
+    "correspondance": null, 
+    "count": 4, 
+    "securely_known": null
+  }, 
+  "4i": {
+    "correspondance": null, 
+    "count": 12, 
+    "securely_known": null
+  }, 
+  "4on": {
+    "correspondance": null, 
+    "count": 11, 
+    "securely_known": null
+  }, 
+  "4ow": {
+    "correspondance": "tOff-alpha", 
+    "count": 4, 
+    "securely_known": true
+  }, 
+  "51": {
+    "correspondance": "W3", 
+    "count": 19, 
+    "securely_known": true
+  }, 
+  "5si": {
+    "correspondance": null, 
+    "count": 11, 
+    "securely_known": null
+  }, 
+  "5so": {
+    "correspondance": null, 
+    "count": 16, 
+    "securely_known": null
+  }, 
+  "5ti": {
+    "correspondance": null, 
+    "count": 30, 
+    "securely_known": null
+  }, 
+  "5to": {
+    "correspondance": null, 
+    "count": 3, 
+    "securely_known": null
+  }, 
+  "63": {
+    "correspondance": "F-mini^On", 
+    "count": 25, 
+    "securely_known": false
+  }, 
+  "6sn": {
+    "correspondance": null, 
+    "count": 6, 
+    "securely_known": null
+  }, 
+  "6sw": {
+    "correspondance": "tOn-alpha", 
+    "count": 5, 
+    "securely_known": false
+  }, 
+  "6t": {
+    "correspondance": "F-midi^On", 
+    "count": 3, 
+    "securely_known": false
+  }, 
+  "72": {
+    "correspondance": null, 
+    "count": 5, 
+    "securely_known": null
+  }, 
+  "73": {
+    "correspondance": null, 
+    "count": 7, 
+    "securely_known": null
+  }, 
+  "7id": {
+    "correspondance": "sOn DS", 
+    "count": 3, 
+    "securely_known": true
+  }, 
+  "7ir": {
+    "correspondance": "sOn DS", 
+    "count": 4, 
+    "securely_known": true
+  }, 
+  "7iv": {
+    "correspondance": "sOn DS", 
+    "count": 2, 
+    "securely_known": true
+  }, 
+  "7o": {
+    "correspondance": "tOn DS", 
+    "count": 7, 
+    "securely_known": false
+  }, 
+  "81i": {
+    "correspondance": null, 
+    "count": 3, 
+    "securely_known": null
+  }, 
+  "81o": {
+    "correspondance": null, 
+    "count": 2, 
+    "securely_known": null
+  }, 
+  "82n": {
+    "correspondance": null, 
+    "count": 6, 
+    "securely_known": null
+  }, 
+  "82wi": {
+    "correspondance": null, 
+    "count": 3, 
+    "securely_known": null
+  }, 
+  "82wo": {
+    "correspondance": null, 
+    "count": 2, 
+    "securely_known": null
+  }, 
+  "85": {
+    "correspondance": null, 
+    "count": 10, 
+    "securely_known": null
+  }, 
+  "8n": {
+    "correspondance": null, 
+    "count": 1, 
+    "securely_known": null
+  }, 
+  "8w": {
+    "correspondance": "sOn-alpha", 
+    "count": 4, 
+    "securely_known": true
+  }, 
+  "91": {
+    "correspondance": null, 
+    "count": 6, 
+    "securely_known": null
+  }, 
+  "915": {
+    "correspondance": null, 
+    "count": 2, 
+    "securely_known": null
+  }, 
+  "9n": {
+    "correspondance": null, 
+    "count": 9, 
+    "securely_known": null
+  }, 
+  "9w": {
+    "correspondance": "M2", 
+    "count": 1, 
+    "securely_known": true
+  }, 
+  "OFF SAC": {
+    "correspondance": null, 
+    "count": 80, 
+    "securely_known": null
+  }, 
+  "ON SAC": {
+    "correspondance": null, 
+    "count": 103, 
+    "securely_known": null
+  }, 
+  "bc1": {
+    "correspondance": null, 
+    "count": 41, 
+    "securely_known": null
+  }, 
+  "bc2": {
+    "correspondance": null, 
+    "count": 55, 
+    "securely_known": null
+  }, 
+  "bc3a": {
+    "correspondance": null, 
+    "count": 28, 
+    "securely_known": null
+  }, 
+  "bc3b": {
+    "correspondance": null, 
+    "count": 34, 
+    "securely_known": null
+  }, 
+  "bc4": {
+    "correspondance": null, 
+    "count": 33, 
+    "securely_known": null
+  }, 
+  "bc5i": {
+    "correspondance": null, 
+    "count": 41, 
+    "securely_known": null
+  }, 
+  "bc5o": {
+    "correspondance": null, 
+    "count": 28, 
+    "securely_known": null
+  }, 
+  "bc5t": {
+    "correspondance": null, 
+    "count": 25, 
+    "securely_known": null
+  }, 
+  "bc6": {
+    "correspondance": null, 
+    "count": 47, 
+    "securely_known": null
+  }, 
+  "bc7": {
+    "correspondance": null, 
+    "count": 29, 
+    "securely_known": null
+  }, 
+  "bc8/9": {
+    "correspondance": null, 
+    "count": 10, 
+    "securely_known": null
+  }, 
+  "cutoffs": {
+    "correspondance": null, 
+    "count": 11, 
+    "securely_known": null
+  }, 
+  "rbc": {
+    "correspondance": null, 
+    "count": 79, 
+    "securely_known": null
+  }, 
+  "weirdos": {
+    "correspondance": null, 
+    "count": 4, 
+    "securely_known": null
+  }, 
+  "xbc": {
+    "correspondance": null, 
+    "count": 12, 
+    "securely_known": null
+  }
+}

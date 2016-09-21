@@ -10,13 +10,21 @@ var user = require('../api/user/user.model');
 var cells =require('../api/cells/cells.model');
 
 var cells_import = require('./cells.json')
-var sets_import = require('./sets.json')
-
-
+var types_import = require('./types.json')
 
 sets.find({}).remove(function() {
-  sets.create(sets_import ,
-  function() {
+
+  var types = Object.keys(types_import).map(function (type) {
+    var info = types_import[type];
+    return {
+      type: type,
+      classical_type: info ? info.correspondance : null,
+      securely_known: info ? info.securely_known : null,
+      count: info ? info.count : null,    
+    };
+  });
+
+  sets.create(types, function () {
     console.log('finished populating sets');
   });
 });

@@ -12,7 +12,9 @@ var CellSchema = new Schema({
   description: String,
   copyright: String,
   stratification: [],
-  calcium: {},
+  directional_response: {},
+  temporal_response: [],
+  classical_type: {},
   color: String,
 });
 
