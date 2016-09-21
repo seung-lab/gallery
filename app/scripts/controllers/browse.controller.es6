@@ -30,6 +30,12 @@ app.controller('BrowseCtrl', function ($scope, cellSetsService) {
   	});
   })();
 
+  $scope.$watch(function () {
+    return $scope.sets.map( (st) => st.type ).sort().join('$');
+  }, function () {
+    $scope.sets.sort( (a,b) => a.type.localeCompare(b.type) );
+  });
+
 
   $scope.chooseType = function (type) {
    	let cell_ids = $scope.$parent.cellIdsForType(type);
