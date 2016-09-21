@@ -41,6 +41,6 @@ The Museum currently supports four kinds of data:
 6. Final Ca2+ Export (Tuning Curves)
 	- `ca_export_museum.mat` (Matlab/Octave matrix)
 	- Final response size for 8 directions and mean temporal response for museum 
-	- Thrid row in tuning_ordered_unified_coord_base0 is the on-off combined responses, orded as 0, 45... in the final coordinates.
+	- Thrid row in tuning_ordered_unified_coord_base0 is the on-off combined responses, ordered as 0, 45... in the final coordinates.
 
 	- last coordinate is ROI indicies 

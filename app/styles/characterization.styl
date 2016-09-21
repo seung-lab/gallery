@@ -1,11 +1,14 @@
 @require 'colors.styl'
 @require 'app.styl'
 
-$MIN_SIDEBAR_WIDTH = 450px
+$zero = 0px
+$padding_main = 20vw
+$card_width = ((90vw - $padding_main) / 2)
 
 .viewer .sidebar
-	width 33vw
+	width $SIDEBAR_RIGHT_WIDTH
 	min-width $MIN_SIDEBAR_WIDTH
+	max-width $MAX_SIDEBAR_WIDTH
 	height 100vh
 
 	position absolute
@@ -29,20 +32,59 @@ $MIN_SIDEBAR_WIDTH = 450px
 	
 	transition width 400ms ease-in-out, min-width 400ms ease-in-out
 	
-.characterization
-	overflow-x hidden
+.viewer .sidebar.fullscreen .characterization
+	flex-direction row
+	flex-wrap wrap
+	align-self center
+	justify-content space-between
+	
+	padding-left 10vw
+	padding-right 10vw
 	
 .characterization-header
 	display flex
 	align-items center
 	flex-direction row
-	justify-content space-between
+	justify-content flex-end
 	padding 15px
 	padding-left 25px
-	box-shadow rgba(0,0,0,0.15) 0px 0px 50px
+	box-shadow rgba(0,0,0,0.15) 0px 0px 25px
+	background-color WHITE
+	
+	flex-shrink 0
+
+	box-sizing border-box
+	height 75px
+	z-index 10
 	
 .characterization-header h1
-	font-size 18px
+	@extend .header
+	
+	text-transform capitalize
+	position absolute
+	left 25px
+	margin 0
+	
+.characterization .notSecurelyKnown
+	color gray
+	
+.characterization .card
+	background-color WHITE
+	padding 15px
+	margin-bottom 10px
+	border-radius 5px
+	box-shadow rgba(0,0,0,0.15) 0px 1px 3px
+	
+.characterization .card .flex
+	width 100%
+	height 100%
+	display flex
+	flex-direction column
+	align-items flex-start
+	flex-shrink 0
+	
+border-top 1px solid $GRAYlassification-header .rollup
+	margin-bottom 10px
 	
 button.md-button.circular-button
 	border-radius 100%
@@ -52,8 +94,11 @@ button.md-button.circular-button
 	margin 0
 	min-width 0
 	
-#fullscreen-icon
+.fullscreen-icon
 	transition all 500ms ease-in-out
+	
+.fullscreen-icon + .md-ripple-container
+	border-radius 100%
 	
 .rotate-ninety
 	transform rotate(180deg)
@@ -63,7 +108,6 @@ button.md-button.circular-button
 	min-width 100vw
 	
 .viewer .sidebar a
-	@extend p a
 	line-height 1.75em
 
 .viewer .sidebar p
@@ -76,8 +120,6 @@ button.md-button.circular-button
 	margin-bottom 0.67em
 
 .viewer .sidebar h2
-	
-	border-top 1px solid $GRAY
 	width 100%
 	
 	line-height 1.5em
@@ -87,17 +129,6 @@ button.md-button.circular-button
 	text-transform uppercase
 	font-weight 700
 	letter-spacing 2px
-	
-	padding-top 5px
-	
-	margin-top 50px
-	margin-bottom 15px
-	
-.viewer .sidebar h2:first-of-type
-	margin-top 40px
-	
-.viewer .sidebar #classification-header
-	margin-top 10px
 	
 .viewer .sidebar h4
 	width 100%
@@ -119,17 +150,20 @@ button.md-button.circular-button
 	font-weight 400
 	
 .viewer .sidebar .characterization
+	width 100%
 	overflow-y scroll
+	box-sizing border-box
 	
-	padding 50px
-	padding-top 25px
+	padding 10px
 	
+	display flex
+	flex-direction column
 	flex-grow 1
-	flex-shrink 1
+	flex-shrink 1	
 
 @media all and (max-width: ($MIN_SIDEBAR_WIDTH / .33)) 
 	.viewer .sidebar .characterization
-		padding 25px	
+		padding 10px	
 		padding-top 15px
 
 .viewer .sidebar table.classification td
@@ -146,40 +180,107 @@ button.md-button.circular-button
 	right 50px
 	
 .viewer .sidebar .chart-view-container
-	max-width 40vw
 	display flex
 	flex-grow 1
 	align-items flex-start
 	flex-direction row
 	
-.viewer .sidebar .data-view-fullscreen
-	flex-direction column
-	
-.add-padding
-	padding-right 4vw
-	
-.viewer .sidebar .chart-view-container:first-of-type
-	max-width 100%
-	width 100%
-	
 .viewer .sidebar .data-view-container:first-of-type
-	max-width 100%
+	padding-right 0
 	width 100%
-	
-.chart-container
-	width 100%
-	display flex
+
+.viewer .sidebar.fullscreen .flex
 	flex-direction column
+
+.viewer .sidebar.fullscreen .card:first-of-type
+	margin-right 25vw
+	height auto
 	
-.row-align
-	flex-direction row
-	align-self center
+.viewer .sidebar.fullscreen #stratification-chart
+	width $card_width
+	height @width
+	
+.viewer .sidebar.fullscreen #temporal-chart
+	height 40vh
+	min-height 200px
+
+.viewer .sidebar.fullscreen .card
+	width $card_width
+	height s('calc(3vw + %s)', $width)
+	
+.viewer .sidebar.fullscreen .card:last-of-type
+	width 100%
+	height auto
 	
 .header-rule
 	width 100%
 
 	
 	
+/*
+ *	Media Queries
+ */
 
 
 
+// ---> Small Screen
+
+	// /* ----------- Non-Retina Screens ----------- */
+	// @media screen and (min-width: 400px) and (min-resolution: 1dppx) and (min-resolution: 96dpi)
+
+
+	// /* ----------- Retina Screens ----------- */
+	// @media screen and (min-width: 400px) and (min-resolution: 2dppx) and (min-resolution: 192dpi)
+		
+		
+
+// // ---> Medium Screen || iPad
+
+	// /* ----------- Non-Retina Screens Horizontal ----------- */
+	// @media screen and (max-width: 768px) and (min-resolution: 2dppx) and (min-resolution: 192dpi)
+
+
+	//  ----------- Retina Screens Horizontal ----------- 
+	// @media screen and (max-width: 768px) and (min-resolution: 1dppx) and (min-resolution: 96dpi)
+		
+
+// // ---> Large Screen
+
+	// /* ----------- Non-Retina Screens ----------- */
+	// @media screen and (min-width: 1000px) and (min-resolution: 1dppx) and (min-resolution: 96dpi)
+
+
+	// /* ----------- Retina Screens ----------- */
+	// @media screen and (min-width: 1000px) and (min-resolution: 2dppx) and (min-resolution: 192dpi)
+		
+		
+
+		
+/* ----------- Mobile Media Queries ----------- */
+
+/*
+ *	Set to hit an iPhone 6+
+ */
+
+@media only screen and (max-device-width: 414px) and (min-resolution: 2dppx)
+
+	.viewer .sidebar
+		width 100vw
+		min-width 300px
+		height 100vh
+		
+			
+/*
+ *	Set to hit an iPhone 6
+ */
+			
+// @media only screen and (max-device-width: 375px) and (min-resolution: 2dppx)
+			
+/*
+ *	Set to hit an iPhone 5 + 4
+ */
+			
+// @media only screen and (max-device-width: 320px) and (min-resolution: 2dppx)
+		
+		
+			

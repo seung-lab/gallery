@@ -12,14 +12,24 @@
 var _ = require('lodash');
 var sets = require('./sets.model');
 
-// Get list of sets
-exports.index = function(req, res) {
+var path = require('path');
+var fs = require('fs');
 
-  sets.find(function (err, set) {
-    if(err) { return handleError(res, err); }
-    return res.json(200, set);
+exports.index = function (req, res) {
+  sets.find(function (err, retrieved_sets) {
+    if (err) { return handleError(res, err); }
+
+    var items = retrieved_sets.map(function (item) {
+      return {
+        type: item.type,
+        classical_type: item.classical_type,
+        securely_known: item.securely_known,
+        count: item.count,
+      };
+    });
+
+    return res.json(200, items);
   });
-
 };
 
 // Get a single sets
@@ -89,7 +99,33 @@ exports.destroy = function(req, res) {
     });
 
   });
+};
 
+exports.preview = function (req, res) {
+  var filename = req.params.id;
+
+  filename = filename.replace(/\b(\d+\w+)\/preview\/?$/, '$1') + '.png';
+  filename = filename.replace(/\//g, '-');
+
+  var options = { 
+    root: path.resolve("data/cell_previews/"),
+    dotfiles: 'deny',
+    headers: { 
+      "Content-Type": 'image/png',
+
+      // prevent compress from gzipping
+      // which erases the content-length header
+      // which is necessary for showing progress.
+      // gzip -9 doesn't do anything for these anyway
+      "Cache-Control": 'no-transform', 
+    },
+  };
+
+  res.sendFile(filename, options, function (err) {
+    if (err) { 
+      res.status(404).send(filename + " -- file doesn't exist!");
+    }
+  });
 };
 
 function handleError(res, err) {
