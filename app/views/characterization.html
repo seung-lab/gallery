@@ -1,85 +1,93 @@
 <div class="card">
-  <infoheader id="classification-header" heading="Cells Present">
-    Types followed by a parenthetical indicate a mapping to a previously known type. Securely known types are in black, less certain mappings are in gray.
-  </infoheader>
-
-  <table class="classification">
-    <tr>
-      <td>{{ cell_types.length !== 1 ? 'Classes' : 'Class' }}</td>
-      <td>
-        <span class="celltypes" ng-repeat="klass in cell_classes">
-          <a href="http://wiki.eyewire.org/index.php?title={{klass}}_Cell">{{klass}}</a>{{$last ? '' : ', '}}
-        </span>
-      </td>
-    </tr>
-    <tr>
-      <td>{{ cell_types.length !== 1 ? 'Types' : 'Type' }}</td>
-      <td>
-        <span ng-repeat="type in cell_types">
-          {{type.type}}
-          <span ng-class="{ notSecurelyKnown: !type.securely_known }" ng-bind-html="type.classical"></span>{{$last ? '' : ', '}}
-        </span>
-      </td>
-    </tr>
-    <tr>
-      <td>Count</td>
-      <td>{{neurons.length}}</td>
-    </tr>
-  </table>
-</div>
-
-<div class="card">
-  <div id="stratification-container" class="data-view-container">
-
-    <infoheader id="stratification" class="header-rule" heading="Skeleton Density">
-      <p>
-        The following chart is a representation of skeletonized neuron arbor density (horizontal axis) by % IPL depth (vertical axis).
-      </p>
+  <div class="flex">
+    <infoheader id="classification-header" heading="Cells Present">
+      Types followed by a parenthetical indicate a mapping to a previously known type. Securely known types are in black, less certain mappings are in gray.
     </infoheader>
 
-    <stratification id="stratification-chart" 
-      class="chart chart-view-container stratification"
-      cells="cells"
-      cellids="neurons"/>
-
+    <table class="classification">
+      <tr>
+        <td>{{ cell_types.length !== 1 ? 'Classes' : 'Class' }}</td>
+        <td>
+          <span class="celltypes" ng-repeat="klass in cell_classes">
+            <a href="http://wiki.eyewire.org/index.php?title={{klass}}_Cell">{{klass}}</a>{{$last ? '' : ', '}}
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>{{ cell_types.length !== 1 ? 'Types' : 'Type' }}</td>
+        <td>
+          <span ng-repeat="type in cell_types">
+            {{type.type}}
+            <span ng-class="{ notSecurelyKnown: !type.securely_known }" ng-bind-html="type.classical"></span>{{$last ? '' : ', '}}
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>Count</td>
+        <td>{{neurons.length}}</td>
+      </tr>
+    </table>
   </div>
 </div>
 
 <div class="card">
-  <div id="preferred-direction-container" class="data-view-container">
+  <div class="flex">
+    <div id="stratification-container" class="data-view-container">
 
-    <infoheader class="header-rule" heading="Directional Response">
+      <infoheader id="stratification" class="header-rule" heading="Skeleton Density">
+        <p>
+          The following chart is a representation of skeletonized neuron arbor density (horizontal axis) by % IPL depth (vertical axis).
+        </p>
+      </infoheader>
 
-    <p>The following data are based on a two-photon calcium imaging experiment using bars of light moved along the indicated angles. Data are only available for some ganglion cells. These methods are described in <a href="http://www.nature.com/nature/journal/v471/n7337/full/nature09818.html">Briggman, et al. 2011</a>. [<a ui-sref="publications">3</a>]</p> 
+      <stratification id="stratification-chart" 
+        class="chart chart-view-container stratification"
+        cells="cells"
+        cellids="neurons"/>
 
-    </infoheader>
+    </div>
+  </div>
+</div>
 
-    <div class="radar-container chart-view-container">
-      <div id="radar-inner" class="radar-chart">
-        <calcium
-          class="radar"
-          activation="on"
-          cells="cells" />
+<div class="card">
+  <div class="flex">
+    <div id="preferred-direction-container" class="data-view-container">
+
+      <infoheader class="header-rule" heading="Directional Response">
+
+      <p>The following data are based on a two-photon calcium imaging experiment using bars of light moved along the indicated angles. Data are only available for some ganglion cells. These methods are described in <a href="http://www.nature.com/nature/journal/v471/n7337/full/nature09818.html">Briggman, et al. 2011</a>. [<a ui-sref="publications">3</a>]</p> 
+
+      </infoheader>
+
+      <div class="radar-container chart-view-container">
+        <div id="radar-inner" class="radar-chart">
+          <calcium
+            class="radar"
+            activation="on"
+            cells="cells" />
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <div class="card">
-  <div id="temporal-response-container" class="data-view-container">
-   <infoheader class="header-rule" heading="Temporal Response">
+  <div class="flex">
+    <div id="temporal-response-container" class="data-view-container">
+     <infoheader class="header-rule" heading="Temporal Response">
 
-    <p>The following data are based on a two-photon calcium imaging experiment using bars of light moved along the indicated angles. Data are only available for some ganglion cells. These methods are described in <a href="http://www.nature.com/nature/journal/v471/n7337/full/nature09818.html">Briggman, et al. 2011</a>. [<a ui-sref="publications">3</a>]</p> 
+      <p>The following data are based on a two-photon calcium imaging experiment using bars of light moved along the indicated angles. Data are only available for some ganglion cells. These methods are described in <a href="http://www.nature.com/nature/journal/v471/n7337/full/nature09818.html">Briggman, et al. 2011</a>. [<a ui-sref="publications">3</a>]</p> 
 
 
-    <p>The first line at one second denotes light on and the second line at two seconds denotes light off.</p>
+      <p>The first line at one second denotes light on and the second line at two seconds denotes light off.</p>
 
-    </infoheader>
+      </infoheader>
 
-    <temporal id="temporal-chart" 
-      class="chart chart-view-container temporal"
-      cells="cells"
-      cellids="neurons"/>
-  
+      <temporal id="temporal-chart" 
+        class="chart chart-view-container temporal"
+        cells="cells"
+        cellids="neurons"/>
+    
+    </div>
   </div>
 </div>
