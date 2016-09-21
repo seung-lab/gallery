@@ -320,13 +320,13 @@ app.directive('stratification', function ($timeout) {
             .attr("class", "cell-id");
         tooltip
           .append("h4")
-          .text("IPL%");
+          .text("Depth");
         tooltip
           .append("p")
           .attr("class", "ipl");
         tooltip
           .append("h4")
-          .text("Volume");
+          .text("Density");
         tooltip
           .append("p")
           .attr("class", "volume");
@@ -498,7 +498,7 @@ app.directive('stratification', function ($timeout) {
             .attr("class", "axis-label")
             .attr("text-anchor", "middle")
             .attr("transform", "translate(-10," + yScale(0.45) + ") rotate(-90)")
-            .text("IPL Depth %");
+            .text("IPL Depth");
 
       // Axis label | Y --> INL
       yLabel_INL = svg.select(".y.axis")
@@ -704,7 +704,7 @@ app.directive('stratification', function ($timeout) {
               });
 
             cellId.text(nearest.label);
-            ipl.text(nearest.x.toFixed(5));
+            ipl.text(nearest.x.toFixed(3));
             volume.text(nearest.y.toFixed(5));
 
           })
