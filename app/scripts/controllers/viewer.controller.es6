@@ -289,7 +289,7 @@ app.controller('ViewerCtrl', [
 
     if ($scope.charts_open) {
       $scope.main_menu_open = false;
-      angular.element('.characterization').scrollTo('#stratification', { msec: 0, offset: -25 });
+      angular.element('.characterization').scrollTo('#stratification-container', { msec: 0, offset: -100 });
     }
   };
 
