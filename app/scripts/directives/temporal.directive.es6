@@ -138,7 +138,7 @@ app.directive('temporal', function ($timeout) {
         margin = {
           top: 25,
           right: 35,
-          bottom: 50,
+          bottom: 60,
           left: 35,
           padding: 25,
         };
@@ -385,7 +385,7 @@ app.directive('temporal', function ($timeout) {
       xAxis.outerTickSize(-height);
 
       // Axis label | X + Y
-      xLabel.attr("transform", "translate(" + (width/2) + ", 50)");
+      xLabel.attr("transform", "translate(" + (width/2) + ", 40)");
       yLabel.attr("transform", "translate(" + (-width - 20) + ", " + yScale(y_axis_range.mid) + ") rotate(-90)");
 
       // Update vertical bars
@@ -421,7 +421,7 @@ app.directive('temporal', function ($timeout) {
         .append("text")
           .attr("class", "axis-label")
           .attr("text-anchor", "middle")
-          .attr("transform", "translate(" + (width/2) + ", 50)")
+          .attr("transform", "translate(" + (width/2) + ", 40)")
           .text("Time (s)");
 
       // Axis label | Y

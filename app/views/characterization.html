@@ -1,32 +1,34 @@
-<infoheader id="classification-header" heading="Cells Present">
-  Types followed by a parenthetical indicate a mapping to a previously known type. Securely known types are in black, less certain mappings are in gray.
-</infoheader>
+<div class="card">
+  <infoheader id="classification-header" heading="Cells Present">
+    Types followed by a parenthetical indicate a mapping to a previously known type. Securely known types are in black, less certain mappings are in gray.
+  </infoheader>
 
-<table class="classification">
-  <tr>
-    <td>{{ cell_types.length !== 1 ? 'Classes' : 'Class' }}</td>
-    <td>
-      <span class="celltypes" ng-repeat="klass in cell_classes">
-        <a href="http://wiki.eyewire.org/index.php?title={{klass}}_Cell">{{klass}}</a>{{$last ? '' : ', '}}
-      </span>
-    </td>
-  </tr>
-  <tr>
-    <td>{{ cell_types.length !== 1 ? 'Types' : 'Type' }}</td>
-    <td>
-      <span ng-repeat="type in cell_types">
-        {{type.type}}
-        <span ng-class="{ notSecurelyKnown: !type.securely_known }" ng-bind-html="type.classical"></span>{{$last ? '' : ', '}}
-      </span>
-    </td>
-  </tr>
-  <tr>
-    <td>Count</td>
-    <td>{{neurons.length}}</td>
-  </tr>
-</table>
+  <table class="classification">
+    <tr>
+      <td>{{ cell_types.length !== 1 ? 'Classes' : 'Class' }}</td>
+      <td>
+        <span class="celltypes" ng-repeat="klass in cell_classes">
+          <a href="http://wiki.eyewire.org/index.php?title={{klass}}_Cell">{{klass}}</a>{{$last ? '' : ', '}}
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>{{ cell_types.length !== 1 ? 'Types' : 'Type' }}</td>
+      <td>
+        <span ng-repeat="type in cell_types">
+          {{type.type}}
+          <span ng-class="{ notSecurelyKnown: !type.securely_known }" ng-bind-html="type.classical"></span>{{$last ? '' : ', '}}
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>Count</td>
+      <td>{{neurons.length}}</td>
+    </tr>
+  </table>
+</div>
 
-<div class="chart-container select-none">
+<div class="card">
   <div id="stratification-container" class="data-view-container">
 
     <infoheader id="stratification" class="header-rule" heading="Skeleton Density">
@@ -41,7 +43,9 @@
       cellids="neurons"/>
 
   </div>
+</div>
 
+<div class="card">
   <div id="preferred-direction-container" class="data-view-container">
 
     <infoheader class="header-rule" heading="Directional Response">
@@ -59,7 +63,9 @@
       </div>
     </div>
   </div>
+</div>
 
+<div class="card">
   <div id="temporal-response-container" class="data-view-container">
    <infoheader class="header-rule" heading="Temporal Response">
 

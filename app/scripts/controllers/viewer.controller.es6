@@ -428,37 +428,9 @@ app.controller('ViewerCtrl', [
       evt.target.blur();
     }
 
-    if (!$scope.sidebarFullscreen) { // If Fullscreen
-
-      // Set height of Stratification wrt Calcium data, wait to set height until Calcium
-      // has finished transitioning
-      setTimeout(function(){
-        let strat_height = angular.element('.radar-container').height();
-
-        angular.element('#stratification-chart')
-               .css('height', strat_height + "px");        
-
-      }, 350);
-
-      // Find limiting screen dimension
-      let limiting_factor = window.innerWidth < window.innerHeight
-          ? "vw"
-          : "vh";
-
-      angular.element('#preferred-direction-container')
-             .css('max-width', 45 + limiting_factor);
-    }
-    else {
-      angular.element('#stratification-chart')
-             .css('height', "40vh");
-
-      angular.element('#preferred-direction-container')
-             .css('max-width', "100%");
-    }
-
     $scope.sidebarFullscreen = !$scope.sidebarFullscreen;
-
     $location.search('fullscreen', $scope.sidebarFullscreen ? '1' : null).replace();
+    
   };
 
   // prevent scrolling on spacebar
