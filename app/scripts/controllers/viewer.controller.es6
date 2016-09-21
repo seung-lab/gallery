@@ -205,9 +205,21 @@ app.controller('ViewerCtrl', [
   $scope.takeScreenshot = function () {
     let filename = $scope.cell_types.map( (type) => type.type ).join('_');
 
-    let types = $scope.cell_types.map( (type) => type.type ).sort().join(', ');
+    let types = $scope.cell_types.map(function (type) {
+      let secure = type.securely_known ? '?' : '';
 
-    let type_text = types.length === 1 ? 'Type' : 'Types';
+      let classical = type.classical 
+        ? type.classical.replace(/[\(\)]/g, '') 
+        : null;
+
+      let text = classical 
+        ? `${type.type} (${classical}${secure})`
+        : type.type;
+
+      return text;
+    }).sort().join(', ');
+
+    let type_text = $scope.cell_types.length === 1 ? 'Type' : 'Types';
 
     camera.takeScreenshot(`${type_text} - ${types}`, filename);
   };
