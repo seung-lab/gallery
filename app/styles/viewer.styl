@@ -175,7 +175,7 @@ museum-md-autocomplete
 	left -100vw
 	width calc(450px + 100vw)
 
-$width_trigger = unit($MIN_SIDEBAR_WIDTH / .33, 'px')
+$width_trigger = unit($MIN_SIDEBAR_WIDTH / .25, 'px')
 @media all and (max-width: $width_trigger)
 	.viewer section.glider.right
 		width $MIN_SIDEBAR_WIDTH + 95px
@@ -309,7 +309,29 @@ $width_trigger = unit($MIN_SIDEBAR_WIDTH / .33, 'px')
 
 viewport 
 	user-select none
-	
+
+
+
+
+/*
+ *	Media Queries
+ */
+
+
+
+// ---> Small Screen
+
+/* ----------- Non-Retina Screens ----------- */
+@media screen and (min-width: 1665px) and (min-resolution: 1dppx) and (min-resolution: 96dpi)
+	.viewer section.glider.right
+		right -1 * $MAX_SIDEBAR_WIDTH
+		width s('calc(95px + %s)', $MAX_SIDEBAR_WIDTH)
+
+/* ----------- Retina Screens ----------- */
+@media screen and (min-width: 1665px) and (min-resolution: 2dppx) and (min-resolution: 192dpi)
+	.viewer section.glider.right
+		right -1 * $MAX_SIDEBAR_WIDTH
+		width s('calc(95px + %s)', $MAX_SIDEBAR_WIDTH)
 
 
 	

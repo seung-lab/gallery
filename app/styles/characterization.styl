@@ -2,8 +2,9 @@
 @require 'app.styl'
 
 .viewer .sidebar
-	width 33vw
+	width $SIDEBAR_RIGHT_WIDTH
 	min-width $MIN_SIDEBAR_WIDTH
+	max-width $MAX_SIDEBAR_WIDTH
 	height 100vh
 
 	position absolute
@@ -27,8 +28,16 @@
 	
 	transition width 400ms ease-in-out, min-width 400ms ease-in-out
 	
-.characterization
-	overflow-x hidden
+.sidebar .characterization
+	// overflow-x hidden
+	// width 100%
+	// display flex
+	// flex-direction column
+	
+.sidebar.fullscreen .characterization
+	flex-direction row
+	flex-wrap wrap
+	align-self center
 	
 .characterization-header
 	display flex
@@ -37,24 +46,38 @@
 	justify-content flex-end
 	padding 15px
 	padding-left 25px
-	box-shadow rgba(0,0,0,0.15) 0px 0px 50px
+	box-shadow rgba(0,0,0,0.15) 0px 0px 25px
+	background-color WHITE
 	
 	flex-shrink 0
 
 	box-sizing border-box
-	height 50px
+	height 75px
+	z-index 10
 	
 .characterization-header h1
 	@extend .header
 	
+	text-transform capitalize
 	position absolute
 	left 25px
-	top 5px
+	margin 0
 	
 .characterization .notSecurelyKnown
 	color gray
 	
-#classification-header .rollup
+.characterization .card
+	background-color WHITE
+	padding 15px
+	margin-bottom 10px
+	border-radius 5px
+	box-shadow rgba(0,0,0,0.15) 0px 1px 3px
+	
+	display flex
+	flex-direction column
+	align-items flex-start
+	
+border-top 1px solid $GRAYlassification-header .rollup
 	margin-bottom 10px
 	
 button.md-button.circular-button
@@ -91,8 +114,6 @@ button.md-button.circular-button
 	margin-bottom 0.67em
 
 .viewer .sidebar h2
-	
-	border-top 1px solid $GRAY
 	width 100%
 	
 	line-height 1.5em
@@ -102,17 +123,6 @@ button.md-button.circular-button
 	text-transform uppercase
 	font-weight 700
 	letter-spacing 2px
-	
-	padding-top 5px
-	
-	margin-top 50px
-	margin-bottom 15px
-	
-.viewer .sidebar h2:first-of-type
-	margin-top 40px
-	
-.viewer .sidebar #classification-header
-	margin-top 10px
 	
 .viewer .sidebar h4
 	width 100%
@@ -136,15 +146,14 @@ button.md-button.circular-button
 .viewer .sidebar .characterization
 	overflow-y scroll
 	
-	padding 50px
-	padding-top 25px
+	padding 10px
 	
 	flex-grow 1
 	flex-shrink 1
 
 @media all and (max-width: ($MIN_SIDEBAR_WIDTH / .33)) 
 	.viewer .sidebar .characterization
-		padding 25px	
+		padding 10px	
 		padding-top 15px
 
 .viewer .sidebar table.classification td
@@ -161,34 +170,25 @@ button.md-button.circular-button
 	right 50px
 	
 .viewer .sidebar .chart-view-container
-	max-width 40vw
 	display flex
 	flex-grow 1
 	align-items flex-start
 	flex-direction row
-
-.viewer .sidebar.fullscreen .chart-view-container
-	flex-direction column
 	
-.viewer .sidebar .chart-view-container:first-of-type
-	max-width 100%
-	width 100%
-
-.viewer .sidebar.fullscreen .data-view-container
-	padding-right 4vw
-
 .viewer .sidebar .data-view-container:first-of-type
+	padding-right 0
 	max-width 100%
 	width 100%
-	
-.chart-container
-	width 100%
-	display flex
+
+.viewer .sidebar.fullscreen .card
 	flex-direction column
+
+.viewer .sidebar.fullscreen .card:first-of-type
+	width 300px
 	
-.sidebar.fullscreen .chart-container
-	flex-direction row
-	align-self center
+.viewer .sidebar.fullscreen .card
+	width 44vw
+	height @width
 	
 .header-rule
 	width 100%

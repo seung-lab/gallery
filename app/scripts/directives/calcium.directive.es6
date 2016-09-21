@@ -612,10 +612,6 @@ app.directive('calcium', [ function () {
       width = angular.element('.radar-chart').width();
       height = width; // square format
 
-      width = width > 500
-        ? 500
-        : width;
-
       // SVG width --> height
       svg_container
         .style('width', function() { return width + "px"; })
