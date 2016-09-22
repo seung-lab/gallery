@@ -1,0 +1,78 @@
+{
+	"1ws": {
+		"correspondance": "M1",
+		"securely_known": true
+	},
+	"1wt": {
+		"correspondance": "sOff-alpha",
+		"securely_known": true
+	},
+	"2an": {
+		"correspondance": "F-mini^Off",
+		"securely_known": true
+	},
+	"2aw": {
+		"correspondance": "F-midi^Off,J",
+		"securely_known": true
+	},
+	"37c": {
+		"correspondance": "On-Off DS",
+		"securely_known": true
+	},
+	"37d": {
+		"correspondance": "On-Off DS",
+		"securely_known": true
+	},
+	"37r": {
+		"correspondance": "On-Off DS",
+		"securely_known": true
+	},
+	"37v": {
+		"correspondance": "On-Off DS",
+		"securely_known": true
+	},
+	"4ow": {
+		"correspondance": "tOff-alpha",
+		"securely_known": true
+	},
+	"51": {
+		"correspondance": "W3",
+		"securely_known": true
+	},
+	"63": {
+		"correspondance": "F-mini^On",
+		"securely_known": false
+	},
+	"6sw": {
+		"correspondance": "tOn-alpha",
+		"securely_known": false
+	},
+	"6t": {
+		"correspondance": "F-midi^On",
+		"securely_known": false
+	},
+	"7id": {
+		"correspondance": "sOn DS",
+		"securely_known": true
+	},
+	"7ir": {
+		"correspondance": "sOn DS",
+		"securely_known": true
+	},
+	"7iv": {
+		"correspondance": "sOn DS",
+		"securely_known": true
+	},
+	"7o": {
+		"correspondance": "tOn DS",
+		"securely_known": false
+	},
+	"8w": {
+		"correspondance": "sOn-alpha",
+		"securely_known": true
+	},
+	"9w": {
+		"correspondance": "M2",
+		"securely_known": true
+	}
+}

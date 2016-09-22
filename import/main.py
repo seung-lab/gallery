@@ -152,7 +152,7 @@ def save_cells_json():
   strat = read_stratification()
   temporal_response = read_temporal_response()
 
-  classical_types = slurp_json('data/classical_type_map.json')  
+  classical_types = slurp_json('rawdata/classical_type_map.json')  
 
   # Write all the parseds cell ids
   # Do chaining of all the list of ids like [20126, 20228]
