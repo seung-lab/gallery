@@ -203,12 +203,12 @@ app.factory('camera', function (scene) {
 
     this.camera = new THREE.PerspectiveCamera();
 
-    var dist = 1e4;
+    var dist = 1e5;
 
-    var keylight = new THREE.PointLight( 0xffffff, 0.5);
+    var keylight = new THREE.PointLight( 0xffffff, 0.6);
     keylight.position.set( -dist, 1.5 * dist, 0 );
     
-    var filllight = new THREE.PointLight( 0xffffff, 0.3);
+    var filllight = new THREE.PointLight( 0xffffff, 0.35);
     filllight.position.set( dist, 0, 0 );
 
     this.camera.add(keylight);
