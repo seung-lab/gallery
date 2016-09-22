@@ -68,7 +68,7 @@ THREE.TrackballControls = function (camera, domElement) {
 	_zoom = {
 		amt: 0,
 		min: 4e2,
-		max: 1e5,
+		max: 5.75e5,
 		displacement: new THREE.Vector2(),
 	};
 

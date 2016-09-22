@@ -19,8 +19,8 @@ app.factory('camera', function (scene) {
 
     this.perspectiveMode = function () { 
       this.camera.fov = 45;
-      this.camera.near = 0.1;
-      this.camera.far = 1e6;
+      this.camera.near = 1.0;
+      this.camera.far = 1e7;
       this.camera.aspect = _this.aspectRatio;
 
       this.camera.updateProjectionMatrix();
@@ -32,8 +32,8 @@ app.factory('camera', function (scene) {
 
     this.orthographicMode = function () {
       this.camera.fov = 1;
-      this.camera.near = 0.1;
-      this.camera.far = 1e7;
+      this.camera.near = 1.0;
+      this.camera.far = 1e8;
       this.camera.aspect = _this.aspectRatio;
 
       this.camera.updateProjectionMatrix();
