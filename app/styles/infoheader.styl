@@ -13,7 +13,7 @@ infoheader h2
 	padding-left 5px
 	
 infoheader hr
-	display block
+	display none
 	height 1px 
 	
 	border 0
@@ -27,7 +27,11 @@ infoheader hr
 	margin-left -15px
 	margin-right -15px
 	
+infoheader hr.onscreen
+	display block
+	
 infoheader .more
+	display none
 	position absolute
 	top -4px
 	right 0
@@ -40,8 +44,12 @@ infoheader .more
 	cursor pointer
 	outline none
 	
+	overflow visible !important
+
 	color $GRAY
-	
+
+infoheader .more.onscreen
+	display block
 
 infoheader .rollup
 	max-height 0px

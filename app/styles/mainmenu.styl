@@ -23,28 +23,28 @@
 .viewer .main-menu div
 	overflow-y scroll
 
-.viewer .main-menu > div > div
-	padding 25px
-	border-bottom 1px solid gray
-	
-.viewer .main-menu > div > div:first-child,
-.viewer .main-menu > div > div:nth-child(2)
-	border-bottom 1px solid $BLACK
-	
+.viewer .menu
+	padding 10px
+
 .viewer .main-menu div.title
 	@extend .header
 	
 	font-size 14px
 	
+	background-color white
+
 	border-bottom none
 	box-shadow rgba(0,0,0,0.15) 0px 0px 50px
-	height 50px
+	height 75px
 	box-sizing border-box
 	
 	display flex
 	align-items center
 	justify-content flex-end
 	
+	font-size 16px
+	text-transform none
+
 	flex-shrink 0
 	
 	padding-left 25px
@@ -66,11 +66,71 @@
 .viewer .browse.onscreen
 	display block
 
+.viewer .menu .actions
+	display flex
+	flex-direction column 
+	justify-content space-between
+	
+	height 150px
+
+.viewer .menu button 
+	text-align center
+	background-color transparent
+	border 1px solid #d9d9d9
+	color $BLACK
+	
+	padding 10px
+	width 200px
+	height 45px
+	
+	border-radius 3px
+	
+
+	box-sizing border-box
+	
+	font-weight 500
+	
+	cusror pointer
+	outline none
+
+	text-transform uppercase
+	letter-spacing 2px
+	
+	transition color $transitiontime ease, background-color $transitiontime ease, border $transitiontime ease
+	
+.viewer .menu button:hover
+	background-color $BLACK
+	color $WHITE
+	font-weight 700
+	cursor pointer
+	
+	transition color $transitiontime ease, background-color $transitiontime ease, border $transitiontime ease
+
+
+.viewer .browse .navigation
+	margin-top 10px
+	margin-left 10px
+	margin-right 10px
+	
+.viewer .browse .navigation .flex
+	flex-direction row
+	
+.viewer .browse .navigation .triangle
+	font-size 8px
+	margin-left 5px
+	margin-right 5px
+	
+	position relative
+	top 1px
+
 .viewer .gallery
 	display flex
 	flex-direction row
 	flex-wrap wrap
 	justify-content space-around	
+
+.viewer .gallery .item:first-child
+	margin-top 5px
 
 .viewer .gallery .item
 	cursor pointer
@@ -84,10 +144,10 @@
 	cursor pointer
 	outline none
 	border-radius 1%
-	background #f2f2f2
-	box-shadow 5px 5px 25px rgba($BLACK, 0.20)
-	margin 20px
+	background white
+	box-shadow rgba(0,0,0,0.15) 0px 1px 3px
 	box-sizing border-box
+	margin-top 10px
 	margin-right 10px
 	margin-left 10px
 	transition background-color 150ms ease, border 150ms ease
@@ -95,7 +155,6 @@
 	position relative
 
 .viewer .gallery .item:hover
-	background-color #f5f5f5
 	border 1px solid hsla(40, 50%, 74%, 0.95)
 
 .viewer .gallery .item .notsecurelyknown
