@@ -87,7 +87,7 @@
     <div id="right-sidebar" ng-class="{ sidebar: true, fullscreen: sidebarFullscreen }">
       <div class="characterization-header">
         <h1>Charts</h1>
-        <md-button ng-click="fullscreenToggle($event)" class="circular-button">
+        <md-button ng-click="fullscreenToggle($event)" class="circular-button fullscreen-button">
           <md-icon ng-class="{ 
             'fullscreen-icon': true, 
             'rotate-ninety': sidebarFullscreen 
@@ -95,6 +95,12 @@
           <md-tooltip md-direction="bottom" md-visible="tooltipVisible" md-autohide="true">
             {{ sidebarFullscreen ? "To Viewer (f)" : "Fullscreen (f)" }}
           </md-tooltip>
+        </md-button>
+        <md-button ng-click="charts_open = false" class="circular-button close-button">
+            X
+            <md-tooltip md-direction="bottom" md-visible="tooltipVisible" md-autohide="true">
+              Close Menu
+            </md-tooltip>
         </md-button>
 
       </div>

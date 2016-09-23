@@ -316,6 +316,25 @@ viewport
 
 // ---> Small Screen
 
+@media only screen and (max-device-width: 500px)
+	.viewer section.glider.left
+		left -100vw
+		width calc(450px + 100vw)
+		
+	.viewer .searchTools
+		left calc(100vw + 10px)
+		
+	.viewer section.glider.right
+		right -100vw
+		width calc(95px + 100vw)
+		
+	.viewer museum-md-autocomplete
+		width 175px
+		
+	// advanced search aka browse
+	.viewer .search .advanced 
+		display none
+
 /* ----------- Non-Retina Screens ----------- */
 @media screen and (min-width: 1665px) and (min-resolution: 1dppx) and (min-resolution: 96dpi)
 	.viewer section.glider.right
