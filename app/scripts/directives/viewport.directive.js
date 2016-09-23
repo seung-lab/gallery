@@ -45,6 +45,15 @@ app.directive('viewport', [ 'camera', '$timeout', function (camera, $timeout) {
           $timeout(onResize, 100, false);
         });
 
+        scope.$watch(function () {
+          return scope.charts_open;
+        }, function () {
+          angular.element(renderer.domElement).removeClass('occluded');
+          if (scope.charts_open) {
+            angular.element(renderer.domElement).addClass('occluded');
+          }
+        });
+
       function onResize() {
         var width  = element[0].offsetWidth;
         var height = element[0].offsetHeight;

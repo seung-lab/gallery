@@ -233,13 +233,25 @@ button.md-button.circular-button
  *	Set to hit an iPhone 6+
  */
 
-@media only screen and (max-device-width: 500px)
+@media only screen and (max-width: 500px)
 	.viewer .sidebar
 		width 100vw
 		height 100vh
 		min-width 0px
 		
-			
+@media only screen and (min-width: 501px) and (max-width: 800px)
+	.viewer .sidebar
+		min-width 300px
+
+@media only screen and (max-height: 400px)
+	.glider chartlegend
+		min-height initial
+		height 85px
+		
+	.characterization-header
+		min-height initial !important
+		height 45px !important
+
 /*
  *	Set to hit an iPhone 6
  */

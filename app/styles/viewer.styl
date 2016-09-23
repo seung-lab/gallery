@@ -309,6 +309,11 @@ $width_trigger = unit($MIN_SIDEBAR_WIDTH / .25, 'px')
 
 viewport 
 	user-select none
+	
+viewport canvas
+	position absolute
+	left 0px
+	transition left 400ms ease-in-out
 
 /*
  *	Media Queries
@@ -316,17 +321,22 @@ viewport
 
 // ---> Small Screen
 
-@media only screen and (max-device-width: 500px)
-	.viewer section.glider.left
-		left -100vw
-		width calc(450px + 100vw)
-		
-	.viewer .searchTools
-		left calc(100vw + 10px)
+@media only screen and (max-width: 500px)
+	.viewer .bottom-left
+		left calc(100vw + 20px)
 		
 	.viewer section.glider.right
 		right -100vw
 		width calc(95px + 100vw)
+		
+	.viewer section.glider.left
+		left -100vw
+		width calc(450px + 100vw)
+
+	.viewer .searchTools
+		left calc(100vw + 10px)
+
+@media only screen and (max-width: 800px)
 		
 	.viewer museum-md-autocomplete
 		width 175px
@@ -335,8 +345,16 @@ viewport
 	.viewer .search .advanced 
 		display none
 		
-	.viewer .bottom-left
-		left calc(100vw + 10px)
+@media only screen and (min-width: 501px) and (max-width: 800px)
+	.viewer section.glider.right
+		width 300px + 95px
+		right -300px
+		
+	.viewer section.glider.right.onscreen .controls
+		display none
+
+	viewport canvas.occluded
+		left -150px
 
 /* ----------- Non-Retina Screens ----------- */
 @media screen and (min-width: 1665px) and (min-resolution: 1dppx) and (min-resolution: 96dpi)
