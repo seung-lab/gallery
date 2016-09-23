@@ -105,7 +105,8 @@ exports.preview = function (req, res) {
   var filename = req.params.id;
 
   filename = filename.replace(/\b(\d+\w+)\/preview\/?$/, '$1') + '.png';
-  filename = filename.replace(/\//g, '-');
+  filename = filename.replace(/[\/ ]/g, '-');
+  filename = filename.toLowerCase();
 
   var options = { 
     root: path.resolve("data/cell_previews/"),
