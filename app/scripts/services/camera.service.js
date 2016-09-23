@@ -150,10 +150,12 @@ app.factory('camera', function (scene) {
       renderer.sortObjects = true;
       renderer.clear();
 
-      var width = 4096;
-      var height = 4096 / _this.aspectRatio;
+      var weak_gpu = screen.width * screen.height < 800 * 600;
 
-      var infoheight = Math.max(200, 0.1 * height);
+      var width = weak_gpu ? screen.width : 4096;
+      var height = (weak_gpu ? screen.height : 4096 / _this.aspectRatio);
+
+      var infoheight = 0.1 * height;
 
       renderer.setSize(width, height - infoheight);
       
@@ -170,7 +172,10 @@ app.factory('camera', function (scene) {
       var ctx = canvas.getContext('2d');
       ctx.drawImage(renderer.domElement, 0, 0);
 
-      var font_size = Math.trunc((infoheight * 0.15) * 1000) / 1000;
+      var font_size = Math.max(
+        Math.trunc((infoheight * 0.15) * 1000) / 1000,
+        12
+      );
 
       ctx.font = font_size + "px Roboto";
       ctx.fillStyle = "#f2f2f2";
@@ -178,7 +183,7 @@ app.factory('camera', function (scene) {
       ctx.fillRect(0, canvas.height - infoheight, canvas.width, infoheight);
 
       var offset = {
-        x: 175,
+        x: screen.width < 500 ? 25 : 175,
         y: infoheight / 2 - font_size,
       };
 
@@ -186,7 +191,7 @@ app.factory('camera', function (scene) {
       ctx.fillText(label.toUpperCase(), offset.x, canvas.height - (offset.y + 1.75 * font_size));
       ctx.fillText('MOUSE RETINAL NEURONS', offset.x, canvas.height - offset.y);
 
-      var loc = location.hostname.toUpperCase();
+      var loc = screen.width + ' ' + screen.height;//location.hostname.toUpperCase();
       var locdim = ctx.measureText(loc);
 
       ctx.fillText(loc, canvas.width - locdim.width - offset.x, canvas.height - offset.y);
