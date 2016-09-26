@@ -11,16 +11,47 @@ section.credits
 	width 725px
 	justify-content space-between
 
+$cardsize = 175px
+
 credit > div
 	width 350px
-	height 175px
+	height $cardsize
 	box-shadow rgba(0,0,0,0.15) 0px 1px 3px
 	border-radius 5px
 	padding 15px
+	padding-left 0px
 	
 	margin-bottom 20px
 	
 	box-sizing border-box
+	
+	font-size 14px
+	line-height 22px
+
+credit .left
+	width 105px
+	float left
+	height 100%
+	
+	text-align center
+
+credit .image
+	display inline-block
+	height unit($cardsize / 2 * 0.75, 'px')
+	width @height
+	
+	border-radius 100%
+	
+	box-sizing border-box
+	
+	background-size cover
+
+credit .meta
+	margin-top 10px
+	margin-bottom 10px	
+
+credit .right
+	padding-top 3px
 
 credit credit-name
 	font-weight 500
