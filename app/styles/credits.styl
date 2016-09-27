@@ -55,3 +55,33 @@ credit .right
 
 credit credit-name
 	font-weight 500
+	
+@media only screen and (max-width: 750px)
+	.content
+		width 100vw
+		box-sizing border-box
+		
+	.content .tagline
+		display none
+
+	.content .cta
+		left calc(50% - 350px / 2)
+
+	section.credits
+		width 100%
+		
+	section.credits h1
+		text-align center
+		
+	footer
+		width 100vw
+		
+	#links
+		float none
+		position static
+		margin-bottom 50px
+		
+	section.credits .flex
+		flex-direction column
+		align-items center
+		width 100%

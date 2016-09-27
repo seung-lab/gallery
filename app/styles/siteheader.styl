@@ -39,6 +39,12 @@ header
 	
 	border-bottom 1px solid $GRAY
 
+	position relative
+	
+header nav.right
+	position absolute
+	top 0px
+	right 0px
 
 header nav > div
 	padding-left 25px
@@ -61,3 +67,8 @@ header nav > div:last-child
 
 header.title
 	font-weight 500
+	
+@media only screen and (max-width: 750px)
+	header nav > div
+		padding-left 10px
+		padding-right 10px
