@@ -11,6 +11,10 @@ section.credits
 	width 725px
 	justify-content space-between
 
+.credits .ew-icon .image
+	background-size 75%
+	border 1px solid #dbdbdb
+
 $cardsize = 175px
 
 credit > div
@@ -26,7 +30,7 @@ credit > div
 	box-sizing border-box
 	
 	font-size 14px
-	line-height 22px
+	line-height 1.45em
 
 credit .left
 	width 105px
@@ -45,9 +49,11 @@ credit .image
 	box-sizing border-box
 	
 	background-size cover
+	background-repeat no-repeat
+	background-position center center
 
 credit .meta
-	margin-top 10px
+	margin-top 12px
 	margin-bottom 10px	
 
 credit .right
@@ -71,7 +77,7 @@ credit credit-name
 		width 100%
 		
 	section.credits h1
-		text-align center
+		margin-left calc(50% - 350px / 2)
 		
 	footer
 		width 100vw
