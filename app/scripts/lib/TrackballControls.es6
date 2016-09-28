@@ -237,6 +237,8 @@ THREE.TrackballControls = function (camera, domElement) {
 		var len = _eye.length();
 		var newlen = _eye.clone().multiplyScalar(factor).length();
 
+		// console.log(len);
+
 		let fov_rad = this.camera.fov * THREE.Math.DEG2RAD;
 		let zoomMin = _zoom.min / Math.tan(fov_rad);
 		let zoomMax = _zoom.max / Math.tan(fov_rad);
