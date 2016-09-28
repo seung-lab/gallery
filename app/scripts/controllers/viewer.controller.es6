@@ -388,13 +388,12 @@ app.controller('ViewerCtrl', [
     else if ($scope.current_view == "side") {
       camera.lookBBoxFromSide(bbox);
     } 
-
-    updatePointLocation(null);
   });
 
   $scope.viewClick = function (evt, view) {
     evt.target.blur();
     $scope.current_view = view;
+    updatePointLocation(null);
   };
 
   $scope.sidebarFullscreen = $state.params.fullscreen || false;
