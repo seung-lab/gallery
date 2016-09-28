@@ -105,7 +105,7 @@ app.factory('camera', function (scene) {
           let position = _this.controls.target.clone();
 
           let tween = (new TWEEN.Tween(position))
-            .to(new_target, 800)
+            .to(new_target, 0)
             .easing(TWEEN.Easing.Quadratic.InOut)
             .onUpdate(function () {
               _this.controls.target.copy(position);
