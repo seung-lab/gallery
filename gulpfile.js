@@ -193,6 +193,10 @@ gulp.task('watch',function (done) {
     gulp.watch([
         'app/index.html'
     ], [ 'copy-index' ]);
+
+    gulp.watch([
+        'app/images/**'
+    ], [ 'images' ]);
     
     gulp.watch([
         './app/**/*.css',
