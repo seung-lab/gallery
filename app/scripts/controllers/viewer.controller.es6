@@ -220,7 +220,7 @@ app.controller('ViewerCtrl', [
       let secure = type.securely_known ? '?' : '';
 
       let classical = type.classical 
-        ? type.classical.replace(/[\(\)]/g, '') 
+        ? type.classical.replace(/[\(\)]/g, '').replace(/<sup>/g, '^').replace(/<\/sup>/g, '')
         : null;
 
       let text = classical 
