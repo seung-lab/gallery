@@ -8,7 +8,14 @@ app.factory('camera', function (scene) {
 
     _this.events = {
       move: [],
+      point: [],
     };
+
+    function broadcast (evt, arg) {
+       _this.events[evt].forEach(function (fn) {
+          fn(arg);
+        });
+    }
 
     const PERSPECTIVE = Symbol('perspective');
     const ORTHOGRAPHIC = Symbol('orthographic');
@@ -89,9 +96,7 @@ app.factory('camera', function (scene) {
       });
 
       _this.controls.addEventListener('move', function () {
-        _this.events.move.forEach(function (fn) {
-          fn();
-        });
+        broadcast('move', null);
       });
 
       angular.element(_this.renderer.domElement)
@@ -108,12 +113,12 @@ app.factory('camera', function (scene) {
             .to(new_target, 800)
             .easing(TWEEN.Easing.Quadratic.InOut)
             .onUpdate(function () {
-              _this.controls.target.copy(position);
-              _this.camera.updateProjectionMatrix();
-              _this.controls.update();
+              _this.setTarget(position);
               _this.render();
             })
             .start();
+
+            broadcast('point', new_target);
         });
     };
 
@@ -160,6 +165,24 @@ app.factory('camera', function (scene) {
       _this.controls.up0.set(1, 0, 0);
 
       this.updateControls();
+    };
+
+    this.gotoPoint = function (position) {
+      _this.controls.position0.copy(position);
+      _this.controls.position0.z -= 1e5;
+      _this.controls.target0.copy(position);
+      _this.updateControls();
+    };
+
+    // x,y,z in world coordinates
+    this.setTarget = function (position) {
+      _this.controls.target.copy(position);
+      _this.camera.updateProjectionMatrix();
+      _this.controls.update();
+    };
+
+    this.getTarget = function () {
+      return _this.controls.target.clone();
     };
 
     this.pickPoint = function (x, y) {

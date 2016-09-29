@@ -14,6 +14,10 @@ app.controller('ViewerCtrl', [
   };
   $scope.neurons = [];
 
+  let initial_target = new THREE.Vector3(
+    ...([$state.params.x, $state.params.y, $state.params.z].map(Number))
+  );
+
   $scope.displayCells = function (cell_ids = []) {
     $scope.loading = {
       show: true,
@@ -45,7 +49,14 @@ app.controller('ViewerCtrl', [
       $scope.cells.forEach( (cell) => scene.add(cell.mesh) );
 
       var bbox = meshService.getVisibleBBox($scope.cells);
-      camera.lookBBoxFromSide(bbox);
+
+      if (initial_target.x && initial_target.y && initial_target.z) {
+        camera.gotoPoint(initial_target);
+      }
+      else {
+        camera.lookBBoxFromSide(bbox);
+      }
+
       camera.render();
 
       $scope.loading.show = false;
@@ -369,6 +380,10 @@ app.controller('ViewerCtrl', [
     }, 0);
   });
 
+  camera.addEventListener('point', function (point) {
+    updatePointLocation(point);
+  });
+
   $scope.$watch('current_view', function () {
     let bbox = meshService.getVisibleBBox($scope.cells);
 
@@ -383,6 +398,7 @@ app.controller('ViewerCtrl', [
   $scope.viewClick = function (evt, view) {
     evt.target.blur();
     $scope.current_view = view;
+    updatePointLocation(null);
   };
 
   $scope.sidebarFullscreen = $state.params.fullscreen || false;
@@ -402,6 +418,24 @@ app.controller('ViewerCtrl', [
       evt.preventDefault();
     }
   });
+
+  function updatePointLocation (point) {
+    let x = null, y = null, z = null;
+
+    if (point) {
+      x = Math.trunc(point.x);
+      y = Math.trunc(point.y);
+      z = Math.trunc(point.z);
+    }
+
+    $timeout(function() {
+      $location
+        .search('x', x)
+        .search('y', y)
+        .search('z', z)
+        .replace();
+    }, 0);
+  }
 
   function clearScene () {
     $scope.cells = $scope.cells || [];
