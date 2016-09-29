@@ -124,7 +124,7 @@ exports.preview = function (req, res) {
 
   res.sendFile(filename, options, function (err) {
     if (err) { 
-      res.status(404).send(filename + " -- file doesn't exist!");
+      console.log(filename, " -- file doesn't exist!");
     }
   });
 };
