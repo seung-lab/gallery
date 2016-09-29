@@ -167,6 +167,22 @@ app.factory('camera', function (scene) {
       this.updateControls();
     };
 
+    this.setView = function (position, target, up) {
+      if (!target.x && !target.y && !target.z) {
+        _this.gotoPoint(position);
+        return;
+      }
+      
+      _this.controls.position0.copy(position);
+      _this.controls.target0.copy(target);
+
+      if (!up.x && !up.y && !up.z) { 
+        _this.controls.up0.copy(up);
+      }
+
+      _this.updateControls();
+    };
+
     this.gotoPoint = function (position) {
       _this.controls.position0.copy(position);
       _this.controls.position0.z -= 1e5;
