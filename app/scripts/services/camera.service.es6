@@ -176,7 +176,7 @@ app.factory('camera', function (scene) {
       _this.controls.position0.copy(position);
       _this.controls.target0.copy(target);
 
-      if (!up.x && !up.y && !up.z) { 
+      if (up.x || up.y || up.z) { 
         _this.controls.up0.copy(up);
       }
 
@@ -304,6 +304,7 @@ app.factory('camera', function (scene) {
     this.mode = PERSPECTIVE;
 
     this.camera = new THREE.PerspectiveCamera();
+    this.camera.position.set(0, 0, -1);
 
     var dist = 1e5;
 
