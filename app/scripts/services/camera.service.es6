@@ -129,6 +129,8 @@ app.factory('camera', function (scene) {
       _this.render();
     };
 
+    // NB: +X is the light axis
+
     this.lookBBoxFromTop = function (bbox) {
 
       var size = bbox.size();
@@ -160,7 +162,9 @@ app.factory('camera', function (scene) {
       _this.controls.target0 = center.clone();
       center.z += size.z / 2.0;
 
-      _this.controls.position0.set(center.x, center.y, center.z + 2 * dist);
+      // Align view to match Neuropia paper SVG LR view in. 
+      // https://github.com/seung-lab/Neuropia/blob/master/type_gallery/SupplementaryData2.pdf
+      _this.controls.position0.set(center.x, center.y, -1 * (center.z + 2 * dist));
 
       _this.controls.up0.set(1, 0, 0);
 
