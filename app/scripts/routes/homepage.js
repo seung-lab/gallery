@@ -18,7 +18,7 @@ app.config(function ($stateProvider) {
       .state('credits', {
         url: '/credits',
         templateUrl: 'templates/credits.html',
-        controller: function () {},
+        controller: 'HomepageCtrl',
       });
 
   });

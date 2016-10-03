@@ -29,7 +29,38 @@ main
 	height 500px
 	
 	position relative
-		
+
+.content .tagline 
+	height 75px
+	
+.content .tagline md-autocomplete-wrap
+	position absolute
+	top 0px
+	left 0px
+	width 100%
+	height 100%
+	box-shadow none
+	
+.content .tagline button
+	width 75px !important
+
+.content .tagline md-autocomplete-wrap input
+	width 100%
+	height 100%
+	text-align center
+
+.content .tagline md-autocomplete-wrap input.ng-not-empty,	
+.content .tagline md-autocomplete-wrap input:focus
+	text-align left
+	padding-left 35px
+
+.content .tagline md-autocomplete-wrap input::placeholder
+	color $BLACK
+	opacity 1
+
+.content .tagline md-autocomplete-wrap input:focus::placeholder
+	color transparent
+
 .content .tagline,
 .content .cta
 	position absolute

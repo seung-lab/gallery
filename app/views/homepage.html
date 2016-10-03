@@ -2,10 +2,35 @@
 <main>
     <div class="classyimage"></div>
     <div class="content">
-        <div class="tagline">Neuron Museum | Seung Lab @ Princeton</div>
-        <a href="/">
-            <div class="cta">Enter Museum</div>
-        </a>
+        <museum-md-autocomplete 
+          class="tagline"
+          ng-keydown="searchKeydown($event)" 
+          ng-disabled="false" 
+          md-no-cache="true" 
+          md-selected-item="selectedItem" 
+          md-search-text-change="searchTextChange(searchText)" 
+          md-search-text="searchText" 
+          md-selected-item-change="selectedItemChange(item)" 
+          md-items="item in search(searchText)"
+          md-item-text="item.display"
+          md-escape-key="blur" 
+          md-min-length="0" 
+          placeholder="Neuron Museum | Seung Lab @ Princeton">
+
+          <md-item-template>
+          <span class="autocomplete-match" md-highlight-text="searchText" md-highlight-flags="^i">{{item.display}} &ndash; {{item.count}} cell{{ item.count === 1 ? '' : 's' }}</span>
+          </md-item-template>
+          <md-not-found> 
+          {{
+            autocompleteLoaded 
+              ? 'No matches.'
+              : "Loading autocompletions..."
+          }}
+          </md-not-found>
+        </museum-md-autocomplete>
+        
+        <div ng-click="gotoFirstAutocompleteResult(true)" class="cta">Enter Museum</div>
+        
         <section>
             <div class="what">
                 <h1 class="first">Digital Neural Reconstructions</h1>
