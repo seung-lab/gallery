@@ -140,11 +140,12 @@ app.factory('camera', function (scene) {
 
       var center = bbox.center();
       _this.controls.target0 = center.clone();
-      center.x += size.x / 2.0;
+      
+      center.x -= size.x / 2.0;
+      center.x -= 2.5 * dist;
 
-      var x = -1 * (center.x + 2 * dist);
-
-      _this.controls.position0.set(x, center.y, center.z);
+      // Align view to match Neuropia paper top view in Figure 3a.
+      _this.controls.position0.set(center.x, center.y, center.z);
 
       _this.controls.up0.set(0, 0, -1);
 
