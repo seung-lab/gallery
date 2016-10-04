@@ -1,0 +1,39 @@
+@require 'colors.styl'
+
+.more-info 
+    background-size contain
+    transition all 250ms ease-in-out
+    
+.more-info:hover
+    transform scale(1.1,1.1)
+
+.more-info hr 
+    width 18px    
+    height 2px
+    border none
+    margin-bottom 0
+    opacity 1
+    color $BLACK
+    background-color $BLACK
+    margin-top 5px
+    
+    transition all 250ms ease-in-out
+    transition-delay 525ms
+
+.more-info hr:nth-child(3) 
+    margin-top -2px
+
+.more-info.sidebar-open hr:first-of-type 
+    opacity 0
+
+.more-info.sidebar-open hr:last-of-type
+    opacity 0 
+
+.more-info.sidebar-open hr:nth-child(2) 
+    transform rotate(45deg)
+    background-color $BLACK
+
+
+.more-info.sidebar-open hr:nth-child(3)
+    transform rotate(-45deg)
+    background-color $BLACK

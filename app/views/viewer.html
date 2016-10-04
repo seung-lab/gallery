@@ -2,11 +2,15 @@
   <section ng-class="{ left: true, glider: true, onscreen: main_menu_open, fullscreen: sidebarFullscreen }">
     <div class="main-menu" ng-include="'templates/main_menu.html'"></div>
     <div class="searchTools">
-        <md-button ng-class="[ 'more-info', 'md-fab', 'md-raised', { 'sidebar-open': charts_open }]" ng-click="toggleMainMenu($event)" aria-label="toggle menu" >
-        <md-icon md-svg-src="images/ew-black.svg" ></md-icon>
-
+        <md-button ng-class="[ 'more-info', 'md-fab', 'md-raised', { 'sidebar-open': main_menu_open }]" ng-click="toggleMainMenu($event)" aria-label="toggle menu" >
+        
+          <!-- looks crazy but this is alex's magic hamburger Xtreme -->
+          <hr>
+          <hr>
+          <hr>
+          <hr>
         <md-tooltip md-direction="bottom" md-visible="tooltipVisible" md-autohide="true">
-          Menu (m)
+          {{ main_menu_open ? 'Close' : 'Open' }} Menu (m)
         </md-tooltip>
       </md-button>
       <div class="search">
