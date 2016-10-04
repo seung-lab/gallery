@@ -160,11 +160,13 @@ app.factory('camera', function (scene) {
 
       var center = bbox.center();
       _this.controls.target0 = center.clone();
-      center.z += size.z / 2.0;
+      
+      center.z -= size.z / 2.0; // move to edge of bbox
+      center.z -= 2 * dist; // zoom out an appropriate amount that accounts for the size of the screen
 
-      // Align view to match Neuropia paper SVG LR view in. 
+      // Align view to match Neuropia paper SVG LR view in:
       // https://github.com/seung-lab/Neuropia/blob/master/type_gallery/SupplementaryData2.pdf
-      _this.controls.position0.set(center.x, center.y, -1 * (center.z + 2 * dist));
+      _this.controls.position0.set(center.x, center.y, center.z);
 
       _this.controls.up0.set(1, 0, 0);
 
