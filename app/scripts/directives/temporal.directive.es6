@@ -71,11 +71,11 @@ app.directive('temporal', function ($timeout) {
 
     function makeDataset (scope) {
       let cells = scope.cells;
-      
-      cells = cells.filter( (cell) => cell.temporal_response );
 
       let any_highlighted = false;
       cells.forEach( (cell) => any_highlighted = any_highlighted || cell.highlight );
+      
+      cells = cells.filter( (cell) => cell.temporal_response );
 
       return cells.map(function (cell) {
         let data = [];
