@@ -79,10 +79,10 @@ app.directive('calcium', [ function () {
     let cells = scope.cells,
         activation = scope.activation;
 
-    cells = cells.filter( (cell) => cell.directional_response );
-
     let any_highlighted = false;
     cells.forEach( (cell) => any_highlighted = any_highlighted || cell.highlight );
+
+    cells = cells.filter( (cell) => cell.directional_response );
 
     return cells.map(function (cell) {
 

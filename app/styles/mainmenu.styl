@@ -2,6 +2,7 @@
 @require 'characterization.styl'
 @require 'app.styl'
 @require 'viewer.styl'
+@require 'magicX.styl'
 
 .viewer .main-menu
 	@extend .viewer .sidebar
@@ -56,7 +57,28 @@
 .viewer .main-menu div.title .words
 	position absolute
 	left 25px
+	top calc((75px - 1.5em) / 2)
 	
+.viewer .main-menu .close-menu 
+	display none
+	
+.viewer .fullscreen .close-menu
+	display block
+	
+.viewer .main-menu .close-menu hr
+	@extend .more-info hr 
+	
+	margin-top -2px
+	position relative
+	top 2px
+	transform-origin center center
+	
+.viewer .main-menu .close-menu hr:first-of-type
+	transform rotate(45deg)
+
+.viewer .main-menu .close-menu hr:last-of-type
+	transform rotate(-45deg)
+
 .viewer .main-menu li
 	outline none
 	line-height 25px
@@ -113,7 +135,6 @@
 	cursor pointer
 	
 	transition color $transitiontime ease, background-color $transitiontime ease, border $transitiontime ease
-
 
 .viewer .browse .navigation
 	margin-top 10px
@@ -193,6 +214,9 @@
 
 	.viewer .fullscreen-button
 		display none
+		
+	.viewer .main-menu .close-menu 
+		display block
 
 	.viewer .close-button
 		display block

@@ -213,12 +213,7 @@ app.controller('ViewerCtrl', [
       evt.target.blur();
     }
 
-    if ($scope.main_menu_open && $scope.browse) {
-      $scope.browse = false;
-    }
-    else {
-      $scope.main_menu_open = !$scope.main_menu_open;
-    }
+    $scope.main_menu_open = !$scope.main_menu_open;
     
     if ($scope.main_menu_open) {
       $scope.charts_open = false;
