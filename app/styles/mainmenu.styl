@@ -21,7 +21,8 @@
 	width 100vw
 
 .viewer .main-menu div
-	overflow-y scroll
+	overflow-y auto
+	overflow-x hidden
 
 .viewer .menu
 	padding 10px
@@ -70,10 +71,14 @@
 
 .viewer .menu .actions
 	display flex
-	flex-direction column 
+	flex-direction row 
 	justify-content space-between
-	
-	height 150px
+	flex-wrap wrap
+
+	height 110px
+
+.viewer .fullscreen .menu button
+	margin-left 10px
 
 .viewer .menu button 
 	text-align center
@@ -84,11 +89,10 @@
 	font-size 12px
 
 	padding 10px
-	width 175px
+	width 165px
 	height 45px
-	
+
 	border-radius 3px
-	
 
 	box-sizing border-box
 	
@@ -184,6 +188,9 @@
 	.viewer .main-menu
 		width 100vw
 		
+	.viewer .fullscreen .menu button 
+		margin-left 0px
+
 	.viewer .fullscreen-button
 		display none
 

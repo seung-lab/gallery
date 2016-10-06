@@ -3,7 +3,7 @@
 app.config(function ($stateProvider) {
     $stateProvider
       .state('viewer', {
-        url: '/?neurons&fullscreen&charts&browse&x&y&z',
+        url: '/?neurons&fullscreen&charts&browse&cx&cy&cz&tx&ty&tz&ux&uy&uz',
         templateUrl: 'templates/viewer.html',
         reloadOnSearch : false,
         controller: 'ViewerCtrl'

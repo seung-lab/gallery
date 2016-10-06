@@ -191,7 +191,7 @@ app.factory('camera', function (scene) {
       ctx.fillText(label.toUpperCase(), offset.x, canvas.height - (offset.y + 1.75 * font_size));
       ctx.fillText('MOUSE RETINAL NEURONS', offset.x, canvas.height - offset.y);
 
-      var loc = screen.width + ' ' + screen.height;//location.hostname.toUpperCase();
+      var loc = location.hostname.toUpperCase();
       var locdim = ctx.measureText(loc);
 
       ctx.fillText(loc, canvas.width - locdim.width - offset.x, canvas.height - offset.y);

@@ -129,6 +129,8 @@ app.factory('camera', function (scene) {
       _this.render();
     };
 
+    // NB: +X is the light axis
+
     this.lookBBoxFromTop = function (bbox) {
 
       var size = bbox.size();
@@ -158,13 +160,33 @@ app.factory('camera', function (scene) {
 
       var center = bbox.center();
       _this.controls.target0 = center.clone();
-      center.z += size.z / 2.0;
+      
+      center.z -= size.z / 2.0; // move to edge of bbox
+      center.z -= 2 * dist; // zoom out an appropriate amount that accounts for the size of the screen
 
-      _this.controls.position0.set(center.x, center.y, center.z + 2 * dist);
+      // Align view to match Neuropia paper SVG LR view in:
+      // https://github.com/seung-lab/Neuropia/blob/master/type_gallery/SupplementaryData2.pdf
+      _this.controls.position0.set(center.x, center.y, center.z);
 
       _this.controls.up0.set(1, 0, 0);
 
       this.updateControls();
+    };
+
+    this.setView = function (position, target, up) {
+      if (!target.x && !target.y && !target.z) {
+        _this.gotoPoint(position);
+        return;
+      }
+      
+      _this.controls.position0.copy(position);
+      _this.controls.target0.copy(target);
+
+      if (up.x || up.y || up.z) { 
+        _this.controls.up0.copy(up);
+      }
+
+      _this.updateControls();
     };
 
     this.gotoPoint = function (position) {
@@ -288,6 +310,7 @@ app.factory('camera', function (scene) {
     this.mode = PERSPECTIVE;
 
     this.camera = new THREE.PerspectiveCamera();
+    this.camera.position.set(0, 0, -1);
 
     var dist = 1e5;
 

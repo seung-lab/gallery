@@ -2,13 +2,38 @@
 <main>
     <div class="classyimage"></div>
     <div class="content">
-        <div class="tagline">Neuron Museum | Seung Lab @ Princeton</div>
-        <a href="/">
-            <div class="cta">Enter Museum</div>
-        </a>
+        <museum-md-autocomplete 
+          class="tagline"
+          ng-keydown="searchKeydown($event)" 
+          ng-disabled="false" 
+          md-no-cache="true" 
+          md-selected-item="selectedItem" 
+          md-search-text-change="searchTextChange(searchText)" 
+          md-search-text="searchText" 
+          md-selected-item-change="selectedItemChange(item)" 
+          md-items="item in search(searchText)"
+          md-item-text="item.display"
+          md-escape-key="blur" 
+          md-min-length="0" 
+          placeholder="Neuron Museum | Seung Lab @ Princeton">
+
+          <md-item-template>
+          <span class="autocomplete-match" md-highlight-text="searchText" md-highlight-flags="^i">{{item.display}} &ndash; {{item.count}} cell{{ item.count === 1 ? '' : 's' }}</span>
+          </md-item-template>
+          <md-not-found> 
+          {{
+            autocompleteLoaded 
+              ? 'No matches.'
+              : "Loading autocompletions..."
+          }}
+          </md-not-found>
+        </museum-md-autocomplete>
+        
+        <div ng-click="gotoFirstAutocompleteResult(true)" class="cta">Enter Museum</div>
+        
         <section>
             <div class="what">
-                <h1>Digital Neural Reconstructions</h1>
+                <h1 class="first">Digital Neural Reconstructions</h1>
             
                 <p>The Seung Lab uses techniques from machine learning and social computing to extract brain structure from light and electron microscopic images. <a href="http://eyewire.org">Eyewire</a> showcases our approach by mobilizing gamers from around the world to create 3D reconstructions of neurons by interacting with a deep convolutional network.</p>
 
@@ -25,7 +50,10 @@
                 <h1>Open Data</h1>
                 <p>We are making our data and code publically available via github.com.</p>
 
-                <a href="https://github.com/seung-lab/e2198-gc-analysis">https://github.com/seung-lab/e2198-gc-analysis</a>
+                <ul>
+                    <li><a href="https://github.com/seung-lab/e2198-gc-analysis">https://github.com/seung-lab/e2198-gc-analysis</a></li>
+                    <li><a href="https://github.com/seung-lab/gallery">https://github.com/seung-lab/gallery</a></li>
+                </ul>
             </div>
             <div id="publications" class="publications">
                 <h1>Publications</h1>
@@ -39,7 +67,9 @@
             </div>
             <div class="acknowlegments">
                 <h1>Thank You</h1>
-                <p>We'd like to thank our partners, staff, and the Eyewirers that made these reconstructions possible.</p>
+                <p>We'd like to thank our partners, staff, and the Eyewirers that made these reconstructions and the Museum possible.</p>
+
+                <p><a ui-sref='credits'>Credits</a></p>
             </div>
         </section>
         <nav id="links">

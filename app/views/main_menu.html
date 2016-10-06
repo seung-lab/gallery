@@ -38,6 +38,7 @@
 				<button ng-click="$parent.charts_open = true">Open Charts</button>
 				<button ng-click="$parent.browse = true">Browse Gallery</button>
 				<button ng-click="$parent.takeScreenshot()">Take Screenshot</button>
+				<button id="copy-view-url">Copy View URL</button> <!-- listener declared in viwer.controller.es6 b/c clipboard security requires user input for copy via clipboard.js -->
 			</div>
 		</div>
 	</div>
@@ -57,7 +58,7 @@
 			<infoheader nomore="true" heading="More Information"></infoheader>
 			<ul>
 				<li><a ui-sref="about">About</a></li>
-				<!-- <li>Credits</li> -->
+				<li><a ui-sref="credits">Credits</a></li>
 			</ul>
 		</div>
 	</div>

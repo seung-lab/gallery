@@ -1,0 +1,137 @@
+<siteheader />
+<main>
+    <div class="classyimage"></div>
+    <div class="content">
+        <museum-md-autocomplete 
+          class="tagline"
+          ng-keydown="searchKeydown($event)" 
+          ng-disabled="false" 
+          md-no-cache="true" 
+          md-selected-item="selectedItem" 
+          md-search-text-change="searchTextChange(searchText)" 
+          md-search-text="searchText" 
+          md-selected-item-change="selectedItemChange(item)" 
+          md-items="item in search(searchText)"
+          md-item-text="item.display"
+          md-escape-key="blur" 
+          md-min-length="0" 
+          placeholder="Neuron Museum | Seung Lab @ Princeton">
+
+          <md-item-template>
+          <span class="autocomplete-match" md-highlight-text="searchText" md-highlight-flags="^i">{{item.display}} &ndash; {{item.count}} cell{{ item.count === 1 ? '' : 's' }}</span>
+          </md-item-template>
+          <md-not-found> 
+          {{
+            autocompleteLoaded 
+              ? 'No matches.'
+              : "Loading autocompletions..."
+          }}
+          </md-not-found>
+        </museum-md-autocomplete>
+        <div ng-click="gotoFirstAutocompleteResult(true)" class="cta">Enter Museum</div>
+        <section class="credits">    
+            <h1 class="first">Credits</h1>
+            <p>We'd like to thank our partners, staff, and the Eyewirers that made these reconstructions and this museum possible.</p>
+
+            <h1 class="museum-team">Museum Team</h1>
+
+            <div class="flex">
+                <credit src="/images/credits/will.jpg">
+                    <credit-name>William Silversmith</credit-name>
+                    <credit-title>Software Engineer</credit-title>
+                    <credit-description>Developed version two of The Museum with much assistance.</credit-description>
+                </credit>
+
+                <credit src="/images/credits/alex-norton.jpg">
+                    <credit-name>Alex Norton</credit-name>
+                    <credit-title>Lead Designer</credit-title>
+                    <credit-description>Wrote charts functionality in Angular &amp; D3.</credit-description>
+                </credit>
+
+                <credit src="/images/credits/ignacio.jpg">
+                    <credit-name>Ignacio Tartavull</credit-name>
+                    <credit-title>Software Engineer</credit-title>
+                    <credit-description>Wrote server, provided prototype for version two client. Wrote version one.</credit-description>
+                </credit>
+
+                <credit src="/images/credits/nico.jpg">
+                    <credit-name>Nico Kemnitz</credit-name>
+                    <credit-title>Software Engineer</credit-title>
+                    <credit-description>Resolved multi-threading crash.</credit-description>
+                </credit>
+
+                <credit src="/images/credits/mio.jpg">
+                    <credit-name>Mio Akasako</credit-name>
+                    <credit-title>Fmr. Research Specialist</credit-title>
+                    <credit-description>Design for version two prototype. Now at <a href="http://www.kallyope.com/our-team/">Kallyope</a>.</credit-description>
+                </credit>
+
+                <credit src="/images/credits/jack.jpg">
+                    <credit-name>Jack Hudson</credit-name>
+                    <credit-title>Fmr. Undergraduate Researcher</credit-title>
+                    <credit-description>Assisted with version two prototype.</credit-description>
+                </credit>
+            </div>
+
+            <p>Special thanks to Shang Mu and Sebastian Seung for advising on scientific use cases.</p>
+
+            <h1>Reconstruction &amp; Data Analysis</h1>
+
+            <p>The following people were instrumental in reconstructing and analyzing the neurons in e2198, now present in The Museum:</p> 
+
+            <p>Jinseop Kim, Shang Mu, Nicholas Turner, Alexander Bae, Matt Greene, Chris Jordan, Rachel Prentki, Marissa Sorek, Celia David, Devon Jones, Doug Bland, Amy R. L. Sterling, Sebastian Seung, and the Eyewirers.</p>
+
+            <p>Credits for Eyewire can be found <a href="http://blog.eyewire.org/about/">here</a>.</p>
+            
+            <h1>Collaborators</h1>
+
+            <p>We'd like to thank <a href="http://www.neuro.mpg.de/denk">Winfried Denk</a> for providing the e2198 dataset and <a href="https://neuroscience.nih.gov/ninds/Faculty/Profile/kevin-briggman.aspx">Kevin Briggman</a> for acquiring the e2198 dataset and performing preliminary analysis of the calcium imaging data (including manual ROI detection).</p>
+
+            <p>We'd also like to thank Jungman Park and his team at <a href="https://kt.com/">KT</a> for promoting Eyewire in Korea and for their close collaboration with the Eyewire team.</p>
+
+            <h1>Sponsors</h1>
+
+            <p>We'd like to thank the following organizations for supporting our research:</p> 
+
+            <ul>
+                <li>The <a href="http://www.gatsby.org.uk/neuroscience">Gatsby Charitable Foundation</a></li>
+                <li>The <a href="https://kt.com/">KT Corporation</a></li>
+                <li><a href="https://www.iarpa.gov/">IARPA's</a> <a href="https://www.iarpa.gov/index.php/research-programs/microns">MICrONs</a> Program</li>
+                <li><a href="http://www.ninds.nih.gov/">NINDS/NIH</a></li>
+                <li>The <a href="https://aws.amazon.com/grants/">AWS Research Grants Program</a></li>
+            </ul>
+
+            <h1>Third Party Technology</h1>
+
+            <p>We would like to thank the people behind the following technologies for allowing us to build upon them:</p>
+
+            <ul>
+                <li><a href="https://www.google.com/chrome/">Chrome</a>, <a href="https://firefox.com">Firefox</a>, <a href="https://www.apple.com/safari/">Safari</a>, and <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Edge</a> browsers</li>
+                <li><a href="https://angularjs.org/">AngularJS</a> &ndash; Google's Single Page App Framework</li>
+                <li><a href="https://threejs.org/">THREE.js</a> &ndash; 3D Object manipulation</li>
+                <li><a href="http://expressjs.com/">Express</a> &ndash; JS server</li>
+                <li><a href="http://openctm.sourceforge.net/">OpenCTM</a> &ndash; Open standard for fast 3D model delivery</li>
+                <li><a href="http://gulpjs.com/">Gulp</a> &ndash; The streaming JS build system</li>
+                <li><a href="https://d3js.org/">D3</a> &ndash; Data Driven Documents</li>
+                <li><a href="https://material.angularjs.org/latest/">Angular Material Design</a> &ndash; For UI components</li>
+                <li><a href="https://jquery.com/">jQuery</a> &ndash; Elegant DOM and event manipulation</li>
+            </ul>
+
+            <br>
+            <p><i>Credits last updated September 2016.</i></p>
+        </section>
+        <nav id="links">
+            <div>Links</div>
+            <ul>
+                <li><a href="http://seunglab.org">Seung Lab Website</a></li>
+                <li><a href="http://wiki.eyewire.org">Cell Wiki</a></li>
+                <li><a href="http://eyewire.org">Eyewire</a></li>
+            </ul>
+        </nav>
+        <footer>
+            <a href="/">
+                <div class="cta">Enter Museum</div>
+            </a>
+        </footer>
+    </div>
+</main>

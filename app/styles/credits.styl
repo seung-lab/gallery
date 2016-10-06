@@ -1,0 +1,100 @@
+@require 'app.styl'
+@require 'colors.styl'
+
+section.credits
+	padding-bottom 15px
+	width 100%
+	max-width 475px
+
+.credits .flex
+	display flex
+	flex-wrap wrap
+	flex-direction row
+	width 725px
+	justify-content space-between
+	
+	margin-bottom 0px
+
+.credits .ew-icon .image
+	background-size 75%
+	border 1px solid #dbdbdb
+	
+section h1 .museum-team
+	margin-bottom 1.25em
+
+$cardsize = 175px
+
+credit > div
+	width 350px
+	height $cardsize
+	box-shadow rgba(0,0,0,0.15) 0px 1px 3px
+	border-radius 5px
+	padding 15px
+	padding-left 0px
+	
+	margin-bottom 20px
+	
+	box-sizing border-box
+	
+	font-size 14px
+	line-height 1.45em
+
+credit .left
+	width 105px
+	float left
+	height 100%
+	
+	text-align center
+
+credit .image
+	display inline-block
+	height unit($cardsize / 2 * 0.75, 'px')
+	width @height
+	
+	border-radius 100%
+	
+	box-sizing border-box
+	
+	background-size cover
+	background-repeat no-repeat
+	background-position center center
+
+credit .meta
+	margin-top 12px
+	margin-bottom 10px	
+
+credit .right
+	padding-top 3px
+
+credit credit-name
+	font-weight 500
+	
+@media only screen and (max-width: 750px)
+	.content
+		width 100vw
+		box-sizing border-box
+		
+	.content .tagline
+		display none
+
+	.content .cta
+		left calc(50% - 350px / 2)
+
+	section.credits
+		width 100%
+		
+	section.credits h1
+		margin-left calc(50% - 350px / 2)
+		
+	footer
+		width 100vw
+		
+	#links
+		float none
+		position static
+		margin-bottom 50px
+		
+	section.credits .flex
+		flex-direction column
+		align-items center
+		width 100%

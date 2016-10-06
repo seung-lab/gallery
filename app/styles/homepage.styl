@@ -29,7 +29,38 @@ main
 	height 500px
 	
 	position relative
-		
+
+.content .tagline 
+	height 75px
+	
+.content .tagline md-autocomplete-wrap
+	position absolute
+	top 0px
+	left 0px
+	width 100%
+	height 100%
+	box-shadow none
+	
+.content .tagline button
+	width 75px !important
+
+.content .tagline md-autocomplete-wrap input
+	width 100%
+	height 100%
+	text-align center
+
+.content .tagline md-autocomplete-wrap input.ng-not-empty,	
+.content .tagline md-autocomplete-wrap input:focus
+	text-align left
+	padding-left 35px
+
+.content .tagline md-autocomplete-wrap input::placeholder
+	color $BLACK
+	opacity 1
+
+.content .tagline md-autocomplete-wrap input:focus::placeholder
+	color transparent
+
 .content .tagline,
 .content .cta
 	position absolute
@@ -61,6 +92,8 @@ main
 	text-transform uppercase
 	letter-spacing 2px
 	
+	outline none
+	
 	transition color $transitiontime ease, background-color $transitiontime ease, border $transitiontime ease
 	
 .content .cta:hover
@@ -83,7 +116,7 @@ section
 	border-top 1px solid $BLACK
 
 	position absolute
-	top 200px
+	top 170px
 	right 110px
 	
 #links div
@@ -113,11 +146,13 @@ section
 	
 	box-shadow rgba(0, 0, 0, 0.15) 0px -5px 100px
 
-.content section > div
-	margin-bottom 4em
-
 h1
-	margin-bottom 1.5em
+	line-height 1.5em
+	margin-bottom 0.5em
+	margin-top 1.25em
+	
+section h1.first
+	margin-top auto
 	
 #classification-diagram
 	position relative
@@ -140,6 +175,8 @@ footer
 	
 	box-sizing border-box
 	padding 100px
+	
+	margin-top 4em
 
 .content footer .cta
 	position relative

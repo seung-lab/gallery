@@ -12,4 +12,13 @@ app.config(function ($stateProvider) {
       	templateUrl: 'templates/homepage.html',
         controller: 'HomepageCtrl',
       })
+
+
+    $stateProvider
+      .state('credits', {
+        url: '/credits',
+        templateUrl: 'templates/credits.html',
+        controller: 'HomepageCtrl',
+      });
+
   });

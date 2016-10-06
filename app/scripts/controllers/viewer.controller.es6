@@ -14,9 +14,17 @@ app.controller('ViewerCtrl', [
   };
   $scope.neurons = [];
 
-  let initial_target = new THREE.Vector3(
-    ...([$state.params.x, $state.params.y, $state.params.z].map(Number))
-  );
+  let cameraparams = {
+    position: new THREE.Vector3(
+      ...([$state.params.cx, $state.params.cy, $state.params.cz].map(Number))
+    ),
+    target: new THREE.Vector3(
+      ...([$state.params.tx, $state.params.ty, $state.params.tz].map(Number))
+    ),
+    up: new THREE.Vector3(
+      ...([$state.params.ux, $state.params.uy, $state.params.uz].map(Number))
+    ),
+  };
 
   $scope.displayCells = function (cell_ids = []) {
     $scope.loading = {
@@ -50,8 +58,8 @@ app.controller('ViewerCtrl', [
 
       var bbox = meshService.getVisibleBBox($scope.cells);
 
-      if (initial_target.x && initial_target.y && initial_target.z) {
-        camera.gotoPoint(initial_target);
+      if (cameraparams.position.x && cameraparams.position.y && cameraparams.position.z) {
+        camera.setView(cameraparams.position, cameraparams.target, cameraparams.up);
       }
       else {
         camera.lookBBoxFromSide(bbox);
@@ -205,7 +213,12 @@ app.controller('ViewerCtrl', [
       evt.target.blur();
     }
 
-    $scope.main_menu_open = !$scope.main_menu_open;
+    if ($scope.main_menu_open && $scope.browse) {
+      $scope.browse = false;
+    }
+    else {
+      $scope.main_menu_open = !$scope.main_menu_open;
+    }
     
     if ($scope.main_menu_open) {
       $scope.charts_open = false;
@@ -375,10 +388,6 @@ app.controller('ViewerCtrl', [
     }, 0);
   });
 
-  camera.addEventListener('point', function (point) {
-    updatePointLocation(point);
-  });
-
   $scope.$watch('current_view', function () {
     let bbox = meshService.getVisibleBBox($scope.cells);
 
@@ -393,7 +402,6 @@ app.controller('ViewerCtrl', [
   $scope.viewClick = function (evt, view) {
     evt.target.blur();
     $scope.current_view = view;
-    updatePointLocation(null);
   };
 
   $scope.sidebarFullscreen = $state.params.fullscreen || false;
@@ -414,23 +422,38 @@ app.controller('ViewerCtrl', [
     }
   });
 
-  function updatePointLocation (point) {
-    let x = null, y = null, z = null;
+  // Browser security requires copy to be tied to a user action
+  (new Clipboard('#copy-view-url', {
+    text: function () {
+      let target = camera.getTarget();
+      let position = camera.camera.position.clone();
+      let up = camera.camera.up.clone();
 
-    if (point) {
-      x = Math.trunc(point.x);
-      y = Math.trunc(point.y);
-      z = Math.trunc(point.z);
+      let fmt = (z, factor) => Math.round(z * Math.pow(10, factor)) / Math.pow(10, factor);
+
+      let params = {
+        cx: fmt(position.x, 2),
+        cy: fmt(position.y, 2),
+        cz: fmt(position.z, 2),
+        tx: fmt(target.x, 2),
+        ty: fmt(target.y, 2),
+        tz: fmt(target.z, 2),
+        ux: fmt(up.x, 6),
+        uy: fmt(up.y, 6),
+        uz: fmt(up.z, 6),
+      };
+
+      Object.keys(params).forEach(function (key) {
+        $location.search(key, params[key]);
+      });
+      
+      $timeout(function () {
+        $location.replace();
+      }, 0)
+    
+      return $location.absUrl();
     }
-
-    $timeout(function() {
-      $location
-        .search('x', x)
-        .search('y', y)
-        .search('z', z)
-        .replace();
-    }, 0);
-  }
+  }));
 
   function clearScene () {
     $scope.cells = $scope.cells || [];
