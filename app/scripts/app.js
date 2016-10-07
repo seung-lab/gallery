@@ -59,7 +59,7 @@ app.config(function ($httpProvider) {
 });
 
 $(document).ready(function () {
-  curtainRise(function () {}, 0);
+  curtainRise(function () {}, 1000);
 });
 
 
