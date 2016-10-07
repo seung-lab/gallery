@@ -57,3 +57,27 @@ app.factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location
 app.config(function ($httpProvider) {        
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 });
+
+$(document).ready(function () {
+  curtainRise(function () {}, 0);
+});
+
+
+function curtainRise (fn, delay = 100) {
+  let curtain = $('<div>').addClass('curtain fall');
+  $('body').append(curtain);
+
+  setTimeout(function () {
+    curtain.removeClass('fall');
+
+    setTimeout(function () {
+      curtain.remove();
+
+      if (fn) {
+        fn(curtain);
+      }
+    }, 1250);
+  }, delay);
+}
+
+
