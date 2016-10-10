@@ -658,6 +658,13 @@ THREE.TrackballControls = function (camera, domElement) {
 
 	}
 
+	let hammertime = new Hammer(this.domElement);
+	hammertime.get('pinch').set({ enable: true });
+
+	// hammertime.on('pinch', function () {
+	// 	console.log('pinch!');
+	// });
+
 	this.domElement.addEventListener('contextmenu', function (event) { event.preventDefault(); }, false);
 
 	this.domElement.addEventListener('mousedown', mousedown, false);
