@@ -63,7 +63,7 @@ $(document).ready(function () {
 });
 
 
-function curtainRise (fn, delay = 100) {
+function curtainRise (fn, delay) {
   let curtain = $('<div>').addClass('curtain fall');
   $('body').append(curtain);
 
