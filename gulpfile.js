@@ -196,7 +196,8 @@ gulp.task('watch',function (done) {
     ], [ 'copy-index' ]);
 
     gulp.watch([
-        'app/images/**'
+        'app/images/**',
+        'app/icons/**'
     ], [ 'images' ]);
     
     gulp.watch([
