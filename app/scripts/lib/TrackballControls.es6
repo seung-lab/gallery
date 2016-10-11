@@ -170,7 +170,7 @@ THREE.TrackballControls = function (camera, domElement) {
 
 			if (angle) {
 
-				_eye.copy(_this.camera.position).sub(_this.target);
+				// _eye.copy(_this.camera.position).sub(_this.target);
 
 				eyeDirection.copy(_eye).normalize();
 				cameraUpDirection.copy(_this.camera.up).normalize();
@@ -372,9 +372,14 @@ THREE.TrackballControls = function (camera, domElement) {
 		}
 	};
 
+	var _prev_distance = 1;
+
 	this.update = function () {
 
-		_eye.subVectors(_this.camera.position, _this.target);
+		var cameraDist = _this.camera.position.clone().sub(_this.target).length();
+		if (cameraDist !== _prev_distance) {
+			_eye.subVectors(_this.camera.position, _this.target);
+		}
 
 		if (!_this.noRotate) {
 			_this.rotateCamera();
@@ -389,6 +394,8 @@ THREE.TrackballControls = function (camera, domElement) {
 		}
 
 		_this.camera.position.addVectors(_this.target, _eye);
+
+		_prev_distance = _this.camera.position.clone().sub(_this.target).length();
 
 		_this.checkDistances();
 
@@ -582,15 +589,15 @@ THREE.TrackballControls = function (camera, domElement) {
 				break;
 
 			case 2:
-				_state = STATE.TOUCH_ZOOM_PAN;
-				var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
-				var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
-				_touchZoomDistanceEnd = _touchZoomDistanceStart = Math.sqrt(dx * dx + dy * dy);
+				// _state = STATE.TOUCH_ZOOM_PAN;
+				// var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
+				// var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
+				// _touchZoomDistanceEnd = _touchZoomDistanceStart = Math.sqrt(dx * dx + dy * dy);
 
-				var x = (event.touches[ 0 ].pageX + event.touches[ 1 ].pageX) / 2;
-				var y = (event.touches[ 0 ].pageY + event.touches[ 1 ].pageY) / 2;
-				_panStart.copy(getMouseOnScreen(x, y));
-				_panEnd.copy(_panStart);
+				// var x = (event.touches[ 0 ].pageX + event.touches[ 1 ].pageX) / 2;
+				// var y = (event.touches[ 0 ].pageY + event.touches[ 1 ].pageY) / 2;
+				// _panStart.copy(getMouseOnScreen(x, y));
+				// _panEnd.copy(_panStart);
 				break;
 
 			default:
@@ -615,13 +622,13 @@ THREE.TrackballControls = function (camera, domElement) {
 				break;
 
 			case 2:
-				var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
-				var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
-				_touchZoomDistanceEnd = Math.sqrt(dx * dx + dy * dy);
+				// var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
+				// var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
+				// _touchZoomDistanceEnd = Math.sqrt(dx * dx + dy * dy);
 
-				var x = (event.touches[ 0 ].pageX + event.touches[ 1 ].pageX) / 2;
-				var y = (event.touches[ 0 ].pageY + event.touches[ 1 ].pageY) / 2;
-				_panEnd.copy(getMouseOnScreen(x, y));
+				// var x = (event.touches[ 0 ].pageX + event.touches[ 1 ].pageX) / 2;
+				// var y = (event.touches[ 0 ].pageY + event.touches[ 1 ].pageY) / 2;
+				// _panEnd.copy(getMouseOnScreen(x, y));
 				break;
 
 			default:
@@ -643,12 +650,12 @@ THREE.TrackballControls = function (camera, domElement) {
 				break;
 
 			case 2:
-				_touchZoomDistanceStart = _touchZoomDistanceEnd = 0;
+				// _touchZoomDistanceStart = _touchZoomDistanceEnd = 0;
 
-				var x = (event.touches[ 0 ].pageX + event.touches[ 1 ].pageX) / 2;
-				var y = (event.touches[ 0 ].pageY + event.touches[ 1 ].pageY) / 2;
-				_panEnd.copy(getMouseOnScreen(x, y));
-				_panStart.copy(_panEnd);
+				// var x = (event.touches[ 0 ].pageX + event.touches[ 1 ].pageX) / 2;
+				// var y = (event.touches[ 0 ].pageY + event.touches[ 1 ].pageY) / 2;
+				// _panEnd.copy(getMouseOnScreen(x, y));
+				// _panStart.copy(_panEnd);
 				break;
 
 		}
@@ -661,9 +668,18 @@ THREE.TrackballControls = function (camera, domElement) {
 	let hammertime = new Hammer(this.domElement);
 	hammertime.get('pinch').set({ enable: true });
 
-	// hammertime.on('pinch', function () {
-	// 	console.log('pinch!');
-	// });
+
+	let zoomStart = null;
+	function pinchstart(ev) {
+		zoomStart = _eye.length();
+	}
+
+	function pinch(ev) {
+		_eye.setLength(zoomStart / ev.scale);
+	}
+
+	hammertime.on('pinchstart', pinchstart);
+	hammertime.on('pinch', pinch);
 
 	this.domElement.addEventListener('contextmenu', function (event) { event.preventDefault(); }, false);
 
