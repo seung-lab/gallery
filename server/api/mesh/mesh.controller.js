@@ -17,7 +17,8 @@ exports.show = function(req, res) {
 		root: path.resolve("data/meshes/"),
 		dotfiles: 'deny',
 		headers: { 
-			"Content-Type": 'text/plain',
+			"Content-Type": 'application/octet-stream',
+			"Access-Control-Allow-Origin": '*',
 
 			// prevent compress from gzipping
 			// which erases the content-length header
