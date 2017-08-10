@@ -73,7 +73,7 @@ def read_stratification():
     is returned
   """
   data = defaultdict(list)
-  mat = scipy.io.loadmat('rawdata/skel_strat.mat')['skel_strat_renorm'][0]
+  mat = scipy.io.loadmat('rawdata/skel_strat.mat')['strat'][0]
 
   nanproblems = []
 
@@ -87,7 +87,7 @@ def read_stratification():
     # Matab is 1-index while python is 0-index, so obvious now!
 
     if row.shape != (1,0):
-      data[cell_id] = [ [x,y] for x,y in row ] # convert to list, which is JSON serializable
+      data[cell_id] = [ [x, y] for x,y in row ] # convert to list, which is JSON serializable
 
       if len(data[cell_id]) > 0 and any([ math.isnan(x) or math.isnan(y) for x, y in data[cell_id] ]):
         nanproblems.append(cell_id)
@@ -243,8 +243,6 @@ def save_sets_json(cells):
       types[cell['name']]['securely_known'] = cell['classical_type']['securely_known']
 
     types[cell['name']]['count'] += 1
-
-  print types
 
   write_json(types, '../server/config/types.json')
 
