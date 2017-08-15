@@ -31,7 +31,7 @@
   }, 
   "28": {
     "correspondance": null, 
-    "count": 7, 
+    "count": 5, 
     "securely_known": null
   }, 
   "2an": {
@@ -41,12 +41,12 @@
   }, 
   "2aw": {
     "correspondance": "F-midi^Off,J", 
-    "count": 23, 
+    "count": 21, 
     "securely_known": true
   }, 
   "2i": {
     "correspondance": null, 
-    "count": 10, 
+    "count": 12, 
     "securely_known": null
   }, 
   "2o": {
@@ -76,12 +76,12 @@
   }, 
   "3i": {
     "correspondance": null, 
-    "count": 7, 
+    "count": 6, 
     "securely_known": null
   }, 
   "3o": {
     "correspondance": null, 
-    "count": 4, 
+    "count": 5, 
     "securely_known": null
   }, 
   "4i": {
@@ -101,17 +101,17 @@
   }, 
   "51": {
     "correspondance": "W3", 
-    "count": 19, 
+    "count": 20, 
     "securely_known": true
   }, 
   "5si": {
     "correspondance": null, 
-    "count": 11, 
+    "count": 10, 
     "securely_known": null
   }, 
   "5so": {
     "correspondance": null, 
-    "count": 16, 
+    "count": 17, 
     "securely_known": null
   }, 
   "5ti": {
@@ -181,12 +181,12 @@
   }, 
   "81o": {
     "correspondance": null, 
-    "count": 2, 
+    "count": 1, 
     "securely_known": null
   }, 
   "82n": {
     "correspondance": null, 
-    "count": 6, 
+    "count": 7, 
     "securely_known": null
   }, 
   "82wi": {
@@ -201,7 +201,7 @@
   }, 
   "85": {
     "correspondance": null, 
-    "count": 10, 
+    "count": 8, 
     "securely_known": null
   }, 
   "8n": {
@@ -216,12 +216,12 @@
   }, 
   "91": {
     "correspondance": null, 
-    "count": 6, 
+    "count": 7, 
     "securely_known": null
   }, 
   "915": {
     "correspondance": null, 
-    "count": 2, 
+    "count": 4, 
     "securely_known": null
   }, 
   "9n": {
