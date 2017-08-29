@@ -167,9 +167,8 @@ THREE.TrackballControls = function (camera, domElement) {
 
 			moveDirection.set(_moveCurr.x - _movePrev.x, _moveCurr.y - _movePrev.y, 0);
 			angle = moveDirection.length();
-
+				
 			if (angle) {
-
 				_eye.copy(_this.camera.position).sub(_this.target);
 
 				eyeDirection.copy(_eye).normalize();
@@ -638,8 +637,6 @@ THREE.TrackballControls = function (camera, domElement) {
 		switch (event.touches.length) {
 
 			case 1:
-				_movePrev.copy(_moveCurr);
-				_moveCurr.copy(getMouseOnCircle( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY));
 				break;
 
 			case 2:
@@ -660,10 +657,6 @@ THREE.TrackballControls = function (camera, domElement) {
 
 	let hammertime = new Hammer(this.domElement);
 	hammertime.get('pinch').set({ enable: true });
-
-	// hammertime.on('pinch', function () {
-	// 	console.log('pinch!');
-	// });
 
 	this.domElement.addEventListener('contextmenu', function (event) { event.preventDefault(); }, false);
 
