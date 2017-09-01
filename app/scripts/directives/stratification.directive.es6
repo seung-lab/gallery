@@ -207,8 +207,9 @@ app.directive('stratification', function ($timeout) {
 
     // Values correspond to:
     // IPL Start, End [0,100]
-    // IPL ON, OFF, 28, 45, 62 %
-    tickValues = [0, 0.28, 0.45, 0.62, 1];
+    // IPL ON, OFF, 28, 47, 62 %
+    let INNER_OUTER = 0.47;
+    tickValues = [0, 0.28, INNER_OUTER, 0.62, 1];
 
     // Add svg
     svg = d3.select("#stratification-chart")
@@ -421,7 +422,7 @@ app.directive('stratification', function ($timeout) {
         yLabel_OFF.attr("transform", "translate(" + (width - 50) + "," + yScale(tickValues[1] + 0.01) + ")"); // 50~Offset
         yLabel_ON.attr("transform", "translate(" + (width - 50) + "," + yScale(tickValues[3] + 0.01) + ")"); // 50~Offset
         
-      yLabel.attr("transform", "translate(-10," + yScale(0.45) + ") rotate(-90)");
+      yLabel.attr("transform", "translate(-10," + yScale(INNER_OUTER) + ") rotate(-90)");
         yLabel_INL.attr("transform", "translate(-10," + yScale(-0.10) + ") rotate(-90)");
         yLabel_GCL.attr("transform", "translate(-10," + yScale(1.10) + ") rotate(-90)");
 
@@ -436,8 +437,8 @@ app.directive('stratification', function ($timeout) {
       yAxis_Outer_Inner_Tick
         .attr("x1", width)
         .attr("x2", (width + 10))
-        .attr("y1", yScale(0.45))
-        .attr("y2", yScale(0.45));
+        .attr("y1", yScale(INNER_OUTER))
+        .attr("y2", yScale(INNER_OUTER));
 
       // IPL Ticks | Right
       yAxis_IPL_Ticks.selectAll('.tick-right')
@@ -497,7 +498,7 @@ app.directive('stratification', function ($timeout) {
           .append("text")
             .attr("class", "axis-label")
             .attr("text-anchor", "middle")
-            .attr("transform", "translate(-10," + yScale(0.45) + ") rotate(-90)")
+            .attr("transform", "translate(-10," + yScale(INNER_OUTER) + ") rotate(-90)")
             .text("IPL Depth");
 
       // Axis label | Y --> INL
@@ -571,8 +572,8 @@ app.directive('stratification', function ($timeout) {
             .attr('class', 'tick-right')
             .attr("x1", width)
             .attr("x2", (width + 10))
-            .attr("y1", yScale(0.45))
-            .attr("y2", yScale(0.45));
+            .attr("y1", yScale(INNER_OUTER))
+            .attr("y2", yScale(INNER_OUTER));
 
       yAxis_IPL_Ticks = d3.select('.y');
       
