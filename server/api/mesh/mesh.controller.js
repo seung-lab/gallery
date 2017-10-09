@@ -25,27 +25,38 @@ var options = {
 	},
 };
 
+function transfer_file (filename, res) {
+	let filepath = path.join(options.root, filename);
+
+	if (!fs.existsSync(filepath)) {
+	    res.sendStatus(404);
+	    console.log(filename, " -- file doesn't exist!");
+	    return;
+	}
+
+	fs.access(filepath, fs.constants.R_OK, (err) => {
+		if (err) {
+			console.log(err);
+			res.sendStatus(403);
+			return;
+		}
+
+		res.sendFile(filename, options, function (err) {
+			if (err) { 
+				console.log(err);
+			}
+		});
+	});
+}
 
 // Get a single mesh
 exports.objformat = function(req, res) {
-	var filename = req.params.id + '.obj';
-
-	res.sendFile(filename, options, function (err) {
-		if (err) { 
-			console.log(filename, " -- file doesn't exist!");
-			res.sendStatus(404);
-		}
-	});
+	console.log(req.params);
+	transfer_file(req.params.id + '.obj', res);
 };
 
 // Get a single mesh
 exports.openctmformat = function(req, res) {
-	var filename = req.params.id + '.ctm';
-
-	res.sendFile(filename, options, function (err) {
-		if (err) { 
-			console.log(filename, " -- file doesn't exist!");
-			res.sendStatus(404);
-		}
-	});
+	console.log(req.params);
+	transfer_file(req.params.id + '.ctm', res);
 };

@@ -144,7 +144,7 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 				.then(function (cell) {
 					if (!cell) {
 						completed[cellid] = 1;
-						return new Error(`Cell ${cellid} not found.`);
+						throw new Error(`Cell ${cellid} not found.`);
 					}
 
 					if (!cell.color) {
