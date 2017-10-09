@@ -136,6 +136,55 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 
 		let displayed = [];
 
+		function display_cell (cell) {
+			if (!cell.color) {
+				cell = colorize(cell, cellids.length);
+			}
+
+			if (progresscb) {
+				progresscb(computeCompleted(), cell);
+			}
+
+			_cache.put(cell.id.toString(), cell); // save basic cell info
+			
+			var x = meshService.createModel(cell, function (args) {
+				let nfract = 0.90;
+				if (args.network !== -1) {
+					completed[cell.id] = nfract * args.network + (1 - nfract) * args.decoded;
+				}
+				else {
+					completed[cell.id] = args.decoded;	
+				}
+
+				progresscb(computeCompleted());
+			})
+			.then(function (cell) {
+				_cache.put(cell.id.toString(), cell); // save new mesh attributes
+
+				displayed.push(cell);
+
+				if (progresscb) {
+					progresscb(computeCompleted(), cell);
+				}
+
+				return cell;
+			})
+			.catch(function (err) {
+				completed_promise.reject(err);
+			})
+			.finally(function () {
+				completed[cell.id] = 1;
+
+				if (progresscb) {
+					progresscb(computeCompleted());
+				}
+				
+				if (computeCompleted() > 0.999999) {
+					completed_promise.resolve();
+				}
+			});
+		}
+
 		for (let cellid of cellids) {
 			let promise = this.get(cellid)
 				.then(function (cells) {
@@ -144,58 +193,11 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 				.then(function (cell) {
 					if (!cell) {
 						completed[cellid] = 1;
+						progresscb(computeCompleted(), null);
 						throw new Error(`Cell ${cellid} not found.`);
 					}
 
-					if (!cell.color) {
-						cell = colorize(cell, cellids.length);
-					}
-
-					if (progresscb) {
-						progresscb(computeCompleted(), cell);
-					}
-
-					_cache.put(cell.id.toString(), cell);
-					return cell;
-				})
-				.then(function (cell) {
-					return meshService.createModel(cell, function (args) {
-						let nfract = 0.90;
-						if (args.network !== -1) {
-							completed[cell.id] = nfract * args.network + (1 - nfract) * args.decoded;
-						}
-						else {
-							completed[cell.id] = args.decoded;	
-						}
-
-						progresscb(computeCompleted());
-					});
-				})
-				.then(function (cell) {
-					_cache.put(cell.id.toString(), cell);
-
-					displayed.push(cell);
-
-					if (progresscb) {
-						progresscb(computeCompleted(), cell);
-					}
-
-					return cell;
-				})
-				.catch(function () {
-					completed_promise.reject('loading failed');
-				})
-				.finally(function () {
-					completed[cellid] = 1;
-
-					if (progresscb) {
-						progresscb(computeCompleted());
-					}
-				})
-				.finally(function () {
-					if (computeCompleted() > 0.999999) {
-						completed_promise.resolve();
-					}
+					display_cell(cell);
 				});
 		}
 
@@ -205,6 +207,8 @@ app.service('cellService', [ '$q', '$resource', 'meshService', 'CacheFactory', f
 			}
 
 			return displayed;	
+		}, function (err) {
+			console.log(err);
 		});
 	};
 
