@@ -71,6 +71,7 @@ function transfer_file (filename, res) {
 			return;
 		}
 
+		res.setHeader('content-disposition', `attachment; filename="${filename}"`);
 		res.sendFile(filename, options, function (err) {
 			if (err) { 
 				console.log(err);
@@ -117,7 +118,7 @@ exports.tarobjs = function (req, res) {
 
 		pack.finalize()
 		res.setHeader('Content-Type', 'application/tar');
-		res.setHeader('content-disposition', `attachment; filename="${filename}.tar"`)
+		res.setHeader('content-disposition', `attachment; filename="${filename}.tar"`);
 		pack.pipe(res);
 
 		pack.on('end', function () {
