@@ -6,6 +6,7 @@ var controller = require('./cells.controller');
 var router = express.Router();
 
 router.get('/', controller.index);
+router.get('/batch', controller.batch);
 router.get('/:id', controller.show);
 router.post('/', controller.create);
 router.put('/:id', controller.update);

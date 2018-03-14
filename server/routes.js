@@ -25,7 +25,5 @@ module.exports = function(app) {
       res.sendFile(app.get('appPath') + '/index.html');
   });
 
-    // All other routes should redirect to the index.html
   app.route('/*').get(errors[404]);
-
 };

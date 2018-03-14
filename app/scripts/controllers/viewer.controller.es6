@@ -263,6 +263,13 @@ app.controller('ViewerCtrl', [
     window.open('/1.0/mesh/tar/obj?cellids=' + $scope.neurons.join(','))
   };
 
+  // Download Data Button
+
+  $scope.downloadData = function (evt) {
+    evt.preventDefault();
+    window.open('/1.0/cells/batch?ids=' + $scope.neurons.join(','))
+  };
+
   // Charts Sidebar
 
   $scope.charts_open = $state.params.charts === '1';

@@ -20,7 +20,7 @@ exports.index = function(req, res) {
   Cells.find(function (err, cells) {
     if (err) { return handleError(res, err); }
 
-    return res.json(200, cells.map(function (cell) {
+    return res.status(200).json(cells.map(function (cell) {
       return {
         id: cell.id,
         name: cell.name,
@@ -38,7 +38,7 @@ exports.show = function(req, res) {
   Cells.findOne({ id: req.params.id }, function (err, cell) {
     if (err) { return handleError(res, err); }
     
-    if (!cell) { return res.send(404); }
+    if (!cell) { return res.sendStatus(404); }
   
     return res.json(cell);
   });
@@ -49,7 +49,7 @@ exports.create = function(req, res) {
 
   Cells.create(req.body, function(err, cells) {
     if (err) { return handleError(res, err); }
-    return res.json(201, cells);
+    return res.status(201).json(cells);
   });
 
  
@@ -69,7 +69,7 @@ exports.update = function(req, res) {
   
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
-      return res.json(200, cell);
+      return res.status(200).json(cell);
     });
   });
 };
@@ -94,3 +94,39 @@ exports.destroy = function(req, res) {
 function handleError(res, err) {
   return res.status(500).send(err);
 }
+
+
+exports.batch = function (req, res) {
+  Cells.find(function (err, cells) {
+    if (err) { return handleError(res, err); }
+
+    let idlst = req.query.ids || '';
+    idlst = idlst.split(',').map(Number);
+    let ids = {};
+    for (let cid of idlst) {
+      ids[cid] = true;
+    }
+
+    let output = cells.map(function (cell) {
+      return {
+        id: Number(cell.id),
+        type: cell.name,
+        class: cell.type,
+        stratification: cell.stratification,
+        directional_response: cell.directional_response,
+        temporal_response: cell.temporal_response,
+        classical_type: cell.classical_type,
+      };
+    })
+    .filter(function (cell) {
+      return ids[cell.id];
+    });
+
+    let filename = idlst.length ? idlst.join('_') : 'noresults';
+
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('content-disposition', `attachment; filename="${filename}.json"`);
+
+    return res.status(200).json(output);
+  });
+};
