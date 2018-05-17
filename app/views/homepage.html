@@ -37,15 +37,63 @@
             
                 <p>The Seung Lab uses techniques from machine learning and social computing to extract brain structure from light and electron microscopic images. <a href="http://eyewire.org">Eyewire</a> showcases our approach by mobilizing gamers from around the world to create 3D reconstructions of neurons by interacting with a deep convolutional network.</p>
 
-                <p>This cell museum is where we present our finished reconstructions in an accessible format. In our viewer, you'll be able to see these finished cells represented in 3D space along with data pertinent to interpreting their significance. The neurons currently displayed here are mouse retinal cells from a dataset known as <a href="http://wiki.eyewire.org/index.php?title=E2198">e2198</a>.</p>
+                <p>This cell museum is where we present our finished reconstructions in an accessible format. In our viewer, you'll be able to see these finished cells represented in 3D space along with functional and dendritic stratification data. The neurons currently displayed here are mouse retinal cells from a dataset known as <a href="http://wiki.eyewire.org/index.php?title=E2198">e2198</a>.</p>
 
                 <p>You can read more about our lab <a href="http://seunglab.org">here</a>.</p>
             </div>
             <div class="how">
                 <h1>Classification System</h1>
-                <em>We are updating this diagram to include multi-layer stratification (e.g. 25), preferred direction (c,d,r,v) and asymmetric (a) designations that are currently in the museum. See our new <a href="documents/greene-retinal-motion-computation-on-retina-2016.pdf">pre-print</a> in the interim.</em>
 
-                <img id="classification-diagram" src="/images/splash.svg"></img>
+                <p>This Museum and <a href="https://www.biorxiv.org/content/early/2018/01/02/182758">Bae et al. 2018</a> uses a novel classification scheme for retinal cells that encodes anatomical features such as depth, shape, and asymmetry. "<a href="/?neurons=10007,17021,17050,17110,17236,20092,20157,26024&charts=1">1no</a>" (1 narrow outside) indicates that the bulk of the type's dendrites stratify between 0% to 10% of the way from the Inner Nuclear Layer (INL) to the Ganglion Cell Layer (GCL). "<a href="/?neurons=20251,26067,30001&charts=1">82wi</a>" (8,2 wide inside) has a primary density peak between 70-80% depth and a secondary peak between 10-20%. It also is wide and located closer to the interior of the Inner Plexiform Layer (IPL) than the "<a href="http://museum.eyewire.org/?neurons=20118,26091&charts=1">82wo</a>" (8,2 wide outside) group.</p>
+
+                <img id="classification-diagram" src="/images/classification-diagram.png"></img>
+
+                <table id="classification-table">
+                  <thead>
+                    <tr>
+                      <th>Feature</th>
+                      <th>Modifier</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Depth (1<sup>st</sup>)</td>
+                      <td>1-9</td>
+                      <td>Percent depth of largest stratification density peak. 1 indicates 0.0-0.1 of the way from INL to GCL. 2 is 0.1-0.2, 3 is 0.2-0.3 and so on.</td>
+                    </tr>
+                    <tr>
+                      <td>Depth (2<sup>nd</sup>)</td>
+                      <td>1-9</td>
+                      <td>Percent depth of second largest stratification density peak. 1 indicates 0.0-0.1 of the way from INL to GCL. 2 is 0.1-0.2, 3 is 0.2-0.3 and so on.</td>
+                    </tr>
+                    <tr>
+                      <td>Short, Tall</td>
+                      <td>s, t</td>
+                      <td>Relative height of dendritic arbor.</td>
+                    </tr>
+                    <tr>
+                      <td>Narrow, Wide</td>
+                      <td>n, w</td>
+                      <td>Relative width of dendritic arbor.</td>
+                    </tr>
+                    <tr>
+                      <td>Outer, Inner</td>
+                      <td>o, i</td>
+                      <td>Relative location of IPL peak dendritic density.</td>
+                    </tr>
+                    <tr>
+                      <td>Dorsal, Caudal, Ventral, Rostral</td>
+                      <td>d, c, v, r</td>
+                      <td>Preferred direction of stimulus response.</td>
+                    </tr>                    
+                    <tr>
+                      <td>Asymmetry</td>
+                      <td>a</td>
+                      <td>Indicates asymmetry in dendritic branches.</td>
+                    </tr>
+                  </tbody>
+                </table>
             </div>
             <div class="open-data">
                 <h1>Open Data</h1>
