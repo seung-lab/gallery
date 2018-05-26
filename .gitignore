@@ -6,3 +6,5 @@ coverage
 npm-debug.log
 data
 .DS_Store
+# python virtualenv
+import/env/
