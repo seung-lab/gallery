@@ -20,9 +20,10 @@ You'll need nodejs, npm, and mongodb to bootstrap.
 7. sudo apt install liboctave-dev
 8. pip install -r requirements.txt
 9. python main.py
-10. Acquire meshes from someone who has them (~850MB)
-11. Run `npx gulp`
-12. Run `npm start`
+10. [Download meshes](https://drive.google.com/file/d/1-qmE1sEL3AIGpNfi0w50MEOgm2WIF4_1/view?usp=sharing) (~1.1GB)
+11. Extract meshes to $GALLERY/data/meshes/
+12. Run `npx gulp`
+13. Run `npm start`
 
 # Code coverage
 
