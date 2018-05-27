@@ -5,25 +5,24 @@ Repository for connectomic reconstructions of neruons from Seung Lab.
 
 ## Getting Started
 
-You'll need nodejs, npm, and mongodb to bootstrap.  
+You'll need nodejs, npm, and mongodb to bootstrap.
 
-1. Get `gulp`: `npm install -g gulp`  
-2. Run `npm install` (may need to be run as `sudo npm install --unsafe-perms`)
-3. Get bower: `npm install -g bower` 
-4. Run `bower install`  
-5. Get mongodb up and running:
-	* [Download mongodb](http://www.mongodb.org/downloads)
-	* Unzip into a location of choice. (Note: This is where you will run the daemon)
-	* Open terminal and use the following command to make the directory where mongo will store data: `$ mkdir -p /data/db`
-	* Start the mongodb server in a separate terminal window (if you get an error, you may need to ‘sudo’ this command): `$ ./mongodb-xxxxxxx/bin/mongod`
-6. git submodule update --init
-7. cd import
-8. mkdir data
-9. sudo apt-get install liboctave-dev
-10. python main.py (or main_py3.py for Py3)
-11. Acquire meshes from someone who has them (~850MB)
-12. Run `gulp`
-13. Run `npm start`
+1. Run `npm install`
+2. Run `npx bower install`
+3. Get mongodb up and running:
+	* sudo apt install mongodb
+	* sudo mkdir -p /data/db
+	* sudo chown -R mongodb:mongodb /data
+	* sudo service mongodb restart
+4. git submodule update --init
+5. cd import
+6. mkdir data
+7. sudo apt install liboctave-dev
+8. pip install -r requirements.txt
+9. python main.py
+10. Acquire meshes from someone who has them (~850MB)
+11. Run `npx gulp`
+12. Run `npm start`
 
 # Code coverage
 
