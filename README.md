@@ -9,11 +9,17 @@ You'll need nodejs, npm, and mongodb to bootstrap.
 
 1. Run `npm install`
 2. Run `npx bower install`
-3. Get mongodb up and running:
+3a. Get mongodb up and running on Ubuntu:
 	* sudo apt install mongodb
 	* sudo mkdir -p /data/db
 	* sudo chown -R mongodb:mongodb /data
 	* sudo service mongodb restart
+3b. Get mongodb up and running on MacOS: 
+    * brew tap mongodb/brew
+    * brew install mongodb-community@4.2
+    * brew services start mongodb-community@4.2
+    * cd gallery
+    * mongod --dbpath .
 4. git submodule update --init
 5. cd import
 6. mkdir data
