@@ -94,7 +94,7 @@ def read_stratification():
         data[cell_id] = None
 
   if len(nanproblems):
-    print ", ".join([ str(cid) for cid in nanproblems ]), "had NaN values present in its stratification.\n"
+    print(", ".join([ str(cid) for cid in nanproblems ]), "had NaN values present in its stratification.\n")
 
   return data
 
@@ -128,7 +128,7 @@ def read_temporal_response():
         data[cell_id] = None
 
   if len(nanproblems):
-    print ", ".join([ str(cid) for cid in nanproblems ]), "had NaN values present in its temporal response.\n"
+    print(", ".join([ str(cid) for cid in nanproblems ]), "had NaN values present in its temporal response.\n")
 
   return data
 
@@ -140,7 +140,7 @@ def write_json (object_to_dump , fname):
       indent = 2, 
       ensure_ascii=False)
 
-    print "Wrote to ", fname
+    print("Wrote to ", fname)
 
 def save_cells_json():
   """
@@ -164,17 +164,17 @@ def save_cells_json():
     "metadata": [],
   }
 
-  for cell_id, cell in allcells.iteritems():
+  for cell_id, cell in allcells.items():
     def maybe(info, key):
-      return info[key] if info.has_key(key) else None
+      return info[key] if key in info else None
 
     def hasproblem(problem, is_missing):
-      if not cell.has_key(is_missing) or cell[is_missing] is None:
+      if is_missing not in cell or cell[is_missing] is None:
         problems[problem].append(cell_id)
 
     hasproblem('metadata', 'name')
 
-    if (not cell.has_key('directional_response') or cell['directional_response'] is None) and (cell['type'] == 'ganglion' or cell['type'] == 'amacrine'):
+    if ('directional_response' not in cell or cell['directional_response'] is None) and (cell['type'] == 'ganglion' or cell['type'] == 'amacrine'):
         problems['directional_response'].append(cell_id)
     
     if maybe(strat, cell_id) is None:
@@ -204,16 +204,16 @@ def save_cells_json():
   problems['directional_response'].sort()
   problems['stratification'].sort()
 
-  print "Total Cells: ", len(allcells), "\n"
+  print("Total Cells: ", len(allcells), "\n")
 
   if len(problems['metadata']):
-    print "Did not have cell metadata (", len(problems['metadata']), "): ", ", ".join([ str(cid) for cid in problems["metadata"] ]), "\n"
+    print("Did not have cell metadata (", len(problems['metadata']), "): ", ", ".join([ str(cid) for cid in problems["metadata"] ]), "\n")
   
   if len(problems['directional_response']):
-    print "Did not have directional_response information (", len(problems['directional_response']), "): ", ", ".join([ str(cid) for cid in problems["directional_response"] ]), "\n"
+    print("Did not have directional_response information (", len(problems['directional_response']), "): ", ", ".join([ str(cid) for cid in problems["directional_response"] ]), "\n")
   
   if len(problems['stratification']):
-    print "Did not have stratification data (", len(problems['stratification']), "): ", ", ".join([ str(cid) for cid in problems["stratification"] ]), "\n"
+    print("Did not have stratification data (", len(problems['stratification']), "): ", ", ".join([ str(cid) for cid in problems["stratification"] ]), "\n")
 
   write_json(cells_ready_for_json, '../server/config/cells.json')
 
@@ -231,7 +231,7 @@ def save_sets_json(cells):
     if cell['name'] is None:
       continue
 
-    if not types.has_key(cell['name']):
+    if cell['name'] not in types:
       types[cell['name']] = {
         'correspondance': None,
         "securely_known": None,
@@ -252,13 +252,13 @@ def generate_json():
 
   cmd = "octave generate_cell_json.m"
 
-  print "Executing: ", cmd
-  print subprocess.check_output(cmd, shell=True)
+  print("Executing: ", cmd)
+  print(subprocess.check_output(cmd, shell=True))
 
   cmd = "octave generate_calcium_json.m"
 
-  print "Executing: ", cmd
-  print subprocess.check_output(cmd, shell=True)
+  print("Executing: ", cmd)
+  print(subprocess.check_output(cmd, shell=True))
 
 def main():
   generate_json()
