@@ -31,11 +31,7 @@ You'll need nodejs, npm, and mongodb to bootstrap.
 12. Run `npx gulp`
 13. Run `npm start`
 
-When configuring the server to use `museum.service` a systemd startup script, make sure to run:
-
-`iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3000`
-
-This way you don't have to run as root or with sudo.
+When configuring the server to use `museum.service` a systemd startup script, make sure to set up nginx so you don't have to run the service as root or with sudo.
 
 # Code coverage
 
