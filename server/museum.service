@@ -1,0 +1,16 @@
+[Unit]
+Description=Museum Web Service
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=ubuntu
+Environment=NODE_ENV=production
+Environment=PORT=3000
+WorkingDirectory=/home/ubuntu/gallery
+ExecStart=node --harmony server/app.js
+
+[Install]
+WantedBy=multi-user.target
