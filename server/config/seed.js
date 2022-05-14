@@ -6,7 +6,6 @@
 'use strict';
 
 var sets = require('../api/sets/sets.model');
-var user = require('../api/user/user.model');
 var cells =require('../api/cells/cells.model');
 
 var cells_import = require('./cells.json')
@@ -27,25 +26,6 @@ sets.find({}).remove(function() {
   sets.create(types, function () {
     console.log('finished populating sets');
   });
-});
-
-user.find({}).remove(function() {
-  user.create(
-  {
-    provider: 'local',
-    name: 'Test User',
-    email: 'test@test.com',
-    password: 'test'
-  }, {
-    provider: 'local',
-    role: 'admin',
-    name: 'Admin',
-    email: 'admin@admin.com',
-    password: 'admin'
-  }, function() {
-      console.log('finished populating users');
-    }
-  );
 });
 
 

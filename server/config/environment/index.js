@@ -28,24 +28,6 @@ var all = {
   secrets: {
     session: 'gallery-secret'
   },
-
-  // List of user roles
-  userRoles: ['guest', 'user', 'admin'],
-
-  // MongoDB connection options
-  mongo: {
-    options: {
-      db: {
-        safe: true
-      }
-    }
-  },
-
-  eyewire: {
-    clientID:     process.env.EYEWIRE_ID || 'id',
-    clientSecret: process.env.EYEWIRE_SECRET || 'secret',
-    callbackURL:  (process.env.DOMAIN || '') + '/auth/eyewire/callback'
-  }
 };
 
 // Export the config object based on the NODE_ENV
